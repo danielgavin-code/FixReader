@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230f1c2e'/%3E%3Ctext x='16' y='23' font-family='Arial%2Csans-serif' font-size='22' font-weight='800' fill='%233b82f6' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 
@@ -207,8 +208,9 @@
 
         <div class="form-footer">
           <div class="btn-group">
-            <button type="button" class="btn-export" id="btn-export-csv">Export CSV</button>
-            <button type="button" class="btn-export" id="btn-export-xlsx">Export Excel</button>
+            <button type="button" class="btn-subtle" id="btn-clear">Clear</button>
+            <button type="button" class="btn-subtle" id="btn-export-csv">Export CSV</button>
+            <button type="button" class="btn-subtle" id="btn-export-xlsx">Export Excel</button>
           </div>
           <div class="btn-group">
             <button type="submit" class="btn-decode">DECODE MESSAGE</button>
@@ -249,11 +251,76 @@
         <p>Ensure the message contains <code>tag=value</code> pairs separated by SOH (<code>0x01</code>) or pipe (<code>|</code>) characters and begins with <code>8=FIX</code> or <code>8=FIXT</code>.</p>
       </div>
 
+      <!-- STATE: order timeline -->
+      <div id="state-multi" style="display:none">
+        <div id="tl-recon-banner" class="tl-recon-banner" style="display:none"></div>
+        <div class="results-label-row">
+          <span class="results-label-text">Order Timeline</span>
+          <span id="tl-count" class="pill-fix-version"></span>
+          <span id="tl-issue-count" class="tl-issue-count" style="display:none"></span>
+        </div>
+        <div class="tl-filters">
+          <button class="tl-pill tl-pill-active" data-filter="all">All</button>
+          <button class="tl-pill" data-filter="orders">Orders</button>
+          <button class="tl-pill" data-filter="fills">Fills</button>
+          <button class="tl-pill" data-filter="rejects">Rejects</button>
+        </div>
+        <div class="timeline-wrap" id="timeline-rows"></div>
+        <div class="tl-stats-row" id="tl-stats" style="display:none">
+          <div class="tl-stat">
+            <span class="tl-stat-val" id="tl-avg-price">—</span>
+            <span class="tl-stat-label">Average Price</span>
+          </div>
+          <div class="tl-stat-sep"></div>
+          <div class="tl-stat">
+            <span class="tl-stat-val" id="tl-executions">—</span>
+            <span class="tl-stat-label">Executions</span>
+          </div>
+          <div class="tl-stat-sep"></div>
+          <div class="tl-stat">
+            <span class="tl-stat-val" id="tl-latency">—</span>
+            <span class="tl-stat-label">Latency</span>
+          </div>
+        </div>
+        <div class="tl-progress-bar" id="tl-progress-bar" style="display:none">
+          <div class="tl-progress-fill" id="tl-progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- STATE: analysis — Quick Notes + Key Takeaways (log summary, or per-message after click) -->
+      <div id="state-analysis" style="display:none">
+        <div class="center-analysis">
+
+          <div class="ca-flagged-section" id="ca-flagged-section" style="display:none">
+            <div class="ca-hdr ca-hdr-flagged">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/><circle cx="8" cy="12.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+              Flagged
+            </div>
+            <div id="ca-flagged"></div>
+          </div>
+
+          <div class="ca-two-col">
+            <div class="ca-section">
+              <div class="ca-hdr">Quick Notes</div>
+              <div id="ca-plain-english" class="ca-content"></div>
+            </div>
+            <div class="ca-section">
+              <div class="ca-hdr">Key Takeaways</div>
+              <div id="ca-key-takeaways" class="ca-content"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <!-- STATE: decoded -->
       <div id="state-decoded" style="display:none">
         <div class="results-label-row">
           <span class="results-label-text">Decoded Message</span>
-          <span id="msg-type-pill" class="msg-type-pill"></span>
+          <div class="pill-wrap">
+            <span id="pill-fix-version" class="pill-fix-version"></span>
+            <span id="msg-type-pill" class="msg-type-pill"></span>
+          </div>
         </div>
         <div id="decoded-meta-strip" class="decoded-meta-strip" style="display:none">
           <div class="dms-item"><span class="dms-label">From</span><span class="dms-val" id="dms-from"></span></div>
@@ -303,32 +370,6 @@
             </table>
           </div>
         </div>
-
-        <!-- ── Center analysis: Flagged · Quick Notes · Key Takeaways ── -->
-        <div class="center-analysis">
-
-          <!-- FLAGGED — full width, only shown when issues exist -->
-          <div class="ca-flagged-section" id="ca-flagged-section" style="display:none">
-            <div class="ca-hdr ca-hdr-flagged">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/><circle cx="8" cy="12.5" r="0.5" fill="currentColor" stroke="none"/></svg>
-              Flagged
-            </div>
-            <div id="ca-flagged"></div>
-          </div>
-
-          <!-- QUICK NOTES + KEY TAKEAWAYS — side by side -->
-          <div class="ca-two-col">
-            <div class="ca-section">
-              <div class="ca-hdr">Quick Notes</div>
-              <div id="ca-plain-english" class="ca-content"></div>
-            </div>
-            <div class="ca-section">
-              <div class="ca-hdr">Key Takeaways</div>
-              <div id="ca-key-takeaways" class="ca-content"></div>
-            </div>
-          </div>
-
-        </div><!-- /center-analysis -->
 
       </div><!-- /state-decoded -->
 
@@ -425,6 +466,8 @@ const SAMPLES = {
 const editorInput  = document.getElementById('fix-message');
 const editorGutter = document.getElementById('editor-gutter');
 const decodeBtn    = document.querySelector('.btn-decode');
+// True while a multi-message timeline is active — locks analysis sections to log summary
+let _multiMode = false;
 
 // ── Line numbers ──
 function updateGutter() {
@@ -455,6 +498,18 @@ function loadSample(key, autoSubmit) {
 if (editorInput && !editorInput.value.trim()) {
   editorInput.value = SAMPLES.new_order;
   updateGutter();
+}
+
+// ── Clear button ──
+const clearBtn = document.getElementById('btn-clear');
+if (clearBtn && editorInput) {
+  clearBtn.addEventListener('click', () => {
+    _multiMode = false;
+    editorInput.value = '';
+    updateGutter();
+    showState('empty');
+    resetSidebar();
+  });
 }
 
 // ── EXAMPLES dropdown ──
@@ -518,9 +573,423 @@ function esc(s) {
 }
 
 function showState(state) {
-  document.getElementById('state-empty').style.display   = state === 'empty'  ? ''      : 'none';
-  document.getElementById('state-error').style.display   = state === 'error'  ? ''      : 'none';
-  document.getElementById('state-decoded').style.display = state === 'decoded' ? 'block' : 'none';
+  document.getElementById('state-empty').style.display    = state === 'empty' ? '' : 'none';
+  document.getElementById('state-error').style.display    = state === 'error' ? '' : 'none';
+  document.getElementById('state-multi').style.display    = (state === 'multi' || state === 'multi+decoded') ? '' : 'none';
+  document.getElementById('state-analysis').style.display = (state === 'multi' || state === 'multi+decoded' || state === 'decoded') ? '' : 'none';
+  document.getElementById('state-decoded').style.display  = (state === 'decoded' || state === 'multi+decoded') ? 'block' : 'none';
+}
+
+const MSG_TYPE_NAMES = {
+  'D':'New Order Single','8':'Execution Report','F':'Order Cancel Request',
+  'G':'Order Cancel/Replace','H':'Order Status Request','J':'Allocation',
+  'A':'Logon','5':'Logout','0':'Heartbeat','V':'Market Data Request',
+  'W':'Market Data Snapshot','X':'Market Data Incr.','3':'Reject',
+  '9':'Cancel Reject','AE':'Trade Capture','AP':'Allocation Report',
+  'AS':'Confirmation','AK':'Confirmation Ack','AA':'New Order Cross',
+  'AB':'New Order Multileg',
+};
+const MSG_TYPE_CAT = {
+  'D':'order','8':'exec','F':'order','G':'order','H':'order','9':'order',
+  'AA':'order','AB':'order',
+  'J':'settle','AE':'settle','AP':'settle','AS':'settle','AK':'settle',
+  'A':'session','5':'session','0':'session','3':'session',
+  'V':'market','W':'market','X':'market',
+};
+const SIDE_DISP = {'1':'Buy','2':'Sell','5':'Sell Short','6':'SS Exempt','3':'Buy Minus','4':'Sell Plus'};
+
+function parseFIXQuick(raw) {
+  const fm = {};
+  for (const pair of raw.split(/[|\x01]/)) {
+    const i = pair.indexOf('=');
+    if (i > 0) fm[pair.slice(0, i).trim()] = pair.slice(i + 1).trim();
+  }
+  return fm;
+}
+
+const EXEC_TYPE_NAMES = {
+  '0':'New','1':'Partial Fill','2':'Fill','4':'Cancelled',
+  '5':'Replaced','8':'Rejected','C':'Expired','F':'Trade',
+};
+
+function fixTimeHMS(t) {
+  if (!t) return '';
+  const m = t.match(/(\d{2}:\d{2}:\d{2})/);
+  return m ? m[1] : '';
+}
+
+function tlDetail(mt, fm) {
+  const sym  = fm[55] || '';
+  const side = SIDE_DISP[fm[54]] || '';
+  const qty  = fm[38] || '';
+  const px   = fm[44] ? `@ $${fm[44]}` : '';
+  switch (mt) {
+    case 'D': return [sym, side, qty, px].filter(Boolean).join(' ');
+    case '8': {
+      const et   = EXEC_TYPE_NAMES[fm[150]] || '';
+      const lqty = fm[32] || '';
+      const lpx  = fm[31] ? `@ $${fm[31]}` : '';
+      return [sym, et, lqty, lpx].filter(Boolean).join(' ');
+    }
+    case 'F': return ['Cancel', sym || fm[11]].filter(Boolean).join(' ');
+    case 'G': return [sym, 'Replace →', qty, px].filter(Boolean).join(' ');
+    case 'A': return `${fm[49] || ''} → ${fm[56] || ''}`;
+    case '0': return `Seq #${fm[34] || ''}`;
+    case '5': return fm[49] || '';
+    default:  return sym;
+  }
+}
+
+function tlSideClass(mt, fm) {
+  if (mt === 'D' || mt === 'G') {
+    if (fm[54] === '1') return 'tl-buy';
+    if (fm[54] === '2') return 'tl-sell';
+  }
+  if (mt === '8') {
+    const et = fm[150];
+    if (et === '1' || et === '2' || et === 'F') return 'tl-fill';
+    if (et === '4' || et === '8') return 'tl-cancel';
+  }
+  return '';
+}
+
+function hmsToMs(t) {
+  if (!t) return null;
+  const m = t.match(/(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?/);
+  if (!m) return null;
+  return (+m[1])*3600000 + (+m[2])*60000 + (+m[3])*1000 + (m[4] ? +m[4].padEnd(3,'0').slice(0,3) : 0);
+}
+
+function tlRowType(mt, fm) {
+  if (['D','F','G','H'].includes(mt)) return 'orders';
+  if (mt === '8') {
+    if (['1','2','F'].includes(fm[150])) return 'fills';
+    if (fm[150] === '8')                return 'rejects';
+    return 'orders';
+  }
+  if (['3','9'].includes(mt)) return 'rejects';
+  return 'session';
+}
+
+function tlFillProgress(mt, fm) {
+  if (mt !== '8') return '';
+  const cum = fm[14], leaves = fm[151];
+  if (!cum && !leaves) return '';
+  const parts = [];
+  if (cum    && cum    !== '0') parts.push(`${cum} filled`);
+  if (leaves && leaves !== '0') parts.push(`${leaves} remaining`);
+  return parts.join(' · ');
+}
+
+function calcTimelineStats(parsed) {
+  const fills     = parsed.filter(p => p.mt === '8' && ['1','2','F'].includes(p.fm[150]));
+  const execCount = fills.length;
+  const lastExec  = parsed.filter(p => p.mt === '8' && p.fm[6]).pop();
+  const avgPx     = lastExec ? `$${lastExec.fm[6]}` : '—';
+
+  const times = parsed.map(p => hmsToMs(p.fm[52])).filter(t => t !== null);
+  let latency = '—';
+  if (times.length >= 2) {
+    const ms = times[times.length - 1] - times[0];
+    latency = ms === 0 ? 'N/A'
+            : ms < 1000  ? `${ms}ms`
+            : ms < 60000 ? `${(ms/1000).toFixed(2)}s`
+            : `${Math.floor(ms/60000)}m ${Math.round((ms%60000)/1000)}s`;
+  }
+
+  const lastFill   = [...parsed].reverse().find(p => p.mt === '8' && p.fm[14]);
+  const cumQty     = lastFill ? parseInt(lastFill.fm[14] || '0') : 0;
+  const firstOrder = parsed.find(p => p.mt === 'D' && p.fm[38]);
+  const orderQty   = firstOrder ? parseInt(firstOrder.fm[38] || '0') : 0;
+  const fillPct    = orderQty > 0 ? Math.min(100, Math.round(cumQty / orderQty * 100)) : 0;
+
+  return { avgPx, execCount: execCount || '—', latency, fillPct };
+}
+
+// Mirrors buildAnalysis F1–F5 exactly — same logic, same REQUIRED map
+function tlHasFlaggedIssues(fm) {
+  const mt = fm[35] || '';
+
+  // F1: Limit order without price
+  if (fm[40] === '2' && fm[44] === undefined) return true;
+
+  // F2: IDSource without SecurityID
+  if (fm[22] !== undefined && fm[48] === undefined) return true;
+
+  // F3: No symbol or SecurityID on trading messages
+  if ('D8FGH'.includes(mt) && fm[55] === undefined && fm[48] === undefined) return true;
+
+  // F4: Required tags per MsgType — identical to buildAnalysis REQUIRED
+  const REQUIRED = {
+    'D':[11,21,38,40,54], '8':[17,37,39,54], 'F':[11,41,54],
+    'G':[11,21,38,40,41,54], 'H':[11,54], 'A':[98,108], '2':[7,16], '3':[45], '4':[36]
+  };
+  if ((REQUIRED[mt] || []).some(t => fm[t] === undefined)) return true;
+
+  // F5: SendingTime vs TransactTime gap > 60 s
+  if (fm[52] && fm[60]) {
+    const d52 = parseFIXTime(fm[52]), d60 = parseFIXTime(fm[60]);
+    if (d52 && d60 && Math.abs(d52 - d60) > 60000) return true;
+  }
+
+  return false;
+}
+
+function buildLogSummary(parsed) {
+  const newOrder    = parsed.find(p => p.mt === 'D');
+  const execReports = parsed.filter(p => p.mt === '8');
+  const lastExec    = execReports[execReports.length - 1];
+  const fills       = execReports.filter(p => ['1','2','F'].includes(p.fm[150]));
+
+  // Fill reconciliation: sum Tag 32 (LastQty) across ALL exec reports with LastQty > 0,
+  // compare against the HIGHEST Tag 14 (CumQty) seen across all exec reports
+  const execsWithLastQty = execReports.filter(p => p.fm[32] !== undefined && parseInt(p.fm[32]) > 0);
+  const sumLastQty       = execsWithLastQty.reduce((s, p) => s + parseInt(p.fm[32]), 0);
+  const allCumQtys       = execReports.map(p => parseInt(p.fm[14] || '0')).filter(n => n > 0);
+  const maxCumQty        = allCumQtys.length > 0 ? Math.max(...allCumQtys) : 0;
+  const canRecon         = execsWithLastQty.length > 0 && maxCumQty > 0;
+  const reconOk          = canRecon && sumLastQty === maxCumQty;
+  const reconMiss        = canRecon && sumLastQty !== maxCumQty;
+  console.log('[FIX Recon] fills with LastQty:', execsWithLastQty.length,
+    '| sum(Tag32):', sumLastQty, '| max(Tag14):', maxCumQty, '| match:', reconOk);
+
+  // ── Quick Notes ──
+  const notes = [];
+
+  if (newOrder) {
+    const fm     = newOrder.fm;
+    const sym    = fm[55] || '?';
+    const side   = SIDE_DISP[fm[54]] || fm[54] || '';
+    const qty    = fm[38] || '?';
+    const px     = fm[44] ? ` @ $${fm[44]}` : '';
+    const sender = fm[49] || fm[56] || '?';
+    notes.push({ color: 'blue', text: `New Order Single received from ${sender} for ${qty} ${sym}${side ? ' ' + side : ''}${px}` });
+  }
+
+  if (fills.length > 0) {
+    const lastFill  = [...fills].reverse().find(p => p.fm[14]);
+    const cumQty    = lastFill ? lastFill.fm[14] : '?';
+    const broker    = fills[0].fm[49] || '?';
+    const fillWord  = fills.length === 1 ? 'partial fill' : 'partial fills';
+    notes.push({ color: 'green', text: `${fills.length} ${fillWord} received from ${broker} totaling ${cumQty} shares` });
+  } else if (execReports.length > 0) {
+    const broker = execReports[0].fm[49] || '?';
+    notes.push({ color: 'yellow', text: `${execReports.length} execution report${execReports.length > 1 ? 's' : ''} received from ${broker} — no fills yet` });
+  }
+
+  if (lastExec && lastExec.fm[151] && lastExec.fm[151] !== '0') {
+    notes.push({ color: 'yellow', text: `${lastExec.fm[151]} shares remain unfilled (LeavesQty)` });
+  }
+
+  const lastAvgPx = [...execReports].reverse().find(p => p.fm[6]);
+  if (lastAvgPx) {
+    notes.push({ color: 'green', text: `Average fill price $${lastAvgPx.fm[6]} across all executions` });
+  }
+
+  if (notes.length === 0) {
+    notes.push({ color: 'blue', text: `${parsed.length} messages in session` });
+  }
+
+  // ── Key Takeaways ──
+  const takeaways = [];
+
+  if (lastExec && lastExec.fm[14]) {
+    const orderQty = newOrder ? parseInt(newOrder.fm[38] || '0') : 0;
+    const cumQty   = parseInt(lastExec.fm[14] || '0');
+    if (orderQty > 0) {
+      const pct = Math.round(cumQty / orderQty * 100);
+      if (pct >= 100) {
+        const avgPxVal = lastAvgPx ? ` @ $${lastAvgPx.fm[6]} avg` : '';
+        takeaways.push({ color: 'green', text: `Order fully filled — ${orderQty} shares${avgPxVal}` });
+      } else {
+        takeaways.push({ color: 'yellow', text: `${cumQty} of ${orderQty} shares filled (${pct}%)` });
+      }
+    }
+  }
+
+  // Fill reconciliation takeaway
+  if (reconOk) {
+    takeaways.push({ color: 'green', text: `All fills reconcile — ${execsWithLastQty.length} fills totaling ${sumLastQty} shares match CumQty` });
+  } else if (reconMiss) {
+    takeaways.push({ color: 'red', text: `Fill gap detected — ${maxCumQty - sumLastQty} shares unaccounted for` });
+  }
+
+  const flaggedCount = parsed.filter(p => p.flagged).length;
+  if (flaggedCount > 0) {
+    takeaways.push({ color: 'red', text: `${flaggedCount} ${flaggedCount === 1 ? 'message has' : 'messages have'} validation issues` });
+  }
+
+  const uniqueTimes = [...new Set(parsed.map(p => p.fm[52]).filter(Boolean))];
+  if (uniqueTimes.length === 1 && parsed.length > 1) {
+    takeaways.push({ color: 'yellow', text: 'All messages share the same SendingTime — may be replayed or test data' });
+  }
+
+  const mods = parsed.filter(p => ['F','G'].includes(p.mt));
+  if (mods.length > 0) {
+    const modLabels = { 'F': 'Cancel Request', 'G': 'Cancel/Replace' };
+    takeaways.push({ color: 'yellow', text: `${mods.length} order modification${mods.length > 1 ? 's' : ''}: ${mods.map(p => modLabels[p.mt]).join(', ')}` });
+  }
+
+  if (!takeaways.some(t => t.color === 'red')) {
+    takeaways.push({ color: 'green', text: 'No obvious issues with FIX tags' });
+  }
+
+  // ── Populate DOM ──
+  document.getElementById('ca-plain-english').innerHTML =
+    notes.map(n =>
+      `<p class="summary-para qn-para"><span class="qn-dot qn-dot-${esc(n.color)}" aria-hidden="true"></span>${esc(n.text)}</p>`
+    ).join('');
+
+  document.getElementById('ca-key-takeaways').innerHTML =
+    `<div class="key-takeaways">${takeaways.map(kt =>
+      `<div class="kt-row">
+         <span class="kt-dot dot-${esc(kt.color)}" aria-hidden="true"></span>
+         <span class="kt-text">${esc(kt.text)}</span>
+       </div>`
+    ).join('')}</div>`;
+
+  const reconBanner = document.getElementById('tl-recon-banner');
+  if (reconMiss) {
+    const gap = maxCumQty - sumLastQty;
+    reconBanner.textContent = `⚠ Fill gap detected — ${gap} shares unaccounted for — a fill may be missing`;
+    reconBanner.style.display = '';
+  } else {
+    reconBanner.style.display = 'none';
+  }
+  document.getElementById('ca-flagged-section').style.display = 'none';
+}
+
+function renderTimeline(messages) {
+  _multiMode = true;
+  document.getElementById('tl-count').textContent = `${messages.length} messages`;
+
+  const parsed = messages.map(raw => {
+    const fm      = parseFIXQuick(raw);
+    const mt      = fm[35] || '?';
+    const flagged = tlHasFlaggedIssues(fm);
+    const timeMs  = hmsToMs(fm[52] || fm[60]);
+    return { raw, mt, fm, flagged, timeMs,
+      typeName:     MSG_TYPE_NAMES[mt] || `MsgType ${mt}`,
+      time:         fixTimeHMS(fm[52] || fm[60]),
+      detail:       tlDetail(mt, fm),
+      cls:          tlSideClass(mt, fm),
+      rowType:      tlRowType(mt, fm),
+      fillProgress: tlFillProgress(mt, fm),
+    };
+  });
+
+  // Detect which exec report row is where CumQty jumps beyond the running LastQty sum
+  // (i.e. a preceding fill is missing from this log)
+  const gapRows = new Set();
+  let cumSoFar = 0;
+  parsed.forEach((r, i) => {
+    if (r.mt === '8' && r.fm[32] && parseInt(r.fm[32]) > 0) {
+      cumSoFar += parseInt(r.fm[32]);
+      const cumQty = parseInt(r.fm[14] || '0');
+      if (cumQty > cumSoFar) {
+        gapRows.add(i);
+        cumSoFar = cumQty; // reset to actual so later rows compare correctly
+      }
+    }
+  });
+
+  // Time deltas — gap from previous row, shown only when ≥ 1 second
+  const deltas = parsed.map((r, i) => {
+    if (i === 0 || r.timeMs === null || parsed[i-1].timeMs === null) return '';
+    const ms = r.timeMs - parsed[i-1].timeMs;
+    if (ms < 1000) return '';
+    return ms < 60000 ? `+${Math.round(ms/1000)}s`
+                      : `+${Math.floor(ms/60000)}m${Math.round((ms%60000)/1000)}s`;
+  });
+
+  document.getElementById('timeline-rows').innerHTML = parsed.map((r, i) => {
+    const isGap = gapRows.has(i);
+    return `<div class="tl-row${r.flagged ? ' tl-flagged' : ''}${isGap ? ' tl-gap' : ''}" data-idx="${i}" data-type="${esc(r.rowType)}">
+       <span class="tl-time">${esc(r.time)}</span>
+       <span class="tl-dot">·</span>
+       <span class="tl-type">${esc(r.typeName)}</span>
+       ${r.detail ? `<span class="tl-dot">·</span><span class="tl-detail ${esc(r.cls)}">${esc(r.detail)}${r.fillProgress ? ` <span class="tl-pipe">|</span> <span class="tl-fp">${esc(r.fillProgress)}</span>` : ''}${isGap ? ' <span class="tl-gap-warn">⚠ gap</span>' : ''}</span>` : ''}
+       ${deltas[i]  ? `<span class="tl-delta">${esc(deltas[i])}</span>` : ''}
+       ${r.flagged  ? '<span class="tl-warn" aria-label="Validation issues">⚠</span>' : ''}
+     </div>`;
+  }).join('');
+
+  // Scroll latest row into view within the timeline container
+  const wrap = document.getElementById('timeline-rows');
+  wrap.scrollTop = wrap.scrollHeight;
+
+  // Issue count badge
+  const issueCount = parsed.filter(p => p.flagged).length;
+  const issueEl = document.getElementById('tl-issue-count');
+  if (issueCount > 0) {
+    issueEl.textContent = `⚠ ${issueCount} ${issueCount === 1 ? 'issue' : 'issues'}`;
+    issueEl.style.display = '';
+  } else {
+    issueEl.style.display = 'none';
+  }
+
+  // Stats row
+  const stats = calcTimelineStats(parsed);
+  document.getElementById('tl-avg-price').textContent  = stats.avgPx;
+  document.getElementById('tl-executions').textContent = stats.execCount;
+  document.getElementById('tl-latency').textContent    = stats.latency;
+  document.getElementById('tl-stats').style.display    = '';
+
+  // Fill progress bar
+  const progressBar  = document.getElementById('tl-progress-bar');
+  const progressFill = document.getElementById('tl-progress-fill');
+  if (stats.fillPct > 0) {
+    progressFill.style.width  = `${stats.fillPct}%`;
+    progressBar.style.display = '';
+  } else {
+    progressBar.style.display = 'none';
+  }
+
+  // Reset filter pills to "All"
+  document.querySelectorAll('.tl-pill').forEach(p => p.classList.remove('tl-pill-active'));
+  const allPill = document.querySelector('.tl-pill[data-filter="all"]');
+  if (allPill) allPill.classList.add('tl-pill-active');
+
+  buildLogSummary(parsed);
+  showState('multi');
+
+  // Filter pill handlers
+  document.querySelectorAll('.tl-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.tl-pill').forEach(p => p.classList.remove('tl-pill-active'));
+      pill.classList.add('tl-pill-active');
+      const f = pill.dataset.filter;
+      document.querySelectorAll('#timeline-rows .tl-row').forEach(row => {
+        row.style.display = (f === 'all' || row.dataset.type === f) ? '' : 'none';
+      });
+    });
+  });
+
+  // Row click → decode
+  document.querySelectorAll('.tl-row').forEach(row => {
+    row.addEventListener('click', async () => {
+      document.querySelectorAll('.tl-row').forEach(r => r.classList.remove('tl-selected'));
+      row.classList.add('tl-selected');
+      const idx        = parseInt(row.dataset.idx);
+      const wasFlagged = parsed[idx].flagged;
+      const fd         = new FormData();
+      fd.append('fix_message', parsed[idx].raw);
+      try {
+        const res  = await fetch('/decode', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          renderDecoded(data);
+          showState('multi+decoded');
+          const flaggedSection = document.getElementById('ca-flagged-section');
+          if (wasFlagged && flaggedSection.style.display !== 'none') {
+            flaggedSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          } else {
+            document.getElementById('state-decoded').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
+      } catch (_) {}
+    });
+  });
 }
 
 function iconFor(type, style) {
@@ -676,11 +1145,9 @@ function buildAnalysis(fmap, summary) {
 
   // ── TAKEAWAYS ─────────────────────────────────────────
 
-  // Session header completeness
+  // Session header completeness — only surface if something is missing
   const missSess = [8, 9, 35, 49, 56, 34, 52].filter(t => fmap[t] === undefined);
-  if (!missSess.length)
-    takeaways.push({ color: 'green', text: 'All session header tags present (8, 9, 35, 49, 56, 34, 52)' });
-  else
+  if (missSess.length)
     takeaways.push({ color: 'red', text: `Missing session tag${missSess.length > 1 ? 's' : ''}: ${missSess.join(', ')}` });
 
   // Checksum — only surface if missing; presence is expected and uninteresting
@@ -745,10 +1212,11 @@ function renderDecoded(data) {
   const fmap = {};
   for (const f of fields) fmap[f.tag] = f.value;
 
-  // ── Pill badge above results (change 4: includes FIX version) ──
+  // ── Pill badge above results ──
   const pill = document.getElementById('msg-type-pill');
   pill.className = `msg-type-pill cat-${esc(summary.category)}`;
-  pill.textContent = `${summary.msg_type_val} — ${summary.msg_type_name} · ${summary.fix_version}`;
+  pill.textContent = `${summary.msg_type_val} — ${summary.msg_type_name}`;
+  document.getElementById('pill-fix-version').textContent = summary.fix_version;
 
   // ── Quick quote ──
   const quote = buildQuote(fmap, summary);
@@ -848,42 +1316,44 @@ function renderDecoded(data) {
   document.getElementById('dms-time').textContent = summary.sending_time;
   document.getElementById('decoded-meta-strip').style.display = '';
 
-  // ── Quick Notes (center column) — colored bullet per sentence ──
-  function narrativeDot(text) {
-    const t = text.toLowerCase();
-    if (/\b(cancelled|rejected)\b/.test(t))                           return 'red';
-    if (/\b(fill(ed)?|executed|trade|status: fill)\b/.test(t))        return 'green';
-    if (/\b(price|limit|market|stop|pegged)\b|@ [\d]/.test(t))        return 'yellow';
-    if (/\b(id:|id \(|clordid|orderid|origclordid|execid|alloc)\b/i.test(t)) return 'muted';
-    return 'blue';
+  // ── Analysis sections (Flagged, Quick Notes, Key Takeaways) ──
+  // In multi-message mode (_multiMode flag) these are locked to the log-level
+  // summary written by buildLogSummary — row clicks must never overwrite them.
+  if (!_multiMode) {
+    function narrativeDot(text) {
+      const t = text.toLowerCase();
+      if (/\b(cancelled|rejected)\b/.test(t))                           return 'red';
+      if (/\b(fill(ed)?|executed|trade|status: fill)\b/.test(t))        return 'green';
+      if (/\b(price|limit|market|stop|pegged)\b|@ [\d]/.test(t))        return 'yellow';
+      if (/\b(id:|id \(|clordid|orderid|origclordid|execid|alloc)\b/i.test(t)) return 'muted';
+      return 'blue';
+    }
+    document.getElementById('ca-plain-english').innerHTML =
+      (summary.narrative || []).map(p =>
+        `<p class="summary-para qn-para"><span class="qn-dot qn-dot-${narrativeDot(p)}" aria-hidden="true"></span>${p}</p>`
+      ).join('') || '<p class="ca-dim">No description available.</p>';
+
+    const flaggedSection = document.getElementById('ca-flagged-section');
+    const flaggedEl      = document.getElementById('ca-flagged');
+    if (analysis.flags.length) {
+      flaggedEl.innerHTML = analysis.flags.map(f =>
+        `<div class="flag-row">
+           <svg class="flag-icon" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/></svg>
+           <span class="flag-text">${esc(f)}</span>
+         </div>`).join('');
+      flaggedSection.style.display = '';
+    } else {
+      flaggedSection.style.display = 'none';
+    }
+
+    document.getElementById('ca-key-takeaways').innerHTML = analysis.takeaways.length
+      ? `<div class="key-takeaways">${analysis.takeaways.map(kt =>
+          `<div class="kt-row">
+             <span class="kt-dot dot-${esc(kt.color)}" aria-hidden="true"></span>
+             <span class="kt-text">${esc(kt.text)}</span>
+           </div>`).join('')}</div>`
+      : '<p class="ca-dim">No analysis available.</p>';
   }
-  document.getElementById('ca-plain-english').innerHTML =
-    (summary.narrative || []).map(p =>
-      `<p class="summary-para qn-para"><span class="qn-dot qn-dot-${narrativeDot(p)}" aria-hidden="true"></span>${p}</p>`
-    ).join('') || '<p class="ca-dim">No description available.</p>';
-
-  // ── Flags + Key Takeaways — center column ──
-
-  const flaggedSection = document.getElementById('ca-flagged-section');
-  const flaggedEl = document.getElementById('ca-flagged');
-  if (analysis.flags.length) {
-    flaggedEl.innerHTML = analysis.flags.map(f =>
-      `<div class="flag-row">
-         <svg class="flag-icon" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/></svg>
-         <span class="flag-text">${esc(f)}</span>
-       </div>`).join('');
-    flaggedSection.style.display = '';
-  } else {
-    flaggedSection.style.display = 'none';
-  }
-
-  document.getElementById('ca-key-takeaways').innerHTML = analysis.takeaways.length
-    ? `<div class="key-takeaways">${analysis.takeaways.map(kt =>
-        `<div class="kt-row">
-           <span class="kt-dot dot-${esc(kt.color)}" aria-hidden="true"></span>
-           <span class="kt-text">${esc(kt.text)}</span>
-         </div>`).join('')}</div>`
-    : '<p class="ca-dim">No analysis available.</p>';
 }
 
 function resetSidebar() {
@@ -894,6 +1364,15 @@ async function doDecodeMessage() {
   const msg = (editorInput ? editorInput.value : '').trim();
   if (!msg) { showState('empty'); resetSidebar(); return; }
 
+  // Detect multiple FIX messages — each line starts with 8=FIX
+  const lines = msg.split('\n').map(l => l.trim()).filter(l => /^8=FIXT?[.\d]/.test(l));
+  if (lines.length > 1) {
+    renderTimeline(lines);
+    resetSidebar();
+    return;
+  }
+
+  _multiMode = false;
   if (decodeBtn) { decodeBtn.disabled = true; decodeBtn.textContent = 'DECODING…'; }
 
   try {
