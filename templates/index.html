@@ -103,7 +103,7 @@
       </ul>
     </div>
 
-    <div class="sb-section">
+    <div class="sb-section sb-section-stats">
       <div class="sb-heading">Site Stats</div>
       <div class="sb-stats">
         <div class="sb-stat-item">
@@ -464,15 +464,29 @@ if (examplesBtn && examplesDrop) {
   examplesBtn.addEventListener('click', e => {
     e.stopPropagation();
     const open = examplesDrop.style.display !== 'none';
-    examplesDrop.style.display = open ? 'none' : '';
+    if (open) {
+      examplesDrop.style.display = 'none';
+      examplesDrop.classList.remove('drop-flip');
+    } else {
+      examplesDrop.classList.remove('drop-flip');
+      examplesDrop.style.display = '';
+      const rect = examplesDrop.getBoundingClientRect();
+      if (rect.bottom > window.innerHeight) {
+        examplesDrop.classList.add('drop-flip');
+      }
+    }
   });
   document.querySelectorAll('.examples-drop-item').forEach(item => {
     item.addEventListener('click', () => {
       loadSample(item.dataset.msg, false);
       examplesDrop.style.display = 'none';
+      examplesDrop.classList.remove('drop-flip');
     });
   });
-  document.addEventListener('click', () => { examplesDrop.style.display = 'none'; });
+  document.addEventListener('click', () => {
+    examplesDrop.style.display = 'none';
+    examplesDrop.classList.remove('drop-flip');
+  });
 }
 
 document.querySelectorAll('[data-autosubmit="true"]').forEach(el => {
