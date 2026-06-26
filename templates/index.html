@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIX Message Decoder — FIXReader</title>
+  <meta name="description" content="Decode FIX Protocol messages instantly. Field-by-field breakdown with plain English explanations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     TOP NAV
+════════════════════════════════════════════════════ -->
+<nav class="top-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="logo-mark"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></div>
+      <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="/"               class="nav-item active" aria-current="page">Decode</a></li>
+      <li><a href="/learn"          class="nav-item">Learn FIX</a></li>
+      <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
+      <li><a href="/tools"          class="nav-item">Tools</a></li>
+      <li><a href="/library"        class="nav-item">Message Library</a></li>
+      <li><a href="/resources"      class="nav-item">Resources</a></li>
+      <li><a href="/about"          class="nav-item">About</a></li>
+    </ul>
+    <div class="nav-end">
+      <div class="nav-theme">
+        <span class="nav-theme-label">Today's theme</span>
+        <a href="/learn" class="nav-theme-value">Order Management</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════
+     THREE-COLUMN LAYOUT
+════════════════════════════════════════════════════ -->
+<div class="page-layout">
+
+  <!-- ── LEFT SIDEBAR ───────────────────────────── -->
+  <aside class="sidebar sidebar-left">
+
+    <div class="sb-section">
+      <div class="sb-heading">Tools</div>
+      <nav aria-label="Tools">
+        <a href="/" class="sb-tool active" aria-current="page">
+          <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          FIX Decoder
+        </a>
+        <a href="/reference" class="sb-tool">
+          <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2" width="11" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h6M5 12h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg></span>
+          Field Reference
+        </a>
+        <a href="/builder" class="sb-tool">
+          <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+          Message Builder
+        </a>
+        <a href="/checksum" class="sb-tool">
+          <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 8h2.5M8.5 8H11M8 5v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          Checksum Calculator
+        </a>
+        <a href="/validator" class="sb-tool">
+          <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Tag Validator
+        </a>
+      </nav>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-heading">Popular Topics</div>
+      <ul class="sb-topics" role="list">
+        <li><a class="sb-topic" href="#" data-msg="new_order"      data-autosubmit="true">New Order Single      <code class="sb-tag">35=D</code></a></li>
+        <li><a class="sb-topic" href="#" data-msg="exec_report"    data-autosubmit="true">Execution Report      <code class="sb-tag">35=8</code></a></li>
+        <li><a class="sb-topic" href="#" data-msg="cancel_request" data-autosubmit="true">Order Cancel Request  <code class="sb-tag">35=F</code></a></li>
+        <li><a class="sb-topic" href="#" data-msg="cancel_replace" data-autosubmit="true">Cancel/Replace Req    <code class="sb-tag">35=G</code></a></li>
+        <li><a class="sb-topic" href="#" data-msg="order_status"   data-autosubmit="true">Order Status Request  <code class="sb-tag">35=H</code></a></li>
+        <li><a class="sb-topic" href="#" data-msg="logon"          data-autosubmit="true">Logon                 <code class="sb-tag">35=A</code></a></li>
+        <li><a class="sb-topic" href="#" data-msg="logout"         data-autosubmit="true">Logout                <code class="sb-tag">35=5</code></a></li>
+        <li><a class="sb-topic" href="#" data-msg="heartbeat"      data-autosubmit="true">Heartbeat             <code class="sb-tag">35=0</code></a></li>
+        <li><a class="sb-topic" href="#" data-msg="md_request"     data-autosubmit="true">Market Data Request   <code class="sb-tag">35=V</code></a></li>
+        <li><a class="sb-topic" href="#" data-msg="reject"         data-autosubmit="true">Session Reject        <code class="sb-tag">35=3</code></a></li>
+      </ul>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-heading">Site Stats</div>
+      <div class="sb-stats">
+        <div class="sb-stat-item">
+          <div class="sb-stat-icon">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2" width="11" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sb-stat-n">31</span>
+          <span class="sb-stat-label">Msg Types</span>
+        </div>
+        <div class="sb-stat-item">
+          <div class="sb-stat-icon">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sb-stat-n">1,102</span>
+          <span class="sb-stat-label">Tags</span>
+        </div>
+        <div class="sb-stat-item">
+          <div class="sb-stat-icon">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 2h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1zM5 6h6M5 9h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sb-stat-n">87</span>
+          <span class="sb-stat-label">Articles</span>
+        </div>
+        <div class="sb-stat-item">
+          <div class="sb-stat-icon">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2" stroke="currentColor" stroke-width="1.25"/><path d="M3 13c0-2 2.2-4 5-4s5 2 5 4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>
+          </div>
+          <span class="sb-stat-n">153</span>
+          <span class="sb-stat-label">Q&amp;A</span>
+        </div>
+        <div class="sb-stat-item sb-stat-full">
+          <div class="sb-stat-icon">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.25"/><path d="M5 7l2 2 4-4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="sb-stat-n">42</span>
+          <span class="sb-stat-label">Code Examples</span>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+
+  <!-- ── CENTER COLUMN ──────────────────────────── -->
+  <main class="main-col" id="main-content">
+
+    <!-- Input card -->
+    <div class="card input-card">
+      <div class="editor-header">
+        <span class="editor-header-label">Paste Your FIX Message</span>
+        <button type="button" class="examples-btn">EXAMPLES ▾</button>
+      </div>
+
+      <form id="decode-form" novalidate>
+        <!-- Code editor -->
+        <div class="code-editor">
+          <div class="editor-gutter" id="editor-gutter" aria-hidden="true">
+            <div class="ln">1</div>
+          </div>
+          <textarea
+            id="fix-message"
+            name="fix_message"
+            class="editor-input"
+            rows="8"
+            placeholder="8=FIX.4.2|9=178|35=D|49=ACME|56=NYSE|34=4|52=20060324-17:45:00|11=12345|21=1|55=IBM|54=1|38=100|40=2|44=15.00|10=050|"
+            spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+          >{% if fix_message %}{{ fix_message }}{% endif %}</textarea>
+        </div>
+
+        <div class="form-footer">
+          <div class="sample-row">
+            <span class="sample-label">Try:</span>
+            <button type="button" class="sample-btn" data-msg="new_order">New Order Single</button>
+            <button type="button" class="sample-btn" data-msg="exec_report">Execution Report</button>
+            <button type="button" class="sample-btn" data-msg="heartbeat">Heartbeat</button>
+            <button type="button" class="sample-btn" data-msg="logon">Logon</button>
+          </div>
+          <div class="btn-group">
+            <button type="submit" class="btn-decode">DECODE MESSAGE</button>
+            <button type="button" class="btn-compare">COMPARE MESSAGES</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+    <!-- ── Results area — three states managed by JS ── -->
+    <div id="results-area">
+
+      <!-- STATE: empty (default) -->
+      <div id="state-empty" class="empty-state">
+        <div class="empty-graphic" aria-hidden="true">
+          <div class="eg-row">
+            <span class="eg-tag">35</span><span class="eg-eq">=</span><span class="eg-val">D</span><span class="eg-sep">|</span>
+            <span class="eg-tag">55</span><span class="eg-eq">=</span><span class="eg-val">IBM</span><span class="eg-sep">|</span>
+            <span class="eg-tag">54</span><span class="eg-eq">=</span><span class="eg-val">1</span><span class="eg-sep">|</span>
+            <span class="eg-tag">44</span><span class="eg-eq">=</span><span class="eg-val">15.00</span>
+          </div>
+          <div class="eg-arrow">↓</div>
+          <div class="eg-decoded">
+            <div class="eg-decoded-row"><span class="eg-d-tag">35</span><span class="eg-d-name">MsgType</span><span class="eg-d-badge order">New Order — Single</span></div>
+            <div class="eg-decoded-row"><span class="eg-d-tag">55</span><span class="eg-d-name">Symbol</span><span class="eg-d-val">IBM</span></div>
+            <div class="eg-decoded-row"><span class="eg-d-tag">54</span><span class="eg-d-name">Side</span><span class="eg-d-badge buy">Buy</span></div>
+            <div class="eg-decoded-row"><span class="eg-d-tag">44</span><span class="eg-d-name">Price</span><span class="eg-d-val">$15.00</span></div>
+          </div>
+        </div>
+        <p class="empty-cta">Paste a FIX message above and click <strong>Decode</strong>,<br>or pick a sample from <strong>Popular Topics</strong> on the left.</p>
+      </div>
+
+      <!-- STATE: error -->
+      <div id="state-error" class="card error-card" style="display:none">
+        <div class="error-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></div>
+        <h3>Unable to parse this message</h3>
+        <p>Ensure the message contains <code>tag=value</code> pairs separated by SOH (<code>0x01</code>) or pipe (<code>|</code>) characters and begins with <code>8=FIX</code> or <code>8=FIXT</code>.</p>
+      </div>
+
+      <!-- STATE: decoded -->
+      <div id="state-decoded" style="display:none">
+        <div class="results-label-row">
+          <span class="results-label-text">Decoded Message</span>
+          <span id="msg-type-pill" class="msg-type-pill"></span>
+        </div>
+        <div class="results-panel">
+          <div class="msg-summary">
+            <h3>MESSAGE SUMMARY</h3>
+            <ul class="summary-list" id="summary-list"></ul>
+            <div class="summary-meta" id="summary-meta">
+              <span class="summary-badge" id="summary-badge"></span>
+              <span class="summary-version" id="summary-version"></span>
+            </div>
+          </div>
+          <div class="tag-table-wrap">
+            <table class="tag-table">
+              <thead>
+                <tr>
+                  <th>Tag</th>
+                  <th>Value</th>
+                  <th>Description</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody id="tag-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /results-area -->
+
+    <!-- ── Feature cards — always visible ── -->
+    <div class="feature-cards">
+      <div class="feat-card">
+        <div class="fc-header">
+          <div class="fc-icon fc-icon-learn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L2 5l6 3 6-3-6-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M2 5v5l6 3 6-3V5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="fc-title">Learn FIX</span>
+        </div>
+        <ul class="fc-links">
+          <li><a href="/learn/101">FIX Protocol 101</a></li>
+          <li><a href="/learn/message-types">Message Types Guide</a></li>
+          <li><a href="/reference">Tag Reference (1,102 tags)</a></li>
+          <li><a href="/learn/sessions">Session Management</a></li>
+          <li><a href="/learn/glossary">FIX Glossary</a></li>
+        </ul>
+      </div>
+      <div class="feat-card">
+        <div class="fc-header">
+          <div class="fc-icon fc-icon-interview">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 13.5c0-2.5 2.2-4.5 5-4.5s5 2 5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <span class="fc-title">Interview Prep</span>
+        </div>
+        <ul class="fc-links">
+          <li><a href="/interview-prep">153 Q&amp;A Bank</a></li>
+          <li><a href="/interview-prep/mock">Mock FIX Interview</a></li>
+          <li><a href="/interview-prep/scenarios">Common Scenarios</a></li>
+          <li><a href="/interview-prep/cheatsheet">FIX Cheat Sheet</a></li>
+          <li><a href="/glossary">FIX Glossary</a></li>
+        </ul>
+      </div>
+      <div class="feat-card">
+        <div class="fc-header">
+          <div class="fc-icon fc-icon-tools">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10.5 2a3.5 3.5 0 00-3.4 4.3L2.5 11a1 1 0 000 1.4l.6.6a1 1 0 001.4 0l4.7-4.6A3.5 3.5 0 1010.5 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="fc-title">Tools</span>
+        </div>
+        <ul class="fc-links">
+          <li><a href="/builder">Message Builder</a></li>
+          <li><a href="/checksum">Checksum Calculator</a></li>
+          <li><a href="/validator">Tag Validator</a></li>
+          <li><a href="/diff">FIX Message Diff</a></li>
+          <li><a href="/reference">Tag Reference</a></li>
+        </ul>
+      </div>
+      <div class="feat-card">
+        <div class="fc-header">
+          <div class="fc-icon fc-icon-library">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="2" width="5" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+          </div>
+          <span class="fc-title">Message Library</span>
+        </div>
+        <ul class="fc-links">
+          <li><a href="/library/orders">Order Messages (D, F, G, H)</a></li>
+          <li><a href="/library/executions">Execution Reports (8, 9)</a></li>
+          <li><a href="/library/session">Session Messages (A, 5, 0)</a></li>
+          <li><a href="/library/market-data">Market Data (V, W, X)</a></li>
+          <li><a href="/library/post-trade">Post-Trade (AE, AS)</a></li>
+        </ul>
+      </div>
+    </div><!-- /feature-cards -->
+
+  </main><!-- /main-col -->
+
+
+  <!-- ── RIGHT SIDEBAR ──────────────────────────── -->
+  <aside class="sidebar sidebar-right">
+
+    <!-- Message banner — JS fills on decode -->
+    <div id="sb-banner" style="display:none"></div>
+
+    <!-- WHAT IS FIX (always visible) -->
+    <div class="sb-section">
+      <div class="sb-heading">What Is FIX?</div>
+      <p class="rsb-para">FIX (Financial Information eXchange) is the global standard for electronic trading. Messages use <code>tag=value</code> pairs joined by SOH or pipe delimiters.</p>
+      <p class="rsb-para">Common: <code>35=D</code> New Order, <code>35=8</code> Exec Report, <code>35=A</code> Logon.</p>
+    </div>
+
+    <!-- NEED HELP (always visible) -->
+    <div class="sb-section">
+      <div class="sb-heading">Need Help?</div>
+      <a href="/learn/101"           class="rsb-link">FIX Protocol 101 →</a>
+      <a href="/learn/message-types" class="rsb-link">Message Types Guide →</a>
+      <a href="/reference"           class="rsb-link">Tag Reference (1,102 tags) →</a>
+      <a href="/learn/glossary"      class="rsb-link">FIX Glossary →</a>
+    </div>
+
+    <!-- PLAIN ENGLISH — JS populates on decode -->
+    <div class="sb-section">
+      <div class="sb-heading">Plain English</div>
+      <div id="sb-plain-english">
+        <p class="rsb-para rsb-dim">Decode a FIX message to see a human-readable explanation here.</p>
+      </div>
+    </div>
+
+    <!-- KEY TAKEAWAYS — JS populates on decode -->
+    <div class="sb-section">
+      <div class="sb-heading">Key Takeaways</div>
+      <div id="sb-key-takeaways">
+        <p class="rsb-para rsb-dim">Key insights will appear here after you decode a message.</p>
+      </div>
+    </div>
+
+  </aside>
+
+</div><!-- /page-layout -->
+
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
+    <div class="footer-links">
+      <a href="https://github.com/fixreader" class="footer-link">GitHub</a>
+      <a href="/contact" class="footer-link">Contact</a>
+      <a href="/feedback" class="footer-link">Feedback</a>
+    </div>
+    <span class="footer-copy">© 2026 FIXReader.org</span>
+  </div>
+</footer>
+
+
+<script>
+const SAMPLES = {
+  new_order:      '8=FIX.4.2|9=178|35=D|49=ACME|56=NYSE|34=4|52=20060324-17:45:00|11=12345|21=1|55=IBM|54=1|38=100|40=2|44=15.00|10=050|',
+  exec_report:    '8=FIX.4.2|9=234|35=8|49=NYSE|56=ACME|34=5|52=20060324-17:45:01|11=12345|17=98765|150=F|39=2|55=IBM|54=1|38=100|32=100|31=15.00|151=0|14=100|6=15.00|10=127|',
+  cancel_request: '8=FIX.4.2|9=142|35=F|49=ACME|56=NYSE|34=6|52=20060324-17:46:00|41=12345|11=12346|55=IBM|54=1|38=100|60=20060324-17:46:00|10=088|',
+  cancel_replace: '8=FIX.4.2|9=192|35=G|49=ACME|56=NYSE|34=7|52=20060324-17:47:00|41=12345|11=12347|21=1|55=IBM|54=1|38=200|40=2|44=16.00|60=20060324-17:47:00|10=201|',
+  order_status:   '8=FIX.4.2|9=102|35=H|49=ACME|56=NYSE|34=8|52=20060324-17:48:00|11=12345|55=IBM|54=1|10=044|',
+  logon:          '8=FIX.4.2|9=73|35=A|49=ACME|56=NYSE|34=1|52=20060324-17:44:59|98=0|108=30|141=Y|10=063|',
+  logout:         '8=FIX.4.2|9=82|35=5|49=ACME|56=NYSE|34=99|52=20060324-18:00:00|58=End of trading session|10=212|',
+  heartbeat:      '8=FIX.4.2|9=52|35=0|49=ACME|56=NYSE|34=12|52=20060324-17:50:00|10=110|',
+  md_request:     '8=FIX.4.2|9=102|35=V|49=ACME|56=NYSE|34=20|52=20060324-17:55:00|262=MDR001|263=1|264=1|267=2|269=0|269=1|55=IBM|10=199|',
+  reject:         '8=FIX.4.2|9=103|35=3|49=NYSE|56=ACME|34=10|52=20060324-17:44:59|45=3|371=35|372=D|373=11|58=Invalid MsgType|10=066|',
+};
+
+// ── DOM refs ──
+const editorInput  = document.getElementById('fix-message');
+const editorGutter = document.getElementById('editor-gutter');
+const decodeBtn    = document.querySelector('.btn-decode');
+
+// ── Line numbers ──
+function updateGutter() {
+  if (!editorInput || !editorGutter) return;
+  const lines = (editorInput.value || '').split('\n').length;
+  let html = '';
+  for (let i = 1; i <= Math.max(lines, 1); i++) html += `<div class="ln">${i}</div>`;
+  editorGutter.innerHTML = html;
+  editorGutter.scrollTop = editorInput.scrollTop;
+}
+
+if (editorInput) {
+  editorInput.addEventListener('input',  updateGutter);
+  editorInput.addEventListener('scroll', () => { editorGutter.scrollTop = editorInput.scrollTop; });
+  updateGutter();
+}
+
+// ── Sample loading ──
+function loadSample(key, autoSubmit) {
+  if (!editorInput || !SAMPLES[key]) return;
+  editorInput.value = SAMPLES[key];
+  editorInput.focus();
+  updateGutter();
+  if (autoSubmit) doDecodeMessage();
+}
+
+document.querySelectorAll('.sample-btn').forEach(btn => {
+  btn.addEventListener('click', () => loadSample(btn.dataset.msg, false));
+});
+document.querySelectorAll('[data-autosubmit="true"]').forEach(el => {
+  el.addEventListener('click', e => { e.preventDefault(); loadSample(el.dataset.msg, true); });
+});
+
+// ── Copy raw ──
+const copyBtn = document.getElementById('copy-raw');
+if (copyBtn) {
+  copyBtn.addEventListener('click', () => {
+    if (editorInput && editorInput.value) {
+      navigator.clipboard.writeText(editorInput.value).then(() => {
+        const orig = copyBtn.innerHTML;
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.innerHTML = orig; }, 1800);
+      });
+    }
+  });
+}
+
+
+// ══════════════════════════════════════════════════════
+// FETCH-BASED DECODE — no page reload, URL stays at /
+// ══════════════════════════════════════════════════════
+
+function esc(s) {
+  return s == null ? '' : String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function showState(state) {
+  document.getElementById('state-empty').style.display   = state === 'empty'  ? ''      : 'none';
+  document.getElementById('state-error').style.display   = state === 'error'  ? ''      : 'none';
+  document.getElementById('state-decoded').style.display = state === 'decoded' ? 'block' : 'none';
+}
+
+function iconFor(type, style) {
+  if (type === 'side') {
+    if (style === 'val-buy')
+      return '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="13" x2="8" y2="3"/><polyline points="4,7 8,3 12,7"/></svg>';
+    if (style === 'val-sell')
+      return '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="3" x2="8" y2="13"/><polyline points="4,9 8,13 12,9"/></svg>';
+    return '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="2" x2="8" y2="6.5"/><polyline points="5,5 8,2 11,5"/><line x1="8" y1="14" x2="8" y2="9.5"/><polyline points="5,11 8,14 11,11"/></svg>';
+  }
+  return ({
+    symbol:  '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,13 5.5,7 9,9.5 15,3"/><polyline points="11,3 15,3 15,7"/></svg>',
+    type:    '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="3" y="1.5" width="10" height="13" rx="1.5"/><line x1="5.5" y1="5.5" x2="10.5" y2="5.5"/><line x1="5.5" y1="8" x2="10.5" y2="8"/><line x1="5.5" y1="10.5" x2="8.5" y2="10.5"/></svg>',
+    qty:     '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="5" y1="2" x2="3" y2="14"/><line x1="11" y1="2" x2="9" y2="14"/><line x1="2" y1="6" x2="14" y2="6"/><line x1="2" y1="10" x2="14" y2="10"/></svg>',
+    price:   '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="8" y1="1.5" x2="8" y2="14.5"/><path d="M5.5 4.5H10a2 2 0 0 1 0 4H5.5"/></svg>',
+    status:  '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.5"/><polyline points="5,8.5 7,10.5 11,6"/></svg>',
+    time:    '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><polyline points="8,4.5 8,8 10.5,10"/></svg>',
+    seq:     '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="2" y1="4.5" x2="14" y2="4.5"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="11.5" x2="14" y2="11.5"/></svg>',
+    session: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="4.5" cy="8" r="2.5"/><circle cx="11.5" cy="8" r="2.5"/><line x1="7" y1="8" x2="9" y2="8"/></svg>',
+    reset:   '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8a5.5 5.5 0 1 0 1.4-3.7"/><polyline points="2.5,1.5 2.5,5 6,5"/></svg>',
+    enc:     '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="3.5" y="7.5" width="9" height="7" rx="1.5"/><path d="M5.5 7.5V5.5a2.5 2.5 0 0 1 5 0v2"/></svg>',
+    text:    '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 2.5H2.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1H5l3 2.5 3-2.5h2.5a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1z"/></svg>',
+    orig:    '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,6 2,4 4,2"/><path d="M2 4h8a4 4 0 0 1 0 8H9"/><polyline points="8,14 10,12 8,10"/></svg>',
+    id:      '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5"/><circle cx="5.5" cy="8" r="1.75"/><line x1="8.5" y1="6.5" x2="13" y2="6.5"/><line x1="8.5" y1="9.5" x2="11" y2="9.5"/></svg>',
+    msg:     '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="3" y="1.5" width="10" height="13" rx="1.5"/><line x1="5.5" y1="5.5" x2="10.5" y2="5.5"/><line x1="5.5" y1="8" x2="10.5" y2="8"/><line x1="5.5" y1="10.5" x2="8.5" y2="10.5"/></svg>',
+  })[type] || '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="2"/></svg>';
+}
+
+function badgeFor(f) {
+  if (!f.enum_value) return '—';
+  let cls = 'badge-neutral';
+  if      (f.tag === 54 && f.value === '1')                     cls = 'badge-buy';
+  else if (f.tag === 54 && f.value === '2')                     cls = 'badge-sell';
+  else if (f.tag === 39 && f.value === '2')                     cls = 'badge-filled';
+  else if (f.tag === 39 && ['4','8','C'].includes(f.value))     cls = 'badge-neg';
+  else if (f.tag === 39 && ['1','A','E','6'].includes(f.value)) cls = 'badge-pending';
+  return `<span class="${cls}">${esc(f.enum_value)}</span>`;
+}
+
+function renderDecoded(data) {
+  const { fields, summary } = data;
+
+  // ── Pill badge above results ──
+  const pill = document.getElementById('msg-type-pill');
+  pill.className = `msg-type-pill cat-${esc(summary.category)}`;
+  pill.textContent = `${summary.msg_type_val} — ${summary.msg_type_name}`;
+
+  // ── MESSAGE SUMMARY list ──
+  document.getElementById('summary-list').innerHTML = (summary.summary_fields || []).map(sf =>
+    `<li class="summary-item">
+       <span class="summary-icon">${iconFor(sf.icon, sf.style)}</span>
+       <span class="summary-label">${esc(sf.label)}</span>
+       <span class="summary-value ${esc(sf.style)}">${esc(sf.value)}</span>
+     </li>`
+  ).join('');
+
+  // ── Summary meta footer ──
+  document.getElementById('summary-badge').textContent  = `${summary.msg_type_val} — ${summary.msg_type_name}`;
+  document.getElementById('summary-version').textContent = summary.fix_version;
+
+  // ── Tag table ──
+  document.getElementById('tag-tbody').innerHTML = fields.map(f =>
+    `<tr class="${esc(f.highlight)}">
+       <td><span class="tag-num">${esc(String(f.tag))}</span> ${esc(f.name)}</td>
+       <td class="tag-val">${esc(f.value)}</td>
+       <td class="tag-desc">${esc(f.description)}</td>
+       <td>${badgeFor(f)}</td>
+     </tr>`
+  ).join('');
+
+  showState('decoded');
+
+  // ── Right sidebar banner (message type + session meta) ──
+  const banner = document.getElementById('sb-banner');
+  banner.innerHTML = `
+    <div class="summary-type cat-${esc(summary.category)}">
+      <span class="summary-type-label">${esc(summary.msg_type_name)}</span>
+      <span class="summary-type-code">35=${esc(summary.msg_type_val)}</span>
+    </div>
+    <div class="session-meta">
+      <div class="meta-row"><span class="meta-label">From</span>  <span class="meta-val mono">${esc(summary.sender)}</span></div>
+      <div class="meta-row"><span class="meta-label">To</span>    <span class="meta-val mono">${esc(summary.target)}</span></div>
+      <div class="meta-row"><span class="meta-label">Seq #</span> <span class="meta-val mono">${esc(summary.seq_num)}</span></div>
+      <div class="meta-row"><span class="meta-label">Time</span>  <span class="meta-val mono small">${esc(summary.sending_time)}</span></div>
+      <div class="meta-row"><span class="meta-label">FIX</span>   <span class="meta-val mono">${esc(summary.fix_version)}</span></div>
+    </div>`;
+  banner.style.display = '';
+
+  // ── Plain English — narrative is server-generated HTML (values already escaped via markupsafe) ──
+  document.getElementById('sb-plain-english').innerHTML =
+    (summary.narrative || []).map(p => `<p class="summary-para">${p}</p>`).join('')
+    || '<p class="rsb-para rsb-dim">No description available.</p>';
+
+  // ── Key Takeaways ──
+  const kts = summary.key_takeaways || [];
+  document.getElementById('sb-key-takeaways').innerHTML = kts.length
+    ? `<div class="key-takeaways">${kts.map(kt =>
+        `<div class="kt-row">
+           <span class="kt-dot dot-${esc(kt.color)}" aria-hidden="true"></span>
+           <span class="kt-text">${esc(kt.text)}</span>
+         </div>`).join('')}</div>`
+    : '<p class="rsb-para rsb-dim">No key takeaways for this message type.</p>';
+}
+
+function resetSidebar() {
+  const banner = document.getElementById('sb-banner');
+  if (banner) { banner.innerHTML = ''; banner.style.display = 'none'; }
+  const pe = document.getElementById('sb-plain-english');
+  if (pe) pe.innerHTML = '<p class="rsb-para rsb-dim">Decode a FIX message to see a human-readable explanation here.</p>';
+  const kt = document.getElementById('sb-key-takeaways');
+  if (kt) kt.innerHTML = '<p class="rsb-para rsb-dim">Key insights will appear here after you decode a message.</p>';
+}
+
+async function doDecodeMessage() {
+  const msg = (editorInput ? editorInput.value : '').trim();
+  if (!msg) { showState('empty'); resetSidebar(); return; }
+
+  if (decodeBtn) { decodeBtn.disabled = true; decodeBtn.textContent = 'DECODING…'; }
+
+  try {
+    const fd = new FormData();
+    fd.append('fix_message', msg);
+    const res = await fetch('/decode', { method: 'POST', body: fd });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+
+    if (data.status === 'ok') {
+      renderDecoded(data);
+    } else if (data.status === 'invalid') {
+      showState('error');
+      resetSidebar();
+    } else {
+      showState('empty');
+      resetSidebar();
+    }
+  } catch (err) {
+    showState('error');
+  } finally {
+    if (decodeBtn) { decodeBtn.disabled = false; decodeBtn.textContent = 'DECODE MESSAGE'; }
+  }
+}
+
+document.getElementById('decode-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  doDecodeMessage();
+});
+</script>
+
+</body>
+</html>
