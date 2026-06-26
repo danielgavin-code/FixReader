@@ -1,4 +1,13 @@
+import re
 from markupsafe import Markup, escape
+
+
+def _strip_html(s):
+    """Remove HTML tags and return plain text. Decode entities before stripping
+    so that entity-encoded tags (e.g. &lt;strong&gt;) are also removed."""
+    s = str(s)
+    s = s.replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&').replace('&nbsp;', ' ')
+    return re.sub(r'<[^>]*>', '', s)
 
 # ── Tag definitions ────────────────────────────────────────────────────────────
 TAGS = {
@@ -643,7 +652,7 @@ def generate_summary(fields):
         'target':         target,
         'seq_num':        seq_num,
         'sending_time':   sending_time,
-        'narrative':      narrative,
+        'narrative':      [_strip_html(n) for n in narrative],
         'key_facts':      [(k, v) for k, v in key_facts if v and v != '—'],
         'category':       _msg_category(msg_type_val),
         'summary_fields': summary_fields,

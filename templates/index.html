@@ -47,7 +47,7 @@
   <!-- ── LEFT SIDEBAR ───────────────────────────── -->
   <aside class="sidebar sidebar-left">
 
-    <div class="sb-section">
+    <div class="sb-section sb-section-tools">
       <div class="sb-heading">Tools</div>
       <nav aria-label="Tools">
         <a href="/" class="sb-tool active" aria-current="page">
@@ -62,10 +62,6 @@
           <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
           Message Builder
         </a>
-        <a href="/checksum" class="sb-tool">
-          <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 8h2.5M8.5 8H11M8 5v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
-          Checksum Calculator
-        </a>
         <a href="/validator" class="sb-tool">
           <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           Tag Validator
@@ -73,19 +69,37 @@
       </nav>
     </div>
 
-    <div class="sb-section">
-      <div class="sb-heading">Popular Topics</div>
+    <div class="sb-section sb-section-cert">
+      <div class="sb-heading sb-heading-cert">Cert Scripts <span class="sb-new-badge">NEW</span></div>
+      <nav aria-label="Cert Scripts">
+        <a href="/cert/order-entry" class="sb-tool">
+          <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 5h6M5 8h4M5 11h2" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg></span>
+          Order Entry
+        </a>
+        <a href="/cert/drop-copy" class="sb-tool">
+          <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V5l-3-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 2v3h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Drop Copy
+        </a>
+        <a href="/cert/allocation" class="sb-tool">
+          <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="8" width="4" height="6" rx="1" stroke="currentColor" stroke-width="1.25"/><rect x="6.5" y="6" width="4" height="8" rx="1" stroke="currentColor" stroke-width="1.25"/><rect x="11" y="4" width="3" height="10" rx="1" stroke="currentColor" stroke-width="1.25"/></svg></span>
+          Allocation
+        </a>
+      </nav>
+    </div>
+
+    <div class="sb-section sb-section-tags">
+      <div class="sb-heading">Popular Tags</div>
       <ul class="sb-topics" role="list">
-        <li><a class="sb-topic" href="#" data-msg="new_order"      data-autosubmit="true">New Order Single      <code class="sb-tag">35=D</code></a></li>
-        <li><a class="sb-topic" href="#" data-msg="exec_report"    data-autosubmit="true">Execution Report      <code class="sb-tag">35=8</code></a></li>
-        <li><a class="sb-topic" href="#" data-msg="cancel_request" data-autosubmit="true">Order Cancel Request  <code class="sb-tag">35=F</code></a></li>
-        <li><a class="sb-topic" href="#" data-msg="cancel_replace" data-autosubmit="true">Cancel/Replace Req    <code class="sb-tag">35=G</code></a></li>
-        <li><a class="sb-topic" href="#" data-msg="order_status"   data-autosubmit="true">Order Status Request  <code class="sb-tag">35=H</code></a></li>
-        <li><a class="sb-topic" href="#" data-msg="logon"          data-autosubmit="true">Logon                 <code class="sb-tag">35=A</code></a></li>
-        <li><a class="sb-topic" href="#" data-msg="logout"         data-autosubmit="true">Logout                <code class="sb-tag">35=5</code></a></li>
-        <li><a class="sb-topic" href="#" data-msg="heartbeat"      data-autosubmit="true">Heartbeat             <code class="sb-tag">35=0</code></a></li>
-        <li><a class="sb-topic" href="#" data-msg="md_request"     data-autosubmit="true">Market Data Request   <code class="sb-tag">35=V</code></a></li>
-        <li><a class="sb-topic" href="#" data-msg="reject"         data-autosubmit="true">Session Reject        <code class="sb-tag">35=3</code></a></li>
+        <li><a class="sb-topic" href="/tag/35"><code class="sb-tag">35</code> MsgType</a></li>
+        <li><a class="sb-topic" href="/tag/49"><code class="sb-tag">49</code> SenderCompID</a></li>
+        <li><a class="sb-topic" href="/tag/56"><code class="sb-tag">56</code> TargetCompID</a></li>
+        <li><a class="sb-topic" href="/tag/55"><code class="sb-tag">55</code> Symbol</a></li>
+        <li><a class="sb-topic" href="/tag/54"><code class="sb-tag">54</code> Side</a></li>
+        <li><a class="sb-topic" href="/tag/38"><code class="sb-tag">38</code> OrderQty</a></li>
+        <li><a class="sb-topic" href="/tag/44"><code class="sb-tag">44</code> Price</a></li>
+        <li><a class="sb-topic" href="/tag/11"><code class="sb-tag">11</code> ClOrdID</a></li>
+        <li><a class="sb-topic" href="/tag/52"><code class="sb-tag">52</code> SendingTime</a></li>
+        <li><a class="sb-topic" href="/tag/10"><code class="sb-tag">10</code> CheckSum</a></li>
       </ul>
     </div>
 
@@ -120,12 +134,19 @@
           <span class="sb-stat-n">153</span>
           <span class="sb-stat-label">Q&amp;A</span>
         </div>
-        <div class="sb-stat-item sb-stat-full">
+        <div class="sb-stat-item">
           <div class="sb-stat-icon">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.25"/><path d="M5 7l2 2 4-4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <span class="sb-stat-n">42</span>
           <span class="sb-stat-label">Code Examples</span>
+        </div>
+        <div class="sb-stat-item">
+          <div class="sb-stat-icon">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2L2 5l6 3 6-3-6-3z"/><path d="M2 9l6 3 6-3"/><path d="M2 12.5l6 3 6-3"/></svg>
+          </div>
+          <span class="sb-stat-n">7</span>
+          <span class="sb-stat-label">FIX Versions</span>
         </div>
       </div>
     </div>
@@ -140,7 +161,29 @@
     <div class="card input-card">
       <div class="editor-header">
         <span class="editor-header-label">Paste Your FIX Message</span>
-        <button type="button" class="examples-btn">EXAMPLES ▾</button>
+        <div class="examples-wrap">
+          <button type="button" class="examples-btn" id="examples-btn">EXAMPLES ▾</button>
+          <div class="examples-drop" id="examples-drop" style="display:none">
+            <div class="examples-drop-label">Order Messages</div>
+            <div class="examples-drop-item" data-msg="new_order">New Order Single <span class="ed-badge">35=D</span></div>
+            <div class="examples-drop-item" data-msg="exec_report">Execution Report <span class="ed-badge">35=8</span></div>
+            <div class="examples-drop-sep"></div>
+            <div class="examples-drop-item" data-msg="cancel_request">Order Cancel Request <span class="ed-badge">35=F</span></div>
+            <div class="examples-drop-item" data-msg="cancel_replace">Order Cancel/Replace <span class="ed-badge">35=G</span></div>
+            <div class="examples-drop-item" data-msg="order_status">Order Status Request <span class="ed-badge">35=H</span></div>
+            <div class="examples-drop-sep"></div>
+            <div class="examples-drop-label">Post-Trade</div>
+            <div class="examples-drop-item" data-msg="allocation">Allocation <span class="ed-badge">35=J</span></div>
+            <div class="examples-drop-sep"></div>
+            <div class="examples-drop-label">Session</div>
+            <div class="examples-drop-item" data-msg="logon">Logon <span class="ed-badge">35=A</span></div>
+            <div class="examples-drop-item" data-msg="logout">Logout <span class="ed-badge">35=5</span></div>
+            <div class="examples-drop-item" data-msg="heartbeat">Heartbeat <span class="ed-badge">35=0</span></div>
+            <div class="examples-drop-sep"></div>
+            <div class="examples-drop-item" data-msg="md_request">Market Data Request <span class="ed-badge">35=V</span></div>
+            <div class="examples-drop-item" data-msg="reject">Reject <span class="ed-badge">35=3</span></div>
+          </div>
+        </div>
       </div>
 
       <form id="decode-form" novalidate>
@@ -163,16 +206,13 @@
         </div>
 
         <div class="form-footer">
-          <div class="sample-row">
-            <span class="sample-label">Try:</span>
-            <button type="button" class="sample-btn" data-msg="new_order">New Order Single</button>
-            <button type="button" class="sample-btn" data-msg="exec_report">Execution Report</button>
-            <button type="button" class="sample-btn" data-msg="heartbeat">Heartbeat</button>
-            <button type="button" class="sample-btn" data-msg="logon">Logon</button>
+          <div class="btn-group">
+            <button type="button" class="btn-export" id="btn-export-csv">Export CSV</button>
+            <button type="button" class="btn-export" id="btn-export-xlsx">Export Excel</button>
           </div>
           <div class="btn-group">
             <button type="submit" class="btn-decode">DECODE MESSAGE</button>
-            <button type="button" class="btn-compare">COMPARE MESSAGES</button>
+            <button type="button" class="btn-compare" onclick="window.location.href='/compare'">COMPARE MESSAGES</button>
           </div>
         </div>
       </form>
@@ -215,13 +255,39 @@
           <span class="results-label-text">Decoded Message</span>
           <span id="msg-type-pill" class="msg-type-pill"></span>
         </div>
+        <div id="decoded-meta-strip" class="decoded-meta-strip" style="display:none">
+          <div class="dms-item"><span class="dms-label">From</span><span class="dms-val" id="dms-from"></span></div>
+          <div class="dms-sep" aria-hidden="true"></div>
+          <div class="dms-item"><span class="dms-label">To</span><span class="dms-val" id="dms-to"></span></div>
+          <div class="dms-sep" aria-hidden="true"></div>
+          <div class="dms-item"><span class="dms-label">Seq #</span><span class="dms-val" id="dms-seq"></span></div>
+          <div class="dms-sep" aria-hidden="true"></div>
+          <div class="dms-item"><span class="dms-label">Time</span><span class="dms-val" id="dms-time"></span></div>
+        </div>
         <div class="results-panel">
           <div class="msg-summary">
+            <div class="summary-quote" id="summary-quote" style="display:none">
+              <span class="summary-quote-text" id="summary-quote-text"></span>
+              <button class="quote-copy-btn" id="quote-copy-btn" title="Copy to clipboard" aria-label="Copy">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="9" height="9" rx="1.5"/><path d="M3.5 10.5H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h7.5a1 1 0 0 1 1 1v1.5"/></svg>
+              </button>
+            </div>
             <h3>MESSAGE SUMMARY</h3>
             <ul class="summary-list" id="summary-list"></ul>
+            <div class="summary-client" id="summary-client" style="display:none">
+              <div class="summary-client-hdr">Client Identity</div>
+              <div id="summary-client-rows"></div>
+            </div>
             <div class="summary-meta" id="summary-meta">
               <span class="summary-badge" id="summary-badge"></span>
               <span class="summary-version" id="summary-version"></span>
+            </div>
+            <div class="summary-latency" id="summary-latency" style="display:none">
+              <div class="latency-hdr">Message Latency</div>
+              <div class="latency-body">
+                <span class="latency-value" id="latency-value"></span>
+                <span class="latency-desc" id="latency-desc"></span>
+              </div>
             </div>
           </div>
           <div class="tag-table-wrap">
@@ -230,81 +296,43 @@
                 <tr>
                   <th>Tag</th>
                   <th>Value</th>
-                  <th>Description</th>
-                  <th>Meaning</th>
+                  <th class="th-req" title="Required in all FIX messages">Req</th>
                 </tr>
               </thead>
               <tbody id="tag-tbody"></tbody>
             </table>
           </div>
         </div>
-      </div>
+
+        <!-- ── Center analysis: Flagged · Quick Notes · Key Takeaways ── -->
+        <div class="center-analysis">
+
+          <!-- FLAGGED — full width, only shown when issues exist -->
+          <div class="ca-flagged-section" id="ca-flagged-section" style="display:none">
+            <div class="ca-hdr ca-hdr-flagged">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/><circle cx="8" cy="12.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+              Flagged
+            </div>
+            <div id="ca-flagged"></div>
+          </div>
+
+          <!-- QUICK NOTES + KEY TAKEAWAYS — side by side -->
+          <div class="ca-two-col">
+            <div class="ca-section">
+              <div class="ca-hdr">Quick Notes</div>
+              <div id="ca-plain-english" class="ca-content"></div>
+            </div>
+            <div class="ca-section">
+              <div class="ca-hdr">Key Takeaways</div>
+              <div id="ca-key-takeaways" class="ca-content"></div>
+            </div>
+          </div>
+
+        </div><!-- /center-analysis -->
+
+      </div><!-- /state-decoded -->
 
     </div><!-- /results-area -->
-
-    <!-- ── Feature cards — always visible ── -->
-    <div class="feature-cards">
-      <div class="feat-card">
-        <div class="fc-header">
-          <div class="fc-icon fc-icon-learn">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L2 5l6 3 6-3-6-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M2 5v5l6 3 6-3V5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="fc-title">Learn FIX</span>
-        </div>
-        <ul class="fc-links">
-          <li><a href="/learn/101">FIX Protocol 101</a></li>
-          <li><a href="/learn/message-types">Message Types Guide</a></li>
-          <li><a href="/reference">Tag Reference (1,102 tags)</a></li>
-          <li><a href="/learn/sessions">Session Management</a></li>
-          <li><a href="/learn/glossary">FIX Glossary</a></li>
-        </ul>
-      </div>
-      <div class="feat-card">
-        <div class="fc-header">
-          <div class="fc-icon fc-icon-interview">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 13.5c0-2.5 2.2-4.5 5-4.5s5 2 5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </div>
-          <span class="fc-title">Interview Prep</span>
-        </div>
-        <ul class="fc-links">
-          <li><a href="/interview-prep">153 Q&amp;A Bank</a></li>
-          <li><a href="/interview-prep/mock">Mock FIX Interview</a></li>
-          <li><a href="/interview-prep/scenarios">Common Scenarios</a></li>
-          <li><a href="/interview-prep/cheatsheet">FIX Cheat Sheet</a></li>
-          <li><a href="/glossary">FIX Glossary</a></li>
-        </ul>
-      </div>
-      <div class="feat-card">
-        <div class="fc-header">
-          <div class="fc-icon fc-icon-tools">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10.5 2a3.5 3.5 0 00-3.4 4.3L2.5 11a1 1 0 000 1.4l.6.6a1 1 0 001.4 0l4.7-4.6A3.5 3.5 0 1010.5 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="fc-title">Tools</span>
-        </div>
-        <ul class="fc-links">
-          <li><a href="/builder">Message Builder</a></li>
-          <li><a href="/checksum">Checksum Calculator</a></li>
-          <li><a href="/validator">Tag Validator</a></li>
-          <li><a href="/diff">FIX Message Diff</a></li>
-          <li><a href="/reference">Tag Reference</a></li>
-        </ul>
-      </div>
-      <div class="feat-card">
-        <div class="fc-header">
-          <div class="fc-icon fc-icon-library">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="2" width="5" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
-          </div>
-          <span class="fc-title">Message Library</span>
-        </div>
-        <ul class="fc-links">
-          <li><a href="/library/orders">Order Messages (D, F, G, H)</a></li>
-          <li><a href="/library/executions">Execution Reports (8, 9)</a></li>
-          <li><a href="/library/session">Session Messages (A, 5, 0)</a></li>
-          <li><a href="/library/market-data">Market Data (V, W, X)</a></li>
-          <li><a href="/library/post-trade">Post-Trade (AE, AS)</a></li>
-        </ul>
-      </div>
-    </div><!-- /feature-cards -->
 
   </main><!-- /main-col -->
 
@@ -312,39 +340,52 @@
   <!-- ── RIGHT SIDEBAR ──────────────────────────── -->
   <aside class="sidebar sidebar-right">
 
-    <!-- Message banner — JS fills on decode -->
-    <div id="sb-banner" style="display:none"></div>
-
-    <!-- WHAT IS FIX (always visible) -->
-    <div class="sb-section">
+    <div class="sb-section sb-section-whatisfix">
       <div class="sb-heading">What Is FIX?</div>
       <p class="rsb-para">FIX (Financial Information eXchange) is the global standard for electronic trading. Messages use <code>tag=value</code> pairs joined by SOH or pipe delimiters.</p>
-      <p class="rsb-para">Common: <code>35=D</code> New Order, <code>35=8</code> Exec Report, <code>35=A</code> Logon.</p>
     </div>
 
-    <!-- NEED HELP (always visible) -->
-    <div class="sb-section">
-      <div class="sb-heading">Need Help?</div>
+    <div class="sb-section sb-section-weeds">
+      <div class="sb-heading sb-heading-weeds">Lost in the Weeds?</div>
       <a href="/learn/101"           class="rsb-link">FIX Protocol 101 →</a>
       <a href="/learn/message-types" class="rsb-link">Message Types Guide →</a>
       <a href="/reference"           class="rsb-link">Tag Reference (1,102 tags) →</a>
       <a href="/learn/glossary"      class="rsb-link">FIX Glossary →</a>
     </div>
 
-    <!-- PLAIN ENGLISH — JS populates on decode -->
-    <div class="sb-section">
-      <div class="sb-heading">Plain English</div>
-      <div id="sb-plain-english">
-        <p class="rsb-para rsb-dim">Decode a FIX message to see a human-readable explanation here.</p>
-      </div>
+    <div class="sb-section sb-section-learn">
+      <div class="sb-heading sb-heading-learn">Learn FIX</div>
+      <a href="/learn/101"           class="rsb-link">FIX Protocol 101</a>
+      <a href="/learn/message-types" class="rsb-link">Message Types Guide</a>
+      <a href="/reference"           class="rsb-link">Tag Reference (1,102 tags)</a>
+      <a href="/learn/sessions"      class="rsb-link">Session Management</a>
+      <a href="/learn/glossary"      class="rsb-link">FIX Glossary</a>
     </div>
 
-    <!-- KEY TAKEAWAYS — JS populates on decode -->
-    <div class="sb-section">
-      <div class="sb-heading">Key Takeaways</div>
-      <div id="sb-key-takeaways">
-        <p class="rsb-para rsb-dim">Key insights will appear here after you decode a message.</p>
-      </div>
+    <div class="sb-section sb-section-interview">
+      <div class="sb-heading sb-heading-interview">Interview Prep</div>
+      <a href="/interview-prep"            class="rsb-link">153 Q&amp;A Bank</a>
+      <a href="/interview-prep/mock"       class="rsb-link">Mock FIX Interview</a>
+      <a href="/interview-prep/scenarios"  class="rsb-link">Common Scenarios</a>
+      <a href="/interview-prep/cheatsheet" class="rsb-link">FIX Cheat Sheet</a>
+      <a href="/glossary"                  class="rsb-link">FIX Glossary</a>
+    </div>
+
+    <div class="sb-section sb-section-tools-feat">
+      <div class="sb-heading sb-heading-tools-feat">Tools</div>
+      <a href="/builder"   class="rsb-link">Message Builder</a>
+      <a href="/validator" class="rsb-link">Tag Validator</a>
+      <a href="/diff"      class="rsb-link">FIX Message Diff</a>
+      <a href="/reference" class="rsb-link">Tag Reference</a>
+    </div>
+
+    <div class="sb-section sb-section-library">
+      <div class="sb-heading sb-heading-library">Message Library</div>
+      <a href="/library/orders"      class="rsb-link">Order Messages (D, F, G, H)</a>
+      <a href="/library/executions"  class="rsb-link">Execution Reports (8, 9)</a>
+      <a href="/library/session"     class="rsb-link">Session Messages (A, 5, 0)</a>
+      <a href="/library/market-data" class="rsb-link">Market Data (V, W, X)</a>
+      <a href="/library/post-trade"  class="rsb-link">Post-Trade (AE, AS)</a>
     </div>
 
   </aside>
@@ -367,11 +408,12 @@
 
 <script>
 const SAMPLES = {
-  new_order:      '8=FIX.4.2|9=178|35=D|49=ACME|56=NYSE|34=4|52=20060324-17:45:00|11=12345|21=1|55=IBM|54=1|38=100|40=2|44=15.00|10=050|',
-  exec_report:    '8=FIX.4.2|9=234|35=8|49=NYSE|56=ACME|34=5|52=20060324-17:45:01|11=12345|17=98765|150=F|39=2|55=IBM|54=1|38=100|32=100|31=15.00|151=0|14=100|6=15.00|10=127|',
+  new_order:      '8=FIX.4.2|9=178|35=D|49=ACME|56=NYSE|34=4|52=20060324-17:45:00|11=CL12345|21=1|55=AAPL|54=1|38=100|40=2|44=185.50|10=050|',
+  exec_report:    '8=FIX.4.2|9=243|35=8|49=BROKER|56=ACME|34=5|52=20060324-17:45:01|11=CL12345|17=98765|37=ORD98765|150=F|39=2|55=AAPL|54=1|38=100|32=100|31=185.50|151=0|14=100|6=185.50|10=127|',
   cancel_request: '8=FIX.4.2|9=142|35=F|49=ACME|56=NYSE|34=6|52=20060324-17:46:00|41=12345|11=12346|55=IBM|54=1|38=100|60=20060324-17:46:00|10=088|',
   cancel_replace: '8=FIX.4.2|9=192|35=G|49=ACME|56=NYSE|34=7|52=20060324-17:47:00|41=12345|11=12347|21=1|55=IBM|54=1|38=200|40=2|44=16.00|60=20060324-17:47:00|10=201|',
   order_status:   '8=FIX.4.2|9=102|35=H|49=ACME|56=NYSE|34=8|52=20060324-17:48:00|11=12345|55=IBM|54=1|10=044|',
+  allocation:     '8=FIX.4.2|9=175|35=J|49=BROKER|56=ACME|34=15|52=20060324-18:00:00|70=ALLOC001|71=0|73=1|11=CL12345|37=ORD98765|55=AAPL|54=1|38=100|6=185.50|75=20060324|53=1|79=FUND001|80=100|10=055|',
   logon:          '8=FIX.4.2|9=73|35=A|49=ACME|56=NYSE|34=1|52=20060324-17:44:59|98=0|108=30|141=Y|10=063|',
   logout:         '8=FIX.4.2|9=82|35=5|49=ACME|56=NYSE|34=99|52=20060324-18:00:00|58=End of trading session|10=212|',
   heartbeat:      '8=FIX.4.2|9=52|35=0|49=ACME|56=NYSE|34=12|52=20060324-17:50:00|10=110|',
@@ -409,9 +451,30 @@ function loadSample(key, autoSubmit) {
   if (autoSubmit) doDecodeMessage();
 }
 
-document.querySelectorAll('.sample-btn').forEach(btn => {
-  btn.addEventListener('click', () => loadSample(btn.dataset.msg, false));
-});
+// ── Pre-populate textarea with new_order on first load ──
+if (editorInput && !editorInput.value.trim()) {
+  editorInput.value = SAMPLES.new_order;
+  updateGutter();
+}
+
+// ── EXAMPLES dropdown ──
+const examplesBtn  = document.getElementById('examples-btn');
+const examplesDrop = document.getElementById('examples-drop');
+if (examplesBtn && examplesDrop) {
+  examplesBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const open = examplesDrop.style.display !== 'none';
+    examplesDrop.style.display = open ? 'none' : '';
+  });
+  document.querySelectorAll('.examples-drop-item').forEach(item => {
+    item.addEventListener('click', () => {
+      loadSample(item.dataset.msg, false);
+      examplesDrop.style.display = 'none';
+    });
+  });
+  document.addEventListener('click', () => { examplesDrop.style.display = 'none'; });
+}
+
 document.querySelectorAll('[data-autosubmit="true"]').forEach(el => {
   el.addEventListener('click', e => { e.preventDefault(); loadSample(el.dataset.msg, true); });
 });
@@ -472,24 +535,220 @@ function iconFor(type, style) {
   })[type] || '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="2"/></svg>';
 }
 
-function badgeFor(f) {
-  if (!f.enum_value) return '—';
-  let cls = 'badge-neutral';
-  if      (f.tag === 54 && f.value === '1')                     cls = 'badge-buy';
-  else if (f.tag === 54 && f.value === '2')                     cls = 'badge-sell';
-  else if (f.tag === 39 && f.value === '2')                     cls = 'badge-filled';
-  else if (f.tag === 39 && ['4','8','C'].includes(f.value))     cls = 'badge-neg';
-  else if (f.tag === 39 && ['1','A','E','6'].includes(f.value)) cls = 'badge-pending';
-  return `<span class="${cls}">${esc(f.enum_value)}</span>`;
+function reqDot(f) {
+  return f.section !== 'body'
+    ? '<span class="req-check" title="Required">✓</span>'
+    : '';
+}
+
+function formatLatency(ms) {
+  if (ms < 1000) return `${ms} ms`;
+  const totalSec = Math.floor(ms / 1000);
+  const remMs    = ms % 1000;
+  if (totalSec < 60) return remMs ? `${totalSec} sec ${remMs} ms` : `${totalSec} sec`;
+  const m = Math.floor(totalSec / 60), remS = totalSec % 60;
+  if (m < 60) return remS ? `${m} min ${remS} sec` : `${m} min`;
+  const h = Math.floor(m / 60), remM = m % 60;
+  return remM ? `${h} hr ${remM} min` : `${h} hr`;
+}
+
+function parseFIXTime(ts) {
+  const m = ts.match(/^(\d{4})(\d{2})(\d{2})-(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?$/);
+  if (!m) return null;
+  const ms = m[7] ? parseInt(m[7].padEnd(3, '0').slice(0, 3)) : 0;
+  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6], ms));
+}
+
+function buildQuote(fmap, summary) {
+  const mt  = summary.msg_type_val;
+  const ver = summary.fix_version ? ' · ' + summary.fix_version : '';
+  const sym = fmap[55] || '';
+  const sideMap = { '1':'Buy','2':'Sell','3':'Buy Minus','4':'Sell Plus',
+                    '5':'Sell Short','6':'Sell Short Exempt','B':'As Defined','C':'Undisclosed' };
+  const side  = sideMap[fmap[54]] || '';
+  const qty   = fmap[38] || '';
+  const price = fmap[44];
+
+  if (mt === 'D') {
+    const ordType = fmap[40];
+    const typeLabel = { '1':'Market','2':'Limit','3':'Stop','4':'Stop Limit',
+                        'P':'Pegged','D':'Previously Quoted' };
+    let q = [side, qty, sym].filter(Boolean).join(' ');
+    if (ordType === '2' && price)  q += ` @ ${price} · Limit`;
+    else if (ordType === '1')      q += ' · Market';
+    else if (ordType === '3')      q += ` Stop ${fmap[99] || price || '?'} · Stop`;
+    else if (typeLabel[ordType])   q += ' · ' + typeLabel[ordType];
+    return q + ver;
+  }
+  if (mt === '8') {
+    const lastPx = fmap[31], lastQty = fmap[32];
+    let q = [side, lastQty || qty, sym].filter(Boolean).join(' ');
+    if (lastPx) q += ` @ ${lastPx}`;
+    return (q || summary.msg_type_name || '') + ver;
+  }
+  if (mt === 'F') return ['Cancel', side, qty, sym].filter(Boolean).join(' ') + ver;
+  if (mt === 'G') {
+    let q = ['Amend', side, qty, sym].filter(Boolean).join(' ');
+    if (price) q += ` → ${price}`;
+    return q + ver;
+  }
+  return (summary.msg_type_name || '') + ver;
+}
+
+function buildAnalysis(fmap, summary) {
+  const mt = summary.msg_type_val;
+  const takeaways = [], flags = [], flaggedTags = new Set();
+
+  const TN = {
+    7:'BeginSeqNo', 9:'BodyLength', 10:'CheckSum', 11:'ClOrdID',
+    16:'EndSeqNo', 17:'ExecID', 21:'HandlInst', 36:'NewSeqNo', 37:'OrderID',
+    38:'OrderQty', 39:'OrdStatus', 40:'OrdType', 41:'OrigClOrdID', 44:'Price',
+    45:'RefSeqNum', 48:'SecurityID', 54:'Side', 55:'Symbol',
+    98:'EncryptMethod', 108:'HeartBtInt'
+  };
+  const tn = t => TN[t] ? `${t} (${TN[t]})` : String(t);
+
+  // ── FLAGS ──────────────────────────────────────────────
+
+  const MT_LABELS = {
+    'D':'New Order Single', '8':'Execution Report', 'F':'Order Cancel Request',
+    'G':'Order Cancel/Replace', 'H':'Order Status Request', 'A':'Logon',
+    '2':'Resend Request', '3':'Reject', '4':'Sequence Reset'
+  };
+  const mtLabel = MT_LABELS[mt] || `message type ${mt}`;
+
+  // F1: Limit order without price
+  if (fmap[40] === '2' && fmap[44] === undefined) {
+    flags.push('Tag 44 (Price) is required for Limit orders but wasn\'t found in this message');
+    flaggedTags.add(40);
+  }
+
+  // F2: IDSource without SecurityID
+  if (fmap[22] !== undefined && fmap[48] === undefined) {
+    flags.push('Tag 22 (IDSource) specifies how to identify the security, but Tag 48 (SecurityID) is missing');
+    flaggedTags.add(22);
+  }
+
+  // F3: No symbol or SecurityID for trading messages
+  if ('D8FGH'.includes(mt) && fmap[55] === undefined && fmap[48] === undefined)
+    flags.push('Neither Tag 55 (Symbol) nor Tag 48 (SecurityID) is present — the security can\'t be identified');
+
+  // F4: Required body tags for MsgType
+  const REQUIRED = {
+    'D':[11,21,38,40,54], '8':[17,37,39,54], 'F':[11,41,54],
+    'G':[11,21,38,40,41,54], 'H':[11,54], 'A':[98,108], '2':[7,16], '3':[45], '4':[36]
+  };
+  const missingReq = (REQUIRED[mt] || []).filter(t => fmap[t] === undefined);
+  if (missingReq.length) {
+    const tagWord  = missingReq.length > 1 ? 'Tags' : 'Tag';
+    const isAre    = missingReq.length > 1 ? 'are'  : 'is';
+    const foundNot = missingReq.length > 1 ? "weren't" : "wasn't";
+    flags.push(`${tagWord} ${missingReq.map(tn).join(', ')} ${isAre} required in ${mtLabel} messages but ${foundNot} found in this message`);
+  }
+
+  // F5: Latency > 60 seconds
+  let latencyMs = null;
+  if (fmap[52] && fmap[60]) {
+    const d52 = parseFIXTime(fmap[52]), d60 = parseFIXTime(fmap[60]);
+    if (d52 && d60) {
+      latencyMs = Math.abs(d52 - d60);
+      if (latencyMs > 60000) {
+        flags.push(`${formatLatency(latencyMs)} gap between Tag 52 (SendingTime) and Tag 60 (TransactTime) — unusually high latency`);
+        flaggedTags.add(52);
+        flaggedTags.add(60);
+      }
+    }
+  }
+
+  // ── TAKEAWAYS ─────────────────────────────────────────
+
+  // Session header completeness
+  const missSess = [8, 9, 35, 49, 56, 34, 52].filter(t => fmap[t] === undefined);
+  if (!missSess.length)
+    takeaways.push({ color: 'green', text: 'All session header tags present (8, 9, 35, 49, 56, 34, 52)' });
+  else
+    takeaways.push({ color: 'red', text: `Missing session tag${missSess.length > 1 ? 's' : ''}: ${missSess.join(', ')}` });
+
+  // Checksum — only surface if missing; presence is expected and uninteresting
+  if (fmap[10] === undefined)
+    takeaways.push({ color: 'red', text: 'Checksum (10) missing — message may be incomplete or truncated' });
+
+  // Order-type observations
+  if (mt === 'D' || mt === 'G') {
+    const ot = fmap[40];
+    if (ot === '1')
+      takeaways.push({ color: 'yellow', text: 'Market order — executes at best available price, Price (44) not required' });
+    else if (ot === '2' && fmap[44])
+      takeaways.push({ color: 'green', text: `Limit order with Price ${fmap[44]} — correctly specified` });
+    else if (ot === '3')
+      takeaways.push({ color: 'yellow', text: fmap[99] ? `Stop order, trigger StopPx ${fmap[99]}` : 'Stop order — StopPx (99) not present' });
+  }
+
+  // Execution report state
+  if (mt === '8') {
+    const status = { '0':'New','1':'Partial fill','2':'Filled','4':'Cancelled','5':'Replaced','8':'Rejected','C':'Expired' };
+    const st = status[fmap[39]] || '';
+    const color = { '2':'green','0':'yellow','1':'yellow','4':'yellow','5':'yellow','8':'red','C':'yellow' }[fmap[39]] || 'yellow';
+    if (st) {
+      let text = `Order status: ${st}`;
+      if (fmap[39] === '2' && fmap[31]) text += ` @ ${fmap[31]}`;
+      if (fmap[39] === '1' && fmap[14] && fmap[38]) text += ` (${fmap[14]} of ${fmap[38]} filled)`;
+      takeaways.push({ color, text });
+    }
+  }
+
+  // Latency observation — red when > 15 seconds
+  if (latencyMs !== null) {
+    if (latencyMs === 0)
+      takeaways.push({ color: 'green', text: 'TransactTime and SendingTime match — zero latency' });
+    else if (latencyMs < 200)
+      takeaways.push({ color: 'green', text: `Latency ${latencyMs}ms — excellent` });
+    else if (latencyMs < 15000)
+      takeaways.push({ color: 'yellow', text: `Latency ${formatLatency(latencyMs)} — within acceptable range` });
+    else
+      takeaways.push({ color: 'red', text: `Latency ${formatLatency(latencyMs)} — high latency` });
+  }
+
+  // Logon specifics
+  if (mt === 'A') {
+    const hbi = parseInt(fmap[108] || '0');
+    if (hbi > 0)
+      takeaways.push({ color: 'yellow', text: `HeartBtInt ${hbi}s — heartbeats expected every ${hbi} seconds` });
+    if (fmap[141] === 'Y')
+      takeaways.push({ color: 'yellow', text: 'ResetSeqNumFlag (141=Y) — sequence numbers resetting to 1' });
+  }
+
+  // Sequence number observation
+  const seqNum = parseInt(fmap[34] || '0');
+  if (seqNum === 1)
+    takeaways.push({ color: 'yellow', text: 'Sequence number is 1 — first message or reset session' });
+
+  return { takeaways, flags, flaggedTags };
 }
 
 function renderDecoded(data) {
   const { fields, summary } = data;
+  const fmap = {};
+  for (const f of fields) fmap[f.tag] = f.value;
 
-  // ── Pill badge above results ──
+  // ── Pill badge above results (change 4: includes FIX version) ──
   const pill = document.getElementById('msg-type-pill');
   pill.className = `msg-type-pill cat-${esc(summary.category)}`;
-  pill.textContent = `${summary.msg_type_val} — ${summary.msg_type_name}`;
+  pill.textContent = `${summary.msg_type_val} — ${summary.msg_type_name} · ${summary.fix_version}`;
+
+  // ── Quick quote ──
+  const quote = buildQuote(fmap, summary);
+  const quoteEl = document.getElementById('summary-quote');
+  const quoteTextEl = document.getElementById('summary-quote-text');
+  quoteTextEl.textContent = quote;
+  quoteEl.style.display = quote ? '' : 'none';
+  document.getElementById('quote-copy-btn').onclick = () => {
+    navigator.clipboard.writeText(quote).then(() => {
+      const btn = document.getElementById('quote-copy-btn');
+      btn.classList.add('copied');
+      setTimeout(() => btn.classList.remove('copied'), 1500);
+    });
+  };
 
   // ── MESSAGE SUMMARY list ──
   document.getElementById('summary-list').innerHTML = (summary.summary_fields || []).map(sf =>
@@ -504,57 +763,117 @@ function renderDecoded(data) {
   document.getElementById('summary-badge').textContent  = `${summary.msg_type_val} — ${summary.msg_type_name}`;
   document.getElementById('summary-version').textContent = summary.fix_version;
 
+  // ── Client identity (tags 109, 116, 76) ──
+  const clientDefs = [[109,'ClientID'],[116,'OnBehalfOfSubID'],[76,'ExecBroker']];
+  const clientRows = clientDefs
+    .filter(([tag]) => fmap[tag] !== undefined)
+    .map(([tag, label]) =>
+      `<div class="client-row">
+         <span class="client-label">${label}</span>
+         <span class="client-val">${esc(fmap[tag])}</span>
+       </div>`).join('');
+  const clientEl = document.getElementById('summary-client');
+  document.getElementById('summary-client-rows').innerHTML = clientRows;
+  clientEl.style.display = clientRows ? '' : 'none';
+
+  // ── Message latency — formatted + color coded ──
+  const latEl = document.getElementById('summary-latency');
+  const t52 = fmap[52], t60 = fmap[60];
+  if (t52 && t60) {
+    const d52 = parseFIXTime(t52), d60 = parseFIXTime(t60);
+    if (d52 && d60) {
+      const diff = d52 - d60;
+      const absMs = Math.abs(diff);
+      const latValEl = document.getElementById('latency-value');
+      latValEl.className = 'latency-value';
+      const text = formatLatency(absMs);
+      if (absMs >= 60000) {
+        latValEl.classList.add('lat-critical');
+        latValEl.textContent = '⚠ ' + text;
+      } else if (absMs >= 15000) {
+        latValEl.classList.add('lat-warn');
+        latValEl.textContent = text;
+      } else {
+        latValEl.textContent = text;
+      }
+      document.getElementById('latency-desc').textContent = diff >= 0
+        ? `SendingTime (52) is ${text} after TransactTime (60) — processing lag from event to wire`
+        : `TransactTime (60) is ${text} after SendingTime (52) — possible clock skew or late timestamp`;
+      latEl.style.display = '';
+    } else {
+      latEl.style.display = 'none';
+    }
+  } else {
+    latEl.style.display = 'none';
+  }
+
+  // ── Run analysis first — flaggedTags needed for row highlighting ──
+  const analysis = buildAnalysis(fmap, summary);
+
   // ── Tag table ──
-  document.getElementById('tag-tbody').innerHTML = fields.map(f =>
-    `<tr class="${esc(f.highlight)}">
-       <td><span class="tag-num">${esc(String(f.tag))}</span> ${esc(f.name)}</td>
+  document.getElementById('tag-tbody').innerHTML = fields.map(f => {
+    const rowCls = analysis.flaggedTags.has(f.tag)
+      ? (`${esc(f.highlight)} hl-flagged`).trim()
+      : esc(f.highlight);
+    return `<tr class="${rowCls}">
+       <td class="tag-cell">
+         <a href="/tag/${f.tag}" class="tag-link"><span class="tag-num">${esc(String(f.tag))}</span></a>
+         <span class="tag-name-wrap" data-tooltip="${esc(f.description)}">${esc(f.name)}</span>
+       </td>
        <td class="tag-val">${esc(f.value)}</td>
-       <td class="tag-desc">${esc(f.description)}</td>
-       <td>${badgeFor(f)}</td>
-     </tr>`
-  ).join('');
+       <td class="tag-req">${reqDot(f)}</td>
+     </tr>`;
+  }).join('');
 
   showState('decoded');
 
-  // ── Right sidebar banner (message type + session meta) ──
-  const banner = document.getElementById('sb-banner');
-  banner.innerHTML = `
-    <div class="summary-type cat-${esc(summary.category)}">
-      <span class="summary-type-label">${esc(summary.msg_type_name)}</span>
-      <span class="summary-type-code">35=${esc(summary.msg_type_val)}</span>
-    </div>
-    <div class="session-meta">
-      <div class="meta-row"><span class="meta-label">From</span>  <span class="meta-val mono">${esc(summary.sender)}</span></div>
-      <div class="meta-row"><span class="meta-label">To</span>    <span class="meta-val mono">${esc(summary.target)}</span></div>
-      <div class="meta-row"><span class="meta-label">Seq #</span> <span class="meta-val mono">${esc(summary.seq_num)}</span></div>
-      <div class="meta-row"><span class="meta-label">Time</span>  <span class="meta-val mono small">${esc(summary.sending_time)}</span></div>
-      <div class="meta-row"><span class="meta-label">FIX</span>   <span class="meta-val mono">${esc(summary.fix_version)}</span></div>
-    </div>`;
-  banner.style.display = '';
+  // ── Session meta strip (compact horizontal row below decoded badge) ──
+  document.getElementById('dms-from').textContent = summary.sender;
+  document.getElementById('dms-to').textContent   = summary.target;
+  document.getElementById('dms-seq').textContent  = summary.seq_num;
+  document.getElementById('dms-time').textContent = summary.sending_time;
+  document.getElementById('decoded-meta-strip').style.display = '';
 
-  // ── Plain English — narrative is server-generated HTML (values already escaped via markupsafe) ──
-  document.getElementById('sb-plain-english').innerHTML =
-    (summary.narrative || []).map(p => `<p class="summary-para">${p}</p>`).join('')
-    || '<p class="rsb-para rsb-dim">No description available.</p>';
+  // ── Quick Notes (center column) — colored bullet per sentence ──
+  function narrativeDot(text) {
+    const t = text.toLowerCase();
+    if (/\b(cancelled|rejected)\b/.test(t))                           return 'red';
+    if (/\b(fill(ed)?|executed|trade|status: fill)\b/.test(t))        return 'green';
+    if (/\b(price|limit|market|stop|pegged)\b|@ [\d]/.test(t))        return 'yellow';
+    if (/\b(id:|id \(|clordid|orderid|origclordid|execid|alloc)\b/i.test(t)) return 'muted';
+    return 'blue';
+  }
+  document.getElementById('ca-plain-english').innerHTML =
+    (summary.narrative || []).map(p =>
+      `<p class="summary-para qn-para"><span class="qn-dot qn-dot-${narrativeDot(p)}" aria-hidden="true"></span>${p}</p>`
+    ).join('') || '<p class="ca-dim">No description available.</p>';
 
-  // ── Key Takeaways ──
-  const kts = summary.key_takeaways || [];
-  document.getElementById('sb-key-takeaways').innerHTML = kts.length
-    ? `<div class="key-takeaways">${kts.map(kt =>
+  // ── Flags + Key Takeaways — center column ──
+
+  const flaggedSection = document.getElementById('ca-flagged-section');
+  const flaggedEl = document.getElementById('ca-flagged');
+  if (analysis.flags.length) {
+    flaggedEl.innerHTML = analysis.flags.map(f =>
+      `<div class="flag-row">
+         <svg class="flag-icon" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/></svg>
+         <span class="flag-text">${esc(f)}</span>
+       </div>`).join('');
+    flaggedSection.style.display = '';
+  } else {
+    flaggedSection.style.display = 'none';
+  }
+
+  document.getElementById('ca-key-takeaways').innerHTML = analysis.takeaways.length
+    ? `<div class="key-takeaways">${analysis.takeaways.map(kt =>
         `<div class="kt-row">
            <span class="kt-dot dot-${esc(kt.color)}" aria-hidden="true"></span>
            <span class="kt-text">${esc(kt.text)}</span>
          </div>`).join('')}</div>`
-    : '<p class="rsb-para rsb-dim">No key takeaways for this message type.</p>';
+    : '<p class="ca-dim">No analysis available.</p>';
 }
 
 function resetSidebar() {
-  const banner = document.getElementById('sb-banner');
-  if (banner) { banner.innerHTML = ''; banner.style.display = 'none'; }
-  const pe = document.getElementById('sb-plain-english');
-  if (pe) pe.innerHTML = '<p class="rsb-para rsb-dim">Decode a FIX message to see a human-readable explanation here.</p>';
-  const kt = document.getElementById('sb-key-takeaways');
-  if (kt) kt.innerHTML = '<p class="rsb-para rsb-dim">Key insights will appear here after you decode a message.</p>';
+  document.getElementById('decoded-meta-strip').style.display = 'none';
 }
 
 async function doDecodeMessage() {
