@@ -51,7 +51,7 @@
     "category": "music",
     "subtitle": "Henry Rollins born 1961",
     "wiki_url": "https://en.wikipedia.org/wiki/Henry_Rollins",
-    "description": "Rust orange on near-black navbar, clean white page body. End of Silence era Rollins Band energy.",
+    "description": "Rust orange on near-black navbar. End of Silence era Rollins Band energy.",
     "colors": {
       "--color-bg":         "#ffffff",
       "--color-text":       "#1a0a00",
@@ -61,6 +61,28 @@
       "--color-nav-bg":     "#1a0a00",
       "--color-nav-text":   "#ffffff",
       "--color-input-bg":   "#f8f4f0"
+    }
+  },
+  {
+    "name": "steve_jobs",
+    "display_name": "Happy Birthday, Steve Jobs!",
+    "person_name": "Steve Jobs",
+    "type": "birthday",
+    "emoji": "🍎",
+    "date": "02-24",
+    "category": "tech",
+    "subtitle": "Steve Jobs born 1955",
+    "wiki_url": "https://en.wikipedia.org/wiki/Steve_Jobs",
+    "description": "Mac-era rainbow Apple logo. Space black nav, rainbow orange accent.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#f7921e",
+      "--color-highlight":  "#f7921e",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#1d1d1f",
+      "--color-nav-text":   "#ffffff",
+      "--color-input-bg":   "#f8fafc"
     }
   },
   {
@@ -81,6 +103,82 @@
       "--color-nav-bg":     "#002d72",
       "--color-nav-text":   "#ffffff",
       "--color-input-bg":   "#f0f4fd"
+    }
+  },
+  {
+    "name": "vincent_van_gogh",
+    "display_name": "Happy Birthday, Vincent!",
+    "person_name": "Vincent",
+    "type": "birthday",
+    "emoji": "🌻",
+    "date": "03-30",
+    "category": "art",
+    "subtitle": "Vincent van Gogh born 1853",
+    "wiki_url": "https://en.wikipedia.org/wiki/Vincent_van_Gogh",
+    "description": "Starry Night deep blue nav, sunflower yellow accent.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#f5c518",
+      "--color-highlight":  "#f5c518",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#1a1a4e",
+      "--color-nav-text":   "#e8d5a3",
+      "--color-input-bg":   "#fdfbf0"
+    }
+  },
+  {
+    "name": "hr_bad_brains",
+    "display_name": "Happy Birthday, HR!",
+    "person_name": "HR",
+    "type": "birthday",
+    "emoji": "🇯🇲",
+    "date": "04-11",
+    "category": "music",
+    "subtitle": "HR · Bad Brains born 1956",
+    "wiki_url": "https://en.wikipedia.org/wiki/H.R._(musician)",
+    "description": "Rasta red, gold, green rotating through sidebar sections. Near-black nav, gold accent.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#ffd700",
+      "--color-highlight":  "#ffd700",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#0d0d0d",
+      "--color-nav-text":   "#ffd700",
+      "--color-input-bg":   "#f8fafc",
+      "--color-sidebar-tools":          "#cc0000",
+      "--color-sidebar-cert":           "#ffd700",
+      "--color-sidebar-tags":           "#009b3a",
+      "--color-sidebar-stats":          "#cc0000",
+      "--color-sidebar-whatisfix":      "#ffd700",
+      "--color-sidebar-lostinweeds":    "#009b3a",
+      "--color-sidebar-learnfix":       "#cc0000",
+      "--color-sidebar-interviewprep":  "#ffd700",
+      "--color-sidebar-tools-right":    "#009b3a",
+      "--color-sidebar-messagelibrary": "#cc0000"
+    }
+  },
+  {
+    "name": "ian_mackaye",
+    "display_name": "Happy Birthday, Ian MacKaye!",
+    "person_name": "Ian MacKaye",
+    "type": "birthday",
+    "emoji": "✊",
+    "date": "04-16",
+    "category": "music",
+    "subtitle": "Ian MacKaye born 1962",
+    "wiki_url": "https://en.wikipedia.org/wiki/Ian_MacKaye",
+    "description": "Minor Threat. Black nav, straight edge red accent.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#cc0000",
+      "--color-highlight":  "#cc0000",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#000000",
+      "--color-nav-text":   "#ffffff",
+      "--color-input-bg":   "#f8fafc"
     }
   },
   {
@@ -136,43 +234,25 @@
     }
   },
   {
-    "name": "south_of_heaven",
-    "display_name": "South Of Heaven",
-    "emoji": "🔪",
-    "date": "07-05",
-    "category": "music",
-    "subtitle": "Slayer · South of Heaven · Jul 5, 1988",
-    "wiki_url": "https://en.wikipedia.org/wiki/South_of_Heaven",
-    "description": "Dark grey background, blood red accent, bone white text.",
-    "colors": {
-      "--color-bg":         "#1a1a1a",
-      "--color-text":       "#f5f5dc",
-      "--color-accent":     "#8b0000",
-      "--color-highlight":  "#8b0000",
-      "--color-sidebar-bg": "#222222",
-      "--color-nav-bg":     "#111111",
-      "--color-nav-text":   "#f5f5dc",
-      "--color-input-bg":   "#2a2a2a"
-    }
-  },
-  {
-    "name": "and_justice_for_all",
-    "display_name": "And Justice For All",
-    "emoji": "⚖️",
-    "date": "08-25",
-    "category": "music",
-    "subtitle": "Metallica · And Justice For All · Aug 25, 1988",
-    "wiki_url": "https://en.wikipedia.org/wiki/...And_Justice_for_All_(album)",
-    "description": "White background, black text, light green accent.",
+    "name": "pamela_anderson",
+    "display_name": "Happy Birthday, Pamela!",
+    "person_name": "Pamela",
+    "type": "birthday",
+    "emoji": "👙",
+    "date": "07-01",
+    "category": "culture",
+    "subtitle": "Pamela Anderson born 1967",
+    "wiki_url": "https://en.wikipedia.org/wiki/Pamela_Anderson",
+    "description": "Baywatch red nav, sandy beige warmth. CJ Parker on the beach.",
     "colors": {
       "--color-bg":         "#ffffff",
-      "--color-text":       "#000000",
-      "--color-accent":     "#90ee90",
-      "--color-highlight":  "#90ee90",
-      "--color-sidebar-bg": "#f5fff5",
-      "--color-nav-bg":     "#000000",
-      "--color-nav-text":   "#90ee90",
-      "--color-input-bg":   "#f9fef9"
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#cc0000",
+      "--color-highlight":  "#cc0000",
+      "--color-sidebar-bg": "#f5e6c8",
+      "--color-nav-bg":     "#cc0000",
+      "--color-nav-text":   "#ffffff",
+      "--color-input-bg":   "#fdf6ec"
     }
   },
   {
@@ -195,6 +275,28 @@
       "--color-nav-bg":     "#003087",
       "--color-nav-text":   "#ffffff",
       "--color-input-bg":   "#f8fafc"
+    }
+  },
+  {
+    "name": "pablo_picasso",
+    "display_name": "Happy Birthday, Picasso!",
+    "person_name": "Picasso",
+    "type": "birthday",
+    "emoji": "🎨",
+    "date": "10-25",
+    "category": "art",
+    "subtitle": "Pablo Picasso born 1881",
+    "wiki_url": "https://en.wikipedia.org/wiki/Pablo_Picasso",
+    "description": "Blue Period. Deep navy accent, pale blue nav text.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#1a3a6b",
+      "--color-highlight":  "#1a3a6b",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#1a3a6b",
+      "--color-nav-text":   "#c8d8e8",
+      "--color-input-bg":   "#f0f4fa"
     }
   }
 ]

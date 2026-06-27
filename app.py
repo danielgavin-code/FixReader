@@ -123,9 +123,13 @@ def themes_admin():
     preview  = request.args.get('preview')
     themes   = _load_themes()
     active   = _resolve_active_theme(themes)
+    sorted_themes = sorted(
+        themes.values(),
+        key=lambda t: t.get('date') or 'zz-zz',  # no date → sorts last
+    )
     return render_template('themes_admin.html', **_ctx(
         preview=preview,
-        themes_list=list(themes.values()),
+        themes_list=sorted_themes,
         active_theme_name=active,
         preview_theme_info=themes.get(preview) if preview else None,
     ))
