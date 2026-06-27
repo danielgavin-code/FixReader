@@ -302,15 +302,15 @@
             <span class="tl-stat-label">Latency</span>
           </div>
         </div>
+        <div id="tl-latency-summary" class="tl-latency-summary" style="display:none"></div>
         <div class="tl-progress-bar" id="tl-progress-bar" style="display:none">
           <div class="tl-progress-fill" id="tl-progress-fill"></div>
         </div>
       </div>
 
-      <!-- STATE: analysis — Quick Notes + Key Takeaways (log summary, or per-message after click) -->
-      <div id="state-analysis" style="display:none">
+      <!-- STATE: flagged — sits between timeline and decoded -->
+      <div id="state-flagged" style="display:none">
         <div class="center-analysis">
-
           <div class="ca-flagged-section" id="ca-flagged-section" style="display:none">
             <div class="ca-hdr ca-hdr-flagged">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2l6 12H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/><circle cx="8" cy="12.5" r="0.5" fill="currentColor" stroke="none"/></svg>
@@ -318,18 +318,6 @@
             </div>
             <div id="ca-flagged"></div>
           </div>
-
-          <div class="ca-two-col">
-            <div class="ca-section">
-              <div class="ca-hdr">Quick Notes</div>
-              <div id="ca-plain-english" class="ca-content"></div>
-            </div>
-            <div class="ca-section">
-              <div class="ca-hdr">Key Takeaways</div>
-              <div id="ca-key-takeaways" class="ca-content"></div>
-            </div>
-          </div>
-
         </div>
       </div>
 
@@ -392,6 +380,22 @@
         </div>
 
       </div><!-- /state-decoded -->
+
+      <!-- STATE: analysis — Quick Notes + Key Takeaways (log summary, or per-message after click) -->
+      <div id="state-analysis" style="display:none">
+        <div class="center-analysis">
+          <div class="ca-two-col">
+            <div class="ca-section">
+              <div class="ca-hdr">Quick Notes</div>
+              <div id="ca-plain-english" class="ca-content"></div>
+            </div>
+            <div class="ca-section">
+              <div class="ca-hdr">Key Takeaways</div>
+              <div id="ca-key-takeaways" class="ca-content"></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div><!-- /results-area -->
 
@@ -596,8 +600,9 @@ function showState(state) {
   document.getElementById('state-empty').style.display    = state === 'empty' ? '' : 'none';
   document.getElementById('state-error').style.display    = state === 'error' ? '' : 'none';
   document.getElementById('state-multi').style.display    = (state === 'multi' || state === 'multi+decoded') ? '' : 'none';
-  document.getElementById('state-analysis').style.display = (state === 'multi' || state === 'multi+decoded' || state === 'decoded') ? '' : 'none';
+  document.getElementById('state-flagged').style.display  = (state === 'decoded' || state === 'multi+decoded') ? '' : 'none';
   document.getElementById('state-decoded').style.display  = (state === 'decoded' || state === 'multi+decoded') ? 'block' : 'none';
+  document.getElementById('state-analysis').style.display = (state === 'multi' || state === 'multi+decoded' || state === 'decoded') ? '' : 'none';
 }
 
 const MSG_TYPE_NAMES = {
@@ -888,7 +893,10 @@ function renderTimeline(messages) {
     const mt      = fm[35] || '?';
     const flagged = tlHasFlaggedIssues(fm);
     const timeMs  = hmsToMs(fm[52] || fm[60]);
-    return { raw, mt, fm, flagged, timeMs,
+    const _d52 = fm[52] ? parseFIXTime(fm[52]) : null;
+    const _d60 = fm[60] ? parseFIXTime(fm[60]) : null;
+    const msgLatencyMs = (_d52 && _d60) ? Math.abs(_d52 - _d60) : null;
+    return { raw, mt, fm, flagged, timeMs, msgLatencyMs,
       typeName:     MSG_TYPE_NAMES[mt] || `MsgType ${mt}`,
       time:         fixTimeHMS(fm[52] || fm[60]),
       detail:       tlDetail(mt, fm),
@@ -922,15 +930,25 @@ function renderTimeline(messages) {
                       : `+${Math.floor(ms/60000)}m${Math.round((ms%60000)/1000)}s`;
   });
 
+  // Per-message latency spans (Tag 52 SendingTime vs Tag 60 TransactTime)
+  const latencySpans = parsed.map(r => {
+    if (r.msgLatencyMs === null) return '';
+    const ms  = r.msgLatencyMs;
+    const cls = ms >= 60000 ? 'tl-lat-crit' : ms >= 15000 ? 'tl-lat-warn' : 'tl-lat-ok';
+    const pfx = ms >= 60000 ? '<span class="tl-lat-alert">⚠️</span>' : '';
+    return `${pfx}<span class="tl-msg-latency ${cls}">${esc(fmtMsgLatency(ms))}</span>`;
+  });
+
   document.getElementById('timeline-rows').innerHTML = parsed.map((r, i) => {
     const isGap = gapRows.has(i);
-    return `<div class="tl-row${r.flagged ? ' tl-flagged' : ''}${isGap ? ' tl-gap' : ''}" data-idx="${i}" data-type="${esc(r.rowType)}">
+    return `<div class="tl-row${r.flagged ? ' tl-flagged' : ''}${isGap ? ' tl-gap' : ''}${r.msgLatencyMs >= 15000 ? ' tl-lat-issue' : ''}" data-idx="${i}" data-type="${esc(r.rowType)}">
        <span class="tl-time">${esc(r.time)}</span>
        <span class="tl-dot">·</span>
        <span class="tl-type">${esc(r.typeName)}</span>
        ${r.detail ? `<span class="tl-dot">·</span><span class="tl-detail ${esc(r.cls)}">${esc(r.detail)}${r.fillProgress ? ` <span class="tl-pipe">|</span> <span class="tl-fp">${esc(r.fillProgress)}</span>` : ''}${isGap ? ' <span class="tl-gap-warn">⚠ gap</span>' : ''}</span>` : ''}
-       ${deltas[i]  ? `<span class="tl-delta">${esc(deltas[i])}</span>` : ''}
-       ${r.flagged  ? '<span class="tl-warn" aria-label="Validation issues">⚠</span>' : ''}
+       ${deltas[i]      ? `<span class="tl-delta">${esc(deltas[i])}</span>` : ''}
+       ${latencySpans[i] ? latencySpans[i] : ''}
+       ${r.flagged      ? '<span class="tl-warn" aria-label="Validation issues">⚠</span>' : ''}
      </div>`;
   }).join('');
 
@@ -954,6 +972,26 @@ function renderTimeline(messages) {
   document.getElementById('tl-executions').textContent = stats.execCount;
   document.getElementById('tl-latency').textContent    = stats.latency;
   document.getElementById('tl-stats').style.display    = '';
+
+  // Per-message latency summary line
+  const latRows      = parsed.filter(r => r.msgLatencyMs !== null);
+  const latSummaryEl = document.getElementById('tl-latency-summary');
+  if (latRows.length > 0) {
+    const fastest    = latRows.reduce((a, b) => a.msgLatencyMs < b.msgLatencyMs ? a : b);
+    const slowest    = latRows.reduce((a, b) => a.msgLatencyMs > b.msgLatencyMs ? a : b);
+    const overOneSec = latRows.filter(r => r.msgLatencyMs >= 1000).length;
+    const latCls = ms => ms >= 60000 ? 'tl-lat-crit' : ms >= 15000 ? 'tl-lat-warn' : 'tl-lat-ok';
+    const overPart = overOneSec > 0
+      ? ` · <span class="tl-lat-sum-over">${overOneSec} msg${overOneSec > 1 ? 's' : ''} &gt;1s</span>`
+      : '';
+    latSummaryEl.innerHTML =
+      `Fastest: <strong class="${latCls(fastest.msgLatencyMs)}">${esc(fmtMsgLatency(fastest.msgLatencyMs))}</strong>` +
+      ` · Slowest: <strong class="${latCls(slowest.msgLatencyMs)}">${esc(fmtMsgLatency(slowest.msgLatencyMs))}</strong>` +
+      overPart;
+    latSummaryEl.style.display = '';
+  } else {
+    latSummaryEl.style.display = 'none';
+  }
 
   // Fill progress bar
   const progressBar  = document.getElementById('tl-progress-bar');
@@ -1053,6 +1091,12 @@ function formatLatency(ms) {
   if (m < 60) return remS ? `${m} min ${remS} sec` : `${m} min`;
   const h = Math.floor(m / 60), remM = m % 60;
   return remM ? `${h} hr ${remM} min` : `${h} hr`;
+}
+
+function fmtMsgLatency(ms) {
+  if (ms < 1000)  return `${ms}ms`;
+  if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
+  return `${Math.floor(ms / 60000)}m${Math.round((ms % 60000) / 1000)}s`;
 }
 
 function parseFIXTime(ts) {
@@ -1280,27 +1324,36 @@ function renderDecoded(data) {
 
   // ── Message latency — formatted + color coded ──
   const latEl = document.getElementById('summary-latency');
+  latEl.classList.remove('lat-high');
   const t52 = fmap[52], t60 = fmap[60];
   if (t52 && t60) {
     const d52 = parseFIXTime(t52), d60 = parseFIXTime(t60);
     if (d52 && d60) {
-      const diff = d52 - d60;
+      const diff  = d52 - d60;
       const absMs = Math.abs(diff);
       const latValEl = document.getElementById('latency-value');
+      const latDescEl = document.getElementById('latency-desc');
       latValEl.className = 'latency-value';
-      const text = formatLatency(absMs);
-      if (absMs >= 60000) {
-        latValEl.classList.add('lat-critical');
-        latValEl.textContent = '⚠ ' + text;
-      } else if (absMs >= 15000) {
-        latValEl.classList.add('lat-warn');
-        latValEl.textContent = text;
+      if (absMs === 0) {
+        latValEl.classList.add('lat-na');
+        latValEl.textContent = 'N/A — same timestamp';
+        latDescEl.textContent = 'SendingTime and TransactTime are identical — no measurable latency on this message.';
       } else {
-        latValEl.textContent = text;
+        const text = formatLatency(absMs);
+        if (absMs >= 60000) {
+          latValEl.classList.add('lat-critical');
+          latValEl.textContent = '⚠ ' + text;
+        } else if (absMs >= 15000) {
+          latValEl.classList.add('lat-warn');
+          latValEl.textContent = text;
+        } else {
+          latValEl.textContent = text;
+        }
+        latDescEl.textContent = diff >= 0
+          ? `SendingTime (52) is ${text} after TransactTime (60) — processing lag from event to wire`
+          : `TransactTime (60) is ${text} after SendingTime (52) — possible clock skew or late timestamp`;
+        if (absMs >= 15000) latEl.classList.add('lat-high');
       }
-      document.getElementById('latency-desc').textContent = diff >= 0
-        ? `SendingTime (52) is ${text} after TransactTime (60) — processing lag from event to wire`
-        : `TransactTime (60) is ${text} after SendingTime (52) — possible clock skew or late timestamp`;
       latEl.style.display = '';
     } else {
       latEl.style.display = 'none';

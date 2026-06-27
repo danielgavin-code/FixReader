@@ -112,6 +112,7 @@
       </div>
 
       <div class="ta-card-actions">
+        <button type="button" class="ta-btn ta-btn-edit" onclick="teToggle('{{ theme.name }}')">Edit</button>
         <a href="/themes-admin?preview={{ theme.name }}" class="ta-btn ta-btn-preview">Preview</a>
         <form method="post" action="/themes-admin/apply" style="display:inline;margin:0">
           <input type="hidden" name="theme" value="{{ theme.name }}">
@@ -134,6 +135,52 @@
       {% endfor %}
     </div>
 
+    <!-- Inline edit form -->
+    <div id="te-form-{{ theme.name }}" class="te-form" style="display:none">
+      <div>
+        <div class="te-section-label">Theme Text</div>
+        <div class="te-fields-grid">
+          <div class="te-field">
+            <label class="te-label">Display Name</label>
+            <input type="text" class="te-input" id="te-display_name-{{ theme.name }}" value="{{ theme.display_name or '' }}">
+          </div>
+          <div class="te-field">
+            <label class="te-label">Emoji</label>
+            <input type="text" class="te-input" id="te-emoji-{{ theme.name }}" value="{{ theme.emoji or '' }}">
+          </div>
+          <div class="te-field">
+            <label class="te-label">Subtitle</label>
+            <input type="text" class="te-input" id="te-subtitle-{{ theme.name }}" value="{{ theme.subtitle or '' }}">
+          </div>
+          <div class="te-field">
+            <label class="te-label">Wiki URL</label>
+            <input type="text" class="te-input" id="te-wiki_url-{{ theme.name }}" value="{{ theme.wiki_url or '' }}">
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="te-section-label">Colors</div>
+        <div class="te-colors-grid">
+          {% for var, val in theme.colors.items() %}
+          <div class="te-color-row">
+            <span class="te-color-label" title="{{ var }}">{{ var.replace('--color-', '') }}</span>
+            <input type="color" value="{{ val }}" class="te-color-picker"
+                   data-theme="{{ theme.name }}" data-var="{{ var }}"
+                   oninput="teSyncHex(this)">
+            <input type="text" value="{{ val }}" class="te-color-hex"
+                   data-theme="{{ theme.name }}" data-var="{{ var }}"
+                   maxlength="7" oninput="teSyncPicker(this)">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="te-actions">
+        <button type="button" class="te-btn-save" onclick="teSave('{{ theme.name }}')">Save</button>
+        <button type="button" class="te-btn-cancel" onclick="teToggle('{{ theme.name }}')">Cancel</button>
+        <span class="te-status" id="te-status-{{ theme.name }}"></span>
+      </div>
+    </div>
+
   </div>
   {% endfor %}
 
@@ -152,5 +199,64 @@
   </div>
 </footer>
 
+<script>
+function teToggle(name) {
+  const form = document.getElementById('te-form-' + name);
+  const isOpen = form.style.display !== 'none';
+  form.style.display = isOpen ? 'none' : '';
+  if (!isOpen) form.querySelector('.te-input') && form.querySelector('.te-input').focus();
+}
+
+function teSyncHex(picker) {
+  picker.closest('.te-color-row').querySelector('.te-color-hex').value = picker.value;
+}
+
+function teSyncPicker(hexInput) {
+  const val = hexInput.value.trim();
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    hexInput.closest('.te-color-row').querySelector('.te-color-picker').value = val;
+  }
+}
+
+async function teSave(name) {
+  const statusEl = document.getElementById('te-status-' + name);
+  statusEl.textContent = 'Saving…';
+  statusEl.className = 'te-status';
+
+  const colors = {};
+  document.querySelectorAll(`.te-color-hex[data-theme="${name}"]`).forEach(el => {
+    colors[el.dataset.var] = el.value.trim();
+  });
+
+  const payload = {
+    name,
+    display_name: document.getElementById('te-display_name-' + name).value.trim(),
+    emoji:        document.getElementById('te-emoji-'        + name).value.trim(),
+    subtitle:     document.getElementById('te-subtitle-'     + name).value.trim(),
+    wiki_url:     document.getElementById('te-wiki_url-'     + name).value.trim(),
+    colors,
+  };
+
+  try {
+    const res  = await fetch('/themes-admin/edit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (data.status === 'ok') {
+      statusEl.textContent = 'Saved ✓';
+      statusEl.className = 'te-status te-status-ok';
+      setTimeout(() => { statusEl.textContent = ''; }, 2500);
+    } else {
+      statusEl.textContent = data.message || 'Error saving';
+      statusEl.className = 'te-status te-status-err';
+    }
+  } catch (_) {
+    statusEl.textContent = 'Network error';
+    statusEl.className = 'te-status te-status-err';
+  }
+}
+</script>
 </body>
 </html>

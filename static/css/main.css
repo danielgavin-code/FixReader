@@ -1544,6 +1544,19 @@ code {
 }
 .latency-value.lat-warn     { color: #b45309; }
 .latency-value.lat-critical { color: #dc2626; }
+.latency-value.lat-na       { font-size: 16px; color: var(--text-muted); }
+
+.summary-latency.lat-high {
+  background: #fff5f5;
+  border-top-color: #fecaca;
+  border-left: 3px solid #dc2626;
+  padding-left: 10px;
+}
+.summary-latency.lat-high .latency-hdr {
+  color: #dc2626;
+  border-bottom-color: #fecaca;
+}
+
 .latency-desc {
   font-size: 11.5px;
   color: var(--text-muted);
@@ -1888,12 +1901,22 @@ code {
 .tl-row.tl-flagged:hover       { background: #fee2e2; }
 .tl-row.tl-flagged.tl-selected { background: #fecaca; }
 
+.tl-row.tl-lat-issue {
+  border-left: 3px solid #dc2626;
+  background: #fff5f5;
+  padding-left: 9px;
+}
+.tl-row.tl-lat-issue:hover       { background: #fee2e2; }
+.tl-row.tl-lat-issue.tl-selected { background: #fecaca; }
+
 .tl-warn {
   margin-left: auto;
   flex-shrink: 0;
-  font-size: 11px;
+  font-size: 1.2rem;
+  font-weight: bold;
   line-height: 1;
-  opacity: 0.75;
+  color: #dc2626;
+  padding: 0 4px 0 6px;
 }
 
 .tl-issue-count {
@@ -1915,6 +1938,23 @@ code {
   flex-shrink: 0;
   opacity: 0.55;
 }
+
+/* Per-message Tag 52 vs Tag 60 latency tag */
+.tl-msg-latency { font-size: 10px; font-family: var(--mono); flex-shrink: 0; }
+.tl-lat-ok      { color: var(--text-dim); }
+.tl-lat-warn    { color: var(--amber); font-weight: 500; }
+.tl-lat-crit    { color: #dc2626; font-weight: 600; }
+.tl-lat-alert   { font-size: 10px; flex-shrink: 0; }
+
+/* Latency summary bar below stats row */
+.tl-latency-summary {
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text-dim);
+  padding: 5px 12px 6px;
+  border-top: 1px solid var(--border-light);
+}
+.tl-lat-sum-over { color: #dc2626; font-weight: 600; }
 
 /* Filter pills */
 .tl-filters {
@@ -2424,6 +2464,130 @@ code {
   transition: color var(--trans);
 }
 .ta-btn-bar-cancel:hover { color: #ffffff; }
+
+.ta-btn-edit {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.ta-btn-edit:hover { background: var(--sb-hover-bg); color: var(--text); }
+
+/* ── Theme inline editor ──────────────────────────────── */
+.te-form {
+  border-top: 1px solid var(--border-light);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--bg-page);
+}
+.te-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+.te-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.te-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.te-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.te-input {
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text);
+  width: 100%;
+  box-sizing: border-box;
+}
+.te-input:focus { outline: none; border-color: var(--color-accent); }
+.te-colors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 6px;
+}
+.te-color-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.te-color-label {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text-dim);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.te-color-picker {
+  width: 30px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: none;
+}
+.te-color-hex {
+  font-family: var(--mono);
+  font-size: 12px;
+  width: 74px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--text);
+  flex-shrink: 0;
+}
+.te-color-hex:focus { outline: none; border-color: var(--color-accent); }
+.te-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.te-btn-save {
+  padding: 7px 18px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--trans);
+}
+.te-btn-save:hover { opacity: 0.88; }
+.te-btn-cancel {
+  padding: 7px 14px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.te-btn-cancel:hover { background: var(--sb-hover-bg); }
+.te-status      { font-size: 12px; font-weight: 500; }
+.te-status-ok   { color: #16a34a; }
+.te-status-err  { color: #dc2626; }
 
 
 /* ═══════════════════════════════════════════════════════

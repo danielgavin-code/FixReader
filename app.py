@@ -144,6 +144,39 @@ def themes_admin_apply():
     return redirect('/themes-admin')
 
 
+@app.route('/themes-admin/edit', methods=['POST'])
+def themes_admin_edit():
+    import re
+    data = request.get_json(force=True) or {}
+    name = data.get('name', '').strip()
+    if not name:
+        return jsonify({'status': 'error', 'message': 'Missing theme name'}), 400
+
+    with open(_THEMES_FILE) as f:
+        themes_list = json.load(f)
+
+    theme = next((t for t in themes_list if t['name'] == name), None)
+    if not theme:
+        return jsonify({'status': 'error', 'message': 'Theme not found'}), 404
+
+    for field in ('display_name', 'subtitle', 'emoji', 'wiki_url'):
+        if field in data:
+            theme[field] = data[field] or None
+
+    hex_re = re.compile(r'^#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?$')
+    if isinstance(data.get('colors'), dict):
+        existing = theme.get('colors', {})
+        for var, val in data['colors'].items():
+            if var in existing and hex_re.match(str(val)):
+                existing[var] = val
+
+    with open(_THEMES_FILE, 'w') as f:
+        json.dump(themes_list, f, indent=2)
+        f.write('\n')
+
+    return jsonify({'status': 'ok'})
+
+
 @app.route('/compare')
 def compare():
     return stub(
