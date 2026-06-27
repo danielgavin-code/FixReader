@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {{ theme_vars | safe }}
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230f1c2e'/%3E%3Ctext x='16' y='23' font-family='Arial%2Csans-serif' font-size='22' font-weight='800' fill='%233b82f6' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -31,12 +32,31 @@
       <li><a href="/resources"      class="nav-item{% if active_nav == 'resources' %} active{% endif %}" {% if active_nav == 'resources' %}aria-current="page"{% endif %}>Resources</a></li>
       <li><a href="/about"          class="nav-item{% if active_nav == 'about' %} active{% endif %}" {% if active_nav == 'about' %}aria-current="page"{% endif %}>About</a></li>
     </ul>
+    {% if theme_info.name != 'default' %}
     <div class="nav-end">
       <div class="nav-theme">
-        <span class="nav-theme-label">Today's theme</span>
-        <a href="/learn" class="nav-theme-value">Order Management</a>
+        <span class="nav-theme-emoji">{{ theme_info.emoji }}</span>
+        <div class="nav-theme-text">
+          <div class="nav-theme-line1">
+            {% if theme_info.type == 'birthday' %}
+            <span class="nav-theme-label">Happy Birthday,</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.person_name }}!</a>
+            {% else %}
+            <span class="nav-theme-label">Today's Theme:</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.display_name }}</a>
+            {% endif %}
+          </div>
+          <div class="nav-theme-line2">
+            {% if theme_info.type == 'birthday' %}
+            {{ theme_info.subtitle }}{% if theme_info.wiki_url %} · <a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% else %}
+            {% if theme_info.date %}{{ theme_info.date }}{% if theme_info.subtitle %} · {% endif %}{% endif %}{% if theme_info.subtitle %}{{ theme_info.subtitle }}{% if theme_info.wiki_url %} · {% endif %}{% endif %}{% if theme_info.wiki_url %}<a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% endif %}
+          </div>
+        </div>
       </div>
     </div>
+    {% endif %}
   </div>
 </nav>
 

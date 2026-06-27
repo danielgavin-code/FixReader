@@ -1,0 +1,200 @@
+[
+  {
+    "name": "default",
+    "display_name": "Default",
+    "emoji": null,
+    "date": null,
+    "category": "default",
+    "subtitle": null,
+    "wiki_url": null,
+    "description": "White background, navy accent, clean corporate.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#2563eb",
+      "--color-highlight":  "#f59e0b",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#ffffff",
+      "--color-nav-text":   "#0f172a",
+      "--color-input-bg":   "#f8fafc"
+    }
+  },
+  {
+    "name": "axl_rose",
+    "display_name": "Happy Birthday, Axl!",
+    "person_name": "Axl",
+    "type": "birthday",
+    "emoji": "🎤",
+    "date": "02-06",
+    "category": "music",
+    "subtitle": "W. Axl Rose born 1962",
+    "wiki_url": "https://en.wikipedia.org/wiki/Axl_Rose",
+    "description": "Black nav, Chinese Democracy red accent.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#cc0000",
+      "--color-highlight":  "#cc0000",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#000000",
+      "--color-nav-text":   "#ffffff",
+      "--color-input-bg":   "#f8fafc"
+    }
+  },
+  {
+    "name": "henry_rollins",
+    "display_name": "Happy Birthday, Henry Rollins!",
+    "person_name": "Henry Rollins",
+    "type": "birthday",
+    "emoji": "🎤",
+    "date": "02-13",
+    "category": "music",
+    "subtitle": "Henry Rollins born 1961",
+    "wiki_url": "https://en.wikipedia.org/wiki/Henry_Rollins",
+    "description": "Rust orange on near-black navbar, clean white page body. End of Silence era Rollins Band energy.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#1a0a00",
+      "--color-accent":     "#c0531a",
+      "--color-highlight":  "#c0531a",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#1a0a00",
+      "--color-nav-text":   "#ffffff",
+      "--color-input-bg":   "#f8f4f0"
+    }
+  },
+  {
+    "name": "darryl_strawberry",
+    "display_name": "Straw's Day",
+    "emoji": "⚾",
+    "date": "03-12",
+    "category": "sports",
+    "subtitle": "Darryl Strawberry's Birthday · #18",
+    "wiki_url": "https://en.wikipedia.org/wiki/Darryl_Strawberry",
+    "description": "Mets blue and orange. Happy birthday, Straw.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#002d72",
+      "--color-accent":     "#ff5910",
+      "--color-highlight":  "#ff5910",
+      "--color-sidebar-bg": "#f0f4fd",
+      "--color-nav-bg":     "#002d72",
+      "--color-nav-text":   "#ffffff",
+      "--color-input-bg":   "#f0f4fd"
+    }
+  },
+  {
+    "name": "dennis_rodman",
+    "display_name": "Happy Birthday, Dennis Rodman!",
+    "person_name": "Dennis Rodman",
+    "type": "birthday",
+    "emoji": "🏀",
+    "date": "05-13",
+    "category": "sports",
+    "subtitle": "Dennis Rodman born 1961",
+    "wiki_url": "https://en.wikipedia.org/wiki/Dennis_Rodman",
+    "description": "Hot pink accent, black nav. Wild card energy.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#ff69b4",
+      "--color-highlight":  "#ff69b4",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#000000",
+      "--color-nav-text":   "#ffffff",
+      "--color-input-bg":   "#f8fafc",
+      "--color-sidebar-tools":          "#ffff00",
+      "--color-sidebar-cert":           "#00ff00",
+      "--color-sidebar-tags":           "#ffff00",
+      "--color-sidebar-stats":          "#00ff00",
+      "--color-sidebar-whatisfix":      "#ffff00",
+      "--color-sidebar-lostinweeds":    "#00ff00",
+      "--color-sidebar-learnfix":       "#ffff00",
+      "--color-sidebar-interviewprep":  "#00ff00",
+      "--color-sidebar-tools-right":    "#ffff00",
+      "--color-sidebar-messagelibrary": "#00ff00"
+    }
+  },
+  {
+    "name": "kylie_day",
+    "display_name": "Kylie Day",
+    "emoji": "🪩",
+    "date": "05-28",
+    "category": "music",
+    "subtitle": "Kylie Minogue's Birthday",
+    "wiki_url": "https://en.wikipedia.org/wiki/Kylie_Minogue",
+    "description": "Hot pink accent, white background, black text, pink nav.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#000000",
+      "--color-accent":     "#ff69b4",
+      "--color-highlight":  "#ff69b4",
+      "--color-sidebar-bg": "#fff0f7",
+      "--color-nav-bg":     "#ff69b4",
+      "--color-nav-text":   "#ffffff",
+      "--color-input-bg":   "#fff0f7"
+    }
+  },
+  {
+    "name": "south_of_heaven",
+    "display_name": "South Of Heaven",
+    "emoji": "🔪",
+    "date": "07-05",
+    "category": "music",
+    "subtitle": "Slayer · South of Heaven · Jul 5, 1988",
+    "wiki_url": "https://en.wikipedia.org/wiki/South_of_Heaven",
+    "description": "Dark grey background, blood red accent, bone white text.",
+    "colors": {
+      "--color-bg":         "#1a1a1a",
+      "--color-text":       "#f5f5dc",
+      "--color-accent":     "#8b0000",
+      "--color-highlight":  "#8b0000",
+      "--color-sidebar-bg": "#222222",
+      "--color-nav-bg":     "#111111",
+      "--color-nav-text":   "#f5f5dc",
+      "--color-input-bg":   "#2a2a2a"
+    }
+  },
+  {
+    "name": "and_justice_for_all",
+    "display_name": "And Justice For All",
+    "emoji": "⚖️",
+    "date": "08-25",
+    "category": "music",
+    "subtitle": "Metallica · And Justice For All · Aug 25, 1988",
+    "wiki_url": "https://en.wikipedia.org/wiki/...And_Justice_for_All_(album)",
+    "description": "White background, black text, light green accent.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#000000",
+      "--color-accent":     "#90ee90",
+      "--color-highlight":  "#90ee90",
+      "--color-sidebar-bg": "#f5fff5",
+      "--color-nav-bg":     "#000000",
+      "--color-nav-text":   "#90ee90",
+      "--color-input-bg":   "#f9fef9"
+    }
+  },
+  {
+    "name": "warren_buffett",
+    "display_name": "Happy Birthday, Warren!",
+    "person_name": "Warren",
+    "type": "birthday",
+    "emoji": "💰",
+    "date": "08-30",
+    "category": "finance",
+    "subtitle": "Warren Buffett born 1930",
+    "wiki_url": "https://en.wikipedia.org/wiki/Warren_Buffett",
+    "description": "Berkshire Hathaway navy nav, gold accent. Old money energy.",
+    "colors": {
+      "--color-bg":         "#ffffff",
+      "--color-text":       "#0f172a",
+      "--color-accent":     "#c9a227",
+      "--color-highlight":  "#c9a227",
+      "--color-sidebar-bg": "#ffffff",
+      "--color-nav-bg":     "#003087",
+      "--color-nav-text":   "#ffffff",
+      "--color-input-bg":   "#f8fafc"
+    }
+  }
+]

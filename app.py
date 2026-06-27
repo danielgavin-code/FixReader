@@ -1,19 +1,111 @@
-from flask import Flask, render_template, request, jsonify
+import json
+import os
+from datetime import date as _date
+
+from flask import Flask, render_template, request, jsonify, redirect
 from fix_decoder import decode_fix, generate_summary
 
 app = Flask(__name__)
 
+_BASE        = os.path.dirname(__file__)
+_THEMES_FILE = os.path.join(_BASE, 'fixreader_data', 'themes.json')
+_ACTIVE_FILE = os.path.join(_BASE, 'fixreader_active_theme.json')
+
+
+# ── Theme engine ─────────────────────────────────────────────
+
+def _load_themes():
+    with open(_THEMES_FILE) as f:
+        return {t['name']: t for t in json.load(f)}
+
+
+def _resolve_active_theme(themes):
+    """Priority: manual override (today only) > scheduled date > 'default'."""
+    today_ymd  = _date.today().isoformat()       # 2026-06-26
+    today_mmdd = _date.today().strftime('%m-%d')  # 06-26
+
+    # 1. Manual override — valid only on the day it was set
+    try:
+        with open(_ACTIVE_FILE) as f:
+            data = json.load(f)
+        if data.get('manual_date') == today_ymd:
+            name = data.get('active_theme', 'default')
+            if name in themes:
+                return name
+    except Exception:
+        pass
+
+    # 2. Scheduled theme for today's date
+    for theme in themes.values():
+        if theme.get('date') == today_mmdd:
+            return theme['name']
+
+    return 'default'
+
+
+def _build_theme_vars(theme):
+    colors = theme.get('colors', {})
+    if not colors:
+        return ''
+    lines = ['<style>:root {']
+    for var, val in colors.items():
+        lines.append(f'  {var}: {val};')
+    lines.append('}</style>')
+    return '\n'.join(lines)
+
+
+def _build_theme_info(theme):
+    return {
+        'name':         theme.get('name', 'default'),
+        'display_name': theme.get('display_name', 'Default'),
+        'emoji':        theme.get('emoji') or '',
+        'subtitle':     theme.get('subtitle') or '',
+        'wiki_url':     theme.get('wiki_url') or '',
+        'category':     theme.get('category', ''),
+        'date':         theme.get('date') or '',
+        'type':         theme.get('type') or '',
+        'person_name':  theme.get('person_name') or '',
+    }
+
+
+def _ctx(preview=None, **kwargs):
+    """Assemble per-request template context: theme vars + display info."""
+    themes      = _load_themes()
+    render_name = preview if (preview and preview in themes) else _resolve_active_theme(themes)
+    theme       = themes.get(render_name) or themes.get('default') or {}
+    return {
+        'theme_vars':   _build_theme_vars(theme),
+        'theme_info':   _build_theme_info(theme),
+        'preview_name': preview,
+        **kwargs,
+    }
+
+
+def _save_active_theme(name):
+    data = {'active_theme': name, 'manual_date': _date.today().isoformat()}
+    with open(_ACTIVE_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
+        f.write('\n')
+
+
+# ── Stub helper ──────────────────────────────────────────────
 
 def stub(title, description, active_nav=''):
-    return render_template('stub.html',
-                           page_title=title,
-                           page_description=description,
-                           active_nav=active_nav)
+    preview = request.args.get('preview')
+    return render_template('stub.html', **_ctx(
+        preview=preview,
+        page_title=title,
+        page_description=description,
+        active_nav=active_nav,
+    ))
 
+
+# ── Routes ───────────────────────────────────────────────────
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    preview = request.args.get('preview')
+    return render_template('index.html', **_ctx(preview=preview))
 
 
 @app.route('/decode', methods=['POST'])
@@ -24,6 +116,28 @@ def decode():
         summary = generate_summary(fields)
         return jsonify({'status': 'ok', 'fields': fields, 'summary': summary})
     return jsonify({'status': status})
+
+
+@app.route('/themes-admin')
+def themes_admin():
+    preview  = request.args.get('preview')
+    themes   = _load_themes()
+    active   = _resolve_active_theme(themes)
+    return render_template('themes_admin.html', **_ctx(
+        preview=preview,
+        themes_list=list(themes.values()),
+        active_theme_name=active,
+        preview_theme_info=themes.get(preview) if preview else None,
+    ))
+
+
+@app.route('/themes-admin/apply', methods=['POST'])
+def themes_admin_apply():
+    name   = request.form.get('theme', 'default')
+    themes = _load_themes()
+    if name in themes:
+        _save_active_theme(name)
+    return redirect('/themes-admin')
 
 
 @app.route('/compare')

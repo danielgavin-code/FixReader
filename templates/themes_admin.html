@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Management — FIXReader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {{ theme_vars | safe }}
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230f1c2e'/%3E%3Ctext x='16' y='23' font-family='Arial%2Csans-serif' font-size='22' font-weight='800' fill='%233b82f6' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     PREVIEW BANNER (shown only when ?preview= is set)
+════════════════════════════════════════════════════ -->
+{% if preview_name and preview_theme_info %}
+<div class="ta-preview-bar">
+  <span>PREVIEWING: <strong>{{ preview_theme_info.emoji }} {{ preview_theme_info.display_name }}</strong>
+    {% if preview_theme_info.get('subtitle') %} — {{ preview_theme_info.subtitle }}{% endif %}
+  </span>
+  <div class="ta-preview-bar-actions">
+    <form method="post" action="/themes-admin/apply" style="display:inline;margin:0">
+      <input type="hidden" name="theme" value="{{ preview_name }}">
+      <button type="submit" class="ta-btn-bar-apply">Apply</button>
+    </form>
+    <a href="/themes-admin" class="ta-btn-bar-cancel">Cancel</a>
+  </div>
+</div>
+{% endif %}
+
+<!-- ════════════════════════════════════════════════════
+     TOP NAV
+════════════════════════════════════════════════════ -->
+<nav class="top-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="logo-mark"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></div>
+      <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="/"               class="nav-item">Decode</a></li>
+      <li><a href="/learn"          class="nav-item">Learn FIX</a></li>
+      <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
+      <li><a href="/tools"          class="nav-item">Tools</a></li>
+      <li><a href="/message-library" class="nav-item">Message Library</a></li>
+      <li><a href="/resources"      class="nav-item">Resources</a></li>
+      <li><a href="/about"          class="nav-item">About</a></li>
+    </ul>
+    {% if theme_info.name != 'default' %}
+    <div class="nav-end">
+      <div class="nav-theme">
+        <span class="nav-theme-emoji">{{ theme_info.emoji }}</span>
+        <div class="nav-theme-text">
+          <div class="nav-theme-line1">
+            {% if theme_info.type == 'birthday' %}
+            <span class="nav-theme-label">Happy Birthday,</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.person_name }}!</a>
+            {% else %}
+            <span class="nav-theme-label">Today's Theme:</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.display_name }}</a>
+            {% endif %}
+          </div>
+          <div class="nav-theme-line2">
+            {% if theme_info.type == 'birthday' %}
+            {{ theme_info.subtitle }}{% if theme_info.wiki_url %} · <a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% else %}
+            {% if theme_info.date %}{{ theme_info.date }}{% if theme_info.subtitle %} · {% endif %}{% endif %}{% if theme_info.subtitle %}{{ theme_info.subtitle }}{% if theme_info.wiki_url %} · {% endif %}{% endif %}{% if theme_info.wiki_url %}<a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════
+     ADMIN CONTENT
+════════════════════════════════════════════════════ -->
+<div class="ta-page">
+
+  <div class="ta-page-hdr">
+    <div class="ta-page-title">Theme Management</div>
+    <div class="ta-page-desc">
+      Themes auto-activate on their scheduled date. Use Apply to override manually — the override lasts until midnight.
+    </div>
+  </div>
+
+  {% for theme in themes_list %}
+  {% set is_active    = (theme.name == active_theme_name) %}
+  {% set is_previewing = (theme.name == preview_name) %}
+
+  <div class="ta-card{% if is_active %} ta-active{% endif %}{% if is_previewing %} ta-previewing{% endif %}">
+
+    <div class="ta-card-top">
+      <div class="ta-card-emoji">{{ theme.emoji or '🎨' }}</div>
+
+      <div class="ta-card-info">
+        <div class="ta-card-name">
+          {{ theme.display_name }}
+          {% if is_active    %}<span class="ta-chip ta-chip-active">Active</span>{% endif %}
+          {% if is_previewing %}<span class="ta-chip ta-chip-preview">Previewing</span>{% endif %}
+          {% if theme.date   %}<span class="ta-chip ta-chip-date">{{ theme.date }}</span>{% endif %}
+          {% if theme.category and theme.category != 'default' %}
+          <span class="ta-chip ta-chip-{{ theme.category }}">{{ theme.category }}</span>
+          {% endif %}
+        </div>
+        {% if theme.subtitle %}<div class="ta-card-subtitle">{{ theme.subtitle }}</div>{% endif %}
+      </div>
+
+      <div class="ta-card-actions">
+        <a href="/themes-admin?preview={{ theme.name }}" class="ta-btn ta-btn-preview">Preview</a>
+        <form method="post" action="/themes-admin/apply" style="display:inline;margin:0">
+          <input type="hidden" name="theme" value="{{ theme.name }}">
+          <button type="submit" class="ta-btn ta-btn-apply">Apply</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Color swatches -->
+    <div class="ta-swatches">
+      {% for var, val in theme.colors.items() %}
+      {% set short_key = var.replace('--color-', '') %}
+      <div class="ta-swatch-wrap" title="{{ var }}: {{ val }}">
+        <div class="ta-swatch" style="background: {{ val }}"></div>
+        <div class="ta-swatch-meta">
+          <span class="ta-swatch-key">{{ short_key }}</span>
+          <span class="ta-swatch-val">{{ val }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+  {% endfor %}
+
+</div><!-- /ta-page -->
+
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
+    <div class="footer-links">
+      <a href="https://github.com/fixreader" class="footer-link">GitHub</a>
+      <a href="/contact" class="footer-link">Contact</a>
+      <a href="/feedback" class="footer-link">Feedback</a>
+    </div>
+    <span class="footer-copy">© 2026 FIXReader.org</span>
+  </div>
+</footer>
+
+</body>
+</html>
