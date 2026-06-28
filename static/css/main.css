@@ -240,7 +240,7 @@ code {
   white-space: nowrap;
 }
 .nav-item:hover  { color: var(--color-accent); }
-.nav-item.active { color: var(--text); font-weight: 600; }
+.nav-item.active { color: var(--text); font-weight: 600; border-bottom: 2px solid var(--color-accent); }
 
 .nav-end {
   margin-left: auto;

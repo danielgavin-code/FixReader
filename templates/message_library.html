@@ -35,15 +35,14 @@
       <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
     </a>
     <ul class="nav-links" role="list">
-      <li><a href="/"               class="nav-item">Decode</a></li>
-      <li><a href="/compare"        class="nav-item">Compare</a></li>
-      <li><a href="/learn"          class="nav-item">Learn FIX</a></li>
+      <li><a href="/tools" class="nav-item">Tools</a></li>
+      <li><a href="/tools/cert-scripts" class="nav-item">Cert Scripts</a></li>
+      <li><a href="/learn" class="nav-item">Learn FIX</a></li>
       <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
-      <li><a href="/tools"          class="nav-item">Tools</a></li>
-      <li><a href="/message-library" class="nav-item active" aria-current="page">Message Library</a></li>
-      <li><a href="/exchange-specs"  class="nav-item">Exchange Specs</a></li>
-      <li><a href="/resources"      class="nav-item">Resources</a></li>
-      <li><a href="/about"          class="nav-item">About</a></li>
+      <li><a href="/message-library" class="nav-item active" aria-current="page">FIX Specs</a></li>
+      <li><a href="/exchange-specs" class="nav-item">Exchange Specs</a></li>
+      <li><a href="/resources" class="nav-item">Resources</a></li>
+      <li><a href="/about" class="nav-item">About</a></li>
     </ul>
     {% if theme_info.name != 'default' %}
     <div class="nav-end">
@@ -217,11 +216,11 @@ function esc(s) {
 
 // ── Left nav ──────────────────────────────────────────────────
 const REF_ITEMS = [
-  { code: 'mic',      label: 'MIC Codes' },
-  { code: 'currency', label: 'Currency Codes' },
-  { code: 'country',  label: 'Country Codes' },
-  { code: 'timezone', label: 'Time Zones' },
-  { code: 'secidsrc', label: 'Security ID Sources' },
+  { code: 'mic',      label: 'MIC Codes',          badge: 'MIC' },
+  { code: 'currency', label: 'Currency Codes',      badge: 'CCY' },
+  { code: 'country',  label: 'Country Codes',       badge: 'CTY' },
+  { code: 'timezone', label: 'Time Zones',          badge: 'TZ'  },
+  { code: 'secidsrc', label: 'Security ID Sources', badge: 'SID' },
 ];
 
 function buildNav() {
@@ -240,7 +239,8 @@ function buildNav() {
   html += `<div class="ml-appendix-nav-hdr">Appendix</div>`;
   for (const item of REF_ITEMS) {
     html += `<div class="ml-appendix-item" data-ref="${item.code}" onclick="selectRefItem('${item.code}')">
-      ${esc(item.label)}
+      <span class="ml-msg-code">${esc(item.badge)}</span>
+      <span>${esc(item.label)}</span>
     </div>`;
   }
   document.getElementById('ml-nav').innerHTML = html;
@@ -2548,8 +2548,9 @@ selectMsg('D');
   <div class="footer-inner">
     <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
     <div class="footer-links">
-      <a href="/contact"  class="footer-link">Contact</a>
+      <a href="/contact" class="footer-link">Contact</a>
       <a href="/feedback" class="footer-link">Feedback</a>
+      <a href="https://github.com/danielgavin-code/FixReader" class="footer-link" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
     <span class="footer-copy">© 2026 FIXReader.org</span>
   </div>

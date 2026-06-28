@@ -271,13 +271,7 @@ def themes_admin_edit():
 
 @app.route('/compare')
 def compare():
-    return stub(
-        'Compare Messages',
-        'Paste two FIX messages side by side and see a diff — identical tags in grey, '
-        'changed values highlighted, missing tags flagged. Great for debugging order '
-        'state transitions and spotting what changed between an original order and a cancel/replace.',
-        'compare',
-    )
+    return render_template('compare.html', **_ctx(preview=request.args.get('preview')))
 
 
 @app.route('/learn')
@@ -397,13 +391,7 @@ def tag_reference_page(version):
 
 @app.route('/resources')
 def resources():
-    return stub(
-        'Resources',
-        'FIX Protocol specs, vendor documentation, open-source libraries, and community '
-        'links — everything you need to go deeper on FIX development, integration work, '
-        'or certification prep.',
-        'resources',
-    )
+    return render_template('resources.html', **_ctx(preview=request.args.get('preview')))
 
 
 @app.route('/about')
@@ -437,6 +425,80 @@ def tag_reference(tag_number):
             ),
         )), 404
     return render_template('tag_reference.html', **_ctx(preview=preview), tag=tag, ver=ver)
+
+
+@app.route('/fix-specs')
+def fix_specs_redirect():
+    return redirect('/message-library')
+
+
+@app.route('/learn/fix-protocol-101')
+def learn_fix_protocol_101():
+    return stub('FIX Protocol 101', 'A ground-up introduction to the FIX Protocol — message structure, field types, and the core concepts behind every FIX session.', 'learn')
+
+
+@app.route('/learn/message-types-guide')
+def learn_message_types_guide():
+    return stub('Message Types Guide', 'Every FIX message type explained — from New Order Single to Execution Report — with required fields, valid values, and real-world context.', 'learn')
+
+
+@app.route('/learn/session-management')
+def learn_session_management():
+    return stub('Session Management', 'How FIX sessions connect, authenticate, and recover — Logon, Heartbeat, ResendRequest, and the full sequence-number lifecycle.', 'learn')
+
+
+@app.route('/learn/fix-glossary')
+def learn_fix_glossary():
+    return stub('FIX Glossary', 'Plain-English definitions for every FIX term — from BeginString to execType — with cross-references to relevant tags and message types.', 'learn')
+
+
+@app.route('/interview-prep/qa-bank')
+def interview_prep_qa_bank():
+    return stub('Q&A Bank', '153 FIX Protocol interview questions with detailed answers — covering session management, order types, execution reports, and more.', 'interview-prep')
+
+
+@app.route('/interview-prep/mock-interview')
+def interview_prep_mock_interview():
+    return stub('Mock FIX Interview', 'A simulated technical interview focused on FIX Protocol — questions presented one at a time with feedback and model answers.', 'interview-prep')
+
+
+@app.route('/interview-prep/common-scenarios')
+def interview_prep_common_scenarios():
+    return stub('Common Scenarios', 'Walk through the most common FIX scenarios asked in interviews — cancel/replace flows, partial fills, reject handling, and session recovery.', 'interview-prep')
+
+
+@app.route('/interview-prep/cheat-sheet')
+def interview_prep_cheat_sheet():
+    return stub('FIX Cheat Sheet', 'A printable one-pager covering the most important FIX tags, message types, and session rules — built for trading technology interviews.', 'interview-prep')
+
+
+@app.route('/tools/message-builder')
+def tools_message_builder():
+    return stub('Message Builder', 'Build valid FIX messages from scratch. Select a message type, fill in required fields, and export as a raw FIX string or JSON.', 'tools')
+
+
+@app.route('/tools/tag-validator')
+def tools_tag_validator():
+    return stub('Tag Validator', 'Paste a FIX message and check it against the spec — required tags, valid values, and message-type constraints all flagged in one pass.', 'tools')
+
+
+@app.route('/tools/cert-scripts')
+def tools_cert_scripts():
+    return stub('Cert Scripts', 'Certification test scripts for FIX connectivity — order entry, drop copy, and allocation flows ready for exchange cert sessions.', 'cert-scripts')
+
+@app.route('/tools/order-entry')
+def tools_order_entry():
+    return stub('Order Entry', 'Certification-ready FIX order entry scripts — New Order Single, Cancel, and Replace flows with configurable counterparty settings.', 'tools')
+
+
+@app.route('/tools/drop-copy')
+def tools_drop_copy():
+    return stub('Drop Copy', 'Monitor execution reports and order state via drop copy — subscribe to a session and watch fills arrive in real time.', 'tools')
+
+
+@app.route('/tools/allocation')
+def tools_allocation():
+    return stub('Allocation', 'Post-trade allocation scripts for FIX — split fills across accounts, generate AllocationInstruction messages, and confirm allocations.', 'tools')
 
 
 @app.route('/field-reference')

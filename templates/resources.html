@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ ver_info.name }} Tag Reference — FIXReader</title>
-  <meta name="description" content="Complete FIX protocol tag reference for {{ ver_info.name }}. Search and filter all {{ tag_count }} tags by category.">
+  <title>Resources — FIXReader</title>
+  <meta name="description" content="FIX Protocol resources — official specifications, exchange connectivity docs, ISO standards, regulatory guidance, and community links.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -25,6 +25,24 @@
       .ml-nav-scroll { max-height: 220px; overflow-y: auto; }
       .ml-right { overflow: visible; }
     }
+
+    /* Resources page */
+    .res-page { padding: 30px 36px 72px; }
+    a.res-link { color: var(--color-accent); text-decoration: none; font-weight: 600; }
+    a.res-link:hover { text-decoration: underline; }
+    .ex-section { margin: 0 0 28px; }
+    .ex-section-title {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-dim);
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 6px; margin-bottom: 14px;
+    }
+    .ex-logon-grid { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; align-items: baseline; font-size: 13px; }
+    .ex-logon-key { font-weight: 600; color: var(--text); white-space: nowrap; }
+    .ex-logon-val { color: var(--text-muted); }
+    .ex-logon-val code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--tag-bg); border: 1px solid var(--border-light); border-radius: 3px; padding: 0 4px; color: var(--color-accent); }
+    .res-desc { grid-column: 1 / -1; font-size: 13px; line-height: 1.6; color: var(--text-muted); margin: 0 0 12px; }
+    @media (max-width: 680px) { .res-page { padding: 20px 18px 48px; } }
   </style>
 </head>
 <body>
@@ -42,7 +60,7 @@
       <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
       <li><a href="/message-library" class="nav-item">FIX Specs</a></li>
       <li><a href="/exchange-specs" class="nav-item">Exchange Specs</a></li>
-      <li><a href="/resources" class="nav-item">Resources</a></li>
+      <li><a href="/resources" class="nav-item active" aria-current="page">Resources</a></li>
       <li><a href="/about" class="nav-item">About</a></li>
     </ul>
     {% if theme_info.name != 'default' %}
@@ -74,17 +92,11 @@
 </nav>
 
 <div class="ml-version-bar">
-  <a href="/reference/fix40"    class="ml-version-pill {% if version == 'fix40' %}active{% endif %}">FIX 4.0</a>
-  <a href="/reference/fix41"    class="ml-version-pill {% if version == 'fix41' %}active{% endif %}">FIX 4.1</a>
-  <a href="/reference/fix42"    class="ml-version-pill {% if version == 'fix42' %}active{% endif %}">FIX 4.2</a>
-  <a href="/reference/fix43"    class="ml-version-pill rare {% if version == 'fix43' %}active{% endif %}">FIX 4.3</a>
-  <a href="/reference/fix44"    class="ml-version-pill {% if version == 'fix44' %}active{% endif %}">FIX 4.4</a>
-  <a href="/reference/fix50"    class="ml-version-pill {% if version == 'fix50' %}active{% endif %}">FIX 5.0</a>
-  <a href="/reference/fix50sp1" class="ml-version-pill {% if version == 'fix50sp1' %}active{% endif %}">FIX 5.0 SP1</a>
-  <a href="/reference/fix50sp2" class="ml-version-pill {% if version == 'fix50sp2' %}active{% endif %}">FIX 5.0 SP2</a>
+  <button class="ml-version-pill active" role="tab" aria-selected="true">Resources</button>
 </div>
 
 <div class="ml-shell">
+
   <nav class="ml-left" aria-label="Site navigation">
     <div class="ml-nav-scroll">
 
@@ -97,7 +109,7 @@
         <span class="ml-msg-code">CMP</span>
         <span>Compare Messages</span>
       </a>
-      <a href="/field-reference" class="ml-msg-item active" aria-current="page">
+      <a href="/field-reference" class="ml-msg-item">
         <span class="ml-msg-code">TAG</span>
         <span>Field Reference</span>
       </a>
@@ -201,7 +213,7 @@
       </a>
 
       <div class="ml-cat-hdr">Resources</div>
-      <a href="/resources" class="ml-msg-item">
+      <a href="/resources" class="ml-msg-item active" aria-current="page">
         <span class="ml-msg-code">RES</span>
         <span>Resources</span>
       </a>
@@ -213,215 +225,91 @@
       </a>
     </div>
   </nav>
-<div class="ml-right">
-<div class="ref-page">
 
-  {% if ver_info.withdrawn %}
-  <div class="ref-withdrawn-banner">
-    <strong>FIX 4.3 was withdrawn and is rarely used in production.</strong>
-    The specification was never widely adopted and was superseded by FIX 4.4. This page is provided for historical reference only.
-  </div>
-  {% endif %}
+  <main class="ml-right">
+    <div class="res-page">
 
-  <div class="ref-page-header">
-    <div>
-      <h1 class="ref-page-title">{{ ver_info.name }} Tag Reference</h1>
-      <p class="ref-page-subtitle"><span id="ref-count">{{ tag_count }}</span> tags</p>
+      <div class="ex-section">
+        <div class="ex-section-title">Official FIX Protocol</div>
+        <div class="ex-logon-grid">
+          <div class="ex-logon-key"><a href="https://www.fixtrading.org" class="res-link" target="_blank" rel="noopener">FIX Trading Community</a></div>
+          <div class="ex-logon-val"><code>fixtrading.org</code></div>
+          <p class="res-desc">The official body that maintains the FIX Protocol standard. Primary source for all FIX specifications.</p>
+
+          <div class="ex-logon-key"><a href="https://www.fixtrading.org/standards" class="res-link" target="_blank" rel="noopener">FIX Protocol Specification</a></div>
+          <div class="ex-logon-val"><code>fixtrading.org/standards</code></div>
+          <p class="res-desc">Full technical specifications for FIX 4.0 through FIX 5.0 SP2 and FIXT 1.1.</p>
+        </div>
+      </div>
+
+      <div class="ex-section">
+        <div class="ex-section-title">Exchange Connectivity Specifications</div>
+        <div class="ex-logon-grid">
+          <div class="ex-logon-key"><a href="https://www.nyse.com/connectivity/documents" class="res-link" target="_blank" rel="noopener">NYSE Pillar Gateway FIX Specification</a></div>
+          <div class="ex-logon-val"><code>nyse.com/connectivity/documents</code></div>
+          <p class="res-desc">Official FIX specification for connecting to NYSE Pillar trading platforms.</p>
+
+          <div class="ex-logon-key"><a href="https://www.nasdaqtrader.com/Trader.aspx?id=FIX" class="res-link" target="_blank" rel="noopener">NASDAQ FIX Connectivity</a></div>
+          <div class="ex-logon-val"><code>nasdaqtrader.com/Trader.aspx?id=FIX</code></div>
+          <p class="res-desc">NASDAQ's FIX connectivity documentation and technical specifications for market participants.</p>
+
+          <div class="ex-logon-key"><a href="https://www.cboe.com/us/equities/support/technical/" class="res-link" target="_blank" rel="noopener">Cboe U.S. Equities FIX Specification</a></div>
+          <div class="ex-logon-val"><code>cboe.com/us/equities/support/technical/</code></div>
+          <p class="res-desc">Technical specifications for Cboe's U.S. equities markets, including BZX, BYX, EDGX, and EDGA.</p>
+
+          <div class="ex-logon-key"><a href="https://iex.io/documents/iex-fix-specification" class="res-link" target="_blank" rel="noopener">IEX FIX Specification</a></div>
+          <div class="ex-logon-val"><code>iex.io/documents/iex-fix-specification</code></div>
+          <p class="res-desc">IEX Exchange FIX order entry specification for equity trading.</p>
+        </div>
+      </div>
+
+      <div class="ex-section">
+        <div class="ex-section-title">ISO Standards</div>
+        <div class="ex-logon-grid">
+          <div class="ex-logon-key"><a href="https://www.iso20022.org/market-identifier-codes" class="res-link" target="_blank" rel="noopener">ISO 10383 Market Identifier Codes (MIC)</a></div>
+          <div class="ex-logon-val"><code>iso20022.org/market-identifier-codes</code></div>
+          <p class="res-desc">Updated quarterly. Used in FIX Tag 207 (SecurityExchange) to identify trading venues.</p>
+
+          <div class="ex-logon-key"><a href="https://www.six-group.com/en/products-services/financial-information/data-standards.html" class="res-link" target="_blank" rel="noopener">ISO 4217 Currency Codes</a></div>
+          <div class="ex-logon-val"><code>six-group.com</code></div>
+          <p class="res-desc">Used in FIX Tag 15 (Currency) and Tag 120 (SettlCurrency) for settlement currency identification.</p>
+
+          <div class="ex-logon-key"><a href="https://www.iso.org/iso-3166-country-codes.html" class="res-link" target="_blank" rel="noopener">ISO 3166 Country Codes</a></div>
+          <div class="ex-logon-val"><code>iso.org</code></div>
+          <p class="res-desc">Used in FIX Tag 470 (CountryOfIssue) and other country-identifying fields.</p>
+        </div>
+      </div>
+
+      <div class="ex-section">
+        <div class="ex-section-title">Regulatory</div>
+        <div class="ex-logon-grid">
+          <div class="ex-logon-key"><a href="https://www.sec.gov/cgi-bin/browse-edgar" class="res-link" target="_blank" rel="noopener">SEC EDGAR</a></div>
+          <div class="ex-logon-val"><code>sec.gov/edgar</code></div>
+          <p class="res-desc">Public filings including exchange rule changes and FIX-related regulatory notices.</p>
+
+          <div class="ex-logon-key"><a href="https://www.finra.org/rules-guidance" class="res-link" target="_blank" rel="noopener">FINRA Rules</a></div>
+          <div class="ex-logon-val"><code>finra.org/rules-guidance</code></div>
+          <p class="res-desc">Regulatory guidance relevant to FIX reporting and trade reporting facilities.</p>
+        </div>
+      </div>
+
+      <div class="ex-section">
+        <div class="ex-section-title">Community</div>
+        <div class="ex-logon-grid">
+          <div class="ex-logon-key"><a href="https://www.linkedin.com/groups/71525/" class="res-link" target="_blank" rel="noopener">FIX Protocol LinkedIn Group</a></div>
+          <div class="ex-logon-val"><code>linkedin.com</code></div>
+          <p class="res-desc">Active community of FIX practitioners — vendors, sell-side, buy-side, and exchange technologists.</p>
+
+          <div class="ex-logon-key"><a href="https://stackoverflow.com/questions/tagged/fix-protocol" class="res-link" target="_blank" rel="noopener">Stack Overflow FIX tag</a></div>
+          <div class="ex-logon-val"><code>stackoverflow.com/questions/tagged/fix-protocol</code></div>
+          <p class="res-desc">Q&amp;A for FIX Protocol implementation questions, session troubleshooting, and message parsing.</p>
+        </div>
+      </div>
+
     </div>
-    <a href="/message-library" class="ref-back-link">← Message Library</a>
-  </div>
+  </main>
 
-  <div class="ref-toolbar">
-    <input type="search" id="ref-search" class="ref-search" placeholder="Search tag number or field name…" autocomplete="off" spellcheck="false">
-    <div class="ref-cat-pills" role="group" aria-label="Filter by category">
-      <button class="ref-cat-pill active" data-cat="all">All</button>
-      <button class="ref-cat-pill" data-cat="session">Session</button>
-      <button class="ref-cat-pill" data-cat="order">Order</button>
-      <button class="ref-cat-pill" data-cat="execution">Execution</button>
-      <button class="ref-cat-pill" data-cat="posttrade">Post-Trade</button>
-    </div>
-  </div>
-
-  <div class="ref-table-wrap">
-    <table class="ref-table {% if ver_info.withdrawn %}ref-table-withdrawn{% endif %}">
-      <thead>
-        <tr>
-          <th class="ref-th-tag">Tag</th>
-          <th class="ref-th-name">Field Name</th>
-          <th class="ref-th-type">Type</th>
-          <th class="ref-th-desc">Description</th>
-          <th class="ref-th-req">Required In</th>
-        </tr>
-      </thead>
-      <tbody id="ref-tbody"></tbody>
-    </table>
-    <div id="ref-empty" class="ref-empty" style="display:none">No tags match your search.</div>
-  </div>
-
-  <div id="ref-appendix"></div>
-
-</div><!-- /ref-page -->
-</div><!-- /ml-right -->
 </div><!-- /ml-shell -->
-
-<script>
-const ALL_TAGS = {{ tags_json | safe }};
-const IS_WITHDRAWN = {{ 'true' if ver_info.withdrawn else 'false' }};
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-let _activeCat = 'all';
-let _query = '';
-
-function reqLabel(tag) {
-  const ri = tag.required_in || [];
-  if (!ri.length) return '';
-  if (ri.some(m => m.code === 'All')) return '<span class="ref-req-all">All</span>';
-  return ri.map(m => `<span class="ref-req-code" title="${esc(m.name)}">${esc(m.code)}</span>`).join(' ');
-}
-
-function buildRow(tag) {
-  const hasValues = tag.valid_values && Object.keys(tag.valid_values).length > 0;
-  const expandBtn = hasValues
-    ? `<button class="ref-expand-btn" onclick="toggleExpand(this)" aria-expanded="false" title="Show valid values">+</button>`
-    : '';
-
-  const valRows = hasValues
-    ? Object.entries(tag.valid_values)
-        .map(([k, v]) => `<tr class="ref-val-row"><td class="ref-val-key"><code>${esc(k)}</code></td><td class="ref-val-desc">${esc(v)}</td></tr>`)
-        .join('')
-    : '';
-
-  const expandSection = hasValues
-    ? `<tr class="ref-expand-row" style="display:none">
-        <td colspan="5">
-          <table class="ref-val-table">
-            <thead><tr><th>Value</th><th>Meaning</th></tr></thead>
-            <tbody>${valRows}</tbody>
-          </table>
-        </td>
-      </tr>`
-    : '';
-
-  return `<tr class="ref-row" data-cat="${esc(tag.category || 'other')}" data-tag="${tag.tag}" data-name="${esc((tag.name || '').toLowerCase())}"
-      onclick="rowClick(this)" style="cursor:${hasValues ? 'pointer' : 'default'}">
-    <td class="ref-td-tag">
-      <a href="/tag/${tag.tag}" target="_blank" rel="noopener" class="ref-tag-link" onclick="event.stopPropagation()">${tag.tag}</a>
-      ${expandBtn}
-    </td>
-    <td class="ref-td-name">${esc(tag.name)}</td>
-    <td class="ref-td-type">${esc(tag.data_type)}</td>
-    <td class="ref-td-desc">${esc(tag.description)}</td>
-    <td class="ref-td-req">${reqLabel(tag)}</td>
-  </tr>${expandSection}`;
-}
-
-function rowClick(tr) {
-  const btn = tr.querySelector('.ref-expand-btn');
-  if (btn) toggleExpand(btn);
-}
-
-function toggleExpand(btn) {
-  const tr = btn.closest('tr');
-  const next = tr.nextElementSibling;
-  if (!next || !next.classList.contains('ref-expand-row')) return;
-  const open = next.style.display !== 'none';
-  next.style.display = open ? 'none' : '';
-  btn.textContent = open ? '+' : '−';
-  btn.setAttribute('aria-expanded', String(!open));
-  btn.classList.toggle('open', !open);
-}
-
-function render() {
-  const q = _query.toLowerCase();
-  const tbody = document.getElementById('ref-tbody');
-  let html = '';
-  let count = 0;
-  for (const tag of ALL_TAGS) {
-    const cat = tag.category || 'other';
-    if (_activeCat !== 'all' && cat !== _activeCat) continue;
-    if (q) {
-      const tagStr = String(tag.tag);
-      const name = (tag.name || '').toLowerCase();
-      if (!tagStr.startsWith(q) && !name.includes(q)) continue;
-    }
-    html += buildRow(tag);
-    count++;
-  }
-  tbody.innerHTML = html;
-  document.getElementById('ref-count').textContent = count;
-  document.getElementById('ref-empty').style.display = count ? 'none' : '';
-}
-
-document.getElementById('ref-search').addEventListener('input', function() {
-  _query = this.value.trim();
-  render();
-});
-
-document.querySelectorAll('.ref-cat-pill').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.ref-cat-pill').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    _activeCat = this.dataset.cat;
-    render();
-  });
-});
-
-render();
-
-// ── Appendix ──────────────────────────────────────────────────
-const APP_NUMS = [35, 39, 40, 54, 59, 150];
-
-function buildRefAppendix() {
-  const appTags = APP_NUMS
-    .map(n => ALL_TAGS.find(t => t.tag === n))
-    .filter(t => t && t.valid_values && Object.keys(t.valid_values).length);
-  if (!appTags.length) return;
-
-  const sections = appTags.map(t => {
-    const id  = `ref-app-${t.tag}`;
-    const cnt = Object.keys(t.valid_values).length;
-    const rows = Object.entries(t.valid_values)
-      .map(([k,v]) => `<tr>
-        <td class="ml-app-val"><code>${esc(k)}</code></td>
-        <td class="ml-app-desc">${esc(v)}</td>
-      </tr>`).join('');
-    return `<div class="ml-app-section" id="${id}">
-      <div class="ml-app-sec-hdr" onclick="refToggleApp('${id}')">
-        <span class="ml-app-tag-num">${t.tag}</span>
-        <span class="ml-app-tag-name">${esc(t.name)}</span>
-        <span class="ml-app-val-count">${cnt} values</span>
-        <span class="ml-app-chevron">▾</span>
-      </div>
-      <div class="ml-app-sec-body" style="display:none">
-        <table class="ml-app-table">
-          <thead><tr><th>Value</th><th>Meaning</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('ref-appendix').innerHTML = `<div class="ml-appendix ref-appendix-wrap">
-    <div class="ml-appendix-hdr">Appendix — Enum Values</div>
-    ${sections}
-  </div>`;
-}
-
-function refToggleApp(id) {
-  const sec  = document.getElementById(id);
-  if (!sec) return;
-  const body = sec.querySelector('.ml-app-sec-body');
-  const chev = sec.querySelector('.ml-app-chevron');
-  const open = body.style.display !== 'none';
-  body.style.display = open ? 'none' : '';
-  if (chev) chev.textContent = open ? '▾' : '▴';
-}
-
-buildRefAppendix();
-</script>
 
 <footer class="site-footer">
   <div class="footer-inner">

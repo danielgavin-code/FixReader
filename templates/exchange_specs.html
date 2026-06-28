@@ -19,10 +19,14 @@
     .ex-left  { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; padding: 0; border-right: 1px solid var(--border); background: var(--bg-header-row); }
     .ex-nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 40px; }
     .ex-right { flex: 1; min-width: 0; overflow-y: auto; padding: 30px 36px 72px; }
+    /* Standard left-nav layout (replaces ex-left/ex-nav-scroll) */
+    .ml-left  { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; padding: 0; border-right: 1px solid var(--border); }
+    .ml-nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 40px; }
+    a.ml-msg-item { text-decoration: none; }
     @media (max-width: 680px) {
       .ex-shell { flex-direction: column; overflow: auto; }
-      .ex-left  { width: 100%; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
-      .ex-nav-scroll { max-height: 220px; overflow-y: auto; }
+      .ml-left  { width: 100%; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
+      .ml-nav-scroll { max-height: 220px; overflow-y: auto; }
       .ex-right { overflow: visible; padding: 20px 18px 48px; }
     }
 
@@ -175,15 +179,14 @@
       <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
     </a>
     <ul class="nav-links" role="list">
-      <li><a href="/"               class="nav-item">Decode</a></li>
-      <li><a href="/compare"        class="nav-item">Compare</a></li>
-      <li><a href="/learn"          class="nav-item">Learn FIX</a></li>
+      <li><a href="/tools" class="nav-item">Tools</a></li>
+      <li><a href="/tools/cert-scripts" class="nav-item">Cert Scripts</a></li>
+      <li><a href="/learn" class="nav-item">Learn FIX</a></li>
       <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
-      <li><a href="/tools"          class="nav-item">Tools</a></li>
-      <li><a href="/message-library" class="nav-item">Message Library</a></li>
-      <li><a href="/exchange-specs"  class="nav-item active" aria-current="page">Exchange Specs</a></li>
-      <li><a href="/resources"      class="nav-item">Resources</a></li>
-      <li><a href="/about"          class="nav-item">About</a></li>
+      <li><a href="/message-library" class="nav-item">FIX Specs</a></li>
+      <li><a href="/exchange-specs" class="nav-item active" aria-current="page">Exchange Specs</a></li>
+      <li><a href="/resources" class="nav-item">Resources</a></li>
+      <li><a href="/about" class="nav-item">About</a></li>
     </ul>
     {% if theme_info.name != 'default' %}
     <div class="nav-end">
@@ -214,41 +217,75 @@
 </nav>
 
 <div class="ex-version-bar" role="tablist" aria-label="Exchange">
-  <button class="ex-pill active" onclick="selectExchange('nyse',this)"   role="tab" aria-selected="true">NYSE</button>
-  <button class="ex-pill"        onclick="selectExchange('nasdaq',this)" role="tab" aria-selected="false">NASDAQ</button>
-  <button class="ex-pill"        onclick="selectExchange('arca',this)"   role="tab" aria-selected="false">NYSE Arca</button>
-  <button class="ex-pill"        onclick="selectExchange('bzx',this)"    role="tab" aria-selected="false">CBOE BZX</button>
-  <button class="ex-pill"        onclick="selectExchange('edgx',this)"   role="tab" aria-selected="false">EDGX</button>
-  <button class="ex-pill"        onclick="selectExchange('edga',this)"   role="tab" aria-selected="false">EDGA</button>
-  <button class="ex-pill"        onclick="selectExchange('iex',this)"    role="tab" aria-selected="false">IEX</button>
+  <button class="ex-pill active" onclick="selectExchange('nyse',this)"       role="tab" aria-selected="true">NYSE</button>
+  <button class="ex-pill"        onclick="selectExchange('nasdaq',this)"     role="tab" aria-selected="false">NASDAQ</button>
+  <button class="ex-pill"        onclick="selectExchange('arca',this)"       role="tab" aria-selected="false">NYSE Arca</button>
+  <button class="ex-pill"        onclick="selectExchange('bzx',this)"        role="tab" aria-selected="false">CBOE BZX</button>
+  <button class="ex-pill"        onclick="selectExchange('byx',this)"        role="tab" aria-selected="false">CBOE BYX</button>
+  <button class="ex-pill"        onclick="selectExchange('edgx',this)"       role="tab" aria-selected="false">EDGX</button>
+  <button class="ex-pill"        onclick="selectExchange('edga',this)"       role="tab" aria-selected="false">EDGA</button>
+  <button class="ex-pill"        onclick="selectExchange('iex',this)"        role="tab" aria-selected="false">IEX</button>
+  <button class="ex-pill"        onclick="selectExchange('american',this)"   role="tab" aria-selected="false">NYSE American</button>
+  <button class="ex-pill"        onclick="selectExchange('national',this)"   role="tab" aria-selected="false">NYSE National</button>
+  <button class="ex-pill"        onclick="selectExchange('nasdaqbx',this)"   role="tab" aria-selected="false">Nasdaq BX</button>
+  <button class="ex-pill"        onclick="selectExchange('memx',this)"       role="tab" aria-selected="false">MEMX</button>
 </div>
 
 <div class="ex-shell">
 
-  <nav class="ex-left" aria-label="Exchanges">
-    <div class="ex-nav-scroll">
+  <nav class="ml-left" aria-label="Site navigation">
+    <div class="ml-nav-scroll">
+
       <div class="ml-cat-hdr">US Equities</div>
-      <div class="ex-item active" onclick="selectExchange('nyse',null)"   data-key="nyse">
-        <span>NYSE</span><span class="ex-fix-badge">FIX 4.2</span>
+      <div class="ex-item ml-msg-item active" onclick="selectExchange('nyse',null)" data-key="nyse">
+        <span class="ml-msg-code">XNYS</span>
+        <span>NYSE</span>
       </div>
-      <div class="ex-item" onclick="selectExchange('nasdaq',null)" data-key="nasdaq">
-        <span>NASDAQ</span><span class="ex-fix-badge">FIX 4.2</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('nasdaq',null)" data-key="nasdaq">
+        <span class="ml-msg-code">XNAS</span>
+        <span>NASDAQ</span>
       </div>
-      <div class="ex-item" onclick="selectExchange('arca',null)"   data-key="arca">
-        <span>NYSE Arca</span><span class="ex-fix-badge">FIX 4.2</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('arca',null)" data-key="arca">
+        <span class="ml-msg-code">ARCX</span>
+        <span>NYSE Arca</span>
       </div>
-      <div class="ex-item" onclick="selectExchange('bzx',null)"    data-key="bzx">
-        <span>CBOE BZX</span><span class="ex-fix-badge">FIX 4.2</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('bzx',null)" data-key="bzx">
+        <span class="ml-msg-code">XCBO</span>
+        <span>CBOE BZX</span>
       </div>
-      <div class="ex-item" onclick="selectExchange('edgx',null)"   data-key="edgx">
-        <span>EDGX</span><span class="ex-fix-badge">FIX 4.2</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('byx',null)" data-key="byx">
+        <span class="ml-msg-code">BATY</span>
+        <span>CBOE BYX</span>
       </div>
-      <div class="ex-item" onclick="selectExchange('edga',null)"   data-key="edga">
-        <span>EDGA</span><span class="ex-fix-badge">FIX 4.2</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('edgx',null)" data-key="edgx">
+        <span class="ml-msg-code">EDGX</span>
+        <span>EDGX</span>
       </div>
-      <div class="ex-item" onclick="selectExchange('iex',null)"    data-key="iex">
-        <span>IEX</span><span class="ex-fix-badge">FIX 4.2</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('edga',null)" data-key="edga">
+        <span class="ml-msg-code">EDGA</span>
+        <span>EDGA</span>
       </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('iex',null)" data-key="iex">
+        <span class="ml-msg-code">IEXG</span>
+        <span>IEX</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('american',null)" data-key="american">
+        <span class="ml-msg-code">XASE</span>
+        <span>NYSE American</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('national',null)" data-key="national">
+        <span class="ml-msg-code">XCIS</span>
+        <span>NYSE National</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('nasdaqbx',null)" data-key="nasdaqbx">
+        <span class="ml-msg-code">XBOS</span>
+        <span>Nasdaq BX</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('memx',null)" data-key="memx">
+        <span class="ml-msg-code">MEMX</span>
+        <span>MEMX</span>
+      </div>
+
     </div>
   </nav>
 
@@ -265,8 +302,9 @@
   <div class="footer-inner">
     <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
     <div class="footer-links">
-      <a href="/contact"  class="footer-link">Contact</a>
+      <a href="/contact" class="footer-link">Contact</a>
       <a href="/feedback" class="footer-link">Feedback</a>
+      <a href="https://github.com/danielgavin-code/FixReader" class="footer-link" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
     <span class="footer-copy">© 2026 FIXReader.org</span>
   </div>
@@ -627,6 +665,253 @@ const EXCHANGES = {
       '<strong>D-Peg and P-Peg pull back based on the IEX Signal, which is proprietary.</strong> The exact conditions that trigger a pullback are not published at the tick level. Do not assume that a D-Peg order at midpoint is equivalent to a NASDAQ midpoint peg or BZX midpoint peg — fill rates and timing differ materially on volatile stocks.',
       '<strong>IEX Closing Cross cutoff is 3:55 PM ET, same as NASDAQ.</strong> IEX adopted a 3:55 PM ET cutoff for MOC orders to align with the NASDAQ timeline. However, IEX does not have a LOI (limit on imbalance) session — after 3:55 PM ET, no auction-directed orders are accepted.',
       '<strong>ClOrdID (11) must be unique across your entire session lifetime, not just per day.</strong> IEX enforces ClOrdID uniqueness across all orders for the life of your FIX session. If you reuse a ClOrdID from a previous session (even a different calendar day), the order is rejected with OrdRejReason=6 (Duplicate Order).',
+    ],
+  },
+
+
+  byx: {
+    name: 'CBOE BYX',
+    fullName: 'Cboe BYX Exchange',
+    mic: 'BATY',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Cboe BYX (formerly BATS Y Exchange, MIC: BATY) is a maker-taker US equity exchange operated by Cboe Global Markets on the same Bats One platform as BZX, EDGX, and EDGA. BYX is positioned as a low-cost maker-taker alternative to BZX — it has lower maker rebates and lower taker fees, making it attractive for price-sensitive flow that does not require BZX's liquidity depth. BYX captures a smaller share of consolidated volume than BZX but is widely included in smart order routers as a secondary posting destination. <strong>Tag 8 = FIX.4.2</strong>. The ISO 10383 MIC is BATY — not BYX, CBOE, or BATS.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned BYX FIX session ID (provisioned by Cboe Member Services)',
+      'TargetCompID (56)': 'BATY (production) / BATYTEST (test)',
+      'HeartBtInt (108)': '60 seconds (Cboe platform default)',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Password (554)': 'BYX session credential from Cboe Member Services',
+      'Notes': 'BYX uses the same Cboe Bats One platform as BZX, EDGX, and EDGA. A single Cboe connectivity agreement covers all four venues, but session IDs and credentials are provisioned separately per venue. TargetCompID = BATY (the MIC), not CBSX or BYX.',
+    },
+    schedule: {
+      premarket:  { et: '7:00 AM – 9:30 AM ET', utc: '12:00 – 14:30 UTC' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: '4:00 PM – 8:00 PM ET', utc: '21:00 – 01:00 UTC' },
+    },
+    orderTypes: [
+      { type: 'Market',          tag40: '1', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Core hours only. BYX rejects market orders outside regular session.' },
+      { type: 'Limit',           tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'Standard maker-taker limit. Available all sessions.' },
+      { type: 'Stop',            tag40: '3', required: '49, 56, 11, 21, 55, 54, 38, 99', notes: 'Stop market. Converts to market order on trigger.' },
+      { type: 'Stop Limit',      tag40: '4', required: '49, 56, 11, 21, 55, 54, 38, 44, 99', notes: 'Stop limit. Both Price (44) and StopPx (99) required.' },
+      { type: 'Market on Close', tag40: '5', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Participates in BYX Closing Cross. Cutoff: 3:35 PM ET (same as all Cboe venues).' },
+      { type: 'Limit on Close',  tag40: 'B', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'BYX Closing Cross at limit or better. 3:35 PM ET cutoff.' },
+      { type: 'Midpoint Peg',    tag40: 'P', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Midpoint peg. Non-displayed. Separate fee tier from maker and taker flow.' },
+      { type: 'Post-Only',       tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44, 18', notes: 'Limit + ExecInst=6. Canceled if it would take liquidity (same as BZX behavior).' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: '6', desc: 'Post-only. Order is canceled rather than execute as taker. Earns maker rebate on BYX (maker-taker).' },
+      { tag: '18', name: 'ExecInst', value: 'W', desc: 'Extended hours. Required for pre-market (7:00 AM ET) and after-hours (to 8:00 PM ET) flow.' },
+      { tag: '59', name: 'TimeInForce', value: '5', desc: 'GTC. BYX supports GTC orders. Corporate action cancellation rules apply (same as BZX).' },
+      { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve/display quantity for iceberg orders. BYX minimum display is 1 share.' },
+      { tag: '9730', name: 'CboeRoutingInst', value: 'string', desc: 'Cboe-specific routing instruction. ROUT=route to away venues, CYCL=cycle on BYX first, POST=post only no routing.' },
+    ],
+    gotchas: [
+      '<strong>BYX MIC is BATY, not BYX or CBOE.</strong> The ISO 10383 MIC was assigned as BATY when the exchange was BATS Y Exchange. It has never been updated. TargetCompID = BATY, and Tag 207 = BATY for BYX-executed trades. Using "BYX" or "CBOE" will cause logon rejections and post-trade mismatches.',
+      '<strong>BYX Closing Cross cutoff is 3:35 PM ET</strong> — same as all Cboe equity venues (BZX, EDGX, EDGA). This is earlier than NYSE (3:45–3:55 PM ET) and NASDAQ (3:55 PM ET). A smart order router that uses NASDAQ timing for Cboe closing flow will generate rejected MOC/LOC orders.',
+      '<strong>BYX maker rebates are lower than BZX.</strong> BYX is explicitly a lower-cost alternative within the Cboe family. If your P&L model uses BZX rebate rates for BYX, it will overstate expected credits. Model fee tiers per venue.',
+      '<strong>Post-only orders on BYX are canceled, not repriced.</strong> Same behavior as BZX and EDGA — ExecType=8 (Rejected) is returned, not ExecType=4 (Canceled), if the order would take liquidity. Your OMS must distinguish Rejected from Canceled by ExecType value, not by OrdStatus.',
+      '<strong>BYX pre-market starts at 7:00 AM ET, not 4:00 AM ET.</strong> Orders submitted before 7:00 AM ET are rejected. Do not include BYX in routing decisions for 4:00–7:00 AM ET extended hours flow.',
+    ],
+  },
+
+  american: {
+    name: 'NYSE American',
+    fullName: 'NYSE American',
+    mic: 'XASE',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `NYSE American (MIC: XASE) is the successor to the American Stock Exchange (AMEX), a historic floor-based exchange now operated electronically by NYSE Group under the Pillar FIX Gateway platform. NYSE American is the primary listing venue for smaller and mid-cap companies, ETFs, and structured products. It runs on the same NYSE Pillar technology as NYSE Equities (XNYS), NYSE Arca (ARCX), and NYSE National (XCIS). The FIX interface is identical to NYSE Equities — <strong>Tag 8 = FIX.4.2</strong>, TargetCompID = XASE — with the same Pillar order types, logon rules, and session configuration string.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Agreed upon connection identifier set between NYSE Group and the entering firm',
+      'TargetCompID (56)': 'XASE — Market Identifier Code for NYSE American (same spec section 6.1 rule as XNYS/ARCX)',
+      'HeartBtInt (108)': '1–60 seconds (valid range per NYSE Pillar spec)',
+      'EncryptMethod (98)': '0 — TLS at transport layer; application layer must be unencrypted',
+      'ResetSeqNumFlag (141)': 'N — must be N if included (Pillar rule applies to all venues)',
+      'Username (553)': 'Username agreed with NYSE Group for this specific Pillar venue',
+      'Password (554)': 'Password for this venue. Required on Logon Request; omitted from Logon Response.',
+      'RawData (96)': 'Optional 3-byte config string: [Byte1: CancelOnDisconnect 0/1/2] [Byte2: Order Priority Update Ack 0/1] [Byte3: SelfTradeType T/N/O/C/D]',
+      'Notes': 'NYSE American uses identical Pillar logon semantics to NYSE Equities. Sessions are pre-configured per venue; XASE credentials cannot be used for XNYS and vice versa. SenderCompID must match Username (553) exactly.',
+    },
+    schedule: {
+      premarket:  { et: 'Early Trading Session (TradingSessionID=1)', utc: 'See NYSE published schedule' },
+      core:       { et: 'Core Trading Session 9:30 AM – 4:00 PM ET (TradingSessionID=2)', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Late Trading Session (TradingSessionID=3)', utc: 'See NYSE published schedule' },
+    },
+    orderTypes: [
+      { type: 'Market',           tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55', notes: 'OrdType=1. Executes at best available price. Valid TIF: 0=Day, 3=IOC, 4=FOK.' },
+      { type: 'Limit',            tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=2. Price (44) required. Valid TIF: 0=Day, 1=GTC, 3=IOC, 4=FOK, 5=GTX, 6=GTD.' },
+      { type: 'Inside Limit',     tag40: '7', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=7. NYSE Pillar-specific. Routes to primary market at a price inside the prevailing quote.' },
+      { type: 'AutoMatch Limit',  tag40: '9', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=9. NYSE Pillar-specific. Automatically matches against available liquidity.' },
+      { type: 'Market on Open',   tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 59', notes: 'OrdType=1 + TimeInForce=2. Participates in NYSE American Opening Auction.' },
+      { type: 'Market on Close',  tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 59', notes: 'OrdType=1 + TimeInForce=7. Participates in NYSE American Closing Auction.' },
+      { type: 'Limit on Close',   tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55, 59', notes: 'OrdType=2 + TimeInForce=7 + Price (44). Same Pillar LOC rule as NYSE Equities and Arca.' },
+      { type: 'Pegged (Primary)', tag40: 'P', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 18', notes: 'OrdType=P + ExecInst=R. Pegs to primary side of NBBO.' },
+      { type: 'Pegged (Midpoint)',tag40: 'P', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 18', notes: 'OrdType=P + ExecInst=M (MPL). Non-displayed; pegs to NBBO midpoint.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: 'R / P / M', desc: 'Peg type when OrdType=P. R=Primary Peg, P=Market Peg, M=MPL (Midpoint Liquidity). Same Pillar spec as XNYS.' },
+      { tag: '18', name: 'ExecInst', value: 'f', desc: 'ISO (Intermarket Sweep Order). Bypasses NBBO check. Confirmed in NYSE Pillar spec.' },
+      { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve/iceberg display quantity. Must be ≥ 1 round lot.' },
+      { tag: '336', name: 'TradingSessionID', value: '1/2/3/4/5/6', desc: '1=Early, 2=Core, 3=Late, 4=Early&Core, 5=Core&Late, 6=All three. Applies to all Pillar venues.' },
+      { tag: '7928', name: 'SelfTradeType', value: 'T/N/O/C/D', desc: 'Per-order STP override. Session-level default set via RawData (96) Byte3.' },
+    ],
+    gotchas: [
+      '<strong>NYSE American is not the same as NYSE Equities.</strong> Despite sharing the Pillar platform, XASE and XNYS are distinct venues with separate order books, separate listing rosters, and separate TargetCompIDs. An order sent with TargetCompID=XNYS will never reach the XASE book.',
+      '<strong>ResetSeqNumFlag (141) must be N — same Pillar rule as all NYSE Group venues.</strong> Sending 141=Y on XASE is rejected with the same SessionStatus (1409=5) error as NYSE Equities. The rule is enforced consistently across all Pillar-connected venues.',
+      '<strong>NYSE American lists many ETFs that also trade on NYSE Arca.</strong> Security master files should use Tag 207 (SecurityExchange) to distinguish XASE-listed securities from ARCX-listed ones. Conflating the two causes routing errors and erroneous best-bid/offer calculations.',
+      '<strong>MOC/LOC use OrdType=1/2 + TimeInForce=7, not OrdType=5 or B.</strong> The NYSE Pillar spec lists only OrdType values 1, 2, 7, 9, P. Standard FIX MOC (OrdType=5) and LOC (OrdType=B) are not valid on any Pillar venue, including NYSE American.',
+    ],
+    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification, Version 5.15', url: 'https://www.nyse.com/publicdocs/nyse/NYSE_Pillar_Gateway_FIX_Protocol_Specification.pdf', date: 'March 27, 2026' },
+  },
+
+  national: {
+    name: 'NYSE National',
+    fullName: 'NYSE National',
+    mic: 'XCIS',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `NYSE National (MIC: XCIS), formerly the National Stock Exchange (NSX), is operated by NYSE Group on the Pillar FIX Gateway platform alongside NYSE Equities, NYSE Arca, and NYSE American. NYSE National operates with a maker-taker fee model — a deliberate contrast to NYSE Equities which charges takers at a different tier. NYSE National relaunched in 2018 after NYSE Group acquired it in 2014 and migrated it to Pillar. It captures a small share of consolidated US equity volume but provides an additional posting venue for smart order routers within the NYSE Group ecosystem. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = XCIS.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Agreed upon connection identifier set between NYSE Group and the entering firm',
+      'TargetCompID (56)': 'XCIS — Market Identifier Code for NYSE National',
+      'HeartBtInt (108)': '1–60 seconds (valid range per NYSE Pillar spec)',
+      'EncryptMethod (98)': '0 — TLS at transport layer',
+      'ResetSeqNumFlag (141)': 'N — must be N if included (Pillar-wide rule)',
+      'Username (553)': 'NYSE National-specific username agreed with NYSE Group',
+      'Password (554)': 'NYSE National-specific password. Required on Logon Request; omitted from Logon Response.',
+      'RawData (96)': 'Optional 3-byte config string: [Byte1: CancelOnDisconnect 0/1/2] [Byte2: Order Priority Update Ack 0/1] [Byte3: SelfTradeType T/N/O/C/D]',
+      'Notes': 'NYSE National uses the same Pillar logon semantics as all NYSE Group venues. Sessions are venue-specific. XCIS credentials are separate from XNYS, ARCX, and XASE.',
+    },
+    schedule: {
+      premarket:  { et: 'Early Trading Session (TradingSessionID=1)', utc: 'See NYSE published schedule' },
+      core:       { et: 'Core Trading Session 9:30 AM – 4:00 PM ET (TradingSessionID=2)', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Late Trading Session (TradingSessionID=3)', utc: 'See NYSE published schedule' },
+    },
+    orderTypes: [
+      { type: 'Market',           tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55', notes: 'OrdType=1. Executes at best available price.' },
+      { type: 'Limit',            tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=2. Price (44) required. Maker-taker fee applies when posting.' },
+      { type: 'Inside Limit',     tag40: '7', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=7. NYSE Pillar-specific.' },
+      { type: 'AutoMatch Limit',  tag40: '9', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=9. NYSE Pillar-specific.' },
+      { type: 'Market on Close',  tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 59', notes: 'OrdType=1 + TimeInForce=7. NYSE National Closing Auction.' },
+      { type: 'Limit on Close',   tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55, 59', notes: 'OrdType=2 + TimeInForce=7 + Price (44).' },
+      { type: 'Pegged (Midpoint)',tag40: 'P', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 18', notes: 'OrdType=P + ExecInst=M. Non-displayed midpoint peg.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: 'R / P / M', desc: 'Peg type when OrdType=P. Same values as NYSE Equities and Arca per the Pillar spec.' },
+      { tag: '18', name: 'ExecInst', value: 'f', desc: 'ISO (Intermarket Sweep Order). Bypasses NBBO check.' },
+      { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve quantity for iceberg orders. Must be ≥ 1 round lot.' },
+      { tag: '336', name: 'TradingSessionID', value: '1/2/3/4/5/6', desc: 'Same session ID values as all Pillar venues. 2=Core session.' },
+      { tag: '7928', name: 'SelfTradeType', value: 'T/N/O/C/D', desc: 'STP prevention per-order override.' },
+    ],
+    gotchas: [
+      '<strong>NYSE National has low volume relative to other NYSE Group venues.</strong> NYSE National captures a small share of consolidated volume. Smart order routers that weight venues by historical fill rates will route very little flow here. It is most useful as a passive posting venue to capture maker rebates.',
+      '<strong>TargetCompID = XCIS, not NSX, XCIS, or NATIONAL.</strong> The ISO 10383 MIC is XCIS (assigned when the exchange was National Stock Exchange of India — different exchange, same MIC string). Sending any other value in Tag 56 will reject the Logon.',
+      '<strong>ResetSeqNumFlag (141) must be N — same Pillar rule as all NYSE Group venues.</strong> The rule is not venue-specific; it is enforced at the Pillar gateway level. 141=Y is always rejected on all Pillar venues.',
+      '<strong>Maker-taker fee model — opposite of NYSE Equities.</strong> NYSE National was relaunched specifically to offer a maker-taker alternative within the NYSE Group family. Limit orders that add liquidity earn a rebate; marketable orders pay a take fee. Do not apply NYSE Equities fee assumptions to XCIS.',
+    ],
+    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification, Version 5.15', url: 'https://www.nyse.com/publicdocs/nyse/NYSE_Pillar_Gateway_FIX_Protocol_Specification.pdf', date: 'March 27, 2026' },
+  },
+
+  nasdaqbx: {
+    name: 'Nasdaq BX',
+    fullName: 'Nasdaq BX',
+    mic: 'XBOS',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Nasdaq BX (MIC: XBOS), formerly the Boston Stock Exchange, is operated by Nasdaq Inc. and runs on the same NASDAQ technology as the primary NASDAQ market (XNAS). BX is a taker-maker (inverted) exchange — takers earn a rebate and makers pay a fee — making it the Nasdaq equivalent of Cboe EDGX or Cboe BYX in fee structure. BX has lower volume than XNAS but is widely included in smart order routers as an inverted venue for aggressive flow. FIX connectivity uses the same protocol as NASDAQ with <strong>Tag 8 = FIX.4.2</strong>, and TargetCompID = NQBX. Sessions for XNAS and XBOS are separate.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Your MPID or assigned XBOS session ID (provisioned by Nasdaq Market Operations)',
+      'TargetCompID (56)': 'NQBX (production) / NQBXTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0 (None)',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'XBOS FIX session username provided by Nasdaq Market Operations',
+      'Password (554)': 'Associated password; rotated on the same cycle as XNAS credentials',
+      'Notes': 'Nasdaq BX requires a separate FIX session from XNAS. The session ID, username, and password are distinct even though the underlying Nasdaq technology is shared. You cannot submit XBOS orders on an XNAS session.',
+    },
+    schedule: {
+      premarket:  { et: '4:00 AM – 9:30 AM ET', utc: '09:00 – 14:30 UTC' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: '4:00 PM – 8:00 PM ET', utc: '21:00 – 01:00 UTC' },
+    },
+    orderTypes: [
+      { type: 'Market',          tag40: '1', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Core hours only. Extended hours market orders are rejected.' },
+      { type: 'Limit',           tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'Standard limit. On BX inverted model, takers earn a rebate when this executes against resting liquidity.' },
+      { type: 'Stop',            tag40: '3', required: '49, 56, 11, 21, 55, 54, 38, 99', notes: 'Stop market. Core session only.' },
+      { type: 'Stop Limit',      tag40: '4', required: '49, 56, 11, 21, 55, 54, 38, 44, 99', notes: 'Both Price (44) and StopPx (99) required.' },
+      { type: 'Market on Close', tag40: '5', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Participates in Nasdaq BX Closing Cross. Cutoff: 3:55 PM ET (same as XNAS).' },
+      { type: 'Limit on Close',  tag40: 'B', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'BX Closing Cross at limit or better. 3:55 PM ET cutoff.' },
+      { type: 'Midpoint Peg',    tag40: 'P', required: '49, 56, 11, 21, 55, 54, 38, 211', notes: 'Non-displayed midpoint peg. PegOffsetValue (211) = 0 for exact midpoint.' },
+      { type: 'Post-Only',       tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44, 18', notes: 'Limit + ExecInst=6. On BX (taker-maker), posting incurs a fee — unusual but sometimes used for specific strategies.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: 'W', desc: 'Extended hours trading. Required for pre-market (4:00 AM ET) and after-hours (to 8:00 PM ET) orders.' },
+      { tag: '18', name: 'ExecInst', value: '6', desc: 'Post-only. On BX (inverted), this causes the order to pay a posting fee rather than earn a taker rebate. Unusual use case.' },
+      { tag: '59', name: 'TimeInForce', value: '5', desc: 'GTC. Supported. BX GTC orders are canceled on ex-dividend and corporate action dates.' },
+      { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve/iceberg order. Minimum display is 1 share.' },
+      { tag: '211', name: 'PegOffsetValue', value: '0 or negative', desc: 'Offset for midpoint peg. 0 = exact midpoint.' },
+    ],
+    gotchas: [
+      '<strong>Nasdaq BX is inverted (taker-maker).</strong> Takers earn a rebate; makers pay a fee. Fee models designed for the XNAS maker-taker structure will produce incorrect P&L when applied to XBOS flow. Model XBOS fee tiers separately.',
+      '<strong>TargetCompID = NQBX, not XBOS or BX.</strong> The ISO 10383 MIC is XBOS, but the FIX session TargetCompID is NQBX. Confusing the MIC with the TargetCompID is a common setup error that results in Logon rejection.',
+      '<strong>BX Closing Cross cutoff is 3:55 PM ET, same as XNAS.</strong> Unlike the Cboe venues (3:35 PM ET), Nasdaq-operated exchanges share the 3:55 PM ET cutoff. MOC and LOC orders after 3:55 PM ET are rejected on both XNAS and XBOS.',
+      '<strong>Post-only on BX incurs a fee.</strong> On an inverted venue, posting is the costly side. A strategy that posts limit orders on BX expecting maker rebates (as on BZX) will be charged instead.',
+      '<strong>BX has lower volume than XNAS.</strong> Fill rates on XBOS are lower than on the primary NASDAQ market. Smart order routers that route aggressive flow to BX expecting NASDAQ-level liquidity will generate more partial fills and higher market impact.',
+    ],
+  },
+
+  memx: {
+    name: 'MEMX',
+    fullName: 'Members Exchange',
+    mic: 'MEMX',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `MEMX (Members Exchange, MIC: MEMX) is a US equity exchange launched in 2020 and backed by a consortium of major broker-dealers and market makers including Bank of America, Charles Schwab, Citadel Securities, Fidelity Investments, Goldman Sachs, Jane Street, JPMorgan, Morgan Stanley, TD Ameritrade, UBS, and Virtu Financial. MEMX was created to increase competition, reduce trading costs, and improve transparency. It operates a simple maker-taker fee model with publicly posted, low, and transparent fees. MEMX supports standard FIX 4.2 connectivity with <strong>Tag 8 = FIX.4.2</strong> and a straightforward order type set focused on core trading functionality.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned MEMX FIX session ID (provisioned by MEMX Member Services)',
+      'TargetCompID (56)': 'MEMX (production) / MEMXTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'MEMX session username',
+      'Password (554)': 'MEMX session password',
+      'Notes': 'MEMX uses standard FIX 4.2 session management. Session IDs are provisioned per firm. MEMX does not charge connectivity fees — all revenue comes from transaction fees on the maker-taker schedule.',
+    },
+    schedule: {
+      premarket:  { et: '4:00 AM – 9:30 AM ET', utc: '09:00 – 14:30 UTC' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: '4:00 PM – 8:00 PM ET', utc: '21:00 – 01:00 UTC' },
+    },
+    orderTypes: [
+      { type: 'Market',          tag40: '1', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Core hours only. MEMX rejects market orders outside regular session.' },
+      { type: 'Limit',           tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'Standard maker-taker limit. Available all sessions. Price (44) required.' },
+      { type: 'Stop',            tag40: '3', required: '49, 56, 11, 21, 55, 54, 38, 99', notes: 'Stop market order. Converts on trigger.' },
+      { type: 'Stop Limit',      tag40: '4', required: '49, 56, 11, 21, 55, 54, 38, 44, 99', notes: 'Stop limit. Both Price (44) and StopPx (99) required.' },
+      { type: 'Market on Close', tag40: '5', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Participates in MEMX Closing Cross. Cutoff: 3:55 PM ET.' },
+      { type: 'Limit on Close',  tag40: 'B', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'MEMX Closing Cross at limit or better. 3:55 PM ET cutoff.' },
+      { type: 'Midpoint Peg',    tag40: 'P', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Non-displayed midpoint peg. Tracks NBBO midpoint continuously.' },
+      { type: 'Post-Only',       tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44, 18', notes: 'Limit + ExecInst=6. Canceled if it would take liquidity. Earns maker rebate.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: '6', desc: 'Post-only. Order is canceled rather than execute as taker. Earns MEMX maker rebate.' },
+      { tag: '18', name: 'ExecInst', value: 'W', desc: 'Extended hours. Required for pre-market (4:00 AM ET) and after-hours (to 8:00 PM ET) flow.' },
+      { tag: '59', name: 'TimeInForce', value: '5', desc: 'GTC. MEMX supports Good Till Cancel orders. Corporate action cancellation rules apply.' },
+      { tag: '59', name: 'TimeInForce', value: '6', desc: 'GTD (Good Till Date). ExpireDate (432) required.' },
+      { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve/iceberg display quantity. Minimum display is 1 share.' },
+    ],
+    gotchas: [
+      '<strong>MEMX fee schedule is transparent and publicly posted — use it.</strong> Unlike legacy exchanges whose fee schedules are buried in filing documents, MEMX publishes its full fee schedule on its website. Before connecting, review current maker/taker rates directly. Do not assume rates match any other venue.',
+      '<strong>MEMX is a younger exchange with lower volume than BZX or XNAS.</strong> Fill rates, especially for passive limit orders, are lower than established venues. Smart order routers should weight MEMX appropriately in liquidity models and not expect BZX-equivalent fill probability.',
+      '<strong>Post-only orders are canceled, not repriced, if they would take.</strong> MEMX returns ExecType=8 (Rejected) for a post-only order that would execute as a taker. Your OMS must handle this case and resubmit at the correct passive price, as on BZX and BYX.',
+      '<strong>MEMX Closing Cross cutoff is 3:55 PM ET.</strong> This aligns with NASDAQ and IEX, and is later than the Cboe venue cutoff (3:35 PM ET). A routing system that uses 3:35 PM ET as a universal cutoff will suppress valid MOC/LOC orders to MEMX.',
+      '<strong>Extended hours start at 4:00 AM ET, not 7:00 AM ET.</strong> MEMX accepts orders from 4:00 AM ET in pre-market, unlike Cboe venues which open at 7:00 AM ET. Routing tables that apply the Cboe 7:00 AM start to MEMX will miss two hours of valid trading.',
     ],
   },
 
