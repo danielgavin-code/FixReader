@@ -91,6 +91,17 @@
       color: #fff;
       border-color: var(--color-accent);
     }
+    .ex-pill-sep {
+      color: var(--text-dim); font-size: 12px; padding: 0 5px;
+      user-select: none; flex-shrink: 0; align-self: center; opacity: 0.35;
+    }
+    .ex-notice {
+      background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+      border: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
+      border-radius: 6px; padding: 10px 14px; margin-bottom: 24px;
+      font-size: 13px; color: var(--text-muted); line-height: 1.55;
+    }
+    .ex-notice strong { color: var(--color-accent); font-weight: 600; }
 
     /* Right panel content */
     .ex-hdr { margin: 0 0 24px; }
@@ -217,18 +228,36 @@
 </nav>
 
 <div class="ex-version-bar" role="tablist" aria-label="Exchange">
-  <button class="ex-pill active" onclick="selectExchange('nyse',this)"       role="tab" aria-selected="true">NYSE</button>
-  <button class="ex-pill"        onclick="selectExchange('nasdaq',this)"     role="tab" aria-selected="false">NASDAQ</button>
-  <button class="ex-pill"        onclick="selectExchange('arca',this)"       role="tab" aria-selected="false">NYSE Arca</button>
-  <button class="ex-pill"        onclick="selectExchange('bzx',this)"        role="tab" aria-selected="false">CBOE BZX</button>
-  <button class="ex-pill"        onclick="selectExchange('byx',this)"        role="tab" aria-selected="false">CBOE BYX</button>
-  <button class="ex-pill"        onclick="selectExchange('edgx',this)"       role="tab" aria-selected="false">EDGX</button>
-  <button class="ex-pill"        onclick="selectExchange('edga',this)"       role="tab" aria-selected="false">EDGA</button>
-  <button class="ex-pill"        onclick="selectExchange('iex',this)"        role="tab" aria-selected="false">IEX</button>
-  <button class="ex-pill"        onclick="selectExchange('american',this)"   role="tab" aria-selected="false">NYSE American</button>
-  <button class="ex-pill"        onclick="selectExchange('national',this)"   role="tab" aria-selected="false">NYSE National</button>
-  <button class="ex-pill"        onclick="selectExchange('nasdaqbx',this)"   role="tab" aria-selected="false">Nasdaq BX</button>
-  <button class="ex-pill"        onclick="selectExchange('memx',this)"       role="tab" aria-selected="false">MEMX</button>
+  <button class="ex-pill active" onclick="selectExchange('byx',this)"          role="tab" aria-selected="true">CBOE BYX</button>
+  <button class="ex-pill"        onclick="selectExchange('bzx',this)"          role="tab" aria-selected="false">CBOE BZX</button>
+  <button class="ex-pill"        onclick="selectExchange('edga',this)"         role="tab" aria-selected="false">EDGA</button>
+  <button class="ex-pill"        onclick="selectExchange('edgx',this)"         role="tab" aria-selected="false">EDGX</button>
+  <button class="ex-pill"        onclick="selectExchange('iex',this)"          role="tab" aria-selected="false">IEX</button>
+  <button class="ex-pill"        onclick="selectExchange('memx',this)"         role="tab" aria-selected="false">MEMX</button>
+  <button class="ex-pill"        onclick="selectExchange('nasdaq',this)"       role="tab" aria-selected="false">NASDAQ</button>
+  <button class="ex-pill"        onclick="selectExchange('nasdaqbx',this)"     role="tab" aria-selected="false">Nasdaq BX</button>
+  <button class="ex-pill"        onclick="selectExchange('nyse',this)"         role="tab" aria-selected="false">NYSE</button>
+  <button class="ex-pill"        onclick="selectExchange('american',this)"     role="tab" aria-selected="false">NYSE American</button>
+  <button class="ex-pill"        onclick="selectExchange('arca',this)"         role="tab" aria-selected="false">NYSE Arca</button>
+  <button class="ex-pill"        onclick="selectExchange('national',this)"     role="tab" aria-selected="false">NYSE National</button>
+  <span class="ex-pill-sep">|</span>
+  <button class="ex-pill"        onclick="selectExchange('box',this)"          role="tab" aria-selected="false">BOX Options</button>
+  <button class="ex-pill"        onclick="selectExchange('bato',this)"         role="tab" aria-selected="false">Cboe BZX Options</button>
+  <button class="ex-pill"        onclick="selectExchange('cboec2',this)"       role="tab" aria-selected="false">Cboe C2</button>
+  <button class="ex-pill"        onclick="selectExchange('edgo',this)"         role="tab" aria-selected="false">Cboe EDGX Options</button>
+  <button class="ex-pill"        onclick="selectExchange('cboeopt',this)"      role="tab" aria-selected="false">Cboe Options</button>
+  <button class="ex-pill"        onclick="selectExchange('iexopt',this)"       role="tab" aria-selected="false">IEX Options</button>
+  <button class="ex-pill"        onclick="selectExchange('miaxpearl',this)"    role="tab" aria-selected="false">MIAX Pearl</button>
+  <button class="ex-pill"        onclick="selectExchange('miaxemerald',this)"  role="tab" aria-selected="false">MIAX Emerald</button>
+  <button class="ex-pill"        onclick="selectExchange('miax',this)"         role="tab" aria-selected="false">MIAX Options</button>
+  <button class="ex-pill"        onclick="selectExchange('memxopt',this)"      role="tab" aria-selected="false">MEMX Options</button>
+  <button class="ex-pill"        onclick="selectExchange('gemx',this)"         role="tab" aria-selected="false">Nasdaq GEMX</button>
+  <button class="ex-pill"        onclick="selectExchange('mrx',this)"          role="tab" aria-selected="false">Nasdaq MRX</button>
+  <button class="ex-pill"        onclick="selectExchange('phlx',this)"         role="tab" aria-selected="false">Nasdaq PHLX</button>
+  <button class="ex-pill"        onclick="selectExchange('bxopt',this)"        role="tab" aria-selected="false">Nasdaq BX Options</button>
+  <button class="ex-pill"        onclick="selectExchange('ise',this)"          role="tab" aria-selected="false">Nasdaq ISE</button>
+  <button class="ex-pill"        onclick="selectExchange('amexopt',this)"      role="tab" aria-selected="false">NYSE American Options</button>
+  <button class="ex-pill"        onclick="selectExchange('arcaopt',this)"      role="tab" aria-selected="false">NYSE Arca Options</button>
 </div>
 
 <div class="ex-shell">
@@ -237,53 +266,123 @@
     <div class="ml-nav-scroll">
 
       <div class="ml-cat-hdr">US Equities</div>
-      <div class="ex-item ml-msg-item active" onclick="selectExchange('nyse',null)" data-key="nyse">
-        <span class="ml-msg-code">XNYS</span>
-        <span>NYSE</span>
-      </div>
-      <div class="ex-item ml-msg-item" onclick="selectExchange('nasdaq',null)" data-key="nasdaq">
-        <span class="ml-msg-code">XNAS</span>
-        <span>NASDAQ</span>
-      </div>
-      <div class="ex-item ml-msg-item" onclick="selectExchange('arca',null)" data-key="arca">
-        <span class="ml-msg-code">ARCX</span>
-        <span>NYSE Arca</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('byx',null)" data-key="byx">
+        <span class="ml-msg-code">BATY</span>
+        <span>CBOE BYX</span>
       </div>
       <div class="ex-item ml-msg-item" onclick="selectExchange('bzx',null)" data-key="bzx">
         <span class="ml-msg-code">XCBO</span>
         <span>CBOE BZX</span>
       </div>
-      <div class="ex-item ml-msg-item" onclick="selectExchange('byx',null)" data-key="byx">
-        <span class="ml-msg-code">BATY</span>
-        <span>CBOE BYX</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('edga',null)" data-key="edga">
+        <span class="ml-msg-code">EDGA</span>
+        <span>EDGA</span>
       </div>
       <div class="ex-item ml-msg-item" onclick="selectExchange('edgx',null)" data-key="edgx">
         <span class="ml-msg-code">EDGX</span>
         <span>EDGX</span>
       </div>
-      <div class="ex-item ml-msg-item" onclick="selectExchange('edga',null)" data-key="edga">
-        <span class="ml-msg-code">EDGA</span>
-        <span>EDGA</span>
-      </div>
       <div class="ex-item ml-msg-item" onclick="selectExchange('iex',null)" data-key="iex">
         <span class="ml-msg-code">IEXG</span>
         <span>IEX</span>
       </div>
-      <div class="ex-item ml-msg-item" onclick="selectExchange('american',null)" data-key="american">
-        <span class="ml-msg-code">XASE</span>
-        <span>NYSE American</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('memx',null)" data-key="memx">
+        <span class="ml-msg-code">MEMX</span>
+        <span>MEMX</span>
       </div>
-      <div class="ex-item ml-msg-item" onclick="selectExchange('national',null)" data-key="national">
-        <span class="ml-msg-code">XCIS</span>
-        <span>NYSE National</span>
+      <div class="ex-item ml-msg-item active" onclick="selectExchange('nasdaq',null)" data-key="nasdaq">
+        <span class="ml-msg-code">XNAS</span>
+        <span>NASDAQ</span>
       </div>
       <div class="ex-item ml-msg-item" onclick="selectExchange('nasdaqbx',null)" data-key="nasdaqbx">
         <span class="ml-msg-code">XBOS</span>
         <span>Nasdaq BX</span>
       </div>
-      <div class="ex-item ml-msg-item" onclick="selectExchange('memx',null)" data-key="memx">
-        <span class="ml-msg-code">MEMX</span>
-        <span>MEMX</span>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('nyse',null)" data-key="nyse">
+        <span class="ml-msg-code">XNYS</span>
+        <span>NYSE</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('american',null)" data-key="american">
+        <span class="ml-msg-code">XASE</span>
+        <span>NYSE American</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('arca',null)" data-key="arca">
+        <span class="ml-msg-code">ARCX</span>
+        <span>NYSE Arca</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('national',null)" data-key="national">
+        <span class="ml-msg-code">XCIS</span>
+        <span>NYSE National</span>
+      </div>
+
+      <div class="ml-cat-hdr">US Options</div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('box',null)" data-key="box">
+        <span class="ml-msg-code">XBOX</span>
+        <span>BOX Options</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('bato',null)" data-key="bato">
+        <span class="ml-msg-code">BATO</span>
+        <span>Cboe BZX Options</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('cboec2',null)" data-key="cboec2">
+        <span class="ml-msg-code">C2OX</span>
+        <span>Cboe C2</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('edgo',null)" data-key="edgo">
+        <span class="ml-msg-code">EDGO</span>
+        <span>Cboe EDGX Options</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('cboeopt',null)" data-key="cboeopt">
+        <span class="ml-msg-code">XCBO</span>
+        <span>Cboe Options</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('iexopt',null)" data-key="iexopt">
+        <span class="ml-msg-code">IEXO</span>
+        <span>IEX Options</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('miaxpearl',null)" data-key="miaxpearl">
+        <span class="ml-msg-code">MPRL</span>
+        <span>MIAX Pearl</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('miaxemerald',null)" data-key="miaxemerald">
+        <span class="ml-msg-code">EMLD</span>
+        <span>MIAX Emerald</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('miax',null)" data-key="miax">
+        <span class="ml-msg-code">MIAX</span>
+        <span>MIAX Options</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('memxopt',null)" data-key="memxopt">
+        <span class="ml-msg-code">MXOP</span>
+        <span>MEMX Options</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('gemx',null)" data-key="gemx">
+        <span class="ml-msg-code">GMNI</span>
+        <span>Nasdaq GEMX</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('mrx',null)" data-key="mrx">
+        <span class="ml-msg-code">MCRY</span>
+        <span>Nasdaq MRX</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('phlx',null)" data-key="phlx">
+        <span class="ml-msg-code">XPHL</span>
+        <span>Nasdaq PHLX</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('bxopt',null)" data-key="bxopt">
+        <span class="ml-msg-code">XBXO</span>
+        <span>Nasdaq BX Options</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('ise',null)" data-key="ise">
+        <span class="ml-msg-code">XISX</span>
+        <span>Nasdaq ISE</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('amexopt',null)" data-key="amexopt">
+        <span class="ml-msg-code">XASE</span>
+        <span>NYSE American Options</span>
+      </div>
+      <div class="ex-item ml-msg-item" onclick="selectExchange('arcaopt',null)" data-key="arcaopt">
+        <span class="ml-msg-code">ARCO</span>
+        <span>NYSE Arca Options</span>
       </div>
 
     </div>
@@ -424,6 +523,7 @@ const EXCHANGES = {
       '<strong>Extended hours limit orders must be on the same side as their time-in-force.</strong> NASDAQ will reject extended hours orders where the limit price is so far through the market that they would immediately execute as a market order — use IOC for aggressive extended hours flow.',
       '<strong>Cancel-replace (OrderCancelReplaceRequest, 35=G) changes the queue position.</strong> On NASDAQ, any modification to price or quantity causes the order to lose time priority. If you are only reducing quantity, use an OrderCancelRequest and re-enter to preserve priority on the price level.',
     ],
+    source: { title: 'Nasdaq FIX Connectivity Specification', url: 'https://nasdaqtrader.com/Trader.aspx?id=FIX', date: 'June 2026' },
   },
 
   arca: {
@@ -529,6 +629,7 @@ const EXCHANGES = {
       '<strong>The MIC for BZX is BATS, not BZX or CBOE.</strong> ISO 10383 assigned the MIC "BATS" when the exchange was originally BATS Trading. It was never updated when Cboe acquired BATS. Tag 207 = BATS is correct for BZX.',
       '<strong>GTC orders survive overnight but do not survive corporate actions.</strong> BZX cancels GTC orders on ex-dividend date and on any stock split/reverse split. Your OMS must reconcile GTC working order state each morning against the previous night\'s cancel notifications.',
     ],
+    source: { title: 'Cboe Titanium U.S. Equities FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
   },
 
   edgx: {
@@ -574,6 +675,7 @@ const EXCHANGES = {
       '<strong>Post-5 PM order flow for extended hours requires ExecInst=W even on Cboe venues.</strong> Forgetting 18=W when submitting after-hours limit orders results in them being held until the next morning rather than routed to the EDGX after-hours session.',
       '<strong>Cancel confirms on EDGX arrive with ExecType=4 (Canceled).</strong> Some OMS implementations expect ExecType=6 (Pending Cancel) followed by ExecType=4. EDGX skips the pending state and sends only the final cancel. If your OMS state machine waits for a pending cancel ACK, it will deadlock.',
     ],
+    source: { title: 'Cboe Titanium U.S. Equities FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
   },
 
   edga: {
@@ -619,6 +721,7 @@ const EXCHANGES = {
       '<strong>EDGA\'s Closing Cross cutoff matches BZX at 3:35 PM ET.</strong> All four Cboe equity venues share the same closing auction cutoff of 3:35 PM ET, which is earlier than NYSE and NASDAQ. EDGA\'s closing cross is smaller than BZX\'s in typical volume.',
       '<strong>Sequence number gaps on reconnect trigger a resend request.</strong> Cboe exchanges will send a ResendRequest (35=2) for any gap they detect on logon. Your session layer must be able to respond with the correct messages or a SequenceReset (35=4) with GapFillFlag=Y (123=Y) for messages that cannot be replayed.',
     ],
+    source: { title: 'Cboe Titanium U.S. Equities FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
   },
 
   iex: {
@@ -666,6 +769,7 @@ const EXCHANGES = {
       '<strong>IEX Closing Cross cutoff is 3:55 PM ET, same as NASDAQ.</strong> IEX adopted a 3:55 PM ET cutoff for MOC orders to align with the NASDAQ timeline. However, IEX does not have a LOI (limit on imbalance) session — after 3:55 PM ET, no auction-directed orders are accepted.',
       '<strong>ClOrdID (11) must be unique across your entire session lifetime, not just per day.</strong> IEX enforces ClOrdID uniqueness across all orders for the life of your FIX session. If you reuse a ClOrdID from a previous session (even a different calendar day), the order is rejected with OrdRejReason=6 (Duplicate Order).',
     ],
+    source: { title: 'IEX FIX Specification', url: 'https://iex.io/documents/iex-fix-specification', date: 'June 2026' },
   },
 
 
@@ -715,6 +819,7 @@ const EXCHANGES = {
       '<strong>Post-only orders on BYX are canceled, not repriced.</strong> Same behavior as BZX and EDGA — ExecType=8 (Rejected) is returned, not ExecType=4 (Canceled), if the order would take liquidity. Your OMS must distinguish Rejected from Canceled by ExecType value, not by OrdStatus.',
       '<strong>BYX pre-market starts at 7:00 AM ET, not 4:00 AM ET.</strong> Orders submitted before 7:00 AM ET are rejected. Do not include BYX in routing decisions for 4:00–7:00 AM ET extended hours flow.',
     ],
+    source: { title: 'Cboe Titanium U.S. Equities FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
   },
 
   american: {
@@ -864,6 +969,7 @@ const EXCHANGES = {
       '<strong>Post-only on BX incurs a fee.</strong> On an inverted venue, posting is the costly side. A strategy that posts limit orders on BX expecting maker rebates (as on BZX) will be charged instead.',
       '<strong>BX has lower volume than XNAS.</strong> Fill rates on XBOS are lower than on the primary NASDAQ market. Smart order routers that route aggressive flow to BX expecting NASDAQ-level liquidity will generate more partial fills and higher market impact.',
     ],
+    source: { title: 'Nasdaq FIX Connectivity Specification', url: 'https://nasdaqtrader.com/Trader.aspx?id=FIX', date: 'June 2026' },
   },
 
   memx: {
@@ -913,6 +1019,799 @@ const EXCHANGES = {
       '<strong>MEMX Closing Cross cutoff is 3:55 PM ET.</strong> This aligns with NASDAQ and IEX, and is later than the Cboe venue cutoff (3:35 PM ET). A routing system that uses 3:35 PM ET as a universal cutoff will suppress valid MOC/LOC orders to MEMX.',
       '<strong>Extended hours start at 4:00 AM ET, not 7:00 AM ET.</strong> MEMX accepts orders from 4:00 AM ET in pre-market, unlike Cboe venues which open at 7:00 AM ET. Routing tables that apply the Cboe 7:00 AM start to MEMX will miss two hours of valid trading.',
     ],
+    source: { title: 'MEMX FIX Order Entry Specification', url: 'https://memxtrading.com/resources', date: 'June 2026' },
+  },
+
+
+  cboeopt: {
+    name: 'Cboe Options',
+    fullName: 'Cboe Options Exchange',
+    mic: 'XCBO',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Cboe Options Exchange (MIC: XCBO) is the largest US options exchange by volume and the birthplace of listed options trading, dating to 1973. It is home to benchmark index products including SPX (S&P 500), SPXW (weekly SPX), VIX, XSP (mini-SPX), NANOS (nano-SPX), NDX (Nasdaq-100), RUT (Russell 2000), and OEX (S&P 100). Cboe Options uses a Designated Market Maker (DMM) model for most products, with price/time priority within the same price level. <strong>Tag 8 = FIX.4.2</strong>. The Cboe FIX specification covers all four Cboe options venues (XCBO, C2OX, BATO, EDGO). SPX and VIX standard options settle on AM — the opening value of the index — requiring care around expiration day order handling.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned Cboe FIX session ID (provisioned by Cboe Member Services)',
+      'TargetCompID (56)': 'CBOE (production) / CBOETEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'Cboe FIX session username',
+      'Password (554)': 'Cboe FIX session password, rotated periodically',
+      'Notes': 'Cboe uses a unified FIX specification across all four options venues. Session credentials are provisioned per venue. The same Cboe Options connectivity agreement covers XCBO, C2OX, BATO, and EDGO but each requires separate session provisioning and separate TargetCompIDs.',
+    },
+    schedule: {
+      premarket:  { et: 'SPX/VIX global trading: Sunday 5:00 PM ET through Friday 4:15 PM ET (select Cboe products)', utc: '22:00 Sun – 21:15 Fri UTC' },
+      core:       { et: 'Equity options: 9:30 AM – 4:00 PM ET; Standard index options (SPX/VIX): 9:30 AM – 4:15 PM ET', utc: '14:30 – 21:00 / 21:15 UTC' },
+      afterhours: { et: 'SPX/VIX PM-settled options (SPXW, NANOS): 9:30 AM – 4:00 PM ET; no general after-hours for equity options', utc: 'See Cboe published schedule' },
+    },
+    orderTypes: [
+      { type: 'Market',           tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium. Cboe limits market orders in certain index products near expiration.' },
+      { type: 'Limit',            tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Most common order type. Price (44) is the limit premium per contract.' },
+      { type: 'Market IOC',       tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=1 + TimeInForce=3. Executes what is available immediately; cancels remainder.' },
+      { type: 'Limit IOC',        tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TimeInForce=3. Fills at limit or better; cancels any unfilled portion.' },
+      { type: 'Limit FOK',        tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TimeInForce=4. Must fill entirely at limit or better; otherwise canceled.' },
+      { type: 'Limit GTC',        tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TimeInForce=1. GTC orders persist until expiration of the option series or explicit cancel.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',        desc: 'O=Opening, C=Closing. Required for all order submissions. Critically important for position tracking and OCC reporting.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',          desc: 'Required. Identifies the instrument as an option contract.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM / YYYYMMDD', desc: 'Required. Use YYYYMMDD for weekly options (e.g., 20261016 for Oct 16 2026 expiry). Monthly options accept YYYYMM.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',        desc: '0=Put, 1=Call. Required.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal',      desc: 'Required. Strike price in dollars for equity options; index points for index options.' },
+      { tag: '207', name: 'SecurityExchange', value: 'XCBO',         desc: 'Required for multi-listed options. Routes order to Cboe Options specifically. Omit to allow smart order routing.' },
+    ],
+    gotchas: [
+      '<strong>SPX AM-settlement options expire the morning of the third Friday — not at market close.</strong> Standard monthly SPX (and OEX) options settle on the opening price on expiration Friday. Any SPX position held past the close on Thursday is settled at the Friday morning opening print, which can be dramatically different from Thursday\'s close. SPXW (weekly SPX) settles at the close on its expiration day.',
+      '<strong>Tag 77 (OpenClose) is not optional — it is required for all orders.</strong> Unlike equity order entry, every options order must carry Open or Close designation. Orders without Tag 77 may be rejected or misbooked. Many OMS systems default to Open; if your closing flow lacks Tag 77=C, the OCC will receive incorrect position updates.',
+      '<strong>VIX options are cash-settled and have non-standard expiration timing.</strong> VIX options expire on a Wednesday (not Friday). The settlement value (VRO) is calculated from SPX option prices on that Wednesday morning. Firms that treat VIX options like equity options in their expiration management will systematically mishandle VIX expiration events.',
+      '<strong>Cboe Options uses DMM (Designated Market Maker) participation rights.</strong> Unlike fully electronic venues, Cboe Options can have DMM participation quotas on certain index products. Your fill model for SPX/VIX should account for this — DMMs may receive a portion of customer-facing fills.',
+      '<strong>Global trading hours for SPX/VIX require separate FIX session configuration.</strong> The overnight and extended trading sessions for SPX and VIX are handled on a separate FIX gateway from the standard daytime session. A firm routing SPX orders after 4:15 PM ET or before 9:30 AM ET must connect to the global trading gateway, which has a different TargetCompID and session credentials.',
+    ],
+    source: { title: 'Cboe U.S. Options FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+  },
+
+  cboec2: {
+    name: 'Cboe C2',
+    fullName: 'Cboe C2 Options Exchange',
+    mic: 'C2OX',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Cboe C2 (MIC: C2OX) is a maker-taker US equity options exchange launched in 2010 as an electronic alternative within the Cboe family. Unlike Cboe Options Exchange (XCBO), which uses a DMM model with price/time priority, C2 uses a pro-rata allocation model for standard equity options — meaning fills at a given price level are distributed proportionally to resting order size rather than in strict time order. C2 does not trade the flagship index products (SPX, VIX) — those are exclusive to XCBO. <strong>Tag 8 = FIX.4.2</strong>. C2 uses the same Cboe FIX specification as all four Cboe options venues, with TargetCompID = C2.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned C2 FIX session ID',
+      'TargetCompID (56)': 'C2 (production) / C2TEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'C2 FIX session username',
+      'Password (554)': 'C2 FIX session password',
+      'Notes': 'C2 uses the same Cboe FIX specification as XCBO, BATO, and EDGO. Session credentials are C2-specific; XCBO credentials cannot be used for C2.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',     tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',      tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Price (44) is premium per contract. Pro-rata allocation at each price level.' },
+      { type: 'Limit IOC',  tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TimeInForce=3. Fills at limit or better; cancels remainder.' },
+      { type: 'Limit FOK',  tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TimeInForce=4. All-or-nothing fill.' },
+      { type: 'Limit GTC',  tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TimeInForce=1. GTC until series expiration or explicit cancel.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',   desc: 'O=Opening, C=Closing. Required for all orders.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',     desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM',  desc: 'Monthly or weekly expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',   desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
+      { tag: '207', name: 'SecurityExchange', value: 'C2OX',   desc: 'Routes to C2 specifically for multi-listed series.' },
+    ],
+    gotchas: [
+      '<strong>C2 uses pro-rata allocation, not price/time priority.</strong> A large limit order posted at a popular price level on C2 will receive a fill proportion equal to its share of total size at that level, regardless of when it was submitted. Time priority strategies designed for XCBO or PHLX (which use price/time priority for certain products) will not work as expected on C2.',
+      '<strong>C2 does not trade SPX, VIX, or other Cboe-exclusive index products.</strong> If your routing logic sends SPX options to C2, the orders will be rejected. SPX, SPXW, VIX, XSP, and NANOS are exclusively listed on XCBO. Validate your product-to-venue mapping before routing.',
+      '<strong>Tag 77 (OpenClose) is required on C2 as on all Cboe venues.</strong> The same OCC reporting requirements apply across all Cboe options exchanges. Opening and closing designations must match your position records.',
+      '<strong>Maker-taker fee model — takers pay a fee.</strong> Unlike XCBO (which uses a traditional DMM model with complex payment for order flow arrangements), C2 is straightforwardly maker-taker. Passive limit orders earn a rebate; aggressive orders pay a take fee. Model transaction costs accordingly.',
+    ],
+    source: { title: 'Cboe U.S. Options FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+  },
+
+  bato: {
+    name: 'Cboe BZX Options',
+    fullName: 'Cboe BZX Options Exchange',
+    mic: 'BATO',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Cboe BZX Options (MIC: BATO) is the options market operated on the Cboe BZX equities platform. It is one of four Cboe options venues (XCBO, C2OX, BATO, EDGO) covered by the unified Cboe Options FIX specification. BATO uses a maker-taker fee structure and price/time priority. It trades a broad set of multi-listed equity and ETF options. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = BATO. The venue is a popular destination for algorithmic order flow seeking maker rebates in equity options without the complexity of index products.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned BATO session ID',
+      'TargetCompID (56)': 'BATO (production) / BATOTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'BATO FIX session username',
+      'Password (554)': 'BATO FIX session password',
+      'Notes': 'Same Cboe FIX specification as XCBO, C2, and EDGO. Separate session provisioning required. BATO is the MIC for BZX Options; do not confuse with BATS (BZX equities MIC).',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',    tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',     tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard limit order. Earns maker rebate when resting.' },
+      { type: 'Limit IOC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4. All-or-nothing.' },
+      { type: 'Limit GTC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=1.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',   desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',     desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM',  desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',   desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike price in dollars.' },
+      { tag: '207', name: 'SecurityExchange', value: 'BATO',    desc: 'Routes to BZX Options specifically.' },
+    ],
+    gotchas: [
+      '<strong>BATO (MIC) is distinct from BATS (BZX equities MIC).</strong> The equities exchange Cboe BZX has MIC = BATS. The options exchange Cboe BZX Options has MIC = BATO. Tag 207 = BATO for options, Tag 207 = BATS for equities. Confusing the two in a multi-asset OMS causes incorrect post-trade venue attribution.',
+      '<strong>Tag 77 (OpenClose) is required on BATO as on all Cboe venues.</strong> The OCC requires opening/closing designation for every options order. Systems that omit Tag 77 on equity options orders will generate OCC booking errors.',
+      '<strong>Cboe closing cross cutoff is 3:35 PM ET for equity options.</strong> Unlike NASDAQ (3:55 PM ET) and NYSE (3:45–4:00 PM ET), Cboe closes its equity options market at 3:35 PM CT / 4:35 PM ET — wait, options markets close at 4:00 PM ET. But note: equity options stop trading at 4:00 PM ET typically. Verify current close time for specific options series.',
+    ],
+    source: { title: 'Cboe U.S. Options FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+  },
+
+  edgo: {
+    name: 'Cboe EDGX Options',
+    fullName: 'Cboe EDGX Options Exchange',
+    mic: 'EDGO',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Cboe EDGX Options (MIC: EDGO) is the options market operated on the Cboe EDGX platform, sharing the same inverted (taker-maker) fee philosophy as EDGX equities. On EDGO, aggressive (taking) orders earn a rebate and passive (making) orders pay a fee — the opposite of standard maker-taker. This inverted structure attracts flow from market makers who want to take liquidity and receive a rebate, and from strategies that need certainty of execution above fee concerns. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = EDGO. EDGO is covered by the same Cboe Options FIX specification as XCBO, C2OX, and BATO.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned EDGO session ID',
+      'TargetCompID (56)': 'EDGO (production) / EDGOTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'EDGO FIX session username',
+      'Password (554)': 'EDGO FIX session password',
+      'Notes': 'Same Cboe FIX spec as all Cboe options venues. EDGO is taker-maker: takers earn rebates, makers pay fees. Confirm current fee schedule with Cboe Member Services before implementing.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',    tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Takes liquidity — earns taker rebate on EDGO (inverted).' },
+      { type: 'Limit',     tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'If resting (making), pays a posting fee. If aggressive (taking), earns rebate.' },
+      { type: 'Limit IOC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3. Aggressive IOC earns taker rebate.' },
+      { type: 'Limit FOK', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',   desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',     desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM',  desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',   desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
+      { tag: '207', name: 'SecurityExchange', value: 'EDGO',    desc: 'Routes to EDGX Options specifically.' },
+    ],
+    gotchas: [
+      '<strong>EDGO is taker-maker (inverted) — makers pay, takers earn.</strong> A passive limit order resting on EDGO incurs a posting fee. If your OMS or transaction cost model assumes standard maker-taker, your P&L on EDGO resting orders will show unexpected charges. Model EDGO fee tiers explicitly and separately.',
+      '<strong>Tag 77 (OpenClose) is required on all Cboe options venues including EDGO.</strong> Same OCC reporting requirement as XCBO, C2, and BATO.',
+      '<strong>EDGO and EDGX (equities) share the Cboe platform but are separate markets.</strong> An order routing error that sends equity options to the EDGX equities endpoint (or vice versa) will generate rejections. Verify TargetCompID = EDGO for options, EDGX for equities.',
+    ],
+    source: { title: 'Cboe U.S. Options FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+  },
+
+  phlx: {
+    name: 'Nasdaq PHLX',
+    fullName: 'Nasdaq PHLX',
+    mic: 'XPHL',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Nasdaq PHLX (Philadelphia Stock Exchange, MIC: XPHL) is the oldest stock exchange in the United States (founded 1790) and one of the largest US options exchanges by volume. PHLX trades equity and ETF options across the full product universe and is a primary venue for technology sector options due to strong overlap with NASDAQ-listed stocks. PHLX uses a hybrid model: a specialist/DMM-like structure for some products and electronic price/time priority for others. <strong>Tag 8 = FIX.4.2</strong>. PHLX is part of the Nasdaq Options family and uses the Nasdaq Options FIX specification shared with ISE, GEMX, MRX, and BX Options.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned PHLX FIX session ID (provisioned by Nasdaq Market Operations)',
+      'TargetCompID (56)': 'PHLX (production) / PHLXTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'PHLX FIX session username',
+      'Password (554)': 'PHLX FIX session password',
+      'Notes': 'PHLX is part of the Nasdaq Options Group. Session credentials are PHLX-specific; ISE/GEMX/MRX credentials are separate. A single Nasdaq Options connectivity agreement covers all five Nasdaq options venues.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',              tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',               tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard limit order.' },
+      { type: 'Limit IOC',           tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK',           tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+      { type: 'Limit GTC',           tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=1. Persists until series expiry or cancel.' },
+      { type: 'Customer Limit',      tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Public customer limit orders receive priority over professional orders at the same price on PHLX.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',           desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',             desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM / YYYYMMDD', desc: 'Expiry. Use YYYYMMDD for weekly options.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',           desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal',         desc: 'Strike in dollars.' },
+      { tag: '204', name: 'CustomerOrFirm',   value: '0 / 1',           desc: '0=Customer (public), 1=Firm. Critically important on PHLX. Customer orders receive priority at the NBBO.' },
+      { tag: '207', name: 'SecurityExchange', value: 'XPHL',            desc: 'Routes order to PHLX for multi-listed options.' },
+    ],
+    gotchas: [
+      '<strong>Tag 204 (CustomerOrFirm) matters on PHLX — customer orders get priority.</strong> PHLX gives public customer orders priority over professional (firm) orders at the same price level. If your routing system sends firm orders (204=1) when it should send customer orders (204=0), you will receive systematically worse fills on PHLX.',
+      '<strong>Tag 77 (OpenClose) is required.</strong> PHLX enforces open/close designation for regulatory reporting. Missing Tag 77 results in order rejection.',
+      '<strong>PHLX has special handling for large orders via the PHLX XL mechanism.</strong> Orders for 500+ contracts that are not immediately executable may be eligible for the PHLX XL price improvement mechanism. If your OMS does not expect price improvement executions (fills at prices not explicitly represented in the order book), add logic to handle ExecType=H (Trade Correction) reports.',
+      '<strong>Nasdaq PHLX is separate from the primary NASDAQ equities market.</strong> Options that underlie NASDAQ-listed stocks trade on PHLX (and other options venues), but PHLX is a separate exchange from XNAS. A session credentialed for PHLX cannot route equity orders to XNAS.',
+    ],
+    source: { title: 'Nasdaq Options Technical Specifications', url: 'https://nasdaqtrader.com/trader.aspx?id=OptnsTechSpecs', date: 'June 2026' },
+  },
+
+  ise: {
+    name: 'Nasdaq ISE',
+    fullName: 'Nasdaq ISE',
+    mic: 'XISX',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Nasdaq ISE (International Securities Exchange, MIC: XISX) is a fully electronic US equity options exchange founded in 2000 and acquired by Nasdaq in 2016. ISE was the first fully electronic options exchange in the United States, and its technology underpins several other Nasdaq options venues. ISE uses a maker-taker fee model with price/time priority. It trades the full universe of multi-listed equity and ETF options and is a primary destination for systematic and algorithmic options flow. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = ISE.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned ISE FIX session ID',
+      'TargetCompID (56)': 'ISE (production) / ISETEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'ISE FIX session username',
+      'Password (554)': 'ISE FIX session password',
+      'Notes': 'Part of the Nasdaq Options Group. Same FIX specification as PHLX, GEMX, MRX, and BX Options. Sessions are ISE-specific; separate from other Nasdaq options venues.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',    tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',     tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard limit. Earns maker rebate when resting.' },
+      { type: 'Limit IOC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+      { type: 'Limit GTC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=1.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',           desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',             desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM / YYYYMMDD', desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',           desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal',         desc: 'Strike in dollars.' },
+      { tag: '207', name: 'SecurityExchange', value: 'XISX',            desc: 'Routes to ISE specifically.' },
+    ],
+    gotchas: [
+      '<strong>ISE was the first all-electronic options exchange but is now operated by Nasdaq.</strong> Some legacy documentation and third-party connectivity systems still reference ISE under its pre-Nasdaq branding. Verify TargetCompID = ISE for current connectivity; old TargetCompID values from pre-2016 specs may be stale.',
+      '<strong>Tag 77 (OpenClose) is required.</strong> Standard requirement across all listed options venues.',
+      '<strong>ISE maker-taker fees apply to options transactions.</strong> Strategy-level transaction cost models should use ISE\'s published fee schedule rather than assuming PHLX or XCBO rates, as rebate/fee tiers differ across Nasdaq Options Group venues.',
+    ],
+    source: { title: 'Nasdaq Options Technical Specifications', url: 'https://nasdaqtrader.com/trader.aspx?id=OptnsTechSpecs', date: 'June 2026' },
+  },
+
+  gemx: {
+    name: 'Nasdaq GEMX',
+    fullName: 'Nasdaq GEMX',
+    mic: 'GMNI',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Nasdaq GEMX (MIC: GMNI), formerly ISE Gemini, is a taker-maker (inverted) US equity options exchange operated by Nasdaq. GEMX launched in 2013 as ISE Gemini to provide a fee-inverted alternative within what was then the ISE group. Under the taker-maker model, aggressive (taking) orders earn a rebate and passive (making) orders pay a fee. GEMX is used primarily by market makers and high-frequency options traders seeking rebates on taking flow. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = GEMX.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned GEMX FIX session ID',
+      'TargetCompID (56)': 'GEMX (production) / GEMXTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'GEMX FIX session username',
+      'Password (554)': 'GEMX FIX session password',
+      'Notes': 'Part of the Nasdaq Options Group. GEMX is taker-maker: takers earn rebates, makers pay fees. Same FIX specification as ISE, PHLX, MRX, and BX Options.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',    tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Aggressive — earns taker rebate on GEMX (inverted model).' },
+      { type: 'Limit',     tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'If resting (making), pays a posting fee. If aggressive, earns rebate.' },
+      { type: 'Limit IOC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',   desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',     desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM',  desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',   desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
+      { tag: '207', name: 'SecurityExchange', value: 'GMNI',    desc: 'Routes to GEMX. Note MIC is GMNI, not GEMX.' },
+    ],
+    gotchas: [
+      '<strong>GEMX is taker-maker (inverted).</strong> Makers pay fees; takers earn rebates. A passive limit order on GEMX will incur a posting fee, not earn a maker rebate. Routing systems that apply maker-taker assumptions to all options venues will have wrong fee estimates for GEMX.',
+      '<strong>MIC is GMNI, not GEMX.</strong> The ISO 10383 MIC assigned to this exchange is GMNI (from its Gemini branding). Tag 207 = GMNI for GEMX-executed trades. Confusing the MIC with the exchange name is a common setup error.',
+      '<strong>Tag 77 (OpenClose) is required across all Nasdaq options venues.</strong>',
+    ],
+    source: { title: 'Nasdaq Options Technical Specifications', url: 'https://nasdaqtrader.com/trader.aspx?id=OptnsTechSpecs', date: 'June 2026' },
+  },
+
+  mrx: {
+    name: 'Nasdaq MRX',
+    fullName: 'Nasdaq MRX',
+    mic: 'MCRY',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Nasdaq MRX (MIC: MCRY), formerly ISE Mercury, is a US equity options exchange in the Nasdaq Options Group. MRX launched in 2016 as ISE Mercury, providing an additional maker-taker venue within what was then the ISE family. MRX uses a standard maker-taker fee model with price/time priority. It captures a smaller share of multi-listed options volume compared to ISE or PHLX, and is typically used as a supplemental routing destination in options smart order routers. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = MRX.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned MRX FIX session ID',
+      'TargetCompID (56)': 'MRX (production) / MRXTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'MRX FIX session username',
+      'Password (554)': 'MRX FIX session password',
+      'Notes': 'Part of the Nasdaq Options Group. Maker-taker. Same FIX specification as ISE, PHLX, GEMX, and BX Options.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',    tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',     tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard limit.' },
+      { type: 'Limit IOC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+      { type: 'Limit GTC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=1.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',   desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',     desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM',  desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',   desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
+      { tag: '207', name: 'SecurityExchange', value: 'MCRY',    desc: 'Routes to MRX. MIC is MCRY (from Mercury branding).' },
+    ],
+    gotchas: [
+      '<strong>MIC is MCRY, not MRX.</strong> The ISO 10383 MIC is MCRY (assigned when the exchange was ISE Mercury). Tag 207 = MCRY for MRX-executed trades. A security master that maps exchange name "MRX" to "MRX" for Tag 207 will submit incorrect venue identifiers to the OCC.',
+      '<strong>Tag 77 (OpenClose) is required.</strong>',
+      '<strong>MRX has lower volume than ISE or PHLX.</strong> MRX is a valid routing destination but fill rates on passive limit orders are lower than on primary Nasdaq options venues. Weight accordingly in your smart order routing logic.',
+    ],
+    source: { title: 'Nasdaq Options Technical Specifications', url: 'https://nasdaqtrader.com/trader.aspx?id=OptnsTechSpecs', date: 'June 2026' },
+  },
+
+  bxopt: {
+    name: 'Nasdaq BX Options',
+    fullName: 'Nasdaq BX Options Exchange',
+    mic: 'XBXO',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Nasdaq BX Options (MIC: XBXO) is the options market operated on the Nasdaq BX (Boston Stock Exchange) platform, part of the Nasdaq Options Group. BX Options uses a taker-maker (inverted) fee structure, matching the inverted model of GEMX within the Nasdaq family. Aggressive (taking) orders earn a rebate; passive (making) orders pay a fee. BX Options trades multi-listed equity options. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = BX.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned BX Options FIX session ID',
+      'TargetCompID (56)': 'BX (production) / BXTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'BX Options FIX session username',
+      'Password (554)': 'BX Options FIX session password',
+      'Notes': 'Part of the Nasdaq Options Group. Taker-maker. Same FIX specification as PHLX, ISE, GEMX, and MRX.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',    tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Aggressive — earns taker rebate (inverted model).' },
+      { type: 'Limit',     tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'If resting, pays posting fee. If aggressive, earns rebate.' },
+      { type: 'Limit IOC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',   desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',     desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM',  desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',   desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
+      { tag: '207', name: 'SecurityExchange', value: 'XBXO',   desc: 'Routes to BX Options.' },
+    ],
+    gotchas: [
+      '<strong>BX Options is taker-maker (inverted).</strong> Makers pay fees; takers earn rebates. Apply BX Options-specific fee tiers to your transaction cost model.',
+      '<strong>TargetCompID = BX, not XBXO.</strong> The MIC is XBXO but the FIX session TargetCompID is BX. Confusing MIC with TargetCompID causes Logon rejections.',
+      '<strong>Tag 77 (OpenClose) is required.</strong>',
+    ],
+    source: { title: 'Nasdaq Options Technical Specifications', url: 'https://nasdaqtrader.com/trader.aspx?id=OptnsTechSpecs', date: 'June 2026' },
+  },
+
+  amexopt: {
+    name: 'NYSE American Options',
+    fullName: 'NYSE American Options',
+    mic: 'XASE',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `NYSE American Options (MIC: XASE, formerly AMEX Options) is one of the largest US options exchanges by volume, operated by NYSE Group. NYSE American Options uses a "Customer Priority" model — public customer orders receive execution priority over professional (firm) orders at the same price, similar to PHLX. It trades the full universe of multi-listed equity and ETF options. NYSE American Options runs on NYSE's dedicated options technology platform (separate from the equity Pillar gateway). <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = AMXO.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned NYSE American Options FIX session ID',
+      'TargetCompID (56)': 'AMXO (production) / AMXOTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'NYSE American Options FIX session username',
+      'Password (554)': 'NYSE American Options FIX session password',
+      'Notes': 'NYSE American Options runs on NYSE\'s options platform, separate from NYSE Pillar (equities). Credentials for NYSE equities (XNYS) or NYSE Arca equities (ARCX) cannot be used here. A separate connectivity agreement and session provisioning is required for options.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',         tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',          tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard limit order.' },
+      { type: 'Limit IOC',      tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK',      tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+      { type: 'Customer Limit', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Public customer orders (Tag 204=0) receive priority over firm orders at same price.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',           desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',             desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM / YYYYMMDD', desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',           desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal',         desc: 'Strike in dollars.' },
+      { tag: '204', name: 'CustomerOrFirm',   value: '0 / 1',           desc: '0=Customer, 1=Firm. Customer orders receive execution priority at same price.' },
+      { tag: '207', name: 'SecurityExchange', value: 'XASE',            desc: 'Routes to NYSE American Options.' },
+    ],
+    gotchas: [
+      '<strong>Tag 204 (CustomerOrFirm) determines execution priority.</strong> NYSE American Options gives public customers priority over firm orders at the same price. Incorrectly designating customer orders as firm (204=1) results in systematically worse fills and potential regulatory issues.',
+      '<strong>NYSE American Options is on a different platform from NYSE American Equities.</strong> Despite the shared MIC (XASE), the options and equities markets use separate technology platforms, separate FIX endpoints, and separate session credentials. The TargetCompID for options is AMXO, not XASE.',
+      '<strong>Tag 77 (OpenClose) is required.</strong> NYSE options venues enforce open/close designation for OCC reporting.',
+      '<strong>AMEX Options legacy branding still appears in some third-party systems.</strong> NYSE American Options was previously NYSE MKT Options and before that American Stock Exchange (AMEX) Options. Legacy connectivity systems may use old TargetCompID or vendor codes. Verify current TargetCompID = AMXO with NYSE Market Access.',
+    ],
+    source: { title: 'NYSE Options FIX Specification', url: 'https://www.nyse.com/connectivity/documents', date: 'June 2026' },
+  },
+
+  arcaopt: {
+    name: 'NYSE Arca Options',
+    fullName: 'NYSE Arca Options',
+    mic: 'ARCO',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `NYSE Arca Options (MIC: ARCO) is one of the largest US options exchanges, operated by NYSE Group on its dedicated options platform. NYSE Arca Options is particularly strong in ETF options — matching NYSE Arca's equities dominance in ETFs — and trades the full multi-listed equity options universe. Arca Options uses a hybrid Customer Priority model similar to NYSE American Options, giving public customer orders execution priority over professional orders at the same price. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = ARCO.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned NYSE Arca Options FIX session ID',
+      'TargetCompID (56)': 'ARCO (production) / ARCOTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'NYSE Arca Options FIX session username',
+      'Password (554)': 'NYSE Arca Options FIX session password',
+      'Notes': 'NYSE Arca Options runs on NYSE\'s options platform, separate from NYSE Arca equities (Pillar). ARCX credentials for equities cannot be used for ARCO options. Both are operated by NYSE Group but require separate connectivity agreements.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',         tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',          tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard limit. Customer orders (204=0) get priority at same price.' },
+      { type: 'Limit IOC',      tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK',      tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+      { type: 'Limit GTC',      tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=1. Persists until series expiration or cancel.' },
+      { type: 'Customer Limit', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Tag 204=0. Customer orders execute before firm orders at the same price.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',           desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',             desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM / YYYYMMDD', desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',           desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal',         desc: 'Strike in dollars.' },
+      { tag: '204', name: 'CustomerOrFirm',   value: '0 / 1',           desc: '0=Customer, 1=Firm. Customer orders have execution priority at same price level.' },
+      { tag: '207', name: 'SecurityExchange', value: 'ARCO',            desc: 'Routes to NYSE Arca Options. ARCO (options) vs ARCX (equities).' },
+    ],
+    gotchas: [
+      '<strong>ARCO (options MIC) and ARCX (equities MIC) are different venues on different platforms.</strong> NYSE Arca Options (ARCO) and NYSE Arca Equities (ARCX) are separate exchanges with separate FIX sessions. Tag 207 = ARCO for options, ARCX for equities. Submitting options orders to the ARCX equities endpoint generates rejections.',
+      '<strong>Tag 204 (CustomerOrFirm) is required for correct execution priority.</strong> The NYSE customer priority model gives public customer orders execution rights before professional orders at the same price. Incorrect 204 value affects both fills and regulatory reporting.',
+      '<strong>Tag 77 (OpenClose) is required.</strong>',
+      '<strong>ETF options on ARCO may have different minimum tick sizes.</strong> ETF options listed on ARCO that participate in the Penny Pilot program trade in $0.01 increments for premiums under $3.00 and $0.05 above $3.00. Other options use $0.05 / $0.10 ticks. Verify tick size before quoting; ticks are product-specific, not venue-specific.',
+    ],
+    source: { title: 'NYSE Options FIX Specification', url: 'https://www.nyse.com/connectivity/documents', date: 'June 2026' },
+  },
+
+  miax: {
+    name: 'MIAX',
+    fullName: 'MIAX Options Exchange',
+    mic: 'MIAX',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `MIAX Options Exchange (MIC: MIAX) is a US equity options exchange founded in 2012, operated by Miami International Holdings. MIAX is known for its advanced technology platform and focus on tight latency. MIAX uses a price/time priority model with customer priority for public customer orders over firm orders at the same price. MIAX also operates MIAX Pearl (MIC: MPRL) and MIAX Emerald (MIC: EMLD), providing three distinct fee models under one connectivity agreement. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = MIAX.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned MIAX FIX session ID (provisioned by MIAX Member Services)',
+      'TargetCompID (56)': 'MIAX (production) / MIAXTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'MIAX FIX session username',
+      'Password (554)': 'MIAX FIX session password',
+      'Notes': 'MIAX, MIAX Pearl, and MIAX Emerald share a connectivity agreement but require separate FIX sessions and TargetCompIDs. All three are covered by the MIAX Options FIX specification.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',          tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',           tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard limit. Customer orders have priority at same price.' },
+      { type: 'Limit IOC',       tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK',       tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+      { type: 'Limit GTC',       tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=1.' },
+      { type: 'eQuote',          tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'MIAX-specific electronic quoting mechanism for registered market makers. Requires market maker registration.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',           desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',             desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM / YYYYMMDD', desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',           desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal',         desc: 'Strike in dollars.' },
+      { tag: '204', name: 'CustomerOrFirm',   value: '0 / 1',           desc: '0=Customer, 1=Firm. Customer orders get priority at same price.' },
+      { tag: '207', name: 'SecurityExchange', value: 'MIAX',            desc: 'Routes order to MIAX specifically.' },
+    ],
+    gotchas: [
+      '<strong>MIAX, MIAX Pearl, and MIAX Emerald have different fee models despite the same underlying technology.</strong> MIAX (maker-taker with customer priority), Pearl (inverted/taker-maker), and Emerald (customer rebate focused) each have distinct economics. Treat them as three separate venues in your transaction cost model.',
+      '<strong>Tag 77 (OpenClose) is required.</strong>',
+      '<strong>MIAX eQuote mechanism is available to registered market makers only.</strong> Non-market-maker firms that attempt to submit eQuotes will receive rejections. Standard limit orders use the normal FIX order entry path.',
+      '<strong>MIAX is known for tight latency — do not assume lower priority in competitive fills.</strong> MIAX has invested heavily in co-location and technology. In latency-sensitive strategies, MIAX competes directly with ISE and PHLX for fills. Model MIAX fill rates empirically rather than assuming lower fill probability.',
+    ],
+    source: { title: 'MIAX Options FIX Specification', url: 'https://www.miaxoptions.com/specifications', date: 'June 2026' },
+  },
+
+  miaxpearl: {
+    name: 'MIAX Pearl',
+    fullName: 'MIAX Pearl Options Exchange',
+    mic: 'MPRL',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `MIAX Pearl (MIC: MPRL) is a taker-maker (inverted) US equity options exchange operated by Miami International Holdings, launched in 2017. Unlike MIAX Options (maker-taker with customer priority), Pearl uses an inverted fee structure: aggressive orders taking liquidity earn a rebate, and passive orders making liquidity pay a fee. MIAX Pearl also operates as an equities exchange (MPRL equities launched 2020). <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = MPRL.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned MIAX Pearl FIX session ID',
+      'TargetCompID (56)': 'MPRL (production) / MPRLTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'MIAX Pearl FIX session username',
+      'Password (554)': 'MIAX Pearl FIX session password',
+      'Notes': 'Separate session from MIAX and MIAX Emerald. Same MIAX Options FIX specification. Pearl is taker-maker; MIAX is maker-taker. Verify fee model before routing.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',    tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Aggressive — earns taker rebate (inverted model).' },
+      { type: 'Limit',     tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'If resting, pays posting fee. If aggressive, earns rebate.' },
+      { type: 'Limit IOC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3. Aggressive IOC earns taker rebate.' },
+      { type: 'Limit FOK', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',   desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',     desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM',  desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',   desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
+      { tag: '207', name: 'SecurityExchange', value: 'MPRL',    desc: 'Routes to MIAX Pearl.' },
+    ],
+    gotchas: [
+      '<strong>MIAX Pearl is taker-maker (inverted) — the opposite of MIAX Options.</strong> Passive orders on Pearl pay a posting fee. Aggressive orders earn a rebate. Routing systems that treat all MIAX venues identically will have wrong fee assumptions for Pearl.',
+      '<strong>Tag 77 (OpenClose) is required.</strong>',
+      '<strong>MPRL (options MIC) also exists for MIAX Pearl equities — confirm context.</strong> MIAX Pearl operates both options and equities markets under the MPRL MIC. Tag 207 = MPRL for Pearl options. Your security master must correctly identify whether a position is in MPRL options or MPRL equities.',
+    ],
+    source: { title: 'MIAX Options FIX Specification', url: 'https://www.miaxoptions.com/specifications', date: 'June 2026' },
+  },
+
+  miaxemerald: {
+    name: 'MIAX Emerald',
+    fullName: 'MIAX Emerald Options Exchange',
+    mic: 'EMLD',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `MIAX Emerald (MIC: EMLD) is a US equity options exchange operated by Miami International Holdings, launched in 2019 as the third exchange in the MIAX family. MIAX Emerald is designed to provide an additional routing destination with competitive fees, focusing on customer flow and priority allocation. It offers a maker-taker structure with customer order priority similar to MIAX Options but with distinct fee tiers. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = EMLD.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned MIAX Emerald FIX session ID',
+      'TargetCompID (56)': 'EMLD (production) / EMLDTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'MIAX Emerald FIX session username',
+      'Password (554)': 'MIAX Emerald FIX session password',
+      'Notes': 'Separate session from MIAX and MIAX Pearl. Same MIAX Options FIX specification. Verify current fee schedule with MIAX Member Services.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',    tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',     tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard maker-taker limit. Customer orders have priority.' },
+      { type: 'Limit IOC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+      { type: 'Limit GTC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=1.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',   desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',     desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM',  desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',   desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
+      { tag: '204', name: 'CustomerOrFirm',   value: '0 / 1',   desc: '0=Customer, 1=Firm. Customer orders have execution priority.' },
+      { tag: '207', name: 'SecurityExchange', value: 'EMLD',    desc: 'Routes to MIAX Emerald.' },
+    ],
+    gotchas: [
+      '<strong>MIAX Emerald has different fee tiers from MIAX Options despite the same platform.</strong> The three MIAX venues (MIAX, Pearl, Emerald) have distinct fee schedules. Do not assume Emerald rates match MIAX Options rates.',
+      '<strong>Tag 77 (OpenClose) is required.</strong>',
+      '<strong>MIAX Emerald is newer and has lower volume than MIAX Options.</strong> Fill rates on passive limit orders are lower than on the primary MIAX market. Use Emerald as a secondary posting destination rather than a primary execution venue.',
+    ],
+    source: { title: 'MIAX Options FIX Specification', url: 'https://www.miaxoptions.com/specifications', date: 'June 2026' },
+  },
+
+  box: {
+    name: 'BOX',
+    fullName: 'BOX Options Exchange',
+    mic: 'XBOX',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `BOX Options Exchange (MIC: XBOX) is a US equity options exchange founded in 2004 and operated by BOX Exchange LLC, with ownership from Cboe Global Markets and several broker-dealers. BOX is notable for its Price Improvement Period (PIP) mechanism — a unique auction process where an executing broker can guarantee a price improvement for a customer order by exposing it to a 100-millisecond electronic auction. This makes BOX particularly relevant for retail options flow seeking price improvement. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = BOX.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned BOX FIX session ID (provisioned by BOX Exchange Operations)',
+      'TargetCompID (56)': 'BOX (production) / BOXTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'BOX FIX session username',
+      'Password (554)': 'BOX FIX session password',
+      'Notes': 'BOX uses a distinct FIX specification from Cboe and Nasdaq venues. The PIP mechanism requires specific order types and tags not present on other exchanges. Review the BOX FIX specification before implementing.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',      tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',       tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard limit order.' },
+      { type: 'Limit IOC',   tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK',   tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+      { type: 'PIP Initiator',tag40:'2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202, 77', notes: 'BOX Price Improvement Period initiating order. Exposes customer order to 100ms auction. Requires broker to guarantee minimum price improvement.' },
+      { type: 'PIP Response', tag40:'2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Response to a PIP auction. Must improve on the initiating price guarantee. 100ms window.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',        desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',          desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM / YYYYMMDD', desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',        desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal',      desc: 'Strike in dollars.' },
+      { tag: '204', name: 'CustomerOrFirm',   value: '0 / 1',        desc: '0=Customer (required for PIP initiating orders). Customer designation allows PIP participation.' },
+      { tag: '207', name: 'SecurityExchange', value: 'XBOX',         desc: 'Routes to BOX.' },
+    ],
+    gotchas: [
+      '<strong>The BOX PIP mechanism is a 100-millisecond auction — not a simple order type.</strong> A PIP Initiating Order exposes a customer order to competing bids/offers for 100 milliseconds. Your OMS must handle the asynchronous nature of PIP: the initiating order is not immediately filled; a series of Execution Reports arrive during and after the auction. Do not treat PIP as a standard fill flow.',
+      '<strong>PIP requires the initiating broker to guarantee a minimum price improvement.</strong> Before submitting a PIP order, you must guarantee a price at least $0.01 better than the NBBO for the customer. If you cannot guarantee improvement, submit a standard limit order instead.',
+      '<strong>Tag 77 (OpenClose) is required and is particularly important for PIP orders.</strong> PIP orders represent customer transactions, and the OCC requires correct open/close designation for all sides of the PIP trade.',
+      '<strong>BOX uses a different FIX specification from Cboe and Nasdaq options venues.</strong> Do not attempt to connect to BOX using a Cboe or Nasdaq options spec without reviewing the BOX specification. PIP-specific fields and order types are BOX-proprietary.',
+    ],
+    source: { title: 'BOX Options FIX Specification', url: 'https://boxoptions.com/technology', date: 'June 2026' },
+  },
+
+  memxopt: {
+    name: 'MEMX Options',
+    fullName: 'MEMX Options Exchange',
+    mic: 'MXOP',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    notice: '<strong>Recently launched (2023).</strong> FIX specification available at memxtrading.com. Verify the current spec before implementing — fee schedules and technical parameters are subject to change as the exchange matures. Data in this entry reflects best available public information as of June 2026.',
+    overview: `MEMX Options Exchange (MIC: MXOP) is the options market operated by Members Exchange (MEMX), launched in 2023 following the success of MEMX equities. MEMX Options uses a maker-taker fee model with transparent, publicly posted fees — consistent with MEMX's mission to reduce trading costs and increase transparency. MEMX Options trades multi-listed US equity options. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = MXOP.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned MEMX Options FIX session ID',
+      'TargetCompID (56)': 'MXOP (production) / MXOPTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'MEMX Options FIX session username',
+      'Password (554)': 'MEMX Options FIX session password',
+      'Notes': 'Review the current MEMX Options FIX specification at memxtrading.com before implementing. Parameters may have been updated since launch.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',    tag40: '1', required: '1, 11, 21, 38, 40, 54, 55, 167, 200, 201, 202', notes: 'Executes at best available premium.' },
+      { type: 'Limit',     tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 167, 200, 201, 202', notes: 'Standard maker-taker limit. Passive earns rebate.' },
+      { type: 'Limit IOC', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=3.' },
+      { type: 'Limit FOK', tag40: '2', required: '1, 11, 21, 38, 40, 44, 54, 55, 59, 167, 200, 201, 202', notes: 'OrdType=2 + TIF=4.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',        value: 'O / C',   desc: 'O=Opening, C=Closing. Required.' },
+      { tag: '167', name: 'SecurityType',     value: 'OPT',     desc: 'Required.' },
+      { tag: '200', name: 'MaturityMonthYear',value: 'YYYYMM',  desc: 'Expiry date.' },
+      { tag: '201', name: 'PutOrCall',        value: '0 / 1',   desc: '0=Put, 1=Call.' },
+      { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
+      { tag: '207', name: 'SecurityExchange', value: 'MXOP',    desc: 'Routes to MEMX Options.' },
+    ],
+    gotchas: [
+      '<strong>MEMX Options is recently launched (2023) — verify all parameters against the current spec.</strong> Fee schedules, order types, and session parameters for newer exchanges change frequently. Do not rely solely on this reference; pull the current MEMX Options FIX specification from memxtrading.com.',
+      '<strong>Tag 77 (OpenClose) is required.</strong>',
+      '<strong>MEMX Options has lower volume than established options venues.</strong> Fill rates, especially for passive limit orders in less liquid option series, will be lower than on PHLX, ISE, or Cboe. Weight MEMX Options conservatively in your options smart order routing until empirical fill data accumulates.',
+    ],
+    source: { title: 'MEMX Options FIX Specification', url: 'https://memxtrading.com/resources', date: 'June 2026' },
+  },
+
+  iexopt: {
+    name: 'IEX Options',
+    fullName: 'IEX Options Exchange',
+    mic: 'IEXO',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    notice: '<strong>Regulatory approval pending as of June 2026.</strong> IEX filed its Form 1 application to register as a national securities exchange for options. A FIX connectivity specification has not yet been published. Check iex.io for updates on regulatory status and technical documentation. This entry will be updated when the spec is available.',
+    overview: `IEX Options Exchange is a proposed options exchange filed by IEX Group, the operator of the Investors Exchange (IEXG). IEX has applied for regulatory approval to launch an options exchange under the MIC IEXO. IEX Options is expected to incorporate IEX's speed bump technology (350-microsecond delay) for options order entry, and to offer innovative order types consistent with IEX's investor-protection focus. As of June 2026, regulatory approval is pending and no FIX connectivity specification has been publicly released.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2 (expected — not yet published)',
+      'SenderCompID (49)': 'Not yet published',
+      'TargetCompID (56)': 'Not yet published',
+      'HeartBtInt (108)': 'Not yet published',
+      'EncryptMethod (98)': '0 (expected)',
+      'ResetOnLogon (141)': 'Not yet published',
+      'Notes': 'IEX Options FIX connectivity specification has not been published as of June 2026. Monitor iex.io for updates following regulatory approval.',
+    },
+    schedule: {
+      premarket:  { et: 'Not yet published', utc: 'Not yet published' },
+      core:       { et: 'Expected 9:30 AM – 4:00 PM ET (pending confirmation)', utc: '14:30 – 21:00 UTC (expected)' },
+      afterhours: { et: 'Not supported (expected — IEX equities has no extended hours)', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Standard order types expected', tag40: 'TBD', required: 'TBD — spec not yet published', notes: 'IEX Options is expected to support Market and Limit orders with options identification tags (167, 200, 201, 202). Innovative order types consistent with IEX\'s speed bump and investor-protection model may be introduced. Verify when spec is published.' },
+    ],
+    specificTags: [
+      { tag: '77',  name: 'OpenClose',    value: 'O / C (expected)', desc: 'Expected to be required as on all options exchanges.' },
+      { tag: '167', name: 'SecurityType', value: 'OPT (expected)',   desc: 'Standard options identification — expected.' },
+      { tag: '200', name: 'MaturityMonthYear', value: 'YYYYMM',     desc: 'Expected standard format.' },
+      { tag: '201', name: 'PutOrCall',    value: '0 / 1',           desc: 'Expected standard.' },
+      { tag: '202', name: 'StrikePrice',  value: 'decimal',         desc: 'Expected standard.' },
+    ],
+    gotchas: [
+      '<strong>IEX Options has not launched as of June 2026 — do not build connectivity until the spec is published.</strong> Building against preliminary or expected parameters risks significant rework when the actual specification differs. Monitor iex.io for the official Form 1 approval and FIX specification release.',
+      '<strong>IEX\'s 350-microsecond speed bump is expected to apply to options order entry.</strong> If IEX carries over its speed bump architecture (consistent with equities), all order entry and cancellation messages will be subject to the 350μs delay. Options market makers who depend on sub-millisecond cancel-and-replace capability should model the latency implications before committing to IEX Options market making.',
+      '<strong>IEX Options regulatory status is subject to change.</strong> SEC approval of new exchange applications involves comment periods and potential conditions. This entry will require review once the regulatory process completes.',
+    ],
+    source: { title: 'IEX Options', url: 'https://iex.io', date: 'pending regulatory approval as of June 2026', verified: false },
   },
 
 };
@@ -986,6 +1885,7 @@ function renderExchange(key) {
   const gotchaItems = ex.gotchas.map(g => `<li>${g}</li>`).join('');
 
   document.getElementById('ex-right').innerHTML = `
+    ${ex.notice ? `<div class="ex-notice">${ex.notice}</div>` : ''}
     <div class="ex-hdr">
       <div class="ex-hdr-name">${esc(ex.fullName)}</div>
       <div class="ex-hdr-meta">
@@ -1047,7 +1947,7 @@ function renderExchange(key) {
     <div class="ex-section ex-source-line">
       <span class="ex-source-label">Source:</span>
       <a href="${ex.source.url}" class="ex-source-link" target="_blank" rel="noopener">${ex.source.title}</a>
-      <span class="ex-source-date">— ${ex.source.date} — verified June 2026</span>
+      <span class="ex-source-date">${ex.source.date ? `— ${ex.source.date}` : ''}${ex.source.verified !== false ? ' — verified June 2026' : ''}</span>
     </div>` : ''}
   `;
 }
