@@ -43,7 +43,7 @@
   },
   {
     "name": "henry_rollins",
-    "display_name": "Happy Birthday, Henry Rollins!",
+    "display_name": "Happy Birthday, Henry!",
     "person_name": "Henry Rollins",
     "type": "birthday",
     "emoji": "\ud83c\udfa4",
@@ -65,7 +65,7 @@
   },
   {
     "name": "steve_jobs",
-    "display_name": "Happy Birthday, Steve Jobs!",
+    "display_name": "Happy Birthday, Steve!",
     "person_name": "Steve Jobs",
     "type": "birthday",
     "emoji": "\ud83c\udf4e",
@@ -87,11 +87,11 @@
   },
   {
     "name": "darryl_strawberry",
-    "display_name": "Straw's Day",
+    "display_name": "Happy Birthday, Darryl!",
     "emoji": "\u26be",
     "date": "03-12",
     "category": "sports",
-    "subtitle": "Darryl Strawberry's Birthday \u00b7 #18",
+    "subtitle": "Darryl Strawberry born 1962.",
     "wiki_url": "https://en.wikipedia.org/wiki/Darryl_Strawberry",
     "description": "Mets blue and orange. Happy birthday, Straw.",
     "colors": {

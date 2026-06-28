@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page_title }} — FIXReader</title>
-  <meta name="description" content="{{ page_description }}">
+  <title>Tag {{ tag.tag }} — {{ tag.name }} — FIXReader</title>
+  <meta name="description" content="FIX Protocol Tag {{ tag.tag }} ({{ tag.name }}): {{ tag.description }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -14,9 +14,6 @@
 </head>
 <body>
 
-<!-- ════════════════════════════════════════════════════
-     TOP NAV
-════════════════════════════════════════════════════ -->
 <nav class="top-nav" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="/" class="nav-logo">
@@ -24,14 +21,14 @@
       <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
     </a>
     <ul class="nav-links" role="list">
-      <li><a href="/"               class="nav-item{% if active_nav == 'decode' %} active{% endif %}" {% if active_nav == 'decode' %}aria-current="page"{% endif %}>Decode</a></li>
-      <li><a href="/compare"        class="nav-item{% if active_nav == 'compare' %} active{% endif %}" {% if active_nav == 'compare' %}aria-current="page"{% endif %}>Compare</a></li>
-      <li><a href="/learn"          class="nav-item{% if active_nav == 'learn' %} active{% endif %}" {% if active_nav == 'learn' %}aria-current="page"{% endif %}>Learn FIX</a></li>
-      <li><a href="/interview-prep" class="nav-item{% if active_nav == 'interview-prep' %} active{% endif %}" {% if active_nav == 'interview-prep' %}aria-current="page"{% endif %}>Interview Prep</a></li>
-      <li><a href="/tools"          class="nav-item{% if active_nav == 'tools' %} active{% endif %}" {% if active_nav == 'tools' %}aria-current="page"{% endif %}>Tools</a></li>
-      <li><a href="/message-library"        class="nav-item{% if active_nav == 'library' %} active{% endif %}" {% if active_nav == 'library' %}aria-current="page"{% endif %}>Message Library</a></li>
-      <li><a href="/resources"      class="nav-item{% if active_nav == 'resources' %} active{% endif %}" {% if active_nav == 'resources' %}aria-current="page"{% endif %}>Resources</a></li>
-      <li><a href="/about"          class="nav-item{% if active_nav == 'about' %} active{% endif %}" {% if active_nav == 'about' %}aria-current="page"{% endif %}>About</a></li>
+      <li><a href="/"               class="nav-item">Decode</a></li>
+      <li><a href="/compare"        class="nav-item">Compare</a></li>
+      <li><a href="/learn"          class="nav-item">Learn FIX</a></li>
+      <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
+      <li><a href="/tools"          class="nav-item">Tools</a></li>
+      <li><a href="/message-library" class="nav-item">Message Library</a></li>
+      <li><a href="/resources"      class="nav-item">Resources</a></li>
+      <li><a href="/about"          class="nav-item">About</a></li>
     </ul>
     {% if theme_info.name != 'default' %}
     <div class="nav-end">
@@ -61,30 +58,27 @@
   </div>
 </nav>
 
-<!-- ════════════════════════════════════════════════════
-     THREE-COLUMN LAYOUT
-════════════════════════════════════════════════════ -->
 <div class="page-layout">
 
-  <!-- ── LEFT SIDEBAR ───────────────────────────── -->
+  <!-- ── LEFT SIDEBAR ─────────────────────────────────────────── -->
   <aside class="sidebar sidebar-left">
 
     <div class="sb-section sb-section-tools">
       <div class="sb-heading">Tools</div>
       <nav aria-label="Tools">
-        <a href="/" class="sb-tool{% if active_nav == 'decode' %} active{% endif %}">
+        <a href="/" class="sb-tool">
           <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           FIX Decoder
         </a>
-        <a href="/field-reference" class="sb-tool{% if active_nav == 'field-reference' %} active{% endif %}">
+        <a href="/reference/fix42" class="sb-tool active" aria-current="page">
           <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2" width="11" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h6M5 12h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg></span>
-          Field Reference
+          Tag Reference
         </a>
-        <a href="/message-builder" class="sb-tool{% if active_nav == 'message-builder' %} active{% endif %}">
+        <a href="/message-builder" class="sb-tool">
           <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
           Message Builder
         </a>
-        <a href="/tag-validator" class="sb-tool{% if active_nav == 'tag-validator' %} active{% endif %}">
+        <a href="/tag-validator" class="sb-tool">
           <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           Tag Validator
         </a>
@@ -112,16 +106,16 @@
     <div class="sb-section sb-section-tags">
       <div class="sb-heading">Popular Tags</div>
       <ul class="sb-topics" role="list">
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">35</code> MsgType</a></li>
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">49</code> SenderCompID</a></li>
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">56</code> TargetCompID</a></li>
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">55</code> Symbol</a></li>
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">54</code> Side</a></li>
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">38</code> OrderQty</a></li>
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">44</code> Price</a></li>
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">11</code> ClOrdID</a></li>
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">52</code> SendingTime</a></li>
-        <li><a class="sb-topic" href="/field-reference"><code class="sb-tag">10</code> CheckSum</a></li>
+        <li><a class="sb-topic" href="/tag/35"><code class="sb-tag">35</code> MsgType</a></li>
+        <li><a class="sb-topic" href="/tag/49"><code class="sb-tag">49</code> SenderCompID</a></li>
+        <li><a class="sb-topic" href="/tag/56"><code class="sb-tag">56</code> TargetCompID</a></li>
+        <li><a class="sb-topic" href="/tag/55"><code class="sb-tag">55</code> Symbol</a></li>
+        <li><a class="sb-topic" href="/tag/54"><code class="sb-tag">54</code> Side</a></li>
+        <li><a class="sb-topic" href="/tag/38"><code class="sb-tag">38</code> OrderQty</a></li>
+        <li><a class="sb-topic" href="/tag/44"><code class="sb-tag">44</code> Price</a></li>
+        <li><a class="sb-topic" href="/tag/11"><code class="sb-tag">11</code> ClOrdID</a></li>
+        <li><a class="sb-topic" href="/tag/52"><code class="sb-tag">52</code> SendingTime</a></li>
+        <li><a class="sb-topic" href="/tag/10"><code class="sb-tag">10</code> CheckSum</a></li>
       </ul>
     </div>
 
@@ -129,67 +123,93 @@
       <div class="sb-heading">Site Stats</div>
       <div class="sb-stats">
         <div class="sb-stat-item">
-          <div class="sb-stat-icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2" width="11" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>
-          </div>
-          <span class="sb-stat-n">31</span>
-          <span class="sb-stat-label">Msg Types</span>
+          <div class="sb-stat-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2" width="11" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg></div>
+          <span class="sb-stat-n">31</span><span class="sb-stat-label">Msg Types</span>
         </div>
         <div class="sb-stat-item">
-          <div class="sb-stat-icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </div>
-          <span class="sb-stat-n">1,102</span>
-          <span class="sb-stat-label">Tags</span>
+          <div class="sb-stat-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <span class="sb-stat-n">1,102</span><span class="sb-stat-label">Tags</span>
         </div>
         <div class="sb-stat-item">
-          <div class="sb-stat-icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 2h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1zM5 6h6M5 9h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>
-          </div>
-          <span class="sb-stat-n">87</span>
-          <span class="sb-stat-label">Articles</span>
+          <div class="sb-stat-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 2h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1zM5 6h6M5 9h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg></div>
+          <span class="sb-stat-n">87</span><span class="sb-stat-label">Articles</span>
         </div>
         <div class="sb-stat-item">
-          <div class="sb-stat-icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2" stroke="currentColor" stroke-width="1.25"/><path d="M3 13c0-2 2.2-4 5-4s5 2 5 4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>
-          </div>
-          <span class="sb-stat-n">153</span>
-          <span class="sb-stat-label">Q&amp;A</span>
+          <div class="sb-stat-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2" stroke="currentColor" stroke-width="1.25"/><path d="M3 13c0-2 2.2-4 5-4s5 2 5 4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg></div>
+          <span class="sb-stat-n">153</span><span class="sb-stat-label">Q&amp;A</span>
         </div>
         <div class="sb-stat-item">
-          <div class="sb-stat-icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.25"/><path d="M5 7l2 2 4-4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="sb-stat-n">42</span>
-          <span class="sb-stat-label">Code Examples</span>
+          <div class="sb-stat-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.25"/><path d="M5 7l2 2 4-4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="sb-stat-n">42</span><span class="sb-stat-label">Code Examples</span>
         </div>
         <div class="sb-stat-item">
-          <div class="sb-stat-icon">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2L2 5l6 3 6-3-6-3z"/><path d="M2 9l6 3 6-3"/><path d="M2 12.5l6 3 6-3"/></svg>
-          </div>
-          <span class="sb-stat-n">7</span>
-          <span class="sb-stat-label">FIX Versions</span>
+          <div class="sb-stat-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2L2 5l6 3 6-3-6-3z"/><path d="M2 9l6 3 6-3"/><path d="M2 12.5l6 3 6-3"/></svg></div>
+          <span class="sb-stat-n">7</span><span class="sb-stat-label">FIX Versions</span>
         </div>
       </div>
     </div>
 
   </aside>
 
+  <!-- ── CENTER COLUMN ─────────────────────────────────────────── -->
+  <main class="main-col tr-main">
 
-  <!-- ── CENTER COLUMN ──────────────────────────── -->
-  <main class="main-col" id="main-content">
+    <a href="javascript:history.back()" class="tr-back">← Back</a>
 
-    <div class="stub-page">
-      <div class="stub-badge">Coming Soon</div>
-      <h1 class="stub-title">{{ page_title }}</h1>
-      <p class="stub-desc">{{ page_description }}</p>
-      <a href="/" class="stub-back">← Back to Decoder</a>
+    <!-- Header card -->
+    <div class="tr-header">
+      <div class="tr-tag-badge">{{ tag.tag }}</div>
+      <div class="tr-tag-meta">
+        <h1 class="tr-name">{{ tag.name }}</h1>
+        <div class="tr-pills">
+          <span class="tr-pill tr-pill-type">{{ tag.data_type }}</span>
+          <span class="tr-pill tr-pill-ver">FIX {{ ver | replace('fix','') | upper | replace('SP','SP ') }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <p class="tr-description">{{ tag.description }}</p>
+
+    {% if tag.notes %}
+    <p class="tr-notes">{{ tag.notes }}</p>
+    {% endif %}
+
+    <!-- Valid values -->
+    {% if tag.valid_values %}
+    <section class="tr-section">
+      <h2 class="tr-section-hdr">Valid Values</h2>
+      <table class="tr-table">
+        <thead>
+          <tr>
+            <th style="width:100px">Value</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for val, meaning in tag.valid_values.items() %}
+          <tr>
+            <td class="tr-val-code">{{ val }}</td>
+            <td>{{ meaning }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    {% endif %}
+
+    <!-- Tag navigation -->
+    <div class="tr-nav-strip">
+      {% if tag.tag > 1 %}
+      <a href="/tag/{{ tag.tag - 1 }}" class="tr-nav-btn">← Tag {{ tag.tag - 1 }}</a>
+      {% endif %}
+      <a href="/reference/{{ ver }}" class="tr-nav-btn tr-nav-ref">All Tags ↗</a>
+      <a href="/tag/{{ tag.tag + 1 }}" class="tr-nav-btn">Tag {{ tag.tag + 1 }} →</a>
     </div>
 
   </main>
 
-
-  <!-- ── RIGHT SIDEBAR ──────────────────────────── -->
+  <!-- ── RIGHT SIDEBAR ─────────────────────────────────────────── -->
   <aside class="sidebar sidebar-right">
 
     <div class="sb-section sb-section-whatisfix">
@@ -200,27 +220,27 @@
     <div class="sb-section sb-section-weeds">
       <div class="sb-heading sb-heading-weeds">Lost in the Weeds?</div>
       <a href="/learn"           class="rsb-link">FIX Protocol 101 →</a>
-      <a href="/learn" class="rsb-link">Message Types Guide →</a>
-      <a href="/field-reference"     class="rsb-link">Tag Reference (1,102 tags) →</a>
-      <a href="/learn"      class="rsb-link">FIX Glossary →</a>
+      <a href="/learn"           class="rsb-link">Message Types Guide →</a>
+      <a href="/field-reference" class="rsb-link">Tag Reference (1,102 tags) →</a>
+      <a href="/learn"           class="rsb-link">FIX Glossary →</a>
     </div>
 
     <div class="sb-section sb-section-learn">
       <div class="sb-heading sb-heading-learn">Learn FIX</div>
       <a href="/learn"           class="rsb-link">FIX Protocol 101</a>
-      <a href="/learn" class="rsb-link">Message Types Guide</a>
-      <a href="/field-reference"     class="rsb-link">Tag Reference (1,102 tags)</a>
-      <a href="/learn"      class="rsb-link">Session Management</a>
-      <a href="/learn"      class="rsb-link">FIX Glossary</a>
+      <a href="/learn"           class="rsb-link">Message Types Guide</a>
+      <a href="/field-reference" class="rsb-link">Tag Reference (1,102 tags)</a>
+      <a href="/learn"           class="rsb-link">Session Management</a>
+      <a href="/learn"           class="rsb-link">FIX Glossary</a>
     </div>
 
     <div class="sb-section sb-section-interview">
       <div class="sb-heading sb-heading-interview">Interview Prep</div>
-      <a href="/interview-prep"            class="rsb-link">153 Q&amp;A Bank</a>
-      <a href="/interview-prep"       class="rsb-link">Mock FIX Interview</a>
-      <a href="/interview-prep"  class="rsb-link">Common Scenarios</a>
+      <a href="/interview-prep" class="rsb-link">153 Q&amp;A Bank</a>
+      <a href="/interview-prep" class="rsb-link">Mock FIX Interview</a>
+      <a href="/interview-prep" class="rsb-link">Common Scenarios</a>
       <a href="/interview-prep" class="rsb-link">FIX Cheat Sheet</a>
-      <a href="/learn"            class="rsb-link">FIX Glossary</a>
+      <a href="/learn"          class="rsb-link">FIX Glossary</a>
     </div>
 
     <div class="sb-section sb-section-tools-feat">
@@ -233,23 +253,21 @@
 
     <div class="sb-section sb-section-library">
       <div class="sb-heading sb-heading-library">Message Library</div>
-      <a href="/message-library"      class="rsb-link">Order Messages (D, F, G, H)</a>
-      <a href="/message-library"  class="rsb-link">Execution Reports (8, 9)</a>
-      <a href="/message-library"     class="rsb-link">Session Messages (A, 5, 0)</a>
+      <a href="/message-library" class="rsb-link">Order Messages (D, F, G, H)</a>
+      <a href="/message-library" class="rsb-link">Execution Reports (8, 9)</a>
+      <a href="/message-library" class="rsb-link">Session Messages (A, 5, 0)</a>
       <a href="/message-library" class="rsb-link">Market Data (V, W, X)</a>
-      <a href="/message-library"  class="rsb-link">Post-Trade (AE, AS)</a>
+      <a href="/message-library" class="rsb-link">Post-Trade (AE, AS)</a>
     </div>
 
   </aside>
 
 </div><!-- /page-layout -->
 
-
 <footer class="site-footer">
   <div class="footer-inner">
     <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
     <div class="footer-links">
-      <a href="https://github.com/fixreader" class="footer-link">GitHub</a>
       <a href="/contact" class="footer-link">Contact</a>
       <a href="/feedback" class="footer-link">Feedback</a>
     </div>

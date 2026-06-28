@@ -2,13 +2,14 @@ import json
 import os
 from datetime import date as _date
 
-from flask import Flask, render_template, request, jsonify, redirect
+from flask import Flask, render_template, request, jsonify, redirect, abort
 from fix_decoder import decode_fix, generate_summary
 
 app = Flask(__name__)
 
 _BASE        = os.path.dirname(__file__)
 _THEMES_FILE = os.path.join(_BASE, 'fixreader_data', 'themes.json')
+_TAGS_FILE   = os.path.join(_BASE, 'fixreader_data', 'fix_tags.json')
 _ACTIVE_FILE = os.path.join(_BASE, 'fixreader_active_theme.json')
 
 
@@ -68,6 +69,90 @@ def _build_theme_info(theme):
     }
 
 
+_SAMPLES = {
+    # Order Messages
+    'new_order_single': (
+        '8=FIX.4.2|9=162|35=D|49=CLIENTA|56=BROKRB|34=1|52=20240315-09:30:00.000|'
+        '11=ORD-001|21=1|55=AAPL|54=1|38=500|40=2|44=178.50|59=0|60=20240315-09:30:00.000|10=128|'
+    ),
+    'order_cancel_request': (
+        '8=FIX.4.2|9=148|35=F|49=CLIENTA|56=BROKRB|34=5|52=20240315-09:45:00.000|'
+        '11=CXL-001|41=ORD-001|55=AAPL|54=1|38=500|60=20240315-09:45:00.000|10=054|'
+    ),
+    'order_cancel_replace': (
+        '8=FIX.4.2|9=175|35=G|49=CLIENTA|56=BROKRB|34=3|52=20240315-09:33:00.000|'
+        '11=REP-001|41=ORD-001|55=AAPL|54=1|38=300|40=2|44=179.00|59=0|60=20240315-09:33:00.000|10=089|'
+    ),
+    'order_status_request': (
+        '8=FIX.4.2|9=114|35=H|49=CLIENTA|56=BROKRB|34=4|52=20240315-09:35:00.000|'
+        '37=BRKORD-001|11=ORD-001|55=AAPL|54=1|10=201|'
+    ),
+    'order_cancel_reject': (
+        '8=FIX.4.2|9=155|35=9|49=BROKRB|56=CLIENTA|34=5|52=20240315-09:45:05.000|'
+        '11=CXL-001|37=BRKORD-001|39=2|41=ORD-001|434=1|58=Order already filled|10=177|'
+    ),
+    # Execution Reports
+    'exec_report_new': (
+        '8=FIX.4.2|9=222|35=8|49=BROKRB|56=CLIENTA|34=2|52=20240315-09:30:00.100|'
+        '11=ORD-001|17=EXEC-001|37=BRKORD-001|150=0|39=0|55=AAPL|54=1|38=500|40=2|44=178.50|'
+        '32=0|31=0.00|151=500|14=0|6=0.00|60=20240315-09:30:00.100|10=033|'
+    ),
+    'exec_report_partial': (
+        '8=FIX.4.2|9=233|35=8|49=BROKRB|56=CLIENTA|34=3|52=20240315-09:31:15.000|'
+        '11=ORD-001|17=EXEC-002|37=BRKORD-001|150=1|39=1|55=AAPL|54=1|38=500|40=2|44=178.50|'
+        '32=200|31=178.48|151=300|14=200|6=178.48|60=20240315-09:31:15.000|10=211|'
+    ),
+    'exec_report_fill': (
+        '8=FIX.4.2|9=234|35=8|49=BROKRB|56=CLIENTA|34=4|52=20240315-09:31:45.000|'
+        '11=ORD-001|17=EXEC-003|37=BRKORD-001|150=2|39=2|55=AAPL|54=1|38=500|40=2|44=178.50|'
+        '32=300|31=178.47|151=0|14=500|6=178.48|60=20240315-09:31:45.000|10=199|'
+    ),
+    'exec_report_cancelled': (
+        '8=FIX.4.2|9=225|35=8|49=BROKRB|56=CLIENTA|34=6|52=20240315-09:45:05.100|'
+        '11=CXL-001|17=EXEC-004|37=BRKORD-001|150=4|39=4|55=AAPL|54=1|38=500|40=2|44=178.50|'
+        '32=0|31=0.00|151=0|14=0|6=0.00|60=20240315-09:45:05.100|10=144|'
+    ),
+    'exec_report_replaced': (
+        '8=FIX.4.2|9=228|35=8|49=BROKRB|56=CLIENTA|34=7|52=20240315-09:33:30.000|'
+        '11=REP-001|17=EXEC-005|37=BRKORD-002|150=5|39=5|55=AAPL|54=1|38=300|40=2|44=179.00|'
+        '32=0|31=0.00|151=300|14=0|6=0.00|60=20240315-09:33:30.000|10=018|'
+    ),
+    'exec_report_rejected': (
+        '8=FIX.4.2|9=200|35=8|49=BROKRB|56=CLIENTA|34=8|52=20240315-09:30:00.500|'
+        '11=BAD-001|17=EXEC-006|37=NONE|150=8|39=8|55=INVALID|54=1|38=100|40=2|44=0.00|'
+        '32=0|31=0.00|151=0|14=0|6=0.00|58=Unknown symbol|10=077|'
+    ),
+    # Session Messages
+    'logon': (
+        '8=FIX.4.2|9=82|35=A|49=CLIENTA|56=BROKRB|34=1|52=20240315-09:29:58.000|'
+        '98=0|108=30|10=073|'
+    ),
+    'heartbeat': (
+        '8=FIX.4.2|9=57|35=0|49=BROKRB|56=CLIENTA|34=15|52=20240315-09:30:00.000|10=202|'
+    ),
+    'test_request': (
+        '8=FIX.4.2|9=75|35=1|49=CLIENTA|56=BROKRB|34=12|52=20240315-09:35:00.000|'
+        '112=TESTREQ-001|10=031|'
+    ),
+    'resend_request': (
+        '8=FIX.4.2|9=67|35=2|49=CLIENTA|56=BROKRB|34=13|52=20240315-09:36:00.000|'
+        '7=5|16=0|10=188|'
+    ),
+    'reject': (
+        '8=FIX.4.2|9=114|35=3|49=BROKRB|56=CLIENTA|34=14|52=20240315-09:30:02.000|'
+        '45=1|371=38|372=D|373=5|58=Required tag missing|10=099|'
+    ),
+    'sequence_reset': (
+        '8=FIX.4.2|9=74|35=4|49=BROKRB|56=CLIENTA|34=1|52=20240315-09:37:00.000|'
+        '123=Y|36=20|10=155|'
+    ),
+    'logout': (
+        '8=FIX.4.2|9=76|35=5|49=CLIENTA|56=BROKRB|34=20|52=20240315-09:40:00.000|'
+        '58=Goodbye|10=211|'
+    ),
+}
+
+
 def _ctx(preview=None, **kwargs):
     """Assemble per-request template context: theme vars + display info."""
     themes      = _load_themes()
@@ -105,7 +190,14 @@ def stub(title, description, active_nav=''):
 @app.route('/')
 def home():
     preview = request.args.get('preview')
-    return render_template('index.html', **_ctx(preview=preview))
+    try:
+        with open(_TAGS_FILE) as f:
+            tag_ref = {str(t['tag']): t for t in json.load(f)}
+    except Exception:
+        tag_ref = {}
+    return render_template('index.html', **_ctx(preview=preview),
+                           tag_ref_json=json.dumps(tag_ref),
+                           sample_messages_json=json.dumps(_SAMPLES))
 
 
 @app.route('/decode', methods=['POST'])
@@ -224,13 +316,78 @@ def tools():
 @app.route('/library')
 @app.route('/message-library')
 def message_library():
-    return stub(
-        'Message Library',
-        'A searchable reference of real-world FIX messages across every message type. '
-        'See how New Orders, Execution Reports, session messages, and post-trade '
-        'confirmations look in practice — with annotated tag-by-tag breakdowns.',
-        'library',
+    preview = request.args.get('preview')
+    with open(_TAGS_FILE) as f:
+        tag_list = json.load(f)
+    return render_template('message_library.html',
+                           tag_list_json=json.dumps(tag_list),
+                           **_ctx(preview=preview))
+
+
+_VERSION_ORDER = [
+    'FIX 2.7', 'FIX 4.0', 'FIX 4.1', 'FIX 4.2', 'FIX 4.3',
+    'FIX 4.4', 'FIX 5.0', 'FIX 5.0 SP1', 'FIX 5.0 SP2', 'FIXT 1.1',
+]
+
+_VERSION_MAP = {
+    'fix40':    {'name': 'FIX 4.0',     'version_key': 'FIX 4.0',     'withdrawn': False},
+    'fix41':    {'name': 'FIX 4.1',     'version_key': 'FIX 4.1',     'withdrawn': False},
+    'fix42':    {'name': 'FIX 4.2',     'version_key': 'FIX 4.2',     'withdrawn': False},
+    'fix43':    {'name': 'FIX 4.3',     'version_key': 'FIX 4.3',     'withdrawn': True},
+    'fix44':    {'name': 'FIX 4.4',     'version_key': 'FIX 4.4',     'withdrawn': False},
+    'fix50':    {'name': 'FIX 5.0',     'version_key': 'FIX 5.0',     'withdrawn': False},
+    'fix50sp1': {'name': 'FIX 5.0 SP1', 'version_key': 'FIX 5.0 SP1', 'withdrawn': False},
+    'fix50sp2': {'name': 'FIX 5.0 SP2', 'version_key': 'FIX 5.0 SP2', 'withdrawn': False},
+}
+
+_SESSION_CODES  = {'All', 'A', '0', '1', '2', '3', '4', '5', 'j'}
+_ORDER_CODES    = {'D', 'E', 'F', 'G', 'H'}
+_EXEC_CODES     = {'8', '9'}
+_POSTTRADE_CODES = {'J', 'P', 'Q', 'AE', 'AF', 'AP', 'AS', 'AV', 'AW'}
+
+
+def _tag_category(tag):
+    codes = set()
+    for m in tag.get('required_in', []):
+        codes.add(m['code'])
+    for m in tag.get('optional_in', []):
+        codes.add(m['code'])
+    if codes & _SESSION_CODES:
+        return 'session'
+    if codes & _POSTTRADE_CODES and not (codes & _ORDER_CODES or codes & _EXEC_CODES):
+        return 'posttrade'
+    if codes & _EXEC_CODES and not codes & _ORDER_CODES:
+        return 'execution'
+    if codes & _ORDER_CODES:
+        return 'order'
+    return 'other'
+
+
+@app.route('/reference/<version>')
+def tag_reference_page(version):
+    if version not in _VERSION_MAP:
+        abort(404)
+    ver_info = _VERSION_MAP[version]
+    v_idx = _VERSION_ORDER.index(ver_info['version_key'])
+    with open(_TAGS_FILE) as f:
+        all_tags = json.load(f)
+    tags = []
+    for t in all_tags:
+        added = t.get('fix_version_added', 'FIX 2.7')
+        a_idx = _VERSION_ORDER.index(added) if added in _VERSION_ORDER else 0
+        if a_idx <= v_idx:
+            t['category'] = _tag_category(t)
+            tags.append(t)
+    tags.sort(key=lambda t: t['tag'])
+    return render_template(
+        'fix_reference.html',
+        version=version,
+        ver_info=ver_info,
+        tags_json=json.dumps(tags),
+        tag_count=len(tags),
+        **_ctx(),
     )
+
 
 
 @app.route('/resources')
@@ -255,16 +412,32 @@ def about():
     )
 
 
+@app.route('/tag/<int:tag_number>')
+def tag_reference(tag_number):
+    try:
+        with open(_TAGS_FILE) as f:
+            tags = {t['tag']: t for t in json.load(f)}
+    except Exception:
+        tags = {}
+    tag = tags.get(tag_number)
+    preview = request.args.get('preview')
+    ver = request.args.get('ver', 'fix42')
+    if not tag:
+        return render_template('stub.html', **_ctx(preview=preview,
+            page_title=f'Tag {tag_number} — Not Found',
+            page_description=(
+                f'Tag {tag_number} is not in our reference yet. '
+                'We currently document the 50 most common FIX tags. '
+                'More tags are being added regularly.'
+            ),
+        )), 404
+    return render_template('tag_reference.html', **_ctx(preview=preview), tag=tag, ver=ver)
+
+
 @app.route('/field-reference')
 @app.route('/reference')
-def field_reference():
-    return stub(
-        'Field Reference',
-        'Every FIX tag, in one place. Search by tag number or name, filter by message '
-        'type, and see valid values, data types, and examples — covering FIX 4.0 through '
-        'FIXT 1.1 across all 1,102 defined tags.',
-        'field-reference',
-    )
+def field_reference_redirect():
+    return redirect('/reference/fix42')
 
 
 @app.route('/tag-validator')

@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Message Library — FIXReader</title>
+  <meta name="description" content="FIX Protocol message type reference. Required and optional tags for every message type, organized by category.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {{ theme_vars | safe }}
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230f1c2e'/%3E%3Ctext x='16' y='23' font-family='Arial%2Csans-serif' font-size='22' font-weight='800' fill='%233b82f6' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+  <style>
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+    .ml-shell { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+    .ml-left  { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+    .ml-nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 40px; }
+    .ml-right { flex: 1; min-width: 0; }
+    @media (max-width: 680px) {
+      .ml-shell { flex-direction: column; overflow: auto; }
+      .ml-left  { width: 100%; height: auto; overflow: visible; }
+      .ml-nav-scroll { max-height: 220px; overflow-y: auto; }
+      .ml-right { overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="logo-mark"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></div>
+      <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="/"               class="nav-item">Decode</a></li>
+      <li><a href="/compare"        class="nav-item">Compare</a></li>
+      <li><a href="/learn"          class="nav-item">Learn FIX</a></li>
+      <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
+      <li><a href="/tools"          class="nav-item">Tools</a></li>
+      <li><a href="/message-library" class="nav-item active" aria-current="page">Message Library</a></li>
+      <li><a href="/resources"      class="nav-item">Resources</a></li>
+      <li><a href="/about"          class="nav-item">About</a></li>
+    </ul>
+    {% if theme_info.name != 'default' %}
+    <div class="nav-end">
+      <div class="nav-theme">
+        <span class="nav-theme-emoji">{{ theme_info.emoji }}</span>
+        <div class="nav-theme-text">
+          <div class="nav-theme-line1">
+            {% if theme_info.type == 'birthday' %}
+            <span class="nav-theme-label">Happy Birthday,</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.person_name }}!</a>
+            {% else %}
+            <span class="nav-theme-label">Today's Theme:</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.display_name }}</a>
+            {% endif %}
+          </div>
+          <div class="nav-theme-line2">
+            {% if theme_info.type == 'birthday' %}
+            {{ theme_info.subtitle }}{% if theme_info.wiki_url %} · <a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% else %}
+            {% if theme_info.date %}{{ theme_info.date }}{% if theme_info.subtitle %} · {% endif %}{% endif %}{% if theme_info.subtitle %}{{ theme_info.subtitle }}{% if theme_info.wiki_url %} · {% endif %}{% endif %}{% if theme_info.wiki_url %}<a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="ml-version-bar" role="tablist" aria-label="FIX version">
+  <button class="ml-version-pill"        onclick="setVer(this)" role="tab" aria-selected="false">FIX 4.0</button>
+  <button class="ml-version-pill rare"   onclick="setVer(this)" role="tab" aria-selected="false">FIX 4.1</button>
+  <button class="ml-version-pill active" onclick="setVer(this)" role="tab" aria-selected="true">FIX 4.2</button>
+  <button class="ml-version-pill rare"   onclick="setVer(this)" role="tab" aria-selected="false">FIX 4.3</button>
+  <button class="ml-version-pill"        onclick="setVer(this)" role="tab" aria-selected="false">FIX 4.4</button>
+  <button class="ml-version-pill"        onclick="setVer(this)" role="tab" aria-selected="false">FIX 5.0</button>
+  <button class="ml-version-pill"        onclick="setVer(this)" role="tab" aria-selected="false">FIX 5.0 SP1</button>
+  <button class="ml-version-pill"        onclick="setVer(this)" role="tab" aria-selected="false">FIX 5.0 SP2</button>
+  <button class="ml-version-pill"        onclick="setVer(this)" role="tab" aria-selected="false">FIXT 1.1</button>
+</div>
+<div class="ml-shell">
+
+  <nav class="ml-left" aria-label="Message types">
+    <div class="ml-nav-scroll">
+      <div id="ml-nav"></div>
+    </div>
+  </nav>
+
+  <main class="ml-right" id="ml-right">
+    <div class="ml-ref-empty">
+      <div class="ml-ref-empty-icon">&#8592;</div>
+      <div class="ml-ref-empty-text">Select a message type</div>
+    </div>
+  </main>
+
+</div><!-- /ml-shell -->
+
+<script>
+const FIX_TAGS = {{ tag_list_json | safe }};
+
+// ── Version tracking ──────────────────────────────────────────
+// Short version keys used in fix_versions arrays
+const VER_ORDER = ['4.0','4.1','4.2','4.3','4.4','5.0','5.0sp1','5.0sp2'];
+
+// Pill label → short key
+const PILL_TO_KEY = {
+  'FIX 4.0':'4.0','FIX 4.1':'4.1','FIX 4.2':'4.2','FIX 4.3':'4.3',
+  'FIX 4.4':'4.4','FIX 5.0':'5.0','FIX 5.0 SP1':'5.0sp1',
+  'FIX 5.0 SP2':'5.0sp2','FIXT 1.1':'5.0sp2',
+};
+
+// Message "since" field uses long FIX labels → short key
+const SINCE_TO_KEY = {
+  'FIX 2.7':'4.0','FIX 4.0':'4.0','FIX 4.1':'4.1','FIX 4.2':'4.2',
+  'FIX 4.3':'4.3','FIX 4.4':'4.4','FIX 5.0':'5.0',
+  'FIX 5.0 SP1':'5.0sp1','FIX 5.0 SP2':'5.0sp2','FIXT 1.1':'5.0sp2',
+};
+
+let _currentVerKey = '4.2';
+
+function tagInVer(t)      { return (t.fix_versions || []).includes(_currentVerKey); }
+function tagDeprecated(t) { return t.deprecated_in === _currentVerKey; }
+function msgInVer(m) {
+  const sk = SINCE_TO_KEY[m.since || 'FIX 2.7'] || '4.0';
+  return VER_ORDER.indexOf(sk) <= VER_ORDER.indexOf(_currentVerKey);
+}
+
+// ── Build MSG_REF ─────────────────────────────────────────────
+const ALWAYS_TAGS     = [];   // required_in: [{code:"All"}]  → Required in every msg
+const ALWAYS_OPT_TAGS = [];   // optional_in: [{code:"All"}]  → Optional in every msg
+const MSG_REF = {};
+
+for (const t of FIX_TAGS) {
+  const reqAll = (t.required_in || []).some(m => m.code === 'All');
+  const optAll = (t.optional_in || []).some(m => m.code === 'All');
+  if (reqAll) { ALWAYS_TAGS.push(t); continue; }
+  if (optAll) { ALWAYS_OPT_TAGS.push(t); }   // falls through — may also appear in specific msgs
+
+  for (const m of (t.required_in || [])) {
+    const c = m.code;
+    if (!MSG_REF[c]) MSG_REF[c] = { required: [], optional: [] };
+    MSG_REF[c].required.push(t);
+  }
+  for (const m of (t.optional_in || [])) {
+    if (m.code === 'All') continue;
+    const c = m.code;
+    if (!MSG_REF[c]) MSG_REF[c] = { required: [], optional: [] };
+    if (!(MSG_REF[c].required || []).some(r => r.tag === t.tag)) MSG_REF[c].optional.push(t);
+  }
+}
+
+// ── Message catalogue ─────────────────────────────────────────
+const CATEGORIES = [
+  { label: 'Session', msgs: [
+    { code: 'A',  name: 'Logon',                       since: 'FIX 2.7' },
+    { code: '0',  name: 'Heartbeat',                    since: 'FIX 2.7' },
+    { code: '1',  name: 'Test Request',                 since: 'FIX 2.7' },
+    { code: '2',  name: 'Resend Request',               since: 'FIX 2.7' },
+    { code: '3',  name: 'Reject',                       since: 'FIX 2.7' },
+    { code: '4',  name: 'Sequence Reset',               since: 'FIX 2.7' },
+    { code: '5',  name: 'Logout',                       since: 'FIX 2.7' },
+    { code: 'j',  name: 'Business Message Reject',      since: 'FIX 4.2' },
+  ]},
+  { label: 'Order Entry', msgs: [
+    { code: 'D',  name: 'New Order Single',             since: 'FIX 2.7' },
+    { code: 'E',  name: 'New Order List',               since: 'FIX 2.7' },
+    { code: 'F',  name: 'Order Cancel Request',         since: 'FIX 2.7' },
+    { code: 'G',  name: 'Order Cancel/Replace Request', since: 'FIX 2.7' },
+    { code: 'H',  name: 'Order Status Request',         since: 'FIX 2.7' },
+    { code: 's',  name: 'New Order — Cross',            since: 'FIX 4.4' },
+    { code: 'q',  name: 'Order Mass Cancel Request',    since: 'FIX 4.3' },
+    { code: 'r',  name: 'Order Mass Cancel Report',     since: 'FIX 4.3' },
+  ]},
+  { label: 'Execution', msgs: [
+    { code: '8',  name: 'Execution Report',             since: 'FIX 2.7' },
+    { code: '9',  name: 'Order Cancel Reject',          since: 'FIX 2.7' },
+    { code: 'AF', name: 'Order Mass Status Request',    since: 'FIX 4.4' },
+  ]},
+  { label: 'Post-Trade', msgs: [
+    { code: 'J',  name: 'Allocation Instruction',       since: 'FIX 2.7' },
+    { code: 'P',  name: 'Allocation Instruction Ack',   since: 'FIX 2.7' },
+    { code: 'Q',  name: "Don't Know Trade",             since: 'FIX 2.7' },
+    { code: 'AE', name: 'Trade Capture Report',         since: 'FIX 4.4' },
+    { code: 'AP', name: 'Position Report',              since: 'FIX 4.4' },
+  ]},
+];
+
+// ── Tag category (mirrors Python _tag_category) ───────────────
+const _SESS = new Set(['All','A','0','1','2','3','4','5','j']);
+const _ORD  = new Set(['D','E','F','G','H','s','q','r']);
+const _EXEC = new Set(['8','9','AF']);
+const _PT   = new Set(['J','P','Q','AE','AF','AP','AS','AV','AW']);
+
+function tagCat(t) {
+  const c = new Set([
+    ...(t.required_in||[]).map(m => m.code),
+    ...(t.optional_in||[]).map(m => m.code),
+  ]);
+  const a = [...c];
+  if (a.some(x => _SESS.has(x))) return 'session';
+  if (a.some(x => _PT.has(x)) && !a.some(x => _ORD.has(x)) && !a.some(x => _EXEC.has(x))) return 'posttrade';
+  if (a.some(x => _EXEC.has(x)) && !a.some(x => _ORD.has(x))) return 'execution';
+  if (a.some(x => _ORD.has(x))) return 'order';
+  return 'other';
+}
+
+// ── Utilities ─────────────────────────────────────────────────
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Left nav ──────────────────────────────────────────────────
+const REF_ITEMS = [
+  { code: 'mic',      label: 'MIC Codes' },
+  { code: 'currency', label: 'Currency Codes' },
+  { code: 'country',  label: 'Country Codes' },
+  { code: 'timezone', label: 'Time Zones' },
+  { code: 'secidsrc', label: 'Security ID Sources' },
+];
+
+function buildNav() {
+  let html = '';
+  for (const cat of CATEGORIES) {
+    const visible = cat.msgs.filter(msgInVer);
+    if (!visible.length) continue;
+    html += `<div class="ml-cat-hdr">${esc(cat.label)}</div>`;
+    for (const m of visible) {
+      html += `<div class="ml-msg-item" data-code="${esc(m.code)}" onclick="selectMsg('${esc(m.code)}')">
+        <span class="ml-msg-code">${esc(m.code)}</span>
+        <span>${esc(m.name)}</span>
+      </div>`;
+    }
+  }
+  html += `<div class="ml-appendix-nav-hdr">Appendix</div>`;
+  for (const item of REF_ITEMS) {
+    html += `<div class="ml-appendix-item" data-ref="${item.code}" onclick="selectRefItem('${item.code}')">
+      ${esc(item.label)}
+    </div>`;
+  }
+  document.getElementById('ml-nav').innerHTML = html;
+}
+
+// ── Message detail mode ───────────────────────────────────────
+let _active = null;
+
+function selectMsg(code, force) {
+  if (_active === code && !force) return;
+  _active = code;
+  _activeRef = null;
+  document.querySelectorAll('.ml-appendix-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.ml-msg-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.code === code)
+  );
+
+  let msgName = code;
+  for (const cat of CATEGORIES) {
+    const m = cat.msgs.find(x => x.code === code);
+    if (m) { msgName = m.name; break; }
+  }
+
+  const data        = MSG_REF[code] || { required: [], optional: [] };
+  const headerTags  = ALWAYS_TAGS.filter(tagInVer);
+  const headerOpt   = ALWAYS_OPT_TAGS.filter(tagInVer);
+  const reqTags     = (data.required || []).filter(tagInVer);
+  const optTags     = (data.optional || []).filter(tagInVer);
+  const allReq      = [...headerTags, ...reqTags];
+  // Merge optional header fields; skip any already in required list
+  const reqSet      = new Set(allReq.map(t => t.tag));
+  const optSet      = new Set(optTags.map(t => t.tag));
+  const allOpt      = [
+    ...headerOpt.filter(t => !reqSet.has(t.tag)),
+    ...optTags.filter(t => !headerOpt.some(h => h.tag === t.tag)),
+  ];
+
+  const right  = document.getElementById('ml-right');
+  const thead  = `<thead><tr>
+    <th></th><th>Tag</th><th>Field Name</th><th>Type</th><th>Description</th>
+  </tr></thead>`;
+  const reqRows = allReq.map((t, i) => msgRow(t, true, i < headerTags.length)).join('');
+  const optRows = allOpt.map((t, i) => msgRow(t, false, i < headerOpt.length)).join('');
+
+  const reqSection = reqRows
+    ? `<div class="ml-section-hdr req">Required</div>
+       <table class="ml-ref-table">${thead}<tbody>${reqRows}</tbody></table>`
+    : `<div class="ml-section-hdr req">Required</div>
+       <p class="ml-no-data">No required tags for this message type in the selected version.</p>`;
+  const optSection = optRows
+    ? `<div class="ml-section-hdr opt">Optional / Conditional</div>
+       <table class="ml-ref-table">${thead}<tbody>${optRows}</tbody></table>`
+    : '';
+
+  right.innerHTML = `
+    <div class="ml-ref-hdr">
+      <span class="ml-ref-code">${esc(code)}</span>
+      <span class="ml-ref-name">${esc(msgName)}</span>
+    </div>
+    <div class="ml-ref-divider"></div>
+    ${reqSection}${optSection}
+  `;
+  right.scrollTop = 0;
+}
+
+function msgRow(t, isReq, isHeader) {
+  const dep  = tagDeprecated(t);
+  const mark = isReq
+    ? `<span class="ml-mark-req${dep ? ' ml-mark-dep' : ''}" title="${dep ? 'Deprecated' : 'Required'}">${dep ? '⊘' : '&#10003;'}</span>`
+    : `<span class="ml-mark-opt${dep ? ' ml-mark-dep' : ''}" title="${dep ? 'Deprecated' : 'Optional'}">&#9675;</span>`;
+  const classes = [isHeader ? 'ml-header-row' : '', dep ? 'ml-row-deprecated' : ''].filter(Boolean).join(' ');
+  const cls = classes ? ` class="${classes}"` : '';
+  const depBadge = dep ? `<span class="ml-dep-badge">deprecated</span>` : '';
+  const nameStyle = dep ? ' style="text-decoration:line-through"' : '';
+  return `<tr${cls}>
+    <td>${mark}</td>
+    <td><a href="/tag/${t.tag}?ver=fix${_currentVerKey.replace('.','').replace('sp','sp')}" target="_blank" rel="noopener" class="ml-ref-tagnum">${t.tag}</a></td>
+    <td><div class="ml-ref-fname"${nameStyle}>${esc(t.name)}${depBadge}</div></td>
+    <td class="ml-ref-ftype">${esc(t.data_type)}</td>
+    <td class="ml-ref-desc">${esc(t.description)}</td>
+  </tr>`;
+}
+
+// ── Version reference mode ────────────────────────────────────
+const APPENDIX_TAGS = [35, 39, 40, 54, 59, 150];
+let _vpQuery = '';
+let _vpCat   = 'all';
+
+function renderVerPanel(label) {
+  _vpQuery = '';
+  _vpCat   = 'all';
+  _active  = null;
+  document.querySelectorAll('.ml-msg-item').forEach(el => el.classList.remove('active'));
+
+  const verTags = FIX_TAGS
+    .filter(tagInVer)
+    .map(t => ({ ...t, _cat: tagCat(t) }))
+    .sort((a, b) => a.tag - b.tag);
+  const appTags = APPENDIX_TAGS.map(n => verTags.find(t => t.tag === n)).filter(Boolean);
+  window._vpTags = verTags;
+
+  document.getElementById('ml-right').innerHTML = `
+    <div class="ml-ver-panel">
+      <div class="ml-vp-toolbar">
+        <input type="search" class="ref-search" id="ml-vp-search"
+          placeholder="Search tag # or field name…" autocomplete="off" spellcheck="false"
+          oninput="vpSearch(this.value)">
+        <div class="ref-cat-pills" role="group" aria-label="Filter by category">
+          <button class="ref-cat-pill active" onclick="vpFilter(this,'all')">All</button>
+          <button class="ref-cat-pill" onclick="vpFilter(this,'session')">Session</button>
+          <button class="ref-cat-pill" onclick="vpFilter(this,'order')">Order</button>
+          <button class="ref-cat-pill" onclick="vpFilter(this,'execution')">Execution</button>
+          <button class="ref-cat-pill" onclick="vpFilter(this,'posttrade')">Post-Trade</button>
+        </div>
+      </div>
+      <div class="ml-vp-table-wrap">
+        <table class="ref-table">
+          <thead><tr>
+            <th class="ref-th-tag">Tag</th>
+            <th class="ref-th-name">Field Name</th>
+            <th class="ref-th-type">Type</th>
+            <th class="ref-th-desc">Description</th>
+            <th class="ref-th-req">Required In</th>
+          </tr></thead>
+          <tbody id="ml-vp-tbody"></tbody>
+        </table>
+        <div id="ml-vp-empty" class="ref-empty" style="display:none">No tags match your search.</div>
+      </div>
+      ${buildAppendix(appTags,'ml-app')}
+    </div>`;
+  document.getElementById('ml-right').scrollTop = 0;
+  vpRender();
+}
+
+function vpSearch(val) { _vpQuery = val.trim().toLowerCase(); vpRender(); }
+
+function vpFilter(btn, cat) {
+  btn.closest('.ref-cat-pills').querySelectorAll('.ref-cat-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  _vpCat = cat;
+  vpRender();
+}
+
+function vpRender() {
+  const tags = window._vpTags || [];
+  let html = '', count = 0;
+  for (const t of tags) {
+    if (_vpCat !== 'all' && t._cat !== _vpCat) continue;
+    if (_vpQuery && !String(t.tag).startsWith(_vpQuery) && !(t.name||'').toLowerCase().includes(_vpQuery)) continue;
+    html += vpRow(t);
+    count++;
+  }
+  const tbody = document.getElementById('ml-vp-tbody');
+  if (tbody) tbody.innerHTML = html;
+  const ce = document.getElementById('ml-vp-count');
+  if (ce) ce.textContent = count;
+  const ee = document.getElementById('ml-vp-empty');
+  if (ee) ee.style.display = count ? 'none' : '';
+}
+
+function vpRow(t) {
+  const hasV = t.valid_values && Object.keys(t.valid_values).length > 0;
+  const xBtn = hasV
+    ? `<button class="ref-expand-btn" onclick="vpToggle(this)" aria-expanded="false" title="Show valid values">+</button>` : '';
+  const valRows = hasV
+    ? Object.entries(t.valid_values)
+        .map(([k,v]) => `<tr class="ref-val-row"><td class="ref-val-key"><code>${esc(k)}</code></td><td class="ref-val-desc">${esc(v)}</td></tr>`)
+        .join('') : '';
+  const xSec = hasV
+    ? `<tr class="ref-expand-row" style="display:none"><td colspan="5">
+        <table class="ref-val-table"><thead><tr><th>Value</th><th>Meaning</th></tr></thead>
+        <tbody>${valRows}</tbody></table></td></tr>` : '';
+  const ri = t.required_in || [];
+  const reqHtml = ri.some(m => m.code === 'All')
+    ? '<span class="ref-req-all">All</span>'
+    : ri.map(m => `<span class="ref-req-code" title="${esc(m.name)}">${esc(m.code)}</span>`).join(' ');
+  return `<tr class="ref-row" data-cat="${esc(t._cat||'other')}"
+      onclick="${hasV ? 'vpRowClick(this)' : ''}" style="cursor:${hasV?'pointer':'default'}">
+    <td class="ref-td-tag">
+      <a href="/tag/${t.tag}?ver=fix${_currentVerKey.replace('.','').replace('sp','sp')}" target="_blank" rel="noopener" class="ref-tag-link" onclick="event.stopPropagation()">${t.tag}</a>
+      ${xBtn}
+    </td>
+    <td class="ref-td-name">${esc(t.name)}</td>
+    <td class="ref-td-type">${esc(t.data_type)}</td>
+    <td class="ref-td-desc">${esc(t.description)}</td>
+    <td class="ref-td-req">${reqHtml}</td>
+  </tr>${xSec}`;
+}
+
+function vpRowClick(tr) { const b = tr.querySelector('.ref-expand-btn'); if (b) vpToggle(b); }
+function vpToggle(btn) {
+  const next = btn.closest('tr').nextElementSibling;
+  if (!next?.classList.contains('ref-expand-row')) return;
+  const open = next.style.display !== 'none';
+  next.style.display = open ? 'none' : '';
+  btn.textContent = open ? '+' : '−';
+  btn.setAttribute('aria-expanded', String(!open));
+  btn.classList.toggle('open', !open);
+}
+
+// ── Appendix (shared builder, prefix = 'ml-app' or 'ref-app') ─
+function buildAppendix(tags, prefix) {
+  const sections = tags
+    .filter(t => t.valid_values && Object.keys(t.valid_values).length)
+    .map(t => {
+      const id  = `${prefix}-${t.tag}`;
+      const cnt = Object.keys(t.valid_values).length;
+      const rows = Object.entries(t.valid_values)
+        .map(([k,v]) => `<tr>
+          <td class="ml-app-val"><code>${esc(k)}</code></td>
+          <td class="ml-app-desc">${esc(v)}</td>
+        </tr>`).join('');
+      return `<div class="ml-app-section" id="${id}">
+        <div class="ml-app-sec-hdr" onclick="toggleApp('${id}')">
+          <span class="ml-app-tag-num">${t.tag}</span>
+          <span class="ml-app-tag-name">${esc(t.name)}</span>
+          <span class="ml-app-val-count">${cnt} values</span>
+          <span class="ml-app-chevron">▾</span>
+        </div>
+        <div class="ml-app-sec-body" style="display:none">
+          <table class="ml-app-table">
+            <thead><tr><th>Value</th><th>Meaning</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>`;
+    }).join('');
+  if (!sections) return '';
+  return `<div class="ml-appendix">
+    <div class="ml-appendix-hdr">Appendix — Enum Values</div>
+    ${sections}
+  </div>`;
+}
+
+function toggleApp(id) {
+  const sec  = document.getElementById(id);
+  if (!sec) return;
+  const body = sec.querySelector('.ml-app-sec-body');
+  const chev = sec.querySelector('.ml-app-chevron');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  if (chev) chev.textContent = open ? '▾' : '▴';
+}
+
+// ── Version pill handler ──────────────────────────────────────
+function setVer(el) {
+  document.querySelectorAll('.ml-version-pill').forEach(p => {
+    p.classList.remove('active');
+    p.setAttribute('aria-selected', 'false');
+  });
+  el.classList.add('active');
+  el.setAttribute('aria-selected', 'true');
+
+  const pillText  = el.textContent.trim();
+  _currentVerKey  = PILL_TO_KEY[pillText] || '4.2';
+  _active    = null;
+  _activeRef = null;
+  document.querySelectorAll('.ml-appendix-item').forEach(e => e.classList.remove('active'));
+
+  buildNav();
+  renderVerPanel(pillText);
+}
+
+// ── Appendix reference data ───────────────────────────────────
+const MIC_DATA = [
+  { mic:"21XX", name:"21X", country:"DE" },
+  { mic:"24EQ", name:"24X NATIONAL EXCHANGE LLC", country:"US" },
+  { mic:"24EX", name:"24 EXCHANGE", country:"BM" },
+  { mic:"3579", name:"SSY FUTURES LTD -  FREIGHT SCREEN", country:"GB" },
+  { mic:"360T", name:"360T", country:"DE" },
+  { mic:"360X", name:"360X", country:"DE" },
+  { mic:"4AXE", name:"CTSE NOMINEES", country:"ZA" },
+  { mic:"A2XX", name:"A2X", country:"ZA" },
+  { mic:"A5XB", name:"A5X S.A.", country:"BR" },
+  { mic:"AACA", name:"CREDIT AGRICOLE CIB", country:"FR" },
+  { mic:"AAPA", name:"ATHENS EXCHANGE - APA", country:"GR" },
+  { mic:"AATS", name:"ASSENT ATS", country:"US" },
+  { mic:"ABAN", name:"ABANCA", country:"ES" },
+  { mic:"ABFI", name:"ALPHA BANK", country:"GR" },
+  { mic:"ABNA", name:"ABN AMRO BANK NV", country:"NL" },
+  { mic:"ABNC", name:"ABN AMRO CLEARING BANK", country:"NL" },
+  { mic:"ABSI", name:"ALM. BRAND BANK", country:"DK" },
+  { mic:"ACCX", name:"ACCX", country:"GB" },
+  { mic:"ACEX", name:"ACE DERIVATIVES AND COMMODITY EXCHANGE LTD", country:"IN" },
+  { mic:"ACXC", name:"ACX CLEARING CORPORATION LTD.", country:"AE" },
+  { mic:"ACXL", name:"ACX", country:"AE" },
+  { mic:"ADVT", name:"ADVISE TECHNOLOGIES - APA TRANSPARENCY REPORTING", country:"US" },
+  { mic:"AFET", name:"AGRICULTURAL FUTURES EXCHANGE OF THAILAND", country:"TH" },
+  { mic:"AFEX", name:"AFRINEX LIMITED", country:"MU" },
+  { mic:"AFSA", name:"AFS - OTF", country:"NL" },
+  { mic:"AFSE", name:"AFS E-VENUES B.V.", country:"NL" },
+  { mic:"AFTS", name:"ACCESS FINTECH", country:"GB" },
+  { mic:"AGBP", name:"A AND G BANCA PRIVADA SAU", country:"ES" },
+  { mic:"AILT", name:"ARRACO IRELAND LTD", country:"IE" },
+  { mic:"AIXK", name:"ASTANA INTERNATIONAL EXCHANGE LTD", country:"KZ" },
+  { mic:"AKIS", name:"AKIS - BANCO BPM", country:"IT" },
+  { mic:"ALLT", name:"ALLT - OTF", country:"ES" },
+  { mic:"ALPX", name:"ALPHAX US", country:"US" },
+  { mic:"ALSI", name:"AKTIESELSKABET ARBEJDERNES LANDSBANK", country:"DK" },
+  { mic:"AMPX", name:"ASSET MATCH PRIVATE EXCHANGE", country:"GB" },
+  { mic:"ANTS", name:"ABBEY NATIONAL TREASURY SERVICES PLC", country:"GB" },
+  { mic:"ANZL", name:"AUSTRALIA AND NEW ZEALAND BANKING GROUP LIMITED - SYSTEMATIC INTERNALISER", country:"GB" },
+  { mic:"APAW", name:"WIENER BOERSE AG - APA", country:"AT" },
+  { mic:"APEX", name:"ASIA PACIFIC EXCHANGE", country:"SG" },
+  { mic:"APXL", name:"SYDNEY STOCK EXCHANGE LIMITED", country:"AU" },
+  { mic:"AQEU", name:"AQUIS EXCHANGE EUROPE", country:"FR" },
+  { mic:"AQSE", name:"AQUIS STOCK EXCHANGE", country:"GB" },
+  { mic:"AQXE", name:"AQUIS EXCHANGE PLC", country:"GB" },
+  { mic:"ARAX", name:"ARRACO GLOBAL MARKETS LTD", country:"GB" },
+  { mic:"ARCE", name:"ARCHAX EUROPE - MTF (MADRID)", country:"ES" },
+  { mic:"ARCH", name:"ARCHAX", country:"GB" },
+  { mic:"AREX", name:"AREX - AUTOMATED RECEIVABLES EXCHANGE", country:"IE" },
+  { mic:"ARIA", name:"ARIAN TRADING FACILITY", country:"GB" },
+  { mic:"ARKX", name:"ARKONIS", country:"US" },
+  { mic:"ARTX", name:"ARTEX GLOBAL MARKETS AG", country:"LI" },
+  { mic:"ASEF", name:"AEGIS SWAP EXECUTION FACILITY", country:"US" },
+  { mic:"ASEX", name:"ATHENS STOCK EXCHANGE", country:"GR" },
+  { mic:"ATAD", name:"ATADEL FUNDS", country:"CZ" },
+  { mic:"ATHL", name:"ATHLOS CAPITAL INVESTMENT SERVICES LTD", country:"CY" },
+  { mic:"ATLB", name:"BRAEMAR SECURITIES LTD", country:"GB" },
+  { mic:"ATLN", name:"ATONLINE LIMITED", country:"CY" },
+  { mic:"ATXE", name:"XCHANGE ALPHA", country:"US" },
+  { mic:"AURB", name:"AUREL", country:"FR" },
+  { mic:"AWBX", name:"AUSTRALIAN WHEAT BOARD", country:"AU" },
+  { mic:"AWEX", name:"AUSTRALIAN WOOL EXCHANGE", country:"AU" },
+  { mic:"AXIO", name:"AXIOLOGY", country:"LT" },
+  { mic:"BAAD", name:"BAADER BANK", country:"DE" },
+  { mic:"BACE", name:"BOLSA DE CEREALES DE BUENOS AIRES", country:"AR" },
+  { mic:"BAIP", name:"BANK OF AMERICA MERRILL LYNCH EQUITY SWAP - INTERNAL PRICE SOURCE", country:"HK" },
+  { mic:"BAJD", name:"BANK OF AMERICA MERRILL LYNCH - JAPAN INSTINCT X", country:"JP" },
+  { mic:"BALT", name:"THE BALTIC EXCHANGE", country:"GB" },
+  { mic:"BAML", name:"BANK OF AMERICA - MERRILL LYNCH INSTINCT X ATS", country:"US" },
+  { mic:"BAMX", name:"BANK OF AMERICA - MERRILL LYNCH GCX", country:"US" },
+  { mic:"BANA", name:"BANK OF AMERICA, NATIONAL ASSOCIATION", country:"GB" },
+  { mic:"BAPA", name:"BLOOMBERG - APA", country:"GB" },
+  { mic:"BAPE", name:"BLOOMBERG DATA REPORTING SERVICES B.V. - APA", country:"NL" },
+  { mic:"BAPX", name:"BALTPOOL", country:"LT" },
+  { mic:"BARX", name:"BARCLAYS ATS", country:"US" },
+  { mic:"BASE", name:"BANK OF AMERICA MERRILL LYNCH - SWAP EXECUTIONS", country:"HK" },
+  { mic:"BASX", name:"BANK OF AMERICA MERRILL LYNCH - SIMPLEX BLAST X", country:"JP" },
+  { mic:"BBIE", name:"BARCLAYS BANK IRELAND PLC", country:"IE" },
+  { mic:"BBLX", name:"BONDBLOX EXCHANGE", country:"SG" },
+  { mic:"BBSF", name:"BLOOMBERG SEF LLC", country:"US" },
+  { mic:"BBSX", name:"BB SECURITIES LTD", country:"GB" },
+  { mic:"BBVA", name:"BANCO BILBAO VIZCAYA ARGENTARIA S.A", country:"ES" },
+  { mic:"BBVI", name:"BITSTAMP GLOBAL", country:"VG" },
+  { mic:"BBVX", name:"BANCO BILBAO VIZCAYA ARGENTARIA S.A. - UK", country:"GB" },
+  { mic:"BCEE", name:"BANQUE ET CAISSE D'EPARGNE DE L'ETAT, LUXEMBOURG - BCEE", country:"LU" },
+  { mic:"BCFS", name:"BOLSA DE COMERCIO DE SANTA FE", country:"AR" },
+  { mic:"BCMA", name:"BANCA MARCH S.A.", country:"ES" },
+  { mic:"BCMM", name:"BOLSA DE CEREAIS E MERCADORIAS DE MARING\u00c1", country:"BR" },
+  { mic:"BCRM", name:"CBOE EUROPE REGULATED MARKETS", country:"GB" },
+  { mic:"BCSC", name:"BROKERCREDITSERVICE (CYPRUS) LIMITED", country:"CY" },
+  { mic:"BCSE", name:"BELARUS CURRENCY AND STOCK EXCHANGE", country:"BY" },
+  { mic:"BCSL", name:"BARCLAYS CAPITAL SECURITIES LIMITED", country:"GB" },
+  { mic:"BCXE", name:"CBOE EUROPE EQUITIES", country:"GB" },
+  { mic:"BDPL", name:"BANQUE DEGROOF PETERCAM LUXEMBOURG S.A.", country:"LU" },
+  { mic:"BDSK", name:"DSK BANK EAD", country:"BG" },
+  { mic:"BEAM", name:"MTS ASSOCIATED MARKETS", country:"BE" },
+  { mic:"BEBG", name:"BULGARIAN ENERGY TRADING PLATFORM", country:"BG" },
+  { mic:"BEEX", name:"BOND ELECTRONIC EXCHANGE", country:"TH" },
+  { mic:"BEIS", name:"BANCA ETICA", country:"IT" },
+  { mic:"BELB", name:"BELFIUS BANK NV/SA", country:"BE" },
+  { mic:"BESA", name:"BITSTAMP EUROPE", country:"LU" },
+  { mic:"BETP", name:"BLOOMBERG TRADEBOOK JAPAN LIMITED", country:"JP" },
+  { mic:"BETX", name:"BET OTC BILAT COMMODITY DERIVATIVES", country:"GB" },
+  { mic:"BFPT", name:"BANCO FINANTIA S.A.", country:"PT" },
+  { mic:"BFSD", name:"BITSTAMP DERIVATIVES EXCHANGE", country:"SI" },
+  { mic:"BGCA", name:"BGC PARTNERS (AUSTRALIA) PTY LTD", country:"AU" },
+  { mic:"BGCF", name:"BGC FINANCIAL INC", country:"US" },
+  { mic:"BGCI", name:"BGC BROKERS LP", country:"GB" },
+  { mic:"BGCJ", name:"BGC SHOKEN KAISHA LTD \u2013 ETP", country:"JP" },
+  { mic:"BGHX", name:"BALKAN GAS HUB EAD", country:"BG" },
+  { mic:"BGLU", name:"BGL BNP PARIBAS", country:"LU" },
+  { mic:"BGSG", name:"BGC PARTNERS SINGAPORE RMO", country:"SG" },
+  { mic:"BGSI", name:"BERENBERG", country:"DE" },
+  { mic:"BGUK", name:"BERENBERG  UK", country:"GB" },
+  { mic:"BHSF", name:"CBOE SEF, LLC", country:"US" },
+  { mic:"BIDS", name:"BIDS TRADING L.P.", country:"US" },
+  { mic:"BILT", name:"OFF-EXCHANGE TRANSACTIONS - LISTED AND UNLISTED INSTRUMENTS", country:"ZZ" },
+  { mic:"BILU", name:"BANQUE INTERNATIONALE A LUXEMBOURG S.A.", country:"LU" },
+  { mic:"BINV", name:"BOND INVEST", country:"DE" },
+  { mic:"BIVA", name:"BOLSA INSTITUCIONAL DE VALORES", country:"MX" },
+  { mic:"BJSE", name:"BEIJING STOCK EXCHANGE", country:"CN" },
+  { mic:"BKBR", name:"BNY MELLON S.A./N.V. - BRUSSELS BRANCH", country:"BE" },
+  { mic:"BKDM", name:"BNY MELLON MARKETS EUROPE LIMITED", country:"IE" },
+  { mic:"BKKT", name:"BAKKT", country:"US" },
+  { mic:"BKLN", name:"THE BANK OF NEW YORK MELLON - LONDON BRANCH", country:"GB" },
+  { mic:"BKSK", name:"BKS BANK AG", country:"AT" },
+  { mic:"BLBB", name:"BAYERNLB", country:"DE" },
+  { mic:"BLEV", name:"BLOCK EVENT", country:"AU" },
+  { mic:"BLPX", name:"BELGIAN POWER EXCHANGE", country:"BE" },
+  { mic:"BLUE", name:"PRO SECURITIES ATS", country:"US" },
+  { mic:"BLUX", name:"BANQUE DE LUXEMBOURG", country:"LU" },
+  { mic:"BLXA", name:"INSTINET BLX (AU)", country:"AU" },
+  { mic:"BMCM", name:"BMO CAPITAL MARKETS LIMITED", country:"GB" },
+  { mic:"BMEX", name:"BME - BOLSAS Y MERCADOS ESPANOLES", country:"ES" },
+  { mic:"BMLB", name:"BANK OF MONTREAL - LONDON BRANCH", country:"GB" },
+  { mic:"BMLI", name:"BANK OF AMERICA MERRILL LYNCH INTERNATIONAL BANK DESIGNATED ACTIVITY COMPANY", country:"IE" },
+  { mic:"BMTF", name:"BLOOMBERG TRADING FACILITY LIMITED", country:"GB" },
+  { mic:"BNCX", name:"BINANCE", country:"AE" },
+  { mic:"BNDS", name:"BONDS.COM, INC.", country:"US" },
+  { mic:"BNLD", name:"BANCA NAZIONALE DEL LAVORO SPA", country:"IT" },
+  { mic:"BNPA", name:"BNP PARIBAS ARBITRAGE SNC", country:"FR" },
+  { mic:"BNPC", name:"BNPP CORTEX ATS", country:"US" },
+  { mic:"BNPF", name:"BNP PARIBAS FORTIS SA/NV", country:"BE" },
+  { mic:"BNPH", name:"BNPP CORTEX EQUITIES", country:"US" },
+  { mic:"BNPL", name:"BNP PARIBAS SA LONDON BRANCH", country:"GB" },
+  { mic:"BNPP", name:"BANK BGZ BNP PARIBAS S.A.", country:"PL" },
+  { mic:"BNPS", name:"BNP PARIBAS SA", country:"FR" },
+  { mic:"BNPX", name:"BNP PARIBAS ALTERNATIVE TRADING SYSTEM", country:"JP" },
+  { mic:"BNSX", name:"THE BANK OF NOVA SCOTIA", country:"CA" },
+  { mic:"BNYC", name:"CONVERGEX", country:"US" },
+  { mic:"BOAT", name:"CINNOBER BOAT", country:"GB" },
+  { mic:"BOCF", name:"BANK OF CHINA LIMITED - FRANKFURT BRANCH", country:"DE" },
+  { mic:"BOFS", name:"BANK OF SCOTLAND PLC", country:"GB" },
+  { mic:"BOSC", name:"BONDSCAPE", country:"GB" },
+  { mic:"BOSS", name:"BRUCE ATS", country:"US" },
+  { mic:"BOVA", name:"BOLSA DE CORREDORES - BOLSA DE VALORES", country:"CL" },
+  { mic:"BOVM", name:"BOLSA DE VALORES MINAS-ESP\u00cdRITO SANTO-BRAS\u00cdLIA", country:"BR" },
+  { mic:"BPKO", name:"PKO BANK POLSKI S.A.", country:"PL" },
+  { mic:"BPLC", name:"BARCLAYS BANK PLC", country:"GB" },
+  { mic:"BPOL", name:"BLOOMBERG BPOOL", country:"US" },
+  { mic:"BPSX", name:"BNP PARIBAS SECURITIES SERVICES", country:"FR" },
+  { mic:"BPTE", name:"BITSTAMP ASIA PTE. LTD.", country:"SG" },
+  { mic:"BPXX", name:"BPX MARKETS LIMITED", country:"GB" },
+  { mic:"BRDE", name:"BRD - GROUPE SOCIETE GENERALE S.A.", country:"RO" },
+  { mic:"BREA", name:"BANCA REALE", country:"IT" },
+  { mic:"BRED", name:"BRED BANQUE POPULAIRE", country:"FR" },
+  { mic:"BRGA", name:"BRYAN GARNIER AND CO LIMITED", country:"GB" },
+  { mic:"BRIX", name:"BRAZILIAN ENERGY EXCHANGE", country:"BR" },
+  { mic:"BRNX", name:"BERNSTEIN CROSS (BERN-X)", country:"GB" },
+  { mic:"BSAB", name:"BANCO DE SABADELL, S.A.", country:"ES" },
+  { mic:"BSEE", name:"BRAEMAR SECURITIES ESPANA SA - OTF", country:"ES" },
+  { mic:"BSEX", name:"BAKU STOCK EXCHANGE", country:"AZ" },
+  { mic:"BSLB", name:"BANCO SANTANDER, LONDON BRANCH", country:"GB" },
+  { mic:"BSPL", name:"BNP PARIBAS SECURITIES SERVICES LONDON BRANCH", country:"GB" },
+  { mic:"BSTX", name:"BOSTON SECURITY TOKEN EXCHANGE LLC", country:"US" },
+  { mic:"BTAM", name:"CME AMSTERDAM B.V.", country:"NL" },
+  { mic:"BTBS", name:"BLOOMBERG TRADEBOOK SINGAPORE PTE LTD", country:"SG" },
+  { mic:"BTEC", name:"BROKERTEC AMERICAS LLC", country:"US" },
+  { mic:"BTEE", name:"BROKERTEC EUROPE LIMITED - ALL MARKETS", country:"GB" },
+  { mic:"BTFE", name:"BLOOMBERG TRADING FACILITY B.V.", country:"NL" },
+  { mic:"BTLX", name:"BTL OTC BILAT COMMODITY DERIVATIVES", country:"GB" },
+  { mic:"BTNL", name:"BITNOMIAL", country:"US" },
+  { mic:"BTRL", name:"BANCA TRANSILVANIA S.A.", country:"RO" },
+  { mic:"BTSP", name:"BITSTAMP LTD", country:"GB" },
+  { mic:"BUKL", name:"BITSTAMP UK LTD", country:"GB" },
+  { mic:"BUSA", name:"BITSTAMP USA, INC.", country:"US" },
+  { mic:"BVCA", name:"CARACAS STOCK EXCHANGE", country:"VE" },
+  { mic:"BVMF", name:"B3 S.A. - BRASIL BOLSA BALCAO", country:"BR" },
+  { mic:"BVUR", name:"BOLSA ELECTRONICA DE VALORES DEL URUGUAY", country:"UY" },
+  { mic:"BXDA", name:"BX DIGITAL", country:"CH" },
+  { mic:"CABK", name:"CAIXABANK", country:"ES" },
+  { mic:"CABV", name:"CME AMSTERDAM B.V. - APA", country:"NL" },
+  { mic:"CALH", name:"CLSA AMERICAS - LIQUIDITY HUB", country:"US" },
+  { mic:"CAND", name:"CANDEAL.CA INC", country:"CA" },
+  { mic:"CANX", name:"CANNEX FINANCIAL EXCHANGE LTS", country:"CA" },
+  { mic:"CAPI", name:"CAPI - OTF", country:"ES" },
+  { mic:"CAPL", name:"CREDIT AGRICOLE BANK POLSKA S.A.", country:"PL" },
+  { mic:"CAPT", name:"CAPITOLIS OTF", country:"GB" },
+  { mic:"CASI", name:"CARNEGIE INVESTMENT BANK AB", country:"SE" },
+  { mic:"CAST", name:"FORECASTEX, LLC", country:"US" },
+  { mic:"CATS", name:"CATS", country:"DE" },
+  { mic:"CAVD", name:"CAVENDISH MARKETS B.V.", country:"NL" },
+  { mic:"CBAE", name:"COMMONWEALTH BANK OF AUSTRALIA (EUROPE) N.V.", country:"NL" },
+  { mic:"CBAL", name:"COMMONWEALTH BANK OF AUSTRALIA - LONDON BRANCH", country:"GB" },
+  { mic:"CBKA", name:"COMMERZBANK AG", country:"DE" },
+  { mic:"CBLP", name:"CREDITEX BROKERAGE LLP", country:"GB" },
+  { mic:"CBMS", name:"CBM SARB", country:"ZA" },
+  { mic:"CBNL", name:"CITIBANK N.A. LONDON", country:"GB" },
+  { mic:"CBOE", name:"CBOE FX NDFS", country:"CH" },
+  { mic:"CBSK", name:"CESKOSLOVENSKA OBCHODNA BANKA, A.S.", country:"SK" },
+  { mic:"CCDA", name:"CICADA ATS", country:"US" },
+  { mic:"CCEU", name:"CITADEL CONNECT EUROPE", country:"GB" },
+  { mic:"CCEX", name:"CASPY COMMODITY EXCHANGE", country:"KZ" },
+  { mic:"CCFX", name:"CHINA FINANCIAL FUTURES EXCHANGE", country:"CN" },
+  { mic:"CCLX", name:"FINESTI S.A.", country:"LU" },
+  { mic:"CCML", name:"CONTINENTAL CAPITAL MARKETS LIMITED - OTF", country:"GB" },
+  { mic:"CCMS", name:"CONTINENTAL CAPITAL MARKETS S.A.", country:"CH" },
+  { mic:"CCMX", name:"CARTAX", country:"US" },
+  { mic:"CCRM", name:"CBOE EUROPE REGULATED MARKETS (NL)", country:"NL" },
+  { mic:"CCXE", name:"CBOE EUROPE EQUITIES - EUROPEAN EQUITIES (NL)", country:"NL" },
+  { mic:"CDED", name:"CITADEL SECURITIES", country:"US" },
+  { mic:"CDNA", name:"NORTH AMERICAN DERIVATIVES EXCHANGE, INC.", country:"US" },
+  { mic:"CDSL", name:"CLEARCORP DEALING SYSTEMS (INDIA) LTD.", country:"IN" },
+  { mic:"CECA", name:"CECABANK", country:"ES" },
+  { mic:"CEPL", name:"CITIBANK EUROPE PLC", country:"IE" },
+  { mic:"CEPU", name:"CITIBANK EUROPE PLC - LONDON BRANCH", country:"GB" },
+  { mic:"CESF", name:"RESURETY MARKETS", country:"US" },
+  { mic:"CFIC", name:"CHINAFICC", country:"GB" },
+  { mic:"CFIF", name:"CREDIT FINANCIER INVEST (CFI) LTD", country:"CY" },
+  { mic:"CFIL", name:"CANTOR FITZGERALD IRELAND LIMITED", country:"IE" },
+  { mic:"CFIM", name:"CBOE FIXED INCOME MARKETS, LLC", country:"US" },
+  { mic:"CFTW", name:"CROSSFINDER TAIWAN", country:"TW" },
+  { mic:"CGIT", name:"CASSA DI COMPENSAZIONE E GARANZIA SPA", country:"IT" },
+  { mic:"CGMD", name:"CITIGROUP GLOBAL MARKETS EUROPE AG", country:"DE" },
+  { mic:"CGMG", name:"CITIGROUP GLOBAL MARKETS EUROPE AG - LONDON BRANCH", country:"GB" },
+  { mic:"CGMH", name:"CITI MATCH - HK", country:"HK" },
+  { mic:"CGMI", name:"CITIGROUP GLOBAL MARKETS", country:"US" },
+  { mic:"CGML", name:"CITIGROUP GLOBAL MARKETS LIMITED", country:"GB" },
+  { mic:"CGMX", name:"CITI MEXICO RPI (RETAIL PRICE IMPROVEMENT)", country:"MX" },
+  { mic:"CGXS", name:"ONECHRONOS", country:"US" },
+  { mic:"CHEV", name:"CA CHEUVREUX", country:"GB" },
+  { mic:"CHIA", name:"CBOE AUSTRALIA", country:"AU" },
+  { mic:"CHIC", name:"CHI-X CANADA ATS", country:"CA" },
+  { mic:"CHIJ", name:"CBOE JAPAN - ALPHA", country:"JP" },
+  { mic:"CIBC", name:"CANADIAN IMPERIAL BANK OF COMMERCE", country:"GB" },
+  { mic:"CIBH", name:"CIB BANK", country:"HU" },
+  { mic:"CIBP", name:"CIBC WORLD MARKETS PLC", country:"GB" },
+  { mic:"CILH", name:"LIQUIDITY HUB JAPAN", country:"JP" },
+  { mic:"CIMD", name:"CIMD S.V. S.A. - OTF", country:"ES" },
+  { mic:"CITX", name:"CITI MATCH - JP", country:"JP" },
+  { mic:"CLAU", name:"CLSA AUSTRALIA - DARK", country:"AU" },
+  { mic:"CLHK", name:"CLSA HONG KONG - DARK", country:"HK" },
+  { mic:"CLJP", name:"CLSA JAPAN - DARK", country:"JP" },
+  { mic:"CLMX", name:"CLIMEX", country:"NL" },
+  { mic:"CLPH", name:"CLSA PHILIPPINES - DARK", country:"PH" },
+  { mic:"CLST", name:"CLEAR STREET", country:"US" },
+  { mic:"CLTD", name:"EEX ASIA PTE. LTD.", country:"SG" },
+  { mic:"CLVE", name:"VERTO MTF", country:"GB" },
+  { mic:"CMCI", name:"CREDIT INDUSTRIEL ET COMMERCIAL", country:"FR" },
+  { mic:"CMCM", name:"CMC MARKETS UK PLC", country:"GB" },
+  { mic:"CMET", name:"CLEAR MARKETS JAPAN, INC.", country:"JP" },
+  { mic:"CMMT", name:"CLEAR MARKETS EUROPE LIMITED", country:"GB" },
+  { mic:"CMSF", name:"CLEAR MARKETS NORTH AMERICA, INC.", country:"US" },
+  { mic:"CNOD", name:"SGX CURRENCYNODE", country:"SG" },
+  { mic:"CNSI", name:"CARNEGIE AS", country:"NO" },
+  { mic:"COAL", name:"LA COTE ALPHA", country:"FR" },
+  { mic:"CODA", name:"CODA MARKETS - MICRO AND BLOCK", country:"US" },
+  { mic:"COHR", name:"COMHAR CAPITAL MARKETS, LLC", country:"US" },
+  { mic:"COMG", name:"COMMERG LTD.", country:"MT" },
+  { mic:"COMM", name:"COMMERG", country:"NL" },
+  { mic:"CONC", name:"CONCORDE SECURITIES LTD.", country:"HU" },
+  { mic:"COTC", name:"BMO CAPITAL MARKETS - CAD OTC TRADES", country:"CA" },
+  { mic:"CPGX", name:"CLEARPOOL EXECUTION SERVICES, LLC", country:"US" },
+  { mic:"CPTX", name:"CAPTIN", country:"NL" },
+  { mic:"CRBX", name:"CLIMATE TRUST", country:"CH" },
+  { mic:"CRED", name:"CREDIT SUISSE (US)", country:"US" },
+  { mic:"CREM", name:"CREDEM BANCA", country:"IT" },
+  { mic:"CRSX", name:"CROSSX TECHNOLOGIES LTD", country:"VG" },
+  { mic:"CRYD", name:"CRYEX - FX AND DIGITAL CURRENCIES", country:"SE" },
+  { mic:"CRYP", name:"CRYPTO FACILITIES", country:"GB" },
+  { mic:"CRYX", name:"CRYEX", country:"SE" },
+  { mic:"CSAG", name:"CREDIT SUISSE AG", country:"CH" },
+  { mic:"CSAS", name:"CESKA SPORITELNA, A.S.", country:"CZ" },
+  { mic:"CSAU", name:"CREDIT SUISSE EQUITIES (AUSTRALIA) LIMITED", country:"AU" },
+  { mic:"CSDA", name:"CREDIT SUISSE AKTIENGESELLSCHAFT", country:"DE" },
+  { mic:"CSEC", name:"CITADEL SECURITIES FI", country:"GB" },
+  { mic:"CSEU", name:"CREDIT SUISSE (EUROPE)", country:"GB" },
+  { mic:"CSGI", name:"CITADEL SECURITIES FI - EUROPE", country:"IE" },
+  { mic:"CSHK", name:"CREDIT SUISSE SECURITIES (HONG KONG) LIMITED", country:"HK" },
+  { mic:"CSIN", name:"CREDIT SUISSE INTERNATIONAL", country:"GB" },
+  { mic:"CSJP", name:"CREDIT SUISSE EQUITIES (JAPAN) LIMITED", country:"JP" },
+  { mic:"CSLB", name:"CREDIT SUISSE AG - LONDON BRANCH", country:"GB" },
+  { mic:"CSMD", name:"CREDIT SUISSE BANK (EUROPE), S.A.", country:"ES" },
+  { mic:"CSOB", name:"\u010cESKOSLOVENSK\u00c1 OBCHODN\u00cd BANKA, A.S.", country:"CZ" },
+  { mic:"CSSX", name:"CHINA STAINLESS STEEL EXCHANGE", country:"CN" },
+  { mic:"CSZH", name:"CREDIT SUISSE (CH)", country:"CH" },
+  { mic:"CTCC", name:"CLEARTOKEN CCP LIMITED", country:"GB" },
+  { mic:"CTDD", name:"CLEARTOKEN DEPOSITORY LTD", country:"GB" },
+  { mic:"CTS3", name:"CAPE TOWN STOCK EXCHANGE", country:"ZA" },
+  { mic:"CTSS", name:"CLEARTOKEN CSD LIMITED", country:"GB" },
+  { mic:"CULV", name:"CULVERT CAPITAL LLC", country:"US" },
+  { mic:"CURX", name:"CUREX FX", country:"US" },
+  { mic:"D2XG", name:"D2X MARKET", country:"NL" },
+  { mic:"DAIW", name:"DAIWA CAPITAL MARKETS EUROPE LIMITED", country:"GB" },
+  { mic:"DAPA", name:"DEUTSCHE BOERSE AG - APA SERVICE", country:"DE" },
+  { mic:"DASE", name:"DASE", country:"CZ" },
+  { mic:"DASH", name:"DASH ATS", country:"US" },
+  { mic:"DASI", name:"DANSKE BANK A/S", country:"DK" },
+  { mic:"DAUK", name:"DANSKE BANK A/S - LONDON BRANCH", country:"GB" },
+  { mic:"DAVY", name:"J AND E DAVY - IRISH GOVERNMENT BOND", country:"IE" },
+  { mic:"DBAB", name:"DEUTSCHE BANK SECURITIES INC.", country:"US" },
+  { mic:"DBDX", name:"DEUTSCHE BOERSE DIGITAL EXCHANGE", country:"DE" },
+  { mic:"DBHK", name:"DEUTSCHE BANK HONG KONG ATS", country:"HK" },
+  { mic:"DBLX", name:"DEUTSCHE BANK LUXEMBOURG S.A.", country:"LU" },
+  { mic:"DBOX", name:"DEUTSCHE BANK OFF EXCHANGE TRADING", country:"DE" },
+  { mic:"DBXT", name:"DBX", country:"FR" },
+  { mic:"DCAS", name:"CASABLANCA STOCK EXCHANGE \u2013 DERIVATIVES", country:"MA" },
+  { mic:"DCSX", name:"DUTCH CARIBBEAN SECURITIES EXCHANGE", country:"CW" },
+  { mic:"DDTX", name:"DEAL DONE TRADING", country:"IT" },
+  { mic:"DEAL", name:"DCX (DERIVATIVES CURRENCY EXCHANGE)", country:"US" },
+  { mic:"DEKA", name:"DEKABANK DEUTSCHE GIROZENTRALE", country:"DE" },
+  { mic:"DEXE", name:"DEX LIMITED", country:"AE" },
+  { mic:"DGCX", name:"DUBAI GOLD AND COMMODITIES EXCHANGE DMCC", country:"AE" },
+  { mic:"DHLX", name:"DEUTSCHE HOLDINGS (LUXEMBOURG) S.A R.L.", country:"LU" },
+  { mic:"DIFX", name:"NASDAQ DUBAI", country:"AE" },
+  { mic:"DKTC", name:"DANSK OTC", country:"DK" },
+  { mic:"DOTS", name:"SWISS DOTS BY CATS", country:"CH" },
+  { mic:"DOWG", name:"DOWGATE", country:"GB" },
+  { mic:"DRCT", name:"DAIWA DRECT", country:"JP" },
+  { mic:"DRSP", name:"EURONEXT  UK - REPORTING SERVICES", country:"GB" },
+  { mic:"DSMD", name:"QATAR STOCK EXCHANGE", country:"QA" },
+  { mic:"DUMX", name:"GULF MERCANTILE EXCHANGE", country:"AE" },
+  { mic:"DVFX", name:"DIGITAL VEGA", country:"GB" },
+  { mic:"DWFI", name:"DEALERWEB FIXED INCOME", country:"US" },
+  { mic:"DWIN", name:"DRIVEWEALTH INSTITUTIONAL LLC", country:"US" },
+  { mic:"DZBK", name:"DZ BANK", country:"DE" },
+  { mic:"EBHU", name:"ERSTE BANK HUNGARY ZRT.", country:"HU" },
+  { mic:"EBSN", name:"EBS MTF", country:"NL" },
+  { mic:"EBSS", name:"EBS SERVICE COMPANY LIMITED - ALL MARKETS", country:"CH" },
+  { mic:"ECAG", name:"EUREX CLEARING AG", country:"DE" },
+  { mic:"ECAL", name:"EUREX CLEARING ASIA PTE. LTD.", country:"SG" },
+  { mic:"ECEU", name:"TRADECHO EU APA", country:"NL" },
+  { mic:"ECHO", name:"LONDON STOCK EXCHANGE - APA", country:"GB" },
+  { mic:"ECSL", name:"ENTERPRISE COMMODITY SERVICES LIMITED", country:"GB" },
+  { mic:"EDRF", name:"EDMOND DE ROTHSCHILD  (FRANCE)", country:"FR" },
+  { mic:"EDXM", name:"EDX MARKETS", country:"US" },
+  { mic:"EEAL", name:"EUREX EXCHANGE ASIA PTE. LTD.", country:"SG" },
+  { mic:"EESE", name:"EAST EUROPEAN STOCK EXCHANGE", country:"UA" },
+  { mic:"EESX", name:"EQUITY EXPRESS SECURITIES EXCHANGE (EESE)", country:"ZA" },
+  { mic:"EGMT", name:"EG MARKET TECHNOLOGIES", country:"US" },
+  { mic:"EGSI", name:"ERSTE GROUP BANK AG", country:"AT" },
+  { mic:"ELXE", name:"ELIXIUM S.A.", country:"FR" },
+  { mic:"EMBX", name:"EMERGING MARKETS BOND EXCHANGE LIMITED", country:"GB" },
+  { mic:"ENCL", name:"ENCLEAR", country:"GB" },
+  { mic:"ENMS", name:"EURONEXT MARKETS SINGAPORE PTE. LTD.", country:"SG" },
+  { mic:"EOTC", name:"E-OTC", country:"HK" },
+  { mic:"EPEX", name:"EPEX SPOT SE", country:"FR" },
+  { mic:"EQCA", name:"EQUILEND CANADA CORP.", country:"CA" },
+  { mic:"EQIE", name:"EQUILEND LIMITED", country:"IE" },
+  { mic:"EQLD", name:"EQUILEND EUROPE LIMITED", country:"GB" },
+  { mic:"EQOS", name:"EQUOS", country:"SG" },
+  { mic:"EQUS", name:"EQUILEND LLC", country:"US" },
+  { mic:"ERBX", name:"EUROBANK", country:"GR" },
+  { mic:"ERST", name:"ERSTE BEFEKTETESI ZRT", country:"HU" },
+  { mic:"ESLO", name:"ENGNSOL", country:"FR" },
+  { mic:"ETOR", name:"ETORO EU", country:"CY" },
+  { mic:"ETPA", name:"ENERGY TRADING PLATFORM AMSTERDAM", country:"NL" },
+  { mic:"ETSC", name:"ETS EURASIAN TRADING SYSTEM COMMODITY EXCHANGE", country:"KZ" },
+  { mic:"EUCC", name:"CITADEL CONNECT EUROPE - EU", country:"IE" },
+  { mic:"EUFN", name:"EURO-FINANCE AD", country:"BG" },
+  { mic:"EUWA", name:"EUWAX AG", country:"DE" },
+  { mic:"EVOL", name:"EVOLUTION MARKETS", country:"GB" },
+  { mic:"EXEU", name:"EXANE BNP PARIBAS", country:"GB" },
+  { mic:"EXIX", name:"ELECTRONX", country:"US" },
+  { mic:"EXOT", name:"EXOTIX CAPITAL  - OTF", country:"GB" },
+  { mic:"EXSE", name:"EXANE BNP PARIBAS - SYSTEMATIC INTERNALISER", country:"FR" },
+  { mic:"EXTR", name:"ENERGY EXCHANGE ISTANBUL", country:"TR" },
+  { mic:"FAIR", name:"CANTOR SPREADFAIR", country:"GB" },
+  { mic:"FAST", name:"EURONEXT FX", country:"US" },
+  { mic:"FBSI", name:"FINECO BANK", country:"IT" },
+  { mic:"FGEX", name:"KAASUPORSSI - FINNISH GAS EXCHANGE", country:"FI" },
+  { mic:"FGML", name:"FINSTREET GLOBAL MARKETS", country:"AE" },
+  { mic:"FICO", name:"FINANCIALCONTENT", country:"US" },
+  { mic:"FICX", name:"FINANCIAL INFORMATION CONTRIBUTORS EXCHANGE", country:"DE" },
+  { mic:"FINR", name:"FINRA", country:"US" },
+  { mic:"FISH", name:"FISH POOL ASA", country:"NO" },
+  { mic:"FISU", name:"FREIGHT INVESTOR SERVICES LIMITED", country:"GB" },
+  { mic:"FLWX", name:"FLOW TRADERS", country:"NL" },
+  { mic:"FMTS", name:"MTS FRANCE SAS", country:"FR" },
+  { mic:"FMXS", name:"FMX SECURITIES", country:"SG" },
+  { mic:"FMXX", name:"FMX EXECUTION, LLC", country:"US" },
+  { mic:"FNDF", name:"FMX NON-DELIVERABLE FORWARDS", country:"SG" },
+  { mic:"FNUK", name:"FINANTIA UK LIMITED", country:"GB" },
+  { mic:"FPWB", name:"FIRSTPLACE WIENER BOERSE", country:"AT" },
+  { mic:"FREX", name:"COINBASE DERIVATIVES", country:"US" },
+  { mic:"FRTE", name:"FORTE  - OTF", country:"GB" },
+  { mic:"FSEF", name:"FTSEF LLC", country:"US" },
+  { mic:"FSHX", name:"FISHEX", country:"NO" },
+  { mic:"FTFS", name:"42 FINANCIAL SERVICES", country:"CZ" },
+  { mic:"FTUS", name:"FLOW TRADERS U.S LLC", country:"US" },
+  { mic:"FXAL", name:"FXALL", country:"US" },
+  { mic:"FXCM", name:"FXCM", country:"US" },
+  { mic:"FXGB", name:"FXCM - MTF", country:"GB" },
+  { mic:"FXOP", name:"TFS VOLBROKER OTF", country:"GB" },
+  { mic:"G1XX", name:"G1 EXECUTION SERVICES", country:"US" },
+  { mic:"G360", name:"G360", country:"GB" },
+  { mic:"GARA", name:"COINGARAGE", country:"CZ" },
+  { mic:"GATE", name:"GATE", country:"MT" },
+  { mic:"GBOT", name:"BOURSE AFRICA LIMITED", country:"MU" },
+  { mic:"GBSI", name:"GOODBODY STOCKBROKERS UC", country:"IE" },
+  { mic:"GEMX", name:"GEMMA (GILT EDGED MARKET MAKERS\u2019ASSOCIATION)", country:"GB" },
+  { mic:"GETB", name:"LITHUANIAN NATURAL GAS EXCHANGE", country:"LT" },
+  { mic:"GFAM", name:"GFI SECURITIES LLC - ALL MARKETS", country:"US" },
+  { mic:"GFAU", name:"GFI AUSTRALIA PTY LTD", country:"AU" },
+  { mic:"GFEX", name:"GUANGZHOU FUTURES EXCHANGE", country:"CN" },
+  { mic:"GFIB", name:"GFI BROKERS", country:"GB" },
+  { mic:"GFIC", name:"GFI SECURITIES LTD", country:"GB" },
+  { mic:"GFKS", name:"GARANTUM FONDKOMMISSION AB", country:"SE" },
+  { mic:"GFOX", name:"GLOBAL FUTURES AND OPTIONS LTD", country:"GB" },
+  { mic:"GFSG", name:"GFI SINGAPORE RMO", country:"SG" },
+  { mic:"GIPB", name:"GOLDMAN SACHS INTERNATIONAL PARIS BRANCH", country:"FR" },
+  { mic:"GLLC", name:"GATE US LLC", country:"US" },
+  { mic:"GLMX", name:"GLMX", country:"US" },
+  { mic:"GLOM", name:"GLOMAX EXCHANGE LTD", country:"AE" },
+  { mic:"GLPS", name:"ESSEX RADEZ, LLC", country:"US" },
+  { mic:"GLPX", name:"ACS EXECUTION SERVICES, LLC", country:"US" },
+  { mic:"GMEG", name:"GMEX EXCHANGE", country:"GB" },
+  { mic:"GMES", name:"GRIFFIN MARKETS EUROPE", country:"FR" },
+  { mic:"GMGD", name:"GMG DUBAI LIMITED", country:"AE" },
+  { mic:"GMGE", name:"GMG EUROPE B.V.", country:"NL" },
+  { mic:"GMGL", name:"GMG BROKERS LIMITED", country:"GB" },
+  { mic:"GMTF", name:"GALAXY", country:"FR" },
+  { mic:"GOTC", name:"GLOBAL OTC", country:"US" },
+  { mic:"GOVX", name:"GOVEX", country:"US" },
+  { mic:"GPBC", name:"GPB-FINANCIAL SERVICES LTD", country:"CY" },
+  { mic:"GREE", name:"THE GREEN EXCHANGE", country:"US" },
+  { mic:"GRIF", name:"GRIFFIN MARKETS LIMITED", country:"GB" },
+  { mic:"GRSE", name:"THE GREEN STOCK EXCHANGE - ACB IMPACT MARKETS", country:"GB" },
+  { mic:"GSAL", name:"GOLDMAN SACHS (ASIA) LLC", country:"HK" },
+  { mic:"GSBE", name:"GOLDMAN SACHS BANK EUROPE SE", country:"DE" },
+  { mic:"GSCI", name:"THE GUYANA ASSOCIATION OF SECURITIES COMPANIES AND INTERMEDIARIES INC.", country:"GY" },
+  { mic:"GSCO", name:"GOLDMAN SACHS AND CO.", country:"US" },
+  { mic:"GSEF", name:"GFI SWAPS EXCHANGE, LLC", country:"US" },
+  { mic:"GSIB", name:"GOLDMAN SACHS INTERNATIONAL BANK", country:"GB" },
+  { mic:"GSIL", name:"GOLDMAN SACHS INTERNATIONAL", country:"GB" },
+  { mic:"GSLO", name:"GALLARDO SECURITIES LIMITED", country:"GB" },
+  { mic:"GSXC", name:"GSX CHINA", country:"CN" },
+  { mic:"GSXK", name:"GSX KOREA", country:"KR" },
+  { mic:"GSXL", name:"THE GIBRALTAR STOCK EXCHANGE", country:"GI" },
+  { mic:"GSXN", name:"GSX NATURAL", country:"HK" },
+  { mic:"GSXT", name:"GSX TAIWAN", country:"TW" },
+  { mic:"GTCO", name:"KCG AMERICAS LLC", country:"US" },
+  { mic:"GTSM", name:"GTS SECURITIES", country:"US" },
+  { mic:"GTSX", name:"GTSX", country:"US" },
+  { mic:"GTXE", name:"GTX ECN", country:"BM" },
+  { mic:"GXIL", name:"GOLDMAN SACHS INTERNAL LIQUIDITY (GSX-IL)", country:"JP" },
+  { mic:"GXMA", name:"GX MARKETCENTER", country:"VU" },
+  { mic:"HBFR", name:"HSBC CONTINENTAL EUROPE", country:"FR" },
+  { mic:"HBPL", name:"HSBC BANK POLSKA S.A.", country:"PL" },
+  { mic:"HCHC", name:"ICE CLEAR NETHERLANDS B.V.", country:"NL" },
+  { mic:"HDAT", name:"ELECTRONIC SECONDARY SECURITIES MARKET (HDAT)", country:"GR" },
+  { mic:"HEGX", name:"NADEX", country:"US" },
+  { mic:"HELA", name:"HELABA", country:"DE" },
+  { mic:"HEMO", name:"HENEX S.A.", country:"GR" },
+  { mic:"HMTF", name:"VORVEL BONDS", country:"IT" },
+  { mic:"HPCX", name:"HPC SA", country:"FR" },
+  { mic:"HPPO", name:"POTAMUS TRADING LLC", country:"US" },
+  { mic:"HPSX", name:"HPC OTF", country:"GB" },
+  { mic:"HREU", name:"HRTEU LIMITED", country:"IE" },
+  { mic:"HRSI", name:"HUDSON RIVER TRADING - SYSTEMATIC INTERNALISER", country:"GB" },
+  { mic:"HRTF", name:"HUDSON RIVER TRADING (HRT)", country:"US" },
+  { mic:"HRTX", name:"HUDSON RIVER TRADING", country:"US" },
+  { mic:"HSBC", name:"HSBC", country:"GB" },
+  { mic:"HSBT", name:"HSBC TRINKAUS AND BURKHARDT AG", country:"DE" },
+  { mic:"HSFX", name:"CBOE FX", country:"US" },
+  { mic:"HSTC", name:"HANOI STOCK EXCHANGE", country:"VN" },
+  { mic:"HSXA", name:"HSBC-X HONG KONG", country:"HK" },
+  { mic:"HUPX", name:"HUNGARIAN POWER EXCHANGE", country:"HU" },
+  { mic:"HWHE", name:"HWH ENERGIMEGLING", country:"NO" },
+  { mic:"IBAL", name:"ICE BENCHMARK ADMINISTRATION", country:"GB" },
+  { mic:"IBCO", name:"INTERACTIVE BROKERS CORP", country:"US" },
+  { mic:"IBER", name:"IBERCAJA BANCO SA", country:"ES" },
+  { mic:"IBEX", name:"INDEPENDENT BULGARIAN ENERGY EXCHANGE", country:"BG" },
+  { mic:"IBGH", name:"IBERIAN GAS HUB", country:"ES" },
+  { mic:"IBIS", name:"INVEST BANCA", country:"IT" },
+  { mic:"IBKR", name:"INTERACTIVE BROKERS LLC", country:"US" },
+  { mic:"IBSC", name:"ICE BONDS SECURITIES CORPORATION", country:"US" },
+  { mic:"IBSI", name:"INTERACTIVE BROKERS", country:"IE" },
+  { mic:"ICDX", name:"INDONESIA COMMODITY AND DERIVATIVES EXCHANGE", country:"ID" },
+  { mic:"ICES", name:"ICE SWAP TRADE LLC", country:"US" },
+  { mic:"ICOT", name:"ICAP EU - OTF", country:"FR" },
+  { mic:"ICPM", name:"TP ICAP UK MTF", country:"GB" },
+  { mic:"ICPS", name:"ICAP SINGAPORE RMO", country:"SG" },
+  { mic:"IDXM", name:"IDX MARKETS, LLC", country:"US" },
+  { mic:"IEXA", name:"IEX DAP LLC", country:"US" },
+  { mic:"IEXG", name:"INVESTORS EXCHANGE", country:"US" },
+  { mic:"IFAD", name:"ICE FUTURES ABU DHABI", country:"AE" },
+  { mic:"IFBX", name:"IRAN FARA BOURSE", country:"IR" },
+  { mic:"IFEU", name:"ICE FUTURES EUROPE", country:"GB" },
+  { mic:"IFLS", name:"SWAPXECUTE", country:"GB" },
+  { mic:"IFSG", name:"ICE FUTURES SINGAPORE", country:"SG" },
+  { mic:"IFUS", name:"ICE FUTURES U.S.", country:"US" },
+  { mic:"IGDL", name:"ICAP GLOBAL DERIVATIVES LIMITED", country:"GB" },
+  { mic:"IINX", name:"INDIA INTERNATIONAL EXCHANGE (IFSC) LIMITED", country:"IN" },
+  { mic:"IKBS", name:"IKB DEUTSCHE INDUSTRIEBANK AG", country:"DE" },
+  { mic:"IMCS", name:"IMC FINANCIAL MARKETS", country:"US" },
+  { mic:"IMCT", name:"IMC", country:"NL" },
+  { mic:"IMEX", name:"IRAN MERCANTILE EXCHANGE", country:"IR" },
+  { mic:"IMMH", name:"IMMH - INTESA SANPAOLO", country:"IT" },
+  { mic:"IMTF", name:"INTEGRAL MTF", country:"GB" },
+  { mic:"INCR", name:"INTELLIGENTCROSS", country:"US" },
+  { mic:"INFT", name:"INFRONT MARKETS", country:"NO" },
+  { mic:"INGB", name:"ING BANK NV", country:"NL" },
+  { mic:"INGU", name:"ING BANK NV  - LONDON BRANCH", country:"GB" },
+  { mic:"INGW", name:"ING BANK SLASKI SA", country:"PL" },
+  { mic:"INTL", name:"STONEX FINANCIAL INC.", country:"US" },
+  { mic:"INVE", name:"INVESTEC BANK PLC", country:"GB" },
+  { mic:"IOTF", name:"ICAP UK OTF", country:"GB" },
+  { mic:"ISBA", name:"BANCA DI ASTI", country:"IT" },
+  { mic:"ISDA", name:"ISDAFIX", country:"US" },
+  { mic:"ISEX", name:"INTER-CONNECTED STOCK EXCHANGE OF INDIA LTD", country:"IN" },
+  { mic:"ISSI", name:"ICBC STANDARD BANK", country:"GB" },
+  { mic:"ISWA", name:"ISWAP UK MTF", country:"GB" },
+  { mic:"ISWP", name:"ISWAP EURO MTF", country:"NL" },
+  { mic:"ITGI", name:"POSIT", country:"US" },
+  { mic:"ITGL", name:"POSIT MTF", country:"IE" },
+  { mic:"ITSL", name:"INTERNATIONAL TRADING SYSTEM (ITS)", country:"KZ" },
+  { mic:"IVZX", name:"INVESCO CANADA PTF TRADES", country:"CA" },
+  { mic:"JADX", name:"JOINT ASIAN DERIVATIVES EXCHANGE", country:"SG" },
+  { mic:"JBSI", name:"JYSKE BANK", country:"DK" },
+  { mic:"JEFA", name:"JEFFERIES ASIA", country:"JP" },
+  { mic:"JEFE", name:"JEFFERIES EUROPE", country:"DE" },
+  { mic:"JISI", name:"JEFFERIES INTERNATIONAL", country:"GB" },
+  { mic:"JLEU", name:"JUMP TRADING EU EQUITY PLATFORM", country:"NL" },
+  { mic:"JLQD", name:"JUMP TRADING - MULTI-ASSET PLATFORM", country:"US" },
+  { mic:"JNSI", name:"JANE STREET NETHERLANDS B.V.", country:"NL" },
+  { mic:"JNST", name:"JANE STREET CAPITAL, LLC", country:"US" },
+  { mic:"JPBX", name:"JPBX", country:"US" },
+  { mic:"JPCB", name:"JPMORGAN CHASE BANK N.A. LONDON BRANCH", country:"GB" },
+  { mic:"JPEU", name:"J.P. MORGAN SE", country:"DE" },
+  { mic:"JPJX", name:"JP JENKINS", country:"GB" },
+  { mic:"JPMI", name:"JP MORGAN - JPMI MARKET", country:"HK" },
+  { mic:"JPMS", name:"JPMS, LLC", country:"US" },
+  { mic:"JPMX", name:"JPMX", country:"US" },
+  { mic:"JPSI", name:"J.P. MORGAN SECURITIES PLC", country:"GB" },
+  { mic:"JSES", name:"JANE STREET EXECUTION SERVICES LLC", country:"US" },
+  { mic:"JSJX", name:"JANE STREET JX", country:"US" },
+  { mic:"JSSI", name:"JANE STREET FINANCIAL LTD", country:"GB" },
+  { mic:"JYSI", name:"DEN JYSKE SPAREKASSE", country:"DK" },
+  { mic:"KBCB", name:"KBC BANK NV  GROUP MARKETS", country:"BE" },
+  { mic:"KBLL", name:"QUINTET PRIVATE BANK (EUROPE) S.A.", country:"LU" },
+  { mic:"KBLM", name:"KYTE BROKING LIMITED", country:"GB" },
+  { mic:"KCCP", name:"KELER CCP", country:"HU" },
+  { mic:"KELR", name:"KELER", country:"HU" },
+  { mic:"KHHU", name:"K AND H BANK ZRT", country:"HU" },
+  { mic:"KLEU", name:"KNIGHT LINK EUROPE", country:"GB" },
+  { mic:"KLSH", name:"KALSHIEX LLC", country:"US" },
+  { mic:"KNIG", name:"KNIGHT", country:"US" },
+  { mic:"KOME", name:"KOMERCNI BANKA, A.S.", country:"CZ" },
+  { mic:"KRDE", name:"KRAKEN DERIVATIVES EXCHANGE", country:"US" },
+  { mic:"KRME", name:"PAYWARD MENA HOLDINGS LTD.", country:"AE" },
+  { mic:"LAKX", name:"RBC CAPITAL MARKETS LLC - TRAJECTORY CROSS", country:"US" },
+  { mic:"LAMP", name:"LAMPOST CAPITAL", country:"US" },
+  { mic:"LASF", name:"LATAM SEF", country:"US" },
+  { mic:"LASP", name:"LAN AND SPAR BANK A/S", country:"DK" },
+  { mic:"LBBW", name:"LBBW - LANDESBANK BADEN-WUERTTEMBERG", country:"DE" },
+  { mic:"LBCM", name:"LLOYDS BANK CORPORATE MARKETS", country:"GB" },
+  { mic:"LBCW", name:"LLOYDS BANK CORPORATE MARKETS WERTPAPIERHANDELSBANK GMBH", country:"DE" },
+  { mic:"LCHC", name:"LCH.CLEARNET", country:"FR" },
+  { mic:"LCXE", name:"LCX", country:"LI" },
+  { mic:"LEBV", name:"LEDGEREDGE B.V.", country:"NL" },
+  { mic:"LELE", name:"LEDGEREDGE", country:"GB" },
+  { mic:"LESI", name:"LEDGEREDGE SECURITIES INC.", country:"US" },
+  { mic:"LEVL", name:"LEVEL ATS", country:"US" },
+  { mic:"LICA", name:"LIQUIDNET CANADA ATS", country:"CA" },
+  { mic:"LIDR", name:"PT LSEG - CLEARED IDR MATCHING", country:"ID" },
+  { mic:"LIGA", name:"LIGA BANK EG", country:"DE" },
+  { mic:"LINX", name:"LINX", country:"LI" },
+  { mic:"LISE", name:"LISE", country:"FR" },
+  { mic:"LIUS", name:"LIQUIDNET, INC.", country:"US" },
+  { mic:"LLAT", name:"LIECHTENSTEINISCHE LANDESBANK (OSTERREICH) AG", country:"AT" },
+  { mic:"LMAS", name:"LMAX EXCHANGE SINGAPORE - NDFS", country:"SG" },
+  { mic:"LMAX", name:"LMAX", country:"GB" },
+  { mic:"LMEC", name:"LME CLEAR", country:"GB" },
+  { mic:"LMNR", name:"LUMINOR BANK AS", country:"EE" },
+  { mic:"LOOP", name:"LOOPFX", country:"GB" },
+  { mic:"LOTC", name:"OTC MARKET", country:"GB" },
+  { mic:"LOYD", name:"LLOYDS BANK", country:"GB" },
+  { mic:"LPPM", name:"LONDON PLATINUM AND PALLADIUM MARKET", country:"GB" },
+  { mic:"LPSF", name:"LPSFX LLC", country:"US" },
+  { mic:"LQED", name:"LIQUIDITYEDGE", country:"US" },
+  { mic:"LSSI", name:"LANG AND SCHWARZ TRADE CENTER", country:"DE" },
+  { mic:"LTAA", name:"LUMINEX TRADING AND ANALYTICS LLC", country:"US" },
+  { mic:"LTSE", name:"LONG-TERM STOCK EXCHANGE, INC.", country:"US" },
+  { mic:"LXJP", name:"BARCLAYS LX JAPAN", country:"JP" },
+  { mic:"M2AE", name:"M2 LIMITED", country:"AE" },
+  { mic:"MAEL", name:"MARKETAXESS EUROPE LIMITED", country:"GB" },
+  { mic:"MAKX", name:"MAKOR SECURITIES LONDON LTD", country:"GB" },
+  { mic:"MALX", name:"MALDIVES STOCK EXCHANGE", country:"MV" },
+  { mic:"MANL", name:"MARKETAXESS NL B.V.", country:"NL" },
+  { mic:"MAQE", name:"MACQUARIE BANK EUROPE DESIGNATED ACTIVITY COMPANY", country:"IE" },
+  { mic:"MAQH", name:"MACQUARIE INTERNAL MARKETS (HONG KONG)", country:"HK" },
+  { mic:"MAQI", name:"MACQUARIE BANK INTERNATIONAL LIMITED", country:"GB" },
+  { mic:"MAQJ", name:"MACQUARIE INTERNAL MARKETS (JAPAN)", country:"JP" },
+  { mic:"MAQL", name:"MACQUARIE CAPITAL EUROPE LIMITED", country:"GB" },
+  { mic:"MAQU", name:"MACQUARIE BANK LIMITED, LONDON BRANCH", country:"GB" },
+  { mic:"MAQX", name:"MACQUARIE INTERNAL MARKETS (AUSTRALIA)", country:"AU" },
+  { mic:"MASG", name:"MARKETAXESS SINGAPORE PTE LIMITED", country:"SG" },
+  { mic:"MATX", name:"MATRIX LIMITED", country:"AE" },
+  { mic:"MAXD", name:"MAX MARKETS LIMITED", country:"GB" },
+  { mic:"MBPL", name:"MBANK S.A.", country:"PL" },
+  { mic:"MBUL", name:"MTF SOFIA", country:"BG" },
+  { mic:"MCID", name:"MACQUARIE CAPITAL (IRELAND)", country:"IE" },
+  { mic:"MCXX", name:"METROPOLITAN STOCK EXCHANGE OF INDIA LIMITED", country:"IN" },
+  { mic:"MEPX", name:"MONTENEGRIN POWER EXCHANGE", country:"ME" },
+  { mic:"METZ", name:"MET ZURICH", country:"GB" },
+  { mic:"MFGL", name:"MF GLOBAL ENERGY MTF", country:"GB" },
+  { mic:"MFXC", name:"FX CONNECT - MTF", country:"GB" },
+  { mic:"MHBD", name:"MIZUHO BANK, LTD. DUESSELDORF BRANCH", country:"DE" },
+  { mic:"MHBE", name:"MIZUHO BANK EUROPE N.V.", country:"NL" },
+  { mic:"MHBP", name:"MIZUHO BANK LTD. - PARIS BRANCH", country:"FR" },
+  { mic:"MHEU", name:"MIZUHO SECURITIES EUROPE", country:"DE" },
+  { mic:"MIBG", name:"MERCADO ORGANIZADO DEL GAS", country:"ES" },
+  { mic:"MIDC", name:"MIDCHAINS", country:"AE" },
+  { mic:"MIHI", name:"MIAMI INTERNATIONAL HOLDINGS, INC.", country:"US" },
+  { mic:"MISX", name:"MOSCOW EXCHANGE - ALL MARKETS", country:"RU" },
+  { mic:"MIZX", name:"MIZUHO INTERNAL CROSSING", country:"JP" },
+  { mic:"MKAP", name:"MERITKAPITAL", country:"CY" },
+  { mic:"MKTF", name:"MARKET SECURITIES (FRANCE) SA", country:"FR" },
+  { mic:"MLEX", name:"BOFA SECURITIES EUROPE", country:"FR" },
+  { mic:"MLIX", name:"MERRILL LYNCH INTERNATIONAL", country:"GB" },
+  { mic:"MOAT", name:"MOSAIC ATS", country:"US" },
+  { mic:"MOON", name:"MOON", country:"US" },
+  { mic:"MSAL", name:"MORGAN STANLEY AUSTRALIA SECURITIES LIMITED", country:"AU" },
+  { mic:"MSBI", name:"MORGAN STANLEY BANK INTERNATIONAL LIMITED", country:"GB" },
+  { mic:"MSCO", name:"MORGAN STANLEY AND CO. LLC", country:"US" },
+  { mic:"MSDM", name:"MICHAEL/STROM DOM MAKLERSKI SPOLKA AKCYJNA", country:"PL" },
+  { mic:"MSEL", name:"MAREX SPECTRON EUROPE LIMITED - OTF", country:"IE" },
+  { mic:"MSEU", name:"MORGAN STANLEY EUROPE S.E.", country:"DE" },
+  { mic:"MSIP", name:"MORGAN STANLEY AND CO. INTERNATIONAL PLC", country:"GB" },
+  { mic:"MSMS", name:"MORGAN STANLEY MUFG SECURITIES CO., LTD", country:"JP" },
+  { mic:"MTSO", name:"MTS S.P.A.", country:"IT" },
+  { mic:"MTXX", name:"MARKETAXESS CORPORATION", country:"US" },
+  { mic:"MUBE", name:"MUFG BANK (EUROPE) N.V.", country:"NL" },
+  { mic:"MUBL", name:"MUFG BANK, LTD. - LONDON BRANCH", country:"GB" },
+  { mic:"MUBM", name:"MUFG BANK, LTD. - MILANO BRANCH", country:"IT" },
+  { mic:"MUBP", name:"MUFG BANK, LTD. - PARIS BRANCH", country:"FR" },
+  { mic:"MUDX", name:"MITSUBISHI DIAMOND CROSSING", country:"JP" },
+  { mic:"MUFP", name:"MARIANA UFP LLP", country:"GB" },
+  { mic:"MUSE", name:"MUFG SECURITIES EMEA PLC", country:"GB" },
+  { mic:"MUSN", name:"MUFG SECURITIES (EUROPE) N.V -", country:"NL" },
+  { mic:"MUTI", name:"MITSUBISHI UFJ TRUST INTERNATIONAL LIMITED", country:"GB" },
+  { mic:"MYTR", name:"MYTREASURY", country:"GB" },
+  { mic:"N2EX", name:"N2EX", country:"GB" },
+  { mic:"NABP", name:"NATIONAL AUSTRALIA BANK EUROPE S.A.", country:"FR" },
+  { mic:"NAMX", name:"NATIONAL MERCANTILE EXCHANGE", country:"RU" },
+  { mic:"NAPA", name:"NASDAQ STOCKHOLM AB - APA SERVICE", country:"SE" },
+  { mic:"NASX", name:"NASD OTC MARKET", country:"NG" },
+  { mic:"NATX", name:"NATIXIS", country:"FR" },
+  { mic:"NBFL", name:"NATIONAL BANK FINANCIAL INC.", country:"GB" },
+  { mic:"NBLX", name:"NOBLE EXCHANGE", country:"US" },
+  { mic:"NBOT", name:"NATIONAL BOARD OF TRADE LIMITED", country:"IN" },
+  { mic:"NCEL", name:"PAKISTAN MERCANTILE EXCHANGE", country:"PK" },
+  { mic:"NCME", name:"SMBC NIKKO CAPITAL MARKETS EUROPE GMBH", country:"DE" },
+  { mic:"NCML", name:"SMBC NIKKO CAPITAL MARKETS LIMITED", country:"GB" },
+  { mic:"NDCM", name:"ICE ENDEX UK OCM GAS SPOT", country:"GB" },
+  { mic:"NDEX", name:"ICE ENDEX FUTURES", country:"NL" },
+  { mic:"NEEQ", name:"NATIONAL EQUITIES EXCHANGE AND QUOTATIONS", country:"CN" },
+  { mic:"NEOE", name:"CBOE CANADA - NEO-L (MARKET BY ORDER)", country:"CA" },
+  { mic:"NESI", name:"NOMURA FINANCIAL PRODUCTS EUROPE GMBH", country:"DE" },
+  { mic:"NEXO", name:"NOREXECO ASA", country:"NO" },
+  { mic:"NEXS", name:"OSTTRA SEF", country:"GB" },
+  { mic:"NFSC", name:"NATIONAL FINANCIAL SERVICES, LLC", country:"US" },
+  { mic:"NGXC", name:"NATURAL GAS EXCHANGE", country:"CA" },
+  { mic:"NIBC", name:"NIBC", country:"NL" },
+  { mic:"NILX", name:"NILE STOCK EXCHANGE", country:"EG" },
+  { mic:"NLPX", name:"APX POWER NL", country:"NL" },
+  { mic:"NMCE", name:"NATIONAL MULTI-COMMODITY EXCHANGE OF INDIA", country:"IN" },
+  { mic:"NMRA", name:"NOMURA SECURITIES INTERNATIONAL", country:"US" },
+  { mic:"NMRJ", name:"NOMURA SECURITIES CO LTD", country:"JP" },
+  { mic:"NODX", name:"NODAL EXCHANGE", country:"US" },
+  { mic:"NOFF", name:"NOMURA OTC TRADES", country:"GB" },
+  { mic:"NOPS", name:"NORD POOL SPOT AS", country:"NO" },
+  { mic:"NORD", name:"HSH NORDBANK", country:"DE" },
+  { mic:"NORX", name:"NASDAQ OSLO ASA", country:"NO" },
+  { mic:"NOSI", name:"NOMURA INTERNATIONAL PLC", country:"GB" },
+  { mic:"NOTC", name:"EURONEXT NOTC", country:"NO" },
+  { mic:"NOWX", name:"NOW CP - NEU CP", country:"FR" },
+  { mic:"NPEX", name:"NPEX", country:"NL" },
+  { mic:"NPGA", name:"GASPOINT NORDIC A/S", country:"DK" },
+  { mic:"NPMS", name:"NASDAQ PRIVATE MARKET - SECONDMARKET", country:"US" },
+  { mic:"NSPO", name:"NASDAQ SPOT AB", country:"SE" },
+  { mic:"NSSA", name:"NOBLE SECURITIES S.A.", country:"PL" },
+  { mic:"NSXB", name:"BENDIGO STOCK EXCHANGE LIMITED", country:"AU" },
+  { mic:"NTUK", name:"NATIXIS LONDON BRANCH", country:"GB" },
+  { mic:"NWMS", name:"NATWEST MARKETS PLC", country:"GB" },
+  { mic:"NWNV", name:"NATWEST MARKETS NV", country:"NL" },
+  { mic:"NXEU", name:"NX", country:"GB" },
+  { mic:"NXTE", name:"NEXTRADE", country:"KR" },
+  { mic:"NXUS", name:"NX ATS - CROSSING PLATFORM", country:"US" },
+  { mic:"NYPC", name:"NEW YORK PORTFOLIO CLEARING", country:"US" },
+  { mic:"NYSI", name:"NYKREDIT BANK", country:"DK" },
+  { mic:"OAPA", name:"OSLO BORS - APA", country:"NO" },
+  { mic:"OBGE", name:"OB GROUP ENERGY LIMITED", country:"GB" },
+  { mic:"OBKL", name:"OBERBANK AG", country:"AT" },
+  { mic:"OCEA", name:"BLUE OCEAN ALTERNATIVE TRADING SYSTEM", country:"US" },
+  { mic:"OCFX", name:"ONECHRONOS FX", country:"US" },
+  { mic:"OCSI", name:"SOVA CAPITAL", country:"GB" },
+  { mic:"OCTC", name:"OCTAURA - COLLATERALIZED LOAN OBLIGATION (CLO)", country:"US" },
+  { mic:"OCTL", name:"OCTAURA - LOANS", country:"US" },
+  { mic:"OCXE", name:"ONECHRONOS MARKETS EUROPE", country:"NL" },
+  { mic:"OCXL", name:"ONECHRONOS MARKETS UK", country:"GB" },
+  { mic:"ODDO", name:"ODDO BHF", country:"FR" },
+  { mic:"ODOC", name:"ODDO CONTREPARTIE", country:"FR" },
+  { mic:"ODXE", name:"ODX - OSAKA DIGITAL EXCHANGE", country:"JP" },
+  { mic:"OHVO", name:"OHV OTF", country:"NL" },
+  { mic:"OLBB", name:"OLDENBURGISCHE LANDESBANK AG FX  HANDEL", country:"DE" },
+  { mic:"OLLC", name:"OTCEX LLC", country:"US" },
+  { mic:"OMEL", name:"OMI POLO ESPANOL S.A. (OMIE)", country:"ES" },
+  { mic:"OMET", name:"OM E-TRADING (OMET)", country:"US" },
+  { mic:"OMGA", name:"OMEGA ATS", country:"CA" },
+  { mic:"OMIC", name:"THE IBERIAN ENERGY CLEARING HOUSE", country:"PT" },
+  { mic:"OMIP", name:"OMIP - POLO PORTUGUES, S.G.M.R., S.A. / OMIP DERIVATIVES MARKET", country:"PT" },
+  { mic:"ONEX", name:"ONE TRADING EXCHANGE", country:"NL" },
+  { mic:"OPMX", name:"OPTIMX MARKETS, INC", country:"US" },
+  { mic:"OPRA", name:"OPTIONS PRICE REPORTING AUTHORITY", country:"US" },
+  { mic:"OPSI", name:"OPTIVER V.O.F.", country:"NL" },
+  { mic:"OPTX", name:"OPTAXE MTF", country:"GB" },
+  { mic:"OSDS", name:"OSL DIGITAL SECURITIES EXCHANGE", country:"HK" },
+  { mic:"OSLC", name:"SIX X-CLEAR AG", country:"NO" },
+  { mic:"OSSG", name:"OSL SG EXCHANGES", country:"SG" },
+  { mic:"OTCE", name:"OTCEX", country:"GB" },
+  { mic:"OTCI", name:"OTC LINK NQB IDQS (INTER-DEALER QUOTATION SYSTEM)", country:"US" },
+  { mic:"OTCM", name:"OTC LINK ATS - OTC MARKETS", country:"US" },
+  { mic:"OTCN", name:"OTC LINK ECN", country:"US" },
+  { mic:"OTCX", name:"OTC EXCHANGE OF INDIA", country:"IN" },
+  { mic:"OTEU", name:"OTCX EU MTF", country:"NL" },
+  { mic:"OTPB", name:"OTP BANK NYRT", country:"HU" },
+  { mic:"OTPR", name:"OTP BANK ROMANIA SA", country:"RO" },
+  { mic:"OTXB", name:"BERNER KANTONALBANK OTC-X", country:"CH" },
+  { mic:"OTXT", name:"OTCX TRADING LIMITED UK MTF", country:"GB" },
+  { mic:"OYLD", name:"OPENYIELD ATS", country:"US" },
+  { mic:"PATF", name:"PATRIA FINANCE A.S.", country:"CZ" },
+  { mic:"PAVE", name:"ALTERNATIVE PLATFORM FOR SPANISH SECURITIES", country:"ES" },
+  { mic:"PAYM", name:"PAYMIUM", country:"FR" },
+  { mic:"PBGR", name:"PIRAEUS BANK", country:"GR" },
+  { mic:"PDEX", name:"PHILIPPINE DEALING AND EXCHANGE CORP", country:"PH" },
+  { mic:"PEEL", name:"PEEL HUNT LLP UK", country:"GB" },
+  { mic:"PEPW", name:"PEPINS - MTF", country:"SE" },
+  { mic:"PESL", name:"PAYWARD EUROPE SOLUTIONS LIMITED (KRAKEN)", country:"IE" },
+  { mic:"PFTS", name:"PFTS STOCK EXCHANGE", country:"UA" },
+  { mic:"PGSL", name:"PAYWARD GLOBAL SOLUTIONS LIMITED (KRAKEN) - IE", country:"IE" },
+  { mic:"PGTP", name:"PAYWARD GLOBAL TRADING (KRAKEN)", country:"SG" },
+  { mic:"PIEU", name:"ARITAS FINANCIAL LTD", country:"GB" },
+  { mic:"PIPE", name:"ARITAS SECURITIES LLC", country:"US" },
+  { mic:"PIPR", name:"PIPER SANDLER AND CO.", country:"US" },
+  { mic:"PIRM", name:"PIRUM", country:"GB" },
+  { mic:"PKOP", name:"BANK POLSKA KASA OPIEKI S.A.", country:"PL" },
+  { mic:"PMXX", name:"PERPETUAL MARKETS - MAIN", country:"CY" },
+  { mic:"POSE", name:"PORTFOLIO STOCK EXCHANGE", country:"ES" },
+  { mic:"POTC", name:"PACIFIC OTC", country:"VU" },
+  { mic:"POTL", name:"PO TRADE LIQUIDITY", country:"AU" },
+  { mic:"PPEX", name:"PROPERTY PARTNER EXCHANGE", country:"GB" },
+  { mic:"PRSE", name:"PRAGMA ATS", country:"US" },
+  { mic:"PTPG", name:"POLISH TRADING POINT", country:"PL" },
+  { mic:"PUMA", name:"PUMA CAPITAL, LLC", country:"US" },
+  { mic:"PUND", name:"PUNDION LLC", country:"US" },
+  { mic:"PVBL", name:"PROVABLE MARKETS", country:"US" },
+  { mic:"PXIL", name:"POWER EXCHANGE INDIA LTD.", country:"IN" },
+  { mic:"QCEX", name:"QCX, LLC", country:"US" },
+  { mic:"QWIK", name:"QWICKROUTE", country:"US" },
+  { mic:"QWIX", name:"Q-WIXX PLATFORM", country:"GB" },
+  { mic:"R5FX", name:"R5FX LIMITED", country:"GB" },
+  { mic:"RABL", name:"RABOBANK INTERNATIONAL UK", country:"GB" },
+  { mic:"RABO", name:"RABOBANK", country:"NL" },
+  { mic:"RAJA", name:"RAYMOND JAMES", country:"US" },
+  { mic:"RBCB", name:"RBC INVESTOR SERVICES BANK S.A.", country:"LU" },
+  { mic:"RBCC", name:"RBC - PARIS BRANCH", country:"FR" },
+  { mic:"RBCE", name:"RBC EUROPE LIMITED", country:"GB" },
+  { mic:"RBCG", name:"RBC CAPITAL MARKETS (EUROPE) GMBH", country:"DE" },
+  { mic:"RBCM", name:"RBC - ROYAL BANK OF CANADA", country:"GB" },
+  { mic:"RBCS", name:"RBC CAPITAL MARKETS LLC", country:"US" },
+  { mic:"RBCT", name:"RBC INVESTOR SERVICES TRUST", country:"GB" },
+  { mic:"RBEX", name:"RAILBIRD EXCHANGE", country:"US" },
+  { mic:"RBHU", name:"RAIFFEISEN BANK (HUNGARY)", country:"HU" },
+  { mic:"RBIV", name:"RAIFFEISEN BANK INTERNATIONAL AG", country:"AT" },
+  { mic:"RBSX", name:"RBS CROSS", country:"GB" },
+  { mic:"RCMA", name:"RBC CAPITAL MARKETS ARBITRAGE S.A.", country:"US" },
+  { mic:"RENC", name:"RENAISSANCE SECURITIES (CYPRUS) LIMITED", country:"CY" },
+  { mic:"REVX", name:"REVOLUT X", country:"CY" },
+  { mic:"RFBK", name:"RAIFFEISENBANK, AS.", country:"CZ" },
+  { mic:"RFIM", name:"REAL FORTUNE INVESTMENT L.L.C", country:"AE" },
+  { mic:"RITS", name:"REFINITIV - FORWARDS MATCHING", country:"IN" },
+  { mic:"RLBO", name:"RAIFFEISENLANDESBANK OBER\u00d6STERREICH", country:"AT" },
+  { mic:"RMMS", name:"RMB MORGAN STANLEY", country:"ZA" },
+  { mic:"RMTF", name:"REFINITIV MTF", country:"IE" },
+  { mic:"ROCO", name:"TAIPEI EXCHANGE", country:"TW" },
+  { mic:"ROFX", name:"ROSARIO FUTURE EXCHANGE", country:"AR" },
+  { mic:"ROSR", name:"SIX REPO AG", country:"CH" },
+  { mic:"ROTC", name:"RWANDA OTC MARKET", country:"RW" },
+  { mic:"RPDX", name:"MOSCOW ENERGY EXCHANGE", country:"RU" },
+  { mic:"RR4G", name:"ROUTE4GAS", country:"NL" },
+  { mic:"RRSI", name:"RAIFFEISEN BANK S.A. (ROMANIA)", country:"RO" },
+  { mic:"RSEX", name:"RWANDA STOCK EXCHANGE", country:"RW" },
+  { mic:"RTSL", name:"REFINITIV TRANSACTIONS SERVICES LIMITED", country:"GB" },
+  { mic:"RTSP", name:"REFINITIV TRANSACTION SERVICES PTE. LTD", country:"SG" },
+  { mic:"RTXF", name:"RTX FINTECH AND RESEARCH", country:"US" },
+  { mic:"RULE", name:"RULEMATCH", country:"CH" },
+  { mic:"RUSX", name:"NON-PROFIT PARTNERSHIP FOR THE DEVELOPMENT OF FINANCIAL MARKET RTS", country:"RU" },
+  { mic:"RVSA", name:"RAIFFEISENVERBAND SALZBURG", country:"AT" },
+  { mic:"S360", name:"S360", country:"SG" },
+  { mic:"S3FM", name:"SOCIETY3 FUNDERSMART", country:"CH" },
+  { mic:"SAGE", name:"SAGETRADER", country:"US" },
+  { mic:"SANT", name:"BANCO SANTANDER S.A.", country:"ES" },
+  { mic:"SB1M", name:"SPAREBANK 1 MARKETS", country:"NO" },
+  { mic:"SBEX", name:"SCOTIABANK", country:"GB" },
+  { mic:"SBIJ", name:"JAPANNEXT - J - MARKET", country:"JP" },
+  { mic:"SBSI", name:"SYDBANK A/S", country:"DK" },
+  { mic:"SCAG", name:"STANDARD CHARTERED BANK AG", country:"DE" },
+  { mic:"SCLB", name:"SCALABLE CAPITAL", country:"DE" },
+  { mic:"SCOT", name:"SCOTTISH STOCK EXCHANGE", country:"GB" },
+  { mic:"SCXO", name:"ZERO HASH LLC", country:"US" },
+  { mic:"SEBA", name:"STIFEL EUROPE BANK AG", country:"DE" },
+  { mic:"SEBL", name:"SEB LITHUANIA", country:"LT" },
+  { mic:"SEBS", name:"SEB", country:"SE" },
+  { mic:"SECC", name:"SECDEX CLEARING LIMITED", country:"SC" },
+  { mic:"SECD", name:"SECDEX DEPOSITORY LIMITED", country:"SC" },
+  { mic:"SECE", name:"SECDEX EXCHANGE LIMITED", country:"SC" },
+  { mic:"SECF", name:"SECFINEX", country:"GB" },
+  { mic:"SEDC", name:"SECDEX DIGITAL CUSTODIAN LIMITED", country:"SC" },
+  { mic:"SELC", name:"SISTEMA ESPECIAL DE LIQUIDACAO E CUSTODIA DE TITULOS PUBLICOS", country:"BR" },
+  { mic:"SEMX", name:"SEMOPX", country:"IE" },
+  { mic:"SEPE", name:"STOCK EXCHANGE PERSPECTIVA", country:"UA" },
+  { mic:"SFCL", name:"SWISSCANTO FUNDS CENTRE LIMITED", country:"GB" },
+  { mic:"SFMP", name:"FIS SECURITIES FINANCE MATCHING PLATFORM", country:"GB" },
+  { mic:"SFOX", name:"SFOX", country:"US" },
+  { mic:"SGAS", name:"SG AMERICAS SECURITIES, LLC", country:"US" },
+  { mic:"SGEX", name:"SHANGHAI GOLD EXCHANGE", country:"CN" },
+  { mic:"SGMA", name:"GOLDMAN SACH MTF", country:"US" },
+  { mic:"SGMU", name:"SIGMA X EUROPE NON-DISPLAYED BOOK", country:"FR" },
+  { mic:"SGMX", name:"SIGMA X MTF NON-DISPLAYED BOOK", country:"GB" },
+  { mic:"SGOE", name:"SG OPTION EUROPE", country:"FR" },
+  { mic:"SHAR", name:"ASSET MATCH", country:"GB" },
+  { mic:"SHAW", name:"D.E. SHAW", country:"US" },
+  { mic:"SIAB", name:"ALIOR BANK", country:"PL" },
+  { mic:"SIBC", name:"SIB CYPRUS LTD", country:"CY" },
+  { mic:"SIDX", name:"SCOTIABANK (IRELAND) DESIGNATED ACTIVITY COMPANY", country:"IE" },
+  { mic:"SIFX", name:"SIEGE FX LIMITED", country:"GB" },
+  { mic:"SIG2", name:"SIGMA X2 - JAPAN", country:"JP" },
+  { mic:"SIGA", name:"SIGMA X AUSTRALIA", country:"AU" },
+  { mic:"SIGJ", name:"SIGMA X JAPAN", country:"JP" },
+  { mic:"SIMV", name:"SIM VENTURE SECURITIES EXCHANGE", country:"AU" },
+  { mic:"SISI", name:"SUSQUEHANNA INTERNATIONAL SECURITIES LIMITED", country:"IE" },
+  { mic:"SISU", name:"SUSQUEHANNA INTERNATIONAL SECURITIES LIMITED - LONDON BRANCH", country:"GB" },
+  { mic:"SKBB", name:"SKB BANKA D.D. LJUBLJANA", country:"SI" },
+  { mic:"SKSI", name:"SPAREKASSEN KRONJYLLAND", country:"DK" },
+  { mic:"SKYX", name:"SKYTRA", country:"GB" },
+  { mic:"SLHB", name:"SALZBURGER LANDES-HYPOTHEKENBANK", country:"AT" },
+  { mic:"SMBB", name:"SUMITOMO MITSUI BANKING CORPORATION - BRUSSELS BRANCH", country:"BE" },
+  { mic:"SMBC", name:"SMBC NIKKO SNET DARKPOOL", country:"JP" },
+  { mic:"SMBD", name:"SUMITOMO MITSUI BANKING CORPORATION - DUESSELDORF BRANCH", country:"DE" },
+  { mic:"SMBE", name:"SUMITOMO MITSUI BANKING CORPORATION EUROPE LIMITED", country:"GB" },
+  { mic:"SMBG", name:"SUMITOMO MITSUI BANKING CORPORATION - LONDON BRANCH", country:"GB" },
+  { mic:"SMBP", name:"SUMITOMO MITSUI BANKING CORPORATION EUROPE LIMITED - PARIS BRANCH", country:"FR" },
+  { mic:"SMEX", name:"SINGAPORE MERCANTILE EXCHANGE PTE LTD", country:"SG" },
+  { mic:"SMFE", name:"SMALL EXCHANGE, INC - DESIGNATED CONTRACT MARKET", country:"US" },
+  { mic:"SMFF", name:"SMBC BANK EU AG", country:"DE" },
+  { mic:"SNSI", name:"SPAR NORD BANK", country:"DK" },
+  { mic:"SNUK", name:"SANTANDER UK", country:"GB" },
+  { mic:"SOHO", name:"TWO SIGMA SECURITIES, LLC", country:"US" },
+  { mic:"SPAX", name:"SPECTRAXE", country:"US" },
+  { mic:"SPBE", name:"SPB EXCHANGE - ALL MARKETS", country:"RU" },
+  { mic:"SPDX", name:"SPREADEX", country:"GB" },
+  { mic:"SPEC", name:"MAREX SPECTRON INTERNATIONAL LIMITED OTF", country:"GB" },
+  { mic:"SPEX", name:"SPECTRUM MARKETS", country:"DE" },
+  { mic:"SPIM", name:"ST. PETERSBURG INTERNATIONAL MERCANTILE EXCHANGE", country:"RU" },
+  { mic:"SPRZ", name:"SPREADZERO", country:"GB" },
+  { mic:"SPTR", name:"SPAREBANK 1 SMN", country:"NO" },
+  { mic:"SPTX", name:"SPOT FX", country:"US" },
+  { mic:"SPXE", name:"SPX", country:"SK" },
+  { mic:"SQUA", name:"SQUARE GLOBAL - OTF", country:"GB" },
+  { mic:"SRPT", name:"SPEEDROUTE LLC", country:"US" },
+  { mic:"SSBI", name:"STATE STREET BANK INTERNATIONAL GMBH", country:"DE" },
+  { mic:"SSBT", name:"STATE STREET BANK AND TRUST COMPANY", country:"GB" },
+  { mic:"SSEX", name:"SOCIAL STOCK EXCHANGE", country:"GB" },
+  { mic:"SSIL", name:"STATE STREET BANK INTERNATIONAL FX - LONDON BRANCH", country:"GB" },
+  { mic:"SSTX", name:"E-EXCHANGE", country:"US" },
+  { mic:"STAN", name:"STANDARD CHARTERED", country:"GB" },
+  { mic:"STFL", name:"STIFEL NICOLAUS EUROPE LIMITED", country:"GB" },
+  { mic:"STFX", name:"STIFEL, NICOLAUS AND COMPANY, INCORPORATED", country:"US" },
+  { mic:"STOX", name:"STOXX LIMITED", country:"CH" },
+  { mic:"STRM", name:"PURESTREAM", country:"US" },
+  { mic:"STXS", name:"STX FIXED INCOME", country:"NL" },
+  { mic:"STXX", name:"BIT2ME SECURITY TOKENS EXCHANGE - STX", country:"ES" },
+  { mic:"SUNT", name:"SUN TRADING LLC", country:"US" },
+  { mic:"SVEX", name:"SVENSKA HANDELSBANKEN AB - SVEX", country:"SE" },
+  { mic:"SVXI", name:"SAINT VINCENT AND THE GRENADINES SECURITIES EXCHANGE", country:"VC" },
+  { mic:"SWAP", name:"SWAPSTREAM", country:"GB" },
+  { mic:"SWPX", name:"FXSWAPX", country:"US" },
+  { mic:"SXSI", name:"SAXO BANK A/S", country:"DK" },
+  { mic:"SYFX", name:"SYNOPTION", country:"SG" },
+  { mic:"SYNK", name:"SYNKRONY EXCHANGE", country:"IT" },
+  { mic:"T212", name:"TRADING 212 LIMITED", country:"BG" },
+  { mic:"TCML", name:"TIDE CM", country:"GB" },
+  { mic:"TDBL", name:"TORONTO DOMINION BANK - LONDON BRANCH", country:"GB" },
+  { mic:"TDGF", name:"TD SECURITIES", country:"IE" },
+  { mic:"TDON", name:"TRADITION PARIS - TSAF", country:"FR" },
+  { mic:"TDVS", name:"TRADEVILLE", country:"RO" },
+  { mic:"TDXS", name:"TAURUS TDX", country:"CH" },
+  { mic:"TERA", name:"RADIAL-X", country:"US" },
+  { mic:"TERM", name:"TP ICAP FX HUB", country:"SG" },
+  { mic:"TEUR", name:"TRADITION ESPANA OTF", country:"ES" },
+  { mic:"TFEX", name:"THAILAND FUTURES EXCHANGE", country:"TH" },
+  { mic:"TFSA", name:"TFS GREEN AUSTRALIAN GREEN MARKETS", country:"SG" },
+  { mic:"TFSD", name:"T.F.S. DERIVATIVES HK LIMITED", country:"HK" },
+  { mic:"TFSU", name:"TFS GREEN UNITED STATES GREEN MARKETS", country:"US" },
+  { mic:"THEM", name:"THEMIS TRADING LLC", country:"US" },
+  { mic:"THRE", name:"REFINITIV US SEF LLC", country:"US" },
+  { mic:"TICT", name:"TOTAN ICAP CO. LTD", country:"JP" },
+  { mic:"TMCY", name:"TRADING 212 MARKETS LIMITED", country:"CY" },
+  { mic:"TMEU", name:"TRUMID EU MTF", country:"IE" },
+  { mic:"TMEX", name:"TURKISH MERCANTILE EXCHANGE", country:"TR" },
+  { mic:"TMID", name:"TRUMID ATS", country:"US" },
+  { mic:"TMUK", name:"TRUMID UK MTF", country:"GB" },
+  { mic:"TOCP", name:"TORA CROSSPOINT", country:"HK" },
+  { mic:"TOWR", name:"TOWER RESEARCH CAPITAL EUROPE", country:"NL" },
+  { mic:"TPEL", name:"TULLETT PREBON (EUROPE) LIMITED", country:"GB" },
+  { mic:"TPEO", name:"TP ICAP  E AND C OTF", country:"GB" },
+  { mic:"TPEU", name:"TULLETT PREBON EU OTF", country:"FR" },
+  { mic:"TPIC", name:"TP ICAP EU - MTF", country:"FR" },
+  { mic:"TPID", name:"TP ICAP - UK - DIGITAL ASSETS", country:"GB" },
+  { mic:"TPIE", name:"THE PROPERTY INVESTMENT EXCHANGE", country:"GB" },
+  { mic:"TPSE", name:"TP SEF, INC.", country:"US" },
+  { mic:"TPSL", name:"TULLETT PREBON SECURITIES - MTF", country:"GB" },
+  { mic:"TPSO", name:"TP UK OTF", country:"GB" },
+  { mic:"TQEX", name:"TURQUOISE EUROPE - LIT ORDER BOOK", country:"NL" },
+  { mic:"TRAI", name:"TRAIANA INC", country:"US" },
+  { mic:"TRAS", name:"TRADITION ASIA LIMITED", country:"HK" },
+  { mic:"TRAX", name:"MARKETAXESS POST-TRADE LIMITED - APA", country:"GB" },
+  { mic:"TRBX", name:"TRADE REPUBLIC BANK", country:"DE" },
+  { mic:"TRCK", name:"TRACK ECN", country:"US" },
+  { mic:"TRCX", name:"TOWER RESEARCH CAPITAL TRCX", country:"US" },
+  { mic:"TRDC", name:"TFS CURRENCIES PTE LTD", country:"SG" },
+  { mic:"TRDE", name:"TRADITION", country:"GB" },
+  { mic:"TREU", name:"TRADEWEB EUROPE LIMITED", country:"GB" },
+  { mic:"TRIE", name:"TRADING 212 MARKETS (IRELAND) LIMITED", country:"IE" },
+  { mic:"TRNL", name:"MARKETAXESS POST-TRADE B.V. - APA", country:"NL" },
+  { mic:"TRPX", name:"MERJ EXCHANGE LIMITED", country:"SC" },
+  { mic:"TRQX", name:"TURQUOISE - LIT ORDER BOOK", country:"GB" },
+  { mic:"TRSI", name:"TOWER RESEARCH CAPITAL EUROPE LTD", country:"GB" },
+  { mic:"TRUK", name:"TRADING 212 UK LIMITED", country:"GB" },
+  { mic:"TRUX", name:"TRUEEX LLC", country:"US" },
+  { mic:"TRWB", name:"TRADEWEB LLC", country:"US" },
+  { mic:"TRXE", name:"TRAD-X EUROPE", country:"FR" },
+  { mic:"TSAD", name:"TRADITION SECURITIES AND DERIVATIVES INC.", country:"US" },
+  { mic:"TSAF", name:"TSAF OTC - OTF", country:"FR" },
+  { mic:"TSEF", name:"TRADITION SEF", country:"US" },
+  { mic:"TSIG", name:"TRADITION SINGAPORE PTE. LTD.", country:"SG" },
+  { mic:"TWEU", name:"TRADEWEB EU BV", country:"NL" },
+  { mic:"TWGP", name:"TRADEWEB EUROPE LIMITED - GLOBAL TRADING PLATFORM", country:"GB" },
+  { mic:"TWHK", name:"TRADEWEB EUROPE LIMITED - HONG KONG", country:"HK" },
+  { mic:"TWJP", name:"TRADEWEB JAPAN KK - PTS", country:"JP" },
+  { mic:"TWSA", name:"TRADEWEB COMPANY - ATS", country:"SA" },
+  { mic:"TWSG", name:"TRADEWEB EUROPE LIMITED - SINGAPORE", country:"SG" },
+  { mic:"TXSE", name:"TEXAS STOCK EXCHANGE", country:"US" },
+  { mic:"U360", name:"360 TRADING NETWORKS INC.", country:"US" },
+  { mic:"UBCZ", name:"UNICREDIT BANK CZECH REPUBLIC AND SLOVAKIA, A.S.", country:"CZ" },
+  { mic:"UBEC", name:"UNIVERSAL BARTER EXCHANGE CREDIT UNION", country:"US" },
+  { mic:"UBIN", name:"UNION BANK OF INDIA UK LTD", country:"GB" },
+  { mic:"UBIS", name:"UNIPOL BANCA S.P.A.", country:"IT" },
+  { mic:"UBSA", name:"UBS ATS", country:"US" },
+  { mic:"UBSB", name:"UBS AG LONDON BRANCH - TRADING", country:"GB" },
+  { mic:"UBSG", name:"UBS TRADING", country:"CH" },
+  { mic:"UBSL", name:"UBS EUROPE SE - TRADING", country:"DE" },
+  { mic:"UBSS", name:"UBS SECURITIES LLC", country:"US" },
+  { mic:"UBSX", name:"UBS CROSS", country:"HK" },
+  { mic:"UCBA", name:"UNICREDIT BANK AUSTRIA AG", country:"AT" },
+  { mic:"UCBG", name:"UNICREDIT BULBANK AD", country:"BG" },
+  { mic:"UCDE", name:"UNICREDIT BANK AG", country:"DE" },
+  { mic:"UCHU", name:"UNICREDIT BANK HUNGARY ZRT.", country:"HU" },
+  { mic:"UCIT", name:"UNICREDIT SPA", country:"IT" },
+  { mic:"UFEX", name:"UFEX", country:"UY" },
+  { mic:"UGEN", name:"UNITEDBLOCKTRADE", country:"GB" },
+  { mic:"UICE", name:"UKRAINIAN INTERBANK CURRENCY EXCHANGE", country:"UA" },
+  { mic:"UKCA", name:"CREDIT AGRICOLE CIB UK BRANCH", country:"GB" },
+  { mic:"UKEX", name:"UKRAINIAN EXCHANGE", country:"UA" },
+  { mic:"UKPX", name:"EPEX SPOT", country:"GB" },
+  { mic:"ULTX", name:"ALT XCHANGE (U)", country:"UG" },
+  { mic:"UNGB", name:"UNICREDIT BANK AG - LONDON BRANCH - UK", country:"GB" },
+  { mic:"UTSL", name:"UEDA TRADITION SECURITIES LTD.", country:"JP" },
+  { mic:"VAGL", name:"VIRTUAL AUCTION GLOBAL LIMITED", country:"GB" },
+  { mic:"VAGM", name:"VIRTUAL AUCTION GLOBAL MARKETS - MTF", country:"GB" },
+  { mic:"VAMS", name:"VAMOS", country:"ES" },
+  { mic:"VAVO", name:"BITVAVO", country:"NL" },
+  { mic:"VCMO", name:"VANTAGE CAPITAL MARKETS LLP - OTF", country:"GB" },
+  { mic:"VEGA", name:"VEGA-CHI", country:"GB" },
+  { mic:"VERT", name:"VERTICAL", country:"US" },
+  { mic:"VFCM", name:"VIRTU FINANCIAL CAPITAL MARKETS LLC", country:"US" },
+  { mic:"VFEX", name:"VICTORIA FALLS STOCK EXCHANGE", country:"ZW" },
+  { mic:"VFGB", name:"VIRTU FINANCIAL IRELAND LIMITED (LONDON BRANCH)", country:"GB" },
+  { mic:"VFIL", name:"VIRTU FINANCIAL IRELAND LIMITED", country:"IE" },
+  { mic:"VIRT", name:"VIRTU FINANCIAL BD", country:"US" },
+  { mic:"VIUK", name:"POSIT UK", country:"GB" },
+  { mic:"VLEX", name:"VONTOBEL LIQUIDITY EXTENDER", country:"CH" },
+  { mic:"VMEX", name:"VENOMEX LIMITED", country:"AE" },
+  { mic:"VMFX", name:"THE FAROESE SECURITIES MARKET", country:"FO" },
+  { mic:"VONT", name:"BANK VONTOBEL EUROPE AG", country:"DE" },
+  { mic:"VTBC", name:"VTB CAPITAL PLC", country:"GB" },
+  { mic:"VUBA", name:"VSEOBECNA UVEROVA BANKA, AS", country:"SK" },
+  { mic:"VUSA", name:"VIRTU AMERICAS LLC", country:"US" },
+  { mic:"VWDX", name:"VWD TRANSACTIONSOLUTIONS AG", country:"DE" },
+  { mic:"WBKP", name:"BANK ZACHODNI WBK S.A.", country:"PL" },
+  { mic:"WELN", name:"WEL", country:"GB" },
+  { mic:"WELS", name:"WELLS FARGO SECURITIES, LLC - EQUITIES", country:"US" },
+  { mic:"WFLB", name:"WELLS FARGO BANK NA - LONDON BRANCH", country:"GB" },
+  { mic:"WMFS", name:"WEMATCH", country:"GB" },
+  { mic:"WMUS", name:"WEMATCH US", country:"US" },
+  { mic:"WOOD", name:"WOOD AND COMPANY FINANCIAL SERVICES, A.S.", country:"CZ" },
+  { mic:"WSAG", name:"WALL STREET ACCESS", country:"US" },
+  { mic:"WSIL", name:"WELLS FARGO SECURITIES INTERNATIONAL", country:"GB" },
+  { mic:"XABC", name:"ABG SUNDAL COLLIER AB", country:"SE" },
+  { mic:"XABG", name:"ABG SUNDAL COLLIER ASA", country:"NO" },
+  { mic:"XABX", name:"ABAXX EXCHANGE", country:"SG" },
+  { mic:"XADS", name:"ABU DHABI SECURITIES EXCHANGE", country:"AE" },
+  { mic:"XAFR", name:"ALTERNATIVA FRANCE", country:"FR" },
+  { mic:"XAFX", name:"AFRICAN STOCK EXCHANGE", country:"MU" },
+  { mic:"XALG", name:"ALGIERS STOCK EXCHANGE", country:"DZ" },
+  { mic:"XALS", name:"ALBANIA SECURITIES EXCHANGE", country:"AL" },
+  { mic:"XALT", name:"ALTEX - ATS", country:"GB" },
+  { mic:"XAMM", name:"AMMAN STOCK EXCHANGE", country:"JO" },
+  { mic:"XAMS", name:"EURONEXT - EURONEXT AMSTERDAM", country:"NL" },
+  { mic:"XAND", name:"ASIANEXT DERIVATIVES", country:"SG" },
+  { mic:"XANM", name:"ASIANEXT TOKEN MARKETPLACE", country:"SG" },
+  { mic:"XANS", name:"ASIANEXT CRYPTO SPOT", country:"SG" },
+  { mic:"XAQS", name:"AUTOMATED EQUITY FINANCE MARKETS", country:"US" },
+  { mic:"XARM", name:"ARMENIA STOCK EXCHANGE", country:"AM" },
+  { mic:"XASX", name:"ASX - ALL MARKETS", country:"AU" },
+  { mic:"XATS", name:"ALPHA EXCHANGE", country:"CA" },
+  { mic:"XBAA", name:"BAHAMAS INTERNATIONAL SECURITIES EXCHANGE", country:"BS" },
+  { mic:"XBAB", name:"BARBADOS STOCK EXCHANGE", country:"BB" },
+  { mic:"XBAH", name:"BAHRAIN BOURSE", country:"BH" },
+  { mic:"XBAN", name:"BANGALORE STOCK EXCHANGE LTD", country:"IN" },
+  { mic:"XBBJ", name:"JAKARTA FUTURES EXCHANGE (BURSA BERJANGKA JAKARTA)", country:"ID" },
+  { mic:"XBBK", name:"PERIMETER FINANCIAL CORP. - BLOCKBOOK ATS", country:"CA" },
+  { mic:"XBCC", name:"BOLSA DE COMERCIO DE CORDOBA", country:"AR" },
+  { mic:"XBCL", name:"LA BOLSA ELECTRONICA DE CHILE", country:"CL" },
+  { mic:"XBCM", name:"BOLSA DE COMERCIO DE MENDOZA S.A.", country:"AR" },
+  { mic:"XBCV", name:"BOLSA CENTROAMERICANA DE VALORES", country:"HN" },
+  { mic:"XBDA", name:"BERMUDA STOCK EXCHANGE LTD", country:"BM" },
+  { mic:"XBDV", name:"BOLSA DE DIVIDA E VALORES DE ANGOLA (BODIVA) - ANGOLA SECURITIES EXCHANGE", country:"AO" },
+  { mic:"XBEL", name:"BELGRADE STOCK EXCHANGE", country:"RS" },
+  { mic:"XBER", name:"BOERSE BERLIN", country:"DE" },
+  { mic:"XBEY", name:"BOURSE DE BEYROUTH - BEIRUT STOCK EXCHANGE", country:"LB" },
+  { mic:"XBKK", name:"STOCK EXCHANGE OF THAILAND", country:"TH" },
+  { mic:"XBLB", name:"BANJA LUKA STOCK EXCHANGE", country:"BA" },
+  { mic:"XBLN", name:"BLUENEXT", country:"FR" },
+  { mic:"XBNV", name:"BOLSA NACIONAL DE VALORES, S.A.", country:"CR" },
+  { mic:"XBOG", name:"BOLSA DE VALORES DE COLOMBIA", country:"CO" },
+  { mic:"XBOL", name:"BOLSA BOLIVIANA DE VALORES S.A.", country:"BO" },
+  { mic:"XBOM", name:"BSE LTD", country:"IN" },
+  { mic:"XBOT", name:"BOTSWANA STOCK EXCHANGE", country:"BW" },
+  { mic:"XBOX", name:"BOX OPTIONS EXCHANGE", country:"US" },
+  { mic:"XBRA", name:"BRATISLAVA STOCK EXCHANGE", country:"SK" },
+  { mic:"XBRM", name:"ROMANIAN  COMMODITIES EXCHANGE", country:"RO" },
+  { mic:"XBRN", name:"BX SWISS AG", country:"CH" },
+  { mic:"XBRU", name:"EURONEXT - EURONEXT BRUSSELS", country:"BE" },
+  { mic:"XBRV", name:"BOURSE REGIONALE DES VALEURS MOBILIERES", country:"CI" },
+  { mic:"XBRY", name:"XBERRY", country:"PL" },
+  { mic:"XBSE", name:"SPOT REGULATED MARKET - BVB", country:"RO" },
+  { mic:"XBUD", name:"BUDAPEST STOCK EXCHANGE", country:"HU" },
+  { mic:"XBUE", name:"BOLSA DE COMERCIO DE BUENOS AIRES", country:"AR" },
+  { mic:"XBUL", name:"BULGARIAN STOCK EXCHANGE", country:"BG" },
+  { mic:"XBVC", name:"CAPE VERDE STOCK EXCHANGE", country:"CV" },
+  { mic:"XBVM", name:"MOZAMBIQUE STOCK  EXCHANGE", country:"MZ" },
+  { mic:"XBVR", name:"BOLSA DE VALORES DE LA REPUBLICA DOMINICANA SA.", country:"DO" },
+  { mic:"XCAI", name:"EGYPTIAN EXCHANGE", country:"EG" },
+  { mic:"XCAL", name:"CALCUTTA STOCK EXCHANGE", country:"IN" },
+  { mic:"XCAS", name:"CASABLANCA STOCK EXCHANGE", country:"MA" },
+  { mic:"XCAY", name:"CAYMAN ISLANDS STOCK EXCHANGE", country:"KY" },
+  { mic:"XCBO", name:"CBOE GLOBAL MARKETS INC.", country:"US" },
+  { mic:"XCBT", name:"CHICAGO BOARD OF TRADE", country:"US" },
+  { mic:"XCDE", name:"BAXTER FINANCIAL SERVICES", country:"IE" },
+  { mic:"XCEF", name:"DEUTSCHE BOERSE -  CEF - REAL-TIME FEED", country:"DE" },
+  { mic:"XCET", name:"UZBEK COMMODITY EXCHANGE", country:"UZ" },
+  { mic:"XCFE", name:"CHINA FOREIGN EXCHANGE TRADE SYSTEM", country:"CN" },
+  { mic:"XCFF", name:"CANTOR FINANCIAL FUTURES EXCHANGE", country:"US" },
+  { mic:"XCGS", name:"CHINESE GOLD AND SILVER EXCHANGE SOCIETY", country:"HK" },
+  { mic:"XCHG", name:"CHITTAGONG STOCK EXCHANGE LTD.", country:"BD" },
+  { mic:"XCIE", name:"THE INTERNATIONAL STOCK EXCHANGE", country:"GG" },
+  { mic:"XCME", name:"CHICAGO MERCANTILE EXCHANGE", country:"US" },
+  { mic:"XCNF", name:"BOLSA DE COMERCIO CONFEDERADA S.A.", country:"AR" },
+  { mic:"XCNQ", name:"CANADIAN SECURITIES EXCHANGE", country:"CA" },
+  { mic:"XCOL", name:"COLOMBO STOCK EXCHANGE", country:"LK" },
+  { mic:"XCOR", name:"ICMA", country:"GB" },
+  { mic:"XCRO", name:"CROATIAN POWER EXCHANGE", country:"HR" },
+  { mic:"XCSE", name:"NASDAQ COPENHAGEN A/S", country:"DK" },
+  { mic:"XCSX", name:"CAMBODIA SECURITIES EXCHANGE", country:"KH" },
+  { mic:"XCUE", name:"UZBEKISTAN REPUBLICAN CURRENCY EXCHANGE", country:"UZ" },
+  { mic:"XCUR", name:"CURRENEX", country:"US" },
+  { mic:"XCVD", name:"CEVALDOM - OTC MARKET", country:"DO" },
+  { mic:"XCXD", name:"NASDAQ CXD", country:"CA" },
+  { mic:"XCYS", name:"CYPRUS STOCK EXCHANGE", country:"CY" },
+  { mic:"XDAR", name:"DAR ES  SALAAM STOCK EXCHANGE", country:"TZ" },
+  { mic:"XDCE", name:"DALIAN COMMODITY EXCHANGE", country:"CN" },
+  { mic:"XDES", name:"DELHI STOCK EXCHANGE", country:"IN" },
+  { mic:"XDFB", name:"JOINT-STOCK COMPANY \u201cSTOCK EXCHANGE INNEX\u201d", country:"UA" },
+  { mic:"XDFM", name:"DUBAI FINANCIAL MARKET", country:"AE" },
+  { mic:"XDHA", name:"DHAKA STOCK EXCHANGE LTD", country:"BD" },
+  { mic:"XDNB", name:"DNB BANK ASA", country:"NO" },
+  { mic:"XDPA", name:"CADE - MERCADO DE DEUDA PUBLICA ANOTADA", country:"ES" },
+  { mic:"XDSE", name:"DAMASCUS SECURITIES EXCHANGE", country:"SY" },
+  { mic:"XDSX", name:"DOUALA STOCK EXCHANGE", country:"CM" },
+  { mic:"XDUB", name:"IRISH STOCK EXCHANGE - ALL MARKET", country:"IE" },
+  { mic:"XDUS", name:"BOERSE DUESSELDORF", country:"DE" },
+  { mic:"XEBI", name:"ENERGY BROKING IRELAND GAS TRADING PLATFORM", country:"IE" },
+  { mic:"XEBS", name:"EBS UK MULTILATERAL TRADING FACILITY", country:"GB" },
+  { mic:"XECB", name:"ECB EXCHANGE RATES", country:"DE" },
+  { mic:"XECC", name:"EUROPEAN COMMODITY CLEARING AG", country:"DE" },
+  { mic:"XECS", name:"EASTERN CARIBBEAN SECURITIES EXCHANGE", country:"KN" },
+  { mic:"XEEE", name:"EUROPEAN ENERGY EXCHANGE", country:"DE" },
+  { mic:"XELX", name:"ELX", country:"US" },
+  { mic:"XEMD", name:"MERCADO MEXICANO DE DERIVADOS", country:"MX" },
+  { mic:"XEMS", name:"EMS EXCHANGE", country:"NL" },
+  { mic:"XETR", name:"XETRA", country:"DE" },
+  { mic:"XEUP", name:"EUREX REPO GMBH", country:"DE" },
+  { mic:"XEUR", name:"EUREX DEUTSCHLAND", country:"DE" },
+  { mic:"XFCX", name:"FCX", country:"AU" },
+  { mic:"XFEX", name:"FEX GLOBAL", country:"AU" },
+  { mic:"XFKA", name:"FUKUOKA STOCK EXCHANGE", country:"JP" },
+  { mic:"XFRA", name:"DEUTSCHE BOERSE AG", country:"DE" },
+  { mic:"XFTX", name:"FTX", country:"AG" },
+  { mic:"XGAI", name:"GAMI ASSET INVESTMENT L.L.C", country:"AE" },
+  { mic:"XGAS", name:"CENTRAL EASTERN EUROPEAN GAS EXCHANGE LTD", country:"HU" },
+  { mic:"XGCL", name:"GLOBAL COAL LIMITED", country:"GB" },
+  { mic:"XGGI", name:"GAMI GLOBAL INVESTMENT L.L.C", country:"AE" },
+  { mic:"XGHA", name:"GHANA STOCK EXCHANGE", country:"GH" },
+  { mic:"XGME", name:"GESTORE MERCATO ELETTRICO - ITALIAN POWER EXCHANGE", country:"IT" },
+  { mic:"XGMX", name:"GLOBALCLEAR MERCANTILE EXCHANGE", country:"US" },
+  { mic:"XGSE", name:"GEORGIA STOCK EXCHANGE", country:"GE" },
+  { mic:"XGTG", name:"BOLSA DE VALORES NACIONAL SA", country:"GT" },
+  { mic:"XGUA", name:"BOLSA DE VALORES DE GUAYAQUIL", country:"EC" },
+  { mic:"XHAM", name:"HANSEATISCHE WERTPAPIERBOERSE HAMBURG", country:"DE" },
+  { mic:"XHAN", name:"NIEDERSAECHSISCHE BOERSE ZU HANNOVER", country:"DE" },
+  { mic:"XHEL", name:"NASDAQ HELSINKI LTD", country:"FI" },
+  { mic:"XHKF", name:"HONG KONG FUTURES EXCHANGE LTD.", country:"HK" },
+  { mic:"XHKG", name:"HONG KONG EXCHANGES AND CLEARING LTD", country:"HK" },
+  { mic:"XIBE", name:"BAKU INTERBANK CURRENCY EXCHANGE", country:"AZ" },
+  { mic:"XICE", name:"NASDAQ ICELAND HF.", country:"IS" },
+  { mic:"XICX", name:"INSTINET CANADA CROSS", country:"CA" },
+  { mic:"XIDX", name:"INDONESIA STOCK EXCHANGE", country:"ID" },
+  { mic:"XIEL", name:"INSTINET EUROPE LIMITED", country:"GB" },
+  { mic:"XIGG", name:"BLOCKMATCH EUROPE", country:"DE" },
+  { mic:"XIHK", name:"INSTINET PACIFIC LTD", country:"HK" },
+  { mic:"XIMA", name:"INTERNATIONAL MARTIME EXCHANGE", country:"NO" },
+  { mic:"XIMC", name:"MULTI COMMODITY EXCHANGE OF INDIA LTD.", country:"IN" },
+  { mic:"XIMX", name:"IMX HEALTH - FUTURES", country:"US" },
+  { mic:"XINS", name:"INSTINET", country:"US" },
+  { mic:"XINV", name:"INVESTRO", country:"DE" },
+  { mic:"XIQS", name:"IRAQ STOCK EXCHANGE", country:"IQ" },
+  { mic:"XIST", name:"BORSA ISTANBUL", country:"TR" },
+  { mic:"XISX", name:"INTERNATIONAL SECURITIES EXCHANGE, LLC", country:"US" },
+  { mic:"XJAM", name:"JAMAICA STOCK EXCHANGE", country:"JM" },
+  { mic:"XJAX", name:"JAX", country:"JP" },
+  { mic:"XJNB", name:"JAKARTA NEGOTIATED BOARD", country:"ID" },
+  { mic:"XJPX", name:"JAPAN EXCHANGE GROUP", country:"JP" },
+  { mic:"XJSE", name:"JOHANNESBURG STOCK EXCHANGE", country:"ZA" },
+  { mic:"XKAC", name:"OSAKA DOJIMA COMMODITY EXCHANGE", country:"JP" },
+  { mic:"XKAR", name:"THE PAKISTAN STOCK EXCHANGE LIMITED", country:"PK" },
+  { mic:"XKAZ", name:"KAZAKHSTAN STOCK EXCHANGE", country:"KZ" },
+  { mic:"XKCE", name:"KHOREZM INTERREGION COMMODITY EXCHANGE", country:"UZ" },
+  { mic:"XKFB", name:"KOREA FREEBOARD MARKET", country:"KR" },
+  { mic:"XKHA", name:"KHARTOUM STOCK EXCHANGE", country:"SD" },
+  { mic:"XKHR", name:"KHARKOV COMMODITY EXCHANGE", country:"UA" },
+  { mic:"XKIE", name:"KIEV UNIVERSAL EXCHANGE", country:"UA" },
+  { mic:"XKIS", name:"KIEV INTERNATIONAL STOCK EXCHANGE", country:"UA" },
+  { mic:"XKLS", name:"BURSA MALAYSIA", country:"MY" },
+  { mic:"XKRX", name:"KOREA EXCHANGE (STOCK MARKET)", country:"KR" },
+  { mic:"XKSE", name:"KYRGYZ STOCK EXCHANGE", country:"KG" },
+  { mic:"XKUW", name:"KUWAIT STOCK EXCHANGE", country:"KW" },
+  { mic:"XLAO", name:"LAO SECURITIES EXCHANGE", country:"LA" },
+  { mic:"XLBM", name:"LONDON BULLION MARKET", country:"GB" },
+  { mic:"XLCH", name:"LCH LTD", country:"GB" },
+  { mic:"XLFX", name:"LABUAN INTERNATIONAL FINANCIAL EXCHANGE", country:"MY" },
+  { mic:"XLGT", name:"LGT BANK AG", country:"LI" },
+  { mic:"XLIM", name:"BOLSA DE VALORES DE LIMA", country:"PE" },
+  { mic:"XLIS", name:"EURONEXT - EURONEXT LISBON", country:"PT" },
+  { mic:"XLIT", name:"AB NASDAQ VILNIUS", country:"LT" },
+  { mic:"XLJU", name:"LJUBLJANA STOCK EXCHANGE (OFFICIAL MARKET)", country:"SI" },
+  { mic:"XLLB", name:"LIECHTENSTEINISCHE LANDESBANK AG", country:"LI" },
+  { mic:"XLME", name:"LONDON METAL EXCHANGE", country:"GB" },
+  { mic:"XLON", name:"LONDON STOCK EXCHANGE", country:"GB" },
+  { mic:"XLQC", name:"LIQUIDITY CUBE PTY LTD", country:"AU" },
+  { mic:"XLSM", name:"LIBYAN STOCK MARKET", country:"LY" },
+  { mic:"XLUS", name:"LUSAKA STOCK EXCHANGE", country:"ZM" },
+  { mic:"XLUX", name:"LUXEMBOURG STOCK EXCHANGE", country:"LU" },
+  { mic:"XMAB", name:"MERCADO ABIERTO ELECTRONICO", country:"AR" },
+  { mic:"XMAE", name:"MACEDONIAN STOCK EXCHANGE", country:"MK" },
+  { mic:"XMAL", name:"MALTA STOCK EXCHANGE", country:"MT" },
+  { mic:"XMAN", name:"BOLSA DE VALORES DE NICARAGUA", country:"NI" },
+  { mic:"XMAU", name:"STOCK EXCHANGE OF MAURITIUS LTD", country:"MU" },
+  { mic:"XMDG", name:"MARCHE INTERBANCAIRE DES DEVISES M.I.D.", country:"MG" },
+  { mic:"XMDS", name:"MADRAS STOCK EXCHANGE", country:"IN" },
+  { mic:"XMEM", name:"MEMX LLC", country:"US" },
+  { mic:"XMER", name:"MERCHANTS' EXCHANGE", country:"US" },
+  { mic:"XMEX", name:"BOLSA MEXICANA DE VALORES (MEXICAN STOCK EXCHANGE)", country:"MX" },
+  { mic:"XMGE", name:"MIAX FUTURES EXCHANGE, LLC", country:"US" },
+  { mic:"XMIL", name:"BORSA ITALIANA S.P.A.", country:"IT" },
+  { mic:"XMNT", name:"BOLSA DE VALORES DE MONTEVIDEO", country:"UY" },
+  { mic:"XMNX", name:"MONTENEGRO STOCK EXCHANGE", country:"ME" },
+  { mic:"XMOC", name:"MONTREAL CLIMATE EXCHANGE", country:"CA" },
+  { mic:"XMOD", name:"THE MONTREAL EXCHANGE / BOURSE DE MONTREAL", country:"CA" },
+  { mic:"XMOL", name:"MOLDOVA STOCK EXCHANGE", country:"MD" },
+  { mic:"XMOS", name:"CENTRAL COUNTERPARTY CLEARING CENTER MFB - JOINT-STOCK COMPANY", country:"RU" },
+  { mic:"XMSW", name:"MALAWI STOCK EXCHANGE", country:"MW" },
+  { mic:"XMTB", name:"MATBA-ROFEX", country:"AR" },
+  { mic:"XMTS", name:"EUROMTS LTD", country:"GB" },
+  { mic:"XMUN", name:"BOERSE MUENCHEN", country:"DE" },
+  { mic:"XMUS", name:"MUSCAT STOCK EXCHANGE", country:"OM" },
+  { mic:"XMXT", name:"MX2 LLC", country:"US" },
+  { mic:"XNAF", name:"SISTEMA ELETR\u00d3NICO DE NEGOCIACION DE ACTIVOS FINANCIEROS", country:"ES" },
+  { mic:"XNAI", name:"NAIROBI STOCK EXCHANGE", country:"KE" },
+  { mic:"XNAS", name:"NASDAQ - ALL MARKETS", country:"US" },
+  { mic:"XNCD", name:"NATIONAL COMMODITY AND DERIVATIVES EXCHANGE LTD", country:"IN" },
+  { mic:"XNDU", name:"PJSC NATIONAL DEPOSITORY OF UKRAINE", country:"UA" },
+  { mic:"XNEC", name:"NATIONAL STOCK EXCHANGE OF AUSTRALIA LIMITED", country:"AU" },
+  { mic:"XNEP", name:"NEPAL STOCK EXCHANGE", country:"NP" },
+  { mic:"XNGM", name:"NORDIC GROWTH MARKET", country:"SE" },
+  { mic:"XNGO", name:"NAGOYA STOCK EXCHANGE", country:"JP" },
+  { mic:"XNKS", name:"CENTRAL JAPAN COMMODITIES EXCHANGE", country:"JP" },
+  { mic:"XNOM", name:"NOMISMA (LIECHTENSTEIN) AG", country:"LI" },
+  { mic:"XNOR", name:"NORDEA", country:"FI" },
+  { mic:"XNSA", name:"THE NIGERIAN STOCK EXCHANGE", country:"NG" },
+  { mic:"XNSE", name:"NATIONAL STOCK EXCHANGE OF INDIA", country:"IN" },
+  { mic:"XNXC", name:"NXCHANGE", country:"NL" },
+  { mic:"XNYM", name:"NEW YORK MERCANTILE EXCHANGE", country:"US" },
+  { mic:"XNYS", name:"NEW YORK STOCK EXCHANGE, INC.", country:"US" },
+  { mic:"XNZE", name:"NZX - ALL MARKETS", country:"NZ" },
+  { mic:"XODE", name:"ODESSA COMMODITY EXCHANGE", country:"UA" },
+  { mic:"XOFF", name:"OFF-EXCHANGE TRANSACTIONS - LISTED INSTRUMENTS", country:"ZZ" },
+  { mic:"XOSL", name:"OSLO BORS", country:"NO" },
+  { mic:"XOTP", name:"OTP BANKA D.D.", country:"HR" },
+  { mic:"XPAE", name:"PALESTINE SECURITIES EXCHANGE", country:"PS" },
+  { mic:"XPAR", name:"EURONEXT - EURONEXT PARIS", country:"FR" },
+  { mic:"XPET", name:"STOCK EXCHANGE SAINT PETERSBURG", country:"RU" },
+  { mic:"XPHS", name:"PHILIPPINE STOCK EXCHANGE, INC.", country:"PH" },
+  { mic:"XPIC", name:"SAINT-PETERSBURG CURRENCY EXCHANGE", country:"RU" },
+  { mic:"XPOM", name:"PNGX MARKETS LIMITED", country:"PG" },
+  { mic:"XPOW", name:"POWERNEXT", country:"FR" },
+  { mic:"XPRA", name:"PRAGUE STOCK EXCHANGE", country:"CZ" },
+  { mic:"XPRI", name:"PRIDNEPROVSK COMMODITY EXCHANGE", country:"UA" },
+  { mic:"XPST", name:"POSIT - ASIA PACIFIC", country:"HK" },
+  { mic:"XPTY", name:"LATIN AMERICAN STOCK EXCHANGE, INC.", country:"PA" },
+  { mic:"XPUK", name:"XP INVESTMENTS UK LLP", country:"GB" },
+  { mic:"XPUS", name:"XP INVESTMENTS US, LLC", country:"US" },
+  { mic:"XPXE", name:"POWER EXCHANGE CENTRAL EUROPE", country:"CZ" },
+  { mic:"XQUI", name:"BOLSA DE VALORES DE QUITO", country:"EC" },
+  { mic:"XRBM", name:"RINGGIT BOND MARKET", country:"MY" },
+  { mic:"XRIS", name:"NASDAQ RIGA AS", country:"LV" },
+  { mic:"XRMZ", name:"RM-SYSTEM CZECH STOCK EXCHANGE", country:"CZ" },
+  { mic:"XROS", name:"BOLSA DE COMERCIO ROSARIO", country:"AR" },
+  { mic:"XRPM", name:"ROMANIAN POWER MARKET", country:"RO" },
+  { mic:"XRUS", name:"INTERNET DIRECT-ACCESS EXCHANGE", country:"RU" },
+  { mic:"XSAM", name:"SAMARA CURRENCY INTERBANK EXCHANGE", country:"RU" },
+  { mic:"XSAP", name:"SAPPORO SECURITIES EXCHANGE", country:"JP" },
+  { mic:"XSAT", name:"SPOTLIGHT STOCK MARKET AB", country:"SE" },
+  { mic:"XSAU", name:"SAUDI STOCK EXCHANGE", country:"SA" },
+  { mic:"XSCO", name:"BOERSE FRANKFURT WARRANTS TECHNICAL", country:"DE" },
+  { mic:"XSES", name:"SINGAPORE EXCHANGE", country:"SG" },
+  { mic:"XSGA", name:"SOCIETE GENERALE", country:"FR" },
+  { mic:"XSGB", name:"SOCIETE GENERALE (LONDON BRANCH)", country:"GB" },
+  { mic:"XSGE", name:"SHANGHAI FUTURES EXCHANGE", country:"CN" },
+  { mic:"XSGO", name:"SANTIAGO STOCK EXCHANGE", country:"CL" },
+  { mic:"XSHE", name:"SHENZHEN STOCK EXCHANGE", country:"CN" },
+  { mic:"XSHG", name:"SHANGHAI STOCK EXCHANGE", country:"CN" },
+  { mic:"XSIB", name:"SIBERIAN EXCHANGE", country:"RU" },
+  { mic:"XSOP", name:"BSP REGIONAL ENERGY EXCHANGE - SOUTH POOL", country:"SI" },
+  { mic:"XSPS", name:"SOUTH PACIFIC STOCK EXCHANGE", country:"FJ" },
+  { mic:"XSSE", name:"SARAJEVO STOCK EXCHANGE", country:"BA" },
+  { mic:"XSTC", name:"HOCHIMINH STOCK EXCHANGE", country:"VN" },
+  { mic:"XSTE", name:"REPUBLICAN STOCK EXCHANGE", country:"UZ" },
+  { mic:"XSTO", name:"NASDAQ STOCKHOLM AB", country:"SE" },
+  { mic:"XSTU", name:"BOERSE STUTTGART", country:"DE" },
+  { mic:"XSVA", name:"EL SALVADOR STOCK EXCHANGE", country:"SV" },
+  { mic:"XSWA", name:"ESWATINI STOCK EXCHANGE", country:"SZ" },
+  { mic:"XSWB", name:"SWX SWISS BLOCK", country:"GB" },
+  { mic:"XSWX", name:"SIX SWISS EXCHANGE", country:"CH" },
+  { mic:"XTAE", name:"TEL AVIV STOCK EXCHANGE", country:"IL" },
+  { mic:"XTAF", name:"TAIWAN FUTURES EXCHANGE", country:"TW" },
+  { mic:"XTAI", name:"TAIWAN STOCK EXCHANGE", country:"TW" },
+  { mic:"XTAL", name:"NASDAQ TALLINN AS", country:"EE" },
+  { mic:"XTEH", name:"TEHRAN STOCK EXCHANGE", country:"IR" },
+  { mic:"XTFF", name:"TOKYO FINANCIAL  EXCHANGE", country:"JP" },
+  { mic:"XTIR", name:"TIRANA STOCK EXCHANGE", country:"AL" },
+  { mic:"XTRD", name:"XTRD", country:"US" },
+  { mic:"XTRN", name:"TRINIDAD AND TOBAGO STOCK EXCHANGE", country:"TT" },
+  { mic:"XTRZ", name:"ZAGREB MONEY AND SHORT TERM SECURITIES MARKET INC", country:"HR" },
+  { mic:"XTSE", name:"TORONTO STOCK EXCHANGE", country:"CA" },
+  { mic:"XTSI", name:"XTB S.A.", country:"PL" },
+  { mic:"XTSX", name:"TSX VENTURE EXCHANGE", country:"CA" },
+  { mic:"XTUN", name:"TUNIS STOCK EXCHANGE (BOURSE DE TUNIS)", country:"TN" },
+  { mic:"XTXD", name:"XTX DIRECT", country:"US" },
+  { mic:"XTXE", name:"XTX MARKETS SAS", country:"FR" },
+  { mic:"XTXM", name:"XTX MARKETS", country:"GB" },
+  { mic:"XUAX", name:"UKRAINIAN STOCK EXCHANGE", country:"UA" },
+  { mic:"XUGA", name:"UGANDA SECURITIES EXCHANGE", country:"UG" },
+  { mic:"XUKR", name:"UKRAINIAN UNIVERSAL COMMODITY EXCHANGE", country:"UA" },
+  { mic:"XULA", name:"MONGOLIAN STOCK EXCHANGE", country:"MN" },
+  { mic:"XUNI", name:"UNIVERSAL BROKER'S EXCHANGE 'TASHKENT'", country:"UZ" },
+  { mic:"XUSE", name:"UNITED STOCK EXCHANGE", country:"IN" },
+  { mic:"XVES", name:"VESTIMA", country:"LU" },
+  { mic:"XVPA", name:"BOLSA DE VALORES Y PRODUCTOS DE ASUNCION SA", country:"PY" },
+  { mic:"XVPB", name:"VP BANK AG", country:"LI" },
+  { mic:"XWAR", name:"WARSAW STOCK EXCHANGE/EQUITIES/MAIN MARKET", country:"PL" },
+  { mic:"XWBO", name:"WIENER BOERSE AG", country:"AT" },
+  { mic:"XXSC", name:"FRANKFURT CEF SC", country:"DE" },
+  { mic:"XXXX", name:"NO MARKET (E.G. UNLISTED)", country:"ZZ" },
+  { mic:"XYIE", name:"TRADEWEB AUSTRALIA", country:"AU" },
+  { mic:"XZAG", name:"ZAGREB STOCK EXCHANGE", country:"HR" },
+  { mic:"XZCE", name:"ZHENGZHOU COMMODITY EXCHANGE", country:"CN" },
+  { mic:"XZIM", name:"ZIMBABWE STOCK EXCHANGE", country:"ZW" },
+  { mic:"YKNA", name:"COMHAR CAPITAL MARKETS, LLC - US EQUITIES", country:"US" },
+  { mic:"ZARX", name:"ZAR X", country:"ZA" },
+  { mic:"ZBXE", name:"ZBX", country:"MT" },
+  { mic:"ZHEU", name:"ZERO HASH EUROPE", country:"NL" },
+  { mic:"ZKBX", name:"ZURCHER KANTONALBANK SECURITIES EXCHANGE", country:"CH" },
+  { mic:"ZODM", name:"ZODIA MARKETS", country:"GB" }
+];
+
+const CCY_DATA = [
+  { code:'USD', name:'US Dollar',                country:'United States' },
+  { code:'EUR', name:'Euro',                     country:'Eurozone' },
+  { code:'GBP', name:'British Pound Sterling',   country:'United Kingdom' },
+  { code:'JPY', name:'Japanese Yen',             country:'Japan' },
+  { code:'CHF', name:'Swiss Franc',              country:'Switzerland' },
+  { code:'CAD', name:'Canadian Dollar',          country:'Canada' },
+  { code:'AUD', name:'Australian Dollar',        country:'Australia' },
+  { code:'NZD', name:'New Zealand Dollar',       country:'New Zealand' },
+  { code:'HKD', name:'Hong Kong Dollar',         country:'Hong Kong' },
+  { code:'SGD', name:'Singapore Dollar',         country:'Singapore' },
+  { code:'CNY', name:'Chinese Yuan Renminbi',    country:'China (onshore)' },
+  { code:'CNH', name:'Chinese Yuan (Offshore)',  country:'China (offshore / HK)' },
+  { code:'KRW', name:'South Korean Won',         country:'South Korea' },
+  { code:'TWD', name:'New Taiwan Dollar',        country:'Taiwan' },
+  { code:'INR', name:'Indian Rupee',             country:'India' },
+  { code:'SEK', name:'Swedish Krona',            country:'Sweden' },
+  { code:'NOK', name:'Norwegian Krone',          country:'Norway' },
+  { code:'DKK', name:'Danish Krone',             country:'Denmark' },
+  { code:'BRL', name:'Brazilian Real',           country:'Brazil' },
+  { code:'MXN', name:'Mexican Peso',             country:'Mexico' },
+  { code:'ZAR', name:'South African Rand',       country:'South Africa' },
+  { code:'TRY', name:'Turkish Lira',             country:'Turkey' },
+  { code:'PLN', name:'Polish Zloty',             country:'Poland' },
+  { code:'CZK', name:'Czech Koruna',             country:'Czech Republic' },
+  { code:'HUF', name:'Hungarian Forint',         country:'Hungary' },
+  { code:'ILS', name:'Israeli New Shekel',       country:'Israel' },
+  { code:'AED', name:'UAE Dirham',               country:'United Arab Emirates' },
+  { code:'SAR', name:'Saudi Riyal',              country:'Saudi Arabia' },
+  { code:'RUB', name:'Russian Ruble',            country:'Russia' },
+];
+
+const CTY_DATA = [
+  { code:'US', name:'United States',           region:'Americas' },
+  { code:'CA', name:'Canada',                  region:'Americas' },
+  { code:'BR', name:'Brazil',                  region:'Americas' },
+  { code:'MX', name:'Mexico',                  region:'Americas' },
+  { code:'AR', name:'Argentina',               region:'Americas' },
+  { code:'CL', name:'Chile',                   region:'Americas' },
+  { code:'GB', name:'United Kingdom',          region:'Europe' },
+  { code:'DE', name:'Germany',                 region:'Europe' },
+  { code:'FR', name:'France',                  region:'Europe' },
+  { code:'IT', name:'Italy',                   region:'Europe' },
+  { code:'ES', name:'Spain',                   region:'Europe' },
+  { code:'NL', name:'Netherlands',             region:'Europe' },
+  { code:'CH', name:'Switzerland',             region:'Europe' },
+  { code:'SE', name:'Sweden',                  region:'Europe' },
+  { code:'NO', name:'Norway',                  region:'Europe' },
+  { code:'DK', name:'Denmark',                 region:'Europe' },
+  { code:'FI', name:'Finland',                 region:'Europe' },
+  { code:'AT', name:'Austria',                 region:'Europe' },
+  { code:'BE', name:'Belgium',                 region:'Europe' },
+  { code:'PT', name:'Portugal',                region:'Europe' },
+  { code:'PL', name:'Poland',                  region:'Europe' },
+  { code:'CZ', name:'Czech Republic',          region:'Europe' },
+  { code:'HU', name:'Hungary',                 region:'Europe' },
+  { code:'RU', name:'Russia',                  region:'Europe / Asia' },
+  { code:'TR', name:'Turkey',                  region:'Europe / Asia' },
+  { code:'JP', name:'Japan',                   region:'Asia-Pacific' },
+  { code:'CN', name:'China',                   region:'Asia-Pacific' },
+  { code:'HK', name:'Hong Kong',               region:'Asia-Pacific' },
+  { code:'SG', name:'Singapore',               region:'Asia-Pacific' },
+  { code:'KR', name:'South Korea',             region:'Asia-Pacific' },
+  { code:'TW', name:'Taiwan',                  region:'Asia-Pacific' },
+  { code:'IN', name:'India',                   region:'Asia-Pacific' },
+  { code:'AU', name:'Australia',               region:'Asia-Pacific' },
+  { code:'NZ', name:'New Zealand',             region:'Asia-Pacific' },
+  { code:'TH', name:'Thailand',                region:'Asia-Pacific' },
+  { code:'MY', name:'Malaysia',                region:'Asia-Pacific' },
+  { code:'ID', name:'Indonesia',               region:'Asia-Pacific' },
+  { code:'ZA', name:'South Africa',            region:'Africa' },
+  { code:'AE', name:'United Arab Emirates',    region:'Middle East' },
+  { code:'SA', name:'Saudi Arabia',            region:'Middle East' },
+  { code:'IL', name:'Israel',                  region:'Middle East' },
+];
+
+const TZ_DATA = [
+  { zone:'UTC',       name:'Coordinated Universal Time',     std:'UTC+0',    dst:'—',       example:'14:30 UTC  →  20240115-14:30:00' },
+  { zone:'ET',        name:'Eastern Time (US)',               std:'UTC−5 EST',dst:'UTC−4 EDT',example:'09:30 EST  →  20240115-14:30:00' },
+  { zone:'CT',        name:'Central Time (US)',               std:'UTC−6 CST',dst:'UTC−5 CDT',example:'08:30 CST  →  20240115-14:30:00' },
+  { zone:'MT',        name:'Mountain Time (US)',              std:'UTC−7 MST',dst:'UTC−6 MDT',example:'07:30 MST  →  20240115-14:30:00' },
+  { zone:'PT',        name:'Pacific Time (US)',               std:'UTC−8 PST',dst:'UTC−7 PDT',example:'06:30 PST  →  20240115-14:30:00' },
+  { zone:'GMT / BST', name:'London Time (UK)',                std:'UTC+0 GMT',dst:'UTC+1 BST',example:'14:30 GMT  →  20240115-14:30:00' },
+  { zone:'CET / CEST',name:'Central European Time',          std:'UTC+1',    dst:'UTC+2',   example:'15:30 CET  →  20240115-14:30:00' },
+  { zone:'IST',       name:'India Standard Time',            std:'UTC+5:30', dst:'—',       example:'20:00 IST  →  20240115-14:30:00' },
+  { zone:'HKT',       name:'Hong Kong Time',                 std:'UTC+8',    dst:'—',       example:'22:30 HKT  →  20240115-14:30:00' },
+  { zone:'SGT',       name:'Singapore Time',                 std:'UTC+8',    dst:'—',       example:'22:30 SGT  →  20240115-14:30:00' },
+  { zone:'JST',       name:'Japan Standard Time',            std:'UTC+9',    dst:'—',       example:'23:30 JST  →  20240115-14:30:00' },
+  { zone:'AEST/AEDT', name:'Australian Eastern Time',        std:'UTC+10',   dst:'UTC+11',  example:'00:30+1d AEST  →  20240115-14:30:00' },
+];
+
+const SRC_DATA = [
+  {
+    val:'1', name:'CUSIP',
+    desc:'Committee on Uniform Securities Identification Procedures. The primary identifier for US and Canadian securities. Assigned by CUSIP Global Services (a subsidiary of S&P Global).',
+    fmt:'9 characters: 6-char issuer + 2-char issue + 1 check digit',
+    example:'037833100 — Apple Inc',
+  },
+  {
+    val:'2', name:'SEDOL',
+    desc:"Stock Exchange Daily Official List. Used primarily for UK, Irish, and other international securities traded in the UK. Assigned by the London Stock Exchange.",
+    fmt:'7 characters: 6 alphanumeric + 1 check digit',
+    example:'2046251 — BP PLC',
+  },
+  {
+    val:'3', name:'QUIK',
+    desc:'Bloomberg / QUIK proprietary identifier. Historically used in early electronic trading systems. Largely superseded by RIC and Bloomberg tickers. Rarely encountered in modern FIX.',
+    fmt:'Variable — proprietary format',
+    example:'AAPL US Equity',
+  },
+  {
+    val:'4', name:'ISIN',
+    desc:"International Securities Identification Number (ISO 6166). The global standard for cross-border instrument identification. Widely mandated by regulators in Europe (MiFID II) and globally. Composed of the country code + CUSIP/SEDOL/national number + check digit.",
+    fmt:'12 characters: 2-letter ISO country code + 9 alphanumeric + 1 check digit',
+    example:'US0378331005 — Apple Inc',
+  },
+  {
+    val:'5', name:'RIC',
+    desc:'Reuters Instrument Code. Proprietary identifier used in Thomson Reuters / Refinitiv (now LSEG) data feeds and systems. The exchange suffix after the period identifies the listing venue.',
+    fmt:'Ticker symbol + dot + exchange suffix',
+    example:'AAPL.O — Apple on Nasdaq; AAPL.N — Apple on NYSE',
+  },
+  {
+    val:'6', name:'ISO Currency Code',
+    desc:'ISO 4217 three-letter currency code. Used when the instrument IS a currency, typically for FX spot, forwards, and swaps. The SecurityID field carries the currency code directly.',
+    fmt:'3 uppercase letters (ISO 4217)',
+    example:'EUR/USD spot — SecurityID=EUR, SecurityIDSource=6, Currency=USD',
+  },
+  {
+    val:'7', name:'ISO Country Code',
+    desc:'ISO 3166-1 alpha-2 two-letter country code. Used when identifying securities by country of issue (uncommon as primary ID). More frequently appears in Tag 470 (CountryOfIssue) and Tag 421 (Country) than as a SecurityIDSource.',
+    fmt:'2 uppercase letters (ISO 3166-1 alpha-2)',
+    example:'US, GB, JP, DE',
+  },
+  {
+    val:'8', name:'Exchange Symbol',
+    desc:"The exchange's own native ticker symbol for the instrument. Format and uniqueness are exchange-specific — the same company may have different tickers on different exchanges. Must be paired with Tag 207 (SecurityExchange) or Tag 54 MIC to be unambiguous.",
+    fmt:'1–8 characters, exchange-defined',
+    example:'AAPL on Nasdaq; AAPl.BA on Bolsa de Buenos Aires',
+  },
+  {
+    val:'9', name:'CTA Symbol',
+    desc:'Consolidated Tape Association symbol. Used in US equity market data (CTA Plan A for NYSE-listed, CTA Plan B for Nasdaq-listed). The symbology used in consolidated tape feeds and OPRA options data. Generally matches the exchange symbol for US equities.',
+    fmt:'1–6 characters, alphanumeric',
+    example:'AAPL, BRK.B, BRK A',
+  },
+];
+
+// ── Appendix panel selection ───────────────────────────────────
+let _activeRef = null;
+
+function selectRefItem(code) {
+  _active    = null;
+  _activeRef = code;
+  document.querySelectorAll('.ml-msg-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.ml-version-pill').forEach(el => {
+    el.classList.remove('active');
+    el.setAttribute('aria-selected', 'false');
+  });
+  document.querySelectorAll('.ml-appendix-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.ref === code)
+  );
+  const renderers = { mic: renderMic, currency: renderCurrency, country: renderCountry, timezone: renderTimezone, secidsrc: renderSecIdSrc };
+  const right = document.getElementById('ml-right');
+  right.innerHTML = (renderers[code] || (() => ''))();
+  right.scrollTop = 0;
+}
+
+function refSearch(val) {
+  const q = val.toLowerCase();
+  let n = 0;
+  document.querySelectorAll('#rp-table tbody tr').forEach(tr => {
+    const match = !q || tr.dataset.s.includes(q);
+    tr.style.display = match ? '' : 'none';
+    if (match) n++;
+  });
+  const ce = document.getElementById('rp-count');
+  if (ce) ce.textContent = n + ' entries';
+}
+
+function rpHtml({ title, intro, colDefs, rows }) {
+  const ths = colDefs.map(c => `<th class="${c.cls||''}">${esc(c.label)}</th>`).join('');
+  return `
+    <h2 class="rp-title">${esc(title)}</h2>
+    <p class="rp-intro">${intro}</p>
+    <div class="rp-search-bar">
+      <input type="search" class="ref-search rp-search" placeholder="Search…"
+        autocomplete="off" spellcheck="false" oninput="refSearch(this.value)">
+      <span class="rp-count" id="rp-count">${rows.length} entries</span>
+    </div>
+    <div class="rp-table-wrap">
+      <table class="rp-table" id="rp-table">
+        <thead><tr>${ths}</tr></thead>
+        <tbody>${rows.join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+// ── MIC Codes ─────────────────────────────────────────────────
+function renderMic() {
+  const rows = MIC_DATA.map(r => {
+    const s = `${r.mic} ${r.name} ${r.country}`.toLowerCase();
+    return `<tr data-s="${esc(s)}">
+      <td class="rp-code">${esc(r.mic)}</td>
+      <td class="rp-name">${esc(r.name)}</td>
+      <td class="rp-dim">${esc(r.country)}</td>
+    </tr>`;
+  });
+  return rpHtml({
+    title: 'MIC Codes',
+    intro: 'Market Identifier Codes (ISO 10383) uniquely identify trading venues worldwide. In FIX, MICs appear in Tag 207 (SecurityExchange) to specify where a security is listed or traded. When routing orders or reporting executions, the correct MIC removes ambiguity — NYSE (XNYS) and NYSE Arca (ARCX) are different venues even though both are operated by NYSE Group.',
+    colDefs: [{ label:'MIC', cls:'rp-th-code' }, { label:'Exchange / Venue' }, { label:'Country', cls:'rp-th-short' }],
+    rows,
+  });
+}
+
+// ── Currency Codes ────────────────────────────────────────────
+function renderCurrency() {
+  const rows = CCY_DATA.map(r => {
+    const s = `${r.code} ${r.name} ${r.country}`.toLowerCase();
+    return `<tr data-s="${esc(s)}">
+      <td class="rp-code">${esc(r.code)}</td>
+      <td class="rp-name">${esc(r.name)}</td>
+      <td class="rp-dim">${esc(r.country)}</td>
+    </tr>`;
+  });
+  return rpHtml({
+    title: 'Currency Codes',
+    intro: 'ISO 4217 three-letter codes identify currencies throughout FIX. Tag 15 (Currency) carries the trade denomination; Tag 120 (SettlCurrency) specifies a different settlement currency; Tag 155 (SettlCurrFxRate) gives the conversion rate when the two differ. The same codes double as security identifiers — SecurityIDSource=6 with SecurityID="EUR" identifies the Euro in FX messages.',
+    colDefs: [{ label:'ISO Code', cls:'rp-th-code' }, { label:'Currency Name' }, { label:'Country / Region' }],
+    rows,
+  });
+}
+
+// ── Country Codes ─────────────────────────────────────────────
+function renderCountry() {
+  const rows = CTY_DATA.map(r => {
+    const s = `${r.code} ${r.name} ${r.region}`.toLowerCase();
+    return `<tr data-s="${esc(s)}">
+      <td class="rp-code">${esc(r.code)}</td>
+      <td class="rp-name">${esc(r.name)}</td>
+      <td class="rp-dim">${esc(r.region)}</td>
+    </tr>`;
+  });
+  return rpHtml({
+    title: 'Country Codes',
+    intro: 'ISO 3166-1 alpha-2 two-letter codes identify countries in FIX messages. Tag 470 (CountryOfIssue) carries an instrument\'s country of issuance; Tag 421 (Country) provides geographic classification for reporting. Country codes also form the first two characters of every ISIN (e.g. US + CUSIP + check digit = ISIN), and SecurityIDSource=7 uses them as a security identifier in country-level instruments.',
+    colDefs: [{ label:'ISO Code', cls:'rp-th-code' }, { label:'Country' }, { label:'Region' }],
+    rows,
+  });
+}
+
+// ── Time Zones ────────────────────────────────────────────────
+function renderTimezone() {
+  const rows = TZ_DATA.map(r => {
+    const s = `${r.zone} ${r.name} ${r.std}`.toLowerCase();
+    return `<tr data-s="${esc(s)}">
+      <td class="rp-code">${esc(r.zone)}</td>
+      <td class="rp-name">${esc(r.name)}</td>
+      <td class="rp-dim">${esc(r.std)}</td>
+      <td class="rp-dim">${esc(r.dst)}</td>
+      <td class="rp-mono rp-example-cell">${esc(r.example)}</td>
+    </tr>`;
+  });
+  const thead = `<thead><tr>
+    <th class="rp-th-code">Zone</th>
+    <th>Full Name</th>
+    <th>Standard</th>
+    <th>DST / Summer</th>
+    <th>Tag 52 Example (= 14:30 UTC)</th>
+  </tr></thead>`;
+  const tbody = `<tbody>${rows.join('')}</tbody>`;
+  return `
+    <h2 class="rp-title">Time Zones</h2>
+    <p class="rp-intro">FIX Protocol mandates UTC (Coordinated Universal Time) for <strong>all</strong> timestamp fields. Tag 52 (SendingTime), Tag 60 (TransactTime), and every other datetime value must be expressed as UTC in the format <code class="rp-inline-code">YYYYMMDD-HH:MM:SS</code> or <code class="rp-inline-code">YYYYMMDD-HH:MM:SS.sss</code>. Never send local time — always convert to UTC before populating timestamp fields. The table below shows standard UTC offsets for major financial center time zones; the example column shows what local time corresponds to 14:30:00 UTC, and how it appears in a FIX Tag 52 field.</p>
+    <div class="rp-search-bar">
+      <input type="search" class="ref-search rp-search" placeholder="Search…"
+        autocomplete="off" spellcheck="false" oninput="refSearch(this.value)">
+      <span class="rp-count" id="rp-count">${TZ_DATA.length} entries</span>
+    </div>
+    <div class="rp-table-wrap">
+      <table class="rp-table" id="rp-table">${thead}${tbody}</table>
+    </div>`;
+}
+
+// ── Security ID Sources ───────────────────────────────────────
+function renderSecIdSrc() {
+  const rows = SRC_DATA.map(r => {
+    const s = `${r.val} ${r.name} ${r.desc} ${r.example}`.toLowerCase();
+    return `<tr data-s="${esc(s)}">
+      <td class="rp-code rp-val-cell">${esc(r.val)}</td>
+      <td class="rp-name">${esc(r.name)}</td>
+      <td class="rp-desc">${esc(r.desc)}</td>
+      <td class="rp-mono">${esc(r.fmt)}</td>
+      <td class="rp-mono rp-example-cell">${esc(r.example)}</td>
+    </tr>`;
+  });
+  const thead = `<thead><tr>
+    <th class="rp-th-val">Value</th>
+    <th class="rp-th-name">Name</th>
+    <th>Description</th>
+    <th>Format</th>
+    <th>Example</th>
+  </tr></thead>`;
+  return `
+    <h2 class="rp-title">Security ID Sources — Tag 22</h2>
+    <p class="rp-intro">Tag 22 (SecurityIDSource) specifies the naming convention used in Tag 48 (SecurityID). Every FIX order or execution that carries a SecurityID must pair it with the correct SecurityIDSource so the counterparty knows how to resolve the instrument. CUSIP is the North American standard; ISIN is the global cross-border standard mandated by MiFID II; RIC is common in Refinitiv-based systems. Values 1–9 are defined in FIX 4.0–4.2; FIX 4.4 introduced letter codes (D–N) for Bloomberg symbols, ISDA/FpML, and others.</p>
+    <div class="rp-search-bar">
+      <input type="search" class="ref-search rp-search" placeholder="Search…"
+        autocomplete="off" spellcheck="false" oninput="refSearch(this.value)">
+      <span class="rp-count" id="rp-count">${SRC_DATA.length} entries</span>
+    </div>
+    <div class="rp-table-wrap">
+      <table class="rp-table rp-table-wide" id="rp-table">${thead}<tbody>${rows.join('')}</tbody></table>
+    </div>`;
+}
+
+// ── Init ──────────────────────────────────────────────────────
+buildNav();
+selectMsg('D');
+</script>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
+    <div class="footer-links">
+      <a href="/contact"  class="footer-link">Contact</a>
+      <a href="/feedback" class="footer-link">Feedback</a>
+    </div>
+    <span class="footer-copy">© 2026 FIXReader.org</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -25,6 +25,7 @@
     </a>
     <ul class="nav-links" role="list">
       <li><a href="/"               class="nav-item active" aria-current="page">Decode</a></li>
+      <li><a href="/compare"        class="nav-item">Compare</a></li>
       <li><a href="/learn"          class="nav-item">Learn FIX</a></li>
       <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
       <li><a href="/tools"          class="nav-item">Tools</a></li>
@@ -75,9 +76,9 @@
           <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           FIX Decoder
         </a>
-        <a href="/field-reference" class="sb-tool">
+        <a href="/reference/fix42" class="sb-tool">
           <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2" width="11" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h6M5 12h4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg></span>
-          Field Reference
+          Tag Reference
         </a>
         <a href="/message-builder" class="sb-tool">
           <span class="sb-tool-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
@@ -472,6 +473,8 @@
 
 
 <script>
+const FIX_TAG_REF = {{ tag_ref_json | safe }};
+
 const SAMPLES = {
   new_order:      '8=FIX.4.2|9=178|35=D|49=ACME|56=NYSE|34=4|52=20060324-17:45:00|11=CL12345|21=1|55=AAPL|54=1|38=100|40=2|44=185.50|10=050|',
   exec_report:    '8=FIX.4.2|9=243|35=8|49=BROKER|56=ACME|34=5|52=20060324-17:45:01|11=CL12345|17=98765|37=ORD98765|150=F|39=2|55=AAPL|54=1|38=100|32=100|31=185.50|151=0|14=100|6=185.50|10=127|',
@@ -1370,12 +1373,18 @@ function renderDecoded(data) {
     const rowCls = analysis.flaggedTags.has(f.tag)
       ? (`${esc(f.highlight)} hl-flagged`).trim()
       : esc(f.highlight);
+    const ref = FIX_TAG_REF[String(f.tag)];
+    const valHint = ref && ref.valid_values && ref.valid_values[f.value]
+      ? ref.valid_values[f.value] : '';
+    const valCell = valHint
+      ? `<span class="val-wrap" data-vtooltip="${esc(valHint)}">${esc(f.value)}</span>`
+      : esc(f.value);
     return `<tr class="${rowCls}">
        <td class="tag-cell">
-         <a href="/tag/${f.tag}" class="tag-link"><span class="tag-num">${esc(String(f.tag))}</span></a>
+         <a href="/tag/${f.tag}" target="_blank" rel="noopener" class="tag-link"><span class="tag-num">${esc(String(f.tag))}</span></a>
          <span class="tag-name-wrap" data-tooltip="${esc(f.description)}">${esc(f.name)}</span>
        </td>
-       <td class="tag-val">${esc(f.value)}</td>
+       <td class="tag-val">${valCell}</td>
        <td class="tag-req">${reqDot(f)}</td>
      </tr>`;
   }).join('');
@@ -1475,6 +1484,25 @@ document.getElementById('decode-form').addEventListener('submit', function(e) {
   e.preventDefault();
   doDecodeMessage();
 });
+
+// Auto-load sample message — check sessionStorage first (Message Library), then ?sample= URL param
+(function() {
+  const queued = sessionStorage.getItem('mlSample');
+  if (queued) {
+    sessionStorage.removeItem('mlSample');
+    document.getElementById('fix-message').value = queued;
+    doDecodeMessage();
+    return;
+  }
+  const sp = new URLSearchParams(window.location.search).get('sample');
+  if (!sp) return;
+  const msgs = {{ sample_messages_json | safe }};
+  if (msgs[sp]) {
+    document.getElementById('fix-message').value = msgs[sp];
+    doDecodeMessage();
+    history.replaceState(null, '', '/');
+  }
+})();
 </script>
 
 </body>
