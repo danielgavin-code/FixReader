@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exchange Specs — FIXReader</title>
+  <meta name="description" content="FIX connectivity specifications for major US equity exchanges. Session schedules, order types, exchange-specific tags, and production gotchas for NYSE, NASDAQ, NYSE Arca, CBOE BZX, EDGX, EDGA, and IEX.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {{ theme_vars | safe }}
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230f1c2e'/%3E%3Ctext x='16' y='23' font-family='Arial%2Csans-serif' font-size='22' font-weight='800' fill='%233b82f6' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+  <style>
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+    .ex-version-bar { flex-shrink: 0; }
+    .ex-shell { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+    .ex-left  { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; padding: 0; border-right: 1px solid var(--border); background: var(--bg-header-row); }
+    .ex-nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 40px; }
+    .ex-right { flex: 1; min-width: 0; overflow-y: auto; padding: 30px 36px 72px; }
+    @media (max-width: 680px) {
+      .ex-shell { flex-direction: column; overflow: auto; }
+      .ex-left  { width: 100%; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
+      .ex-nav-scroll { max-height: 220px; overflow-y: auto; }
+      .ex-right { overflow: visible; padding: 20px 18px 48px; }
+    }
+
+    /* Exchange left-nav items */
+    .ex-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 9px;
+      padding: 7px 16px;
+      cursor: pointer;
+      font-size: 13px; color: var(--text-muted);
+      border-left: 3px solid transparent;
+      transition: background 0.1s, color 0.1s, border-color 0.1s;
+      user-select: none;
+    }
+    .ex-item:hover { background: var(--bg-row-hover); color: var(--text); }
+    .ex-item.active {
+      background: color-mix(in srgb, var(--color-accent) 9%, transparent);
+      color: var(--color-accent);
+      border-left-color: var(--color-accent);
+      font-weight: 600;
+    }
+    .ex-fix-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 600;
+      color: var(--text-dim);
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ex-item.active .ex-fix-badge {
+      color: var(--color-accent);
+      background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+      border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+    }
+
+    /* Exchange version / name pills (top bar) */
+    .ex-version-bar {
+      display: flex; align-items: center; gap: 5px;
+      padding: 10px 20px;
+      background: var(--bg-header-row);
+      border-bottom: 1px solid var(--border-light);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .ex-version-bar::-webkit-scrollbar { display: none; }
+    .ex-pill {
+      padding: 5px 13px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px; font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg-page);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .ex-pill:hover { color: var(--text); border-color: var(--text-dim); }
+    .ex-pill.active {
+      background: var(--color-accent);
+      color: #fff;
+      border-color: var(--color-accent);
+    }
+
+    /* Right panel content */
+    .ex-hdr { margin: 0 0 24px; }
+    .ex-hdr-name { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+    .ex-hdr-meta { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+    .ex-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 5px;
+      border: 1px solid var(--blue-light);
+      background: var(--tag-bg); color: var(--color-accent);
+    }
+    .ex-badge-mic { border-color: var(--border); background: var(--bg-row); color: var(--text-muted); }
+
+    .ex-section { margin: 28px 0 0; }
+    .ex-section-title {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-dim);
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 6px; margin-bottom: 14px;
+    }
+    .ex-para { font-size: 14px; line-height: 1.7; color: var(--text-muted); margin: 0 0 12px; }
+    .ex-para strong { color: var(--text); font-weight: 600; }
+
+    /* Schedule grid */
+    .ex-schedule { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 4px; }
+    .ex-sched-block {
+      background: var(--bg-row);
+      border: 1px solid var(--border-light);
+      border-radius: 8px; padding: 12px 14px;
+    }
+    .ex-sched-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+    .ex-sched-time { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text); }
+    .ex-sched-utc  { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    @media (max-width: 700px) { .ex-schedule { grid-template-columns: 1fr; } }
+
+    /* Logon block */
+    .ex-logon-grid { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; align-items: baseline; font-size: 13px; }
+    .ex-logon-key { font-weight: 600; color: var(--text); white-space: nowrap; }
+    .ex-logon-val { color: var(--text-muted); }
+    .ex-logon-val code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--tag-bg); border: 1px solid var(--border-light); border-radius: 3px; padding: 0 4px; color: var(--color-accent); }
+
+    /* Tables */
+    .ex-table-wrap { overflow-x: auto; margin-top: 4px; }
+    .ex-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .ex-table th {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-dim); background: var(--bg-header-row);
+      padding: 7px 12px; text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .ex-table td { padding: 8px 12px; border-bottom: 1px solid var(--border-light); color: var(--text-muted); vertical-align: top; line-height: 1.5; }
+    .ex-table tr:last-child td { border-bottom: none; }
+    .ex-table tr:hover td { background: var(--bg-row-hover); }
+    .ex-table code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--tag-bg); border: 1px solid var(--border-light); border-radius: 3px; padding: 0 4px; color: var(--color-accent); }
+    .ex-td-tag { white-space: nowrap; font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--color-accent); }
+    .ex-td-name { font-weight: 500; color: var(--text); white-space: nowrap; }
+    .ex-td-req { white-space: nowrap; }
+
+    /* Gotchas list */
+    .ex-gotchas { list-style: none; padding: 0; margin: 4px 0 0; display: flex; flex-direction: column; gap: 10px; }
+    .ex-gotchas li { font-size: 14px; line-height: 1.65; color: var(--text-muted); padding-left: 20px; position: relative; }
+    .ex-gotchas li::before { content: '→'; position: absolute; left: 0; color: var(--color-accent); font-weight: 700; }
+    .ex-gotchas li strong { color: var(--text); font-weight: 600; }
+
+    /* Empty state */
+    .ex-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 340px; gap: 12px; color: var(--text-dim); }
+    .ex-empty-icon { font-size: 40px; opacity: 0.35; }
+    .ex-empty-text { font-size: 14px; }
+
+    /* Source attribution */
+    .ex-source-line { padding: 10px 0 4px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-dim); display: flex; flex-wrap: wrap; gap: 4px; align-items: baseline; }
+    .ex-source-label { font-weight: 600; color: var(--text-muted); }
+    .ex-source-link { color: var(--color-accent); text-decoration: none; }
+    .ex-source-link:hover { text-decoration: underline; }
+    .ex-source-date { color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="logo-mark"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></div>
+      <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="/"               class="nav-item">Decode</a></li>
+      <li><a href="/compare"        class="nav-item">Compare</a></li>
+      <li><a href="/learn"          class="nav-item">Learn FIX</a></li>
+      <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
+      <li><a href="/tools"          class="nav-item">Tools</a></li>
+      <li><a href="/message-library" class="nav-item">Message Library</a></li>
+      <li><a href="/exchange-specs"  class="nav-item active" aria-current="page">Exchange Specs</a></li>
+      <li><a href="/resources"      class="nav-item">Resources</a></li>
+      <li><a href="/about"          class="nav-item">About</a></li>
+    </ul>
+    {% if theme_info.name != 'default' %}
+    <div class="nav-end">
+      <div class="nav-theme">
+        <span class="nav-theme-emoji">{{ theme_info.emoji }}</span>
+        <div class="nav-theme-text">
+          <div class="nav-theme-line1">
+            {% if theme_info.type == 'birthday' %}
+            <span class="nav-theme-label">Happy Birthday,</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.person_name }}!</a>
+            {% else %}
+            <span class="nav-theme-label">Today's Theme:</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.display_name }}</a>
+            {% endif %}
+          </div>
+          <div class="nav-theme-line2">
+            {% if theme_info.type == 'birthday' %}
+            {{ theme_info.subtitle }}{% if theme_info.wiki_url %} · <a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% else %}
+            {% if theme_info.date %}{{ theme_info.date }}{% if theme_info.subtitle %} · {% endif %}{% endif %}{% if theme_info.subtitle %}{{ theme_info.subtitle }}{% if theme_info.wiki_url %} · {% endif %}{% endif %}{% if theme_info.wiki_url %}<a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="ex-version-bar" role="tablist" aria-label="Exchange">
+  <button class="ex-pill active" onclick="selectExchange('nyse',this)"   role="tab" aria-selected="true">NYSE</button>
+  <button class="ex-pill"        onclick="selectExchange('nasdaq',this)" role="tab" aria-selected="false">NASDAQ</button>
+  <button class="ex-pill"        onclick="selectExchange('arca',this)"   role="tab" aria-selected="false">NYSE Arca</button>
+  <button class="ex-pill"        onclick="selectExchange('bzx',this)"    role="tab" aria-selected="false">CBOE BZX</button>
+  <button class="ex-pill"        onclick="selectExchange('edgx',this)"   role="tab" aria-selected="false">EDGX</button>
+  <button class="ex-pill"        onclick="selectExchange('edga',this)"   role="tab" aria-selected="false">EDGA</button>
+  <button class="ex-pill"        onclick="selectExchange('iex',this)"    role="tab" aria-selected="false">IEX</button>
+</div>
+
+<div class="ex-shell">
+
+  <nav class="ex-left" aria-label="Exchanges">
+    <div class="ex-nav-scroll">
+      <div class="ml-cat-hdr">US Equities</div>
+      <div class="ex-item active" onclick="selectExchange('nyse',null)"   data-key="nyse">
+        <span>NYSE</span><span class="ex-fix-badge">FIX 4.2</span>
+      </div>
+      <div class="ex-item" onclick="selectExchange('nasdaq',null)" data-key="nasdaq">
+        <span>NASDAQ</span><span class="ex-fix-badge">FIX 4.2</span>
+      </div>
+      <div class="ex-item" onclick="selectExchange('arca',null)"   data-key="arca">
+        <span>NYSE Arca</span><span class="ex-fix-badge">FIX 4.2</span>
+      </div>
+      <div class="ex-item" onclick="selectExchange('bzx',null)"    data-key="bzx">
+        <span>CBOE BZX</span><span class="ex-fix-badge">FIX 4.2</span>
+      </div>
+      <div class="ex-item" onclick="selectExchange('edgx',null)"   data-key="edgx">
+        <span>EDGX</span><span class="ex-fix-badge">FIX 4.2</span>
+      </div>
+      <div class="ex-item" onclick="selectExchange('edga',null)"   data-key="edga">
+        <span>EDGA</span><span class="ex-fix-badge">FIX 4.2</span>
+      </div>
+      <div class="ex-item" onclick="selectExchange('iex',null)"    data-key="iex">
+        <span>IEX</span><span class="ex-fix-badge">FIX 4.2</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="ex-right" id="ex-right">
+    <div class="ex-empty">
+      <div class="ex-empty-icon">←</div>
+      <div class="ex-empty-text">Select an exchange</div>
+    </div>
+  </main>
+
+</div><!-- /ex-shell -->
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
+    <div class="footer-links">
+      <a href="/contact"  class="footer-link">Contact</a>
+      <a href="/feedback" class="footer-link">Feedback</a>
+    </div>
+    <span class="footer-copy">© 2026 FIXReader.org</span>
+  </div>
+</footer>
+
+<script>
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Exchange data ─────────────────────────────────────────────
+const EXCHANGES = {
+
+  nyse: {
+    name: 'NYSE',
+    fullName: 'New York Stock Exchange',
+    mic: 'XNYS',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `The New York Stock Exchange (NYSE) is the largest equities exchange in the world by market capitalization, operating as a hybrid market combining a physical trading floor with electronic execution. NYSE lists primarily large-cap NYSE-named securities. FIX connectivity goes through NYSE Pillar, the unified trading platform that also powers NYSE Arca, NYSE American, NYSE National, and NYSE Texas Equities. The Pillar FIX Gateway implements <strong>FIX 4.2</strong> as stated in the specification: "TCP/IP is the required transmission protocol, and FIX 4.2 is the required application protocol." A single Pillar session is configured for exactly one NYSE Group market — sessions are not shared across venues.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Agreed upon connection identifier set between the Exchange and the entering firm',
+      'TargetCompID (56)': 'XNYS — Market Identifier Code for NYSE Equities (confirmed in spec section 6.1 Header)',
+      'HeartBtInt (108)': '1–60 seconds (valid range per spec; no specific default stated)',
+      'EncryptMethod (98)': '0 — must be 0 (no encryption); TLS is handled at the transport layer',
+      'ResetSeqNumFlag (141)': 'N — if included, must be set to N (spec: "If included, this tag must be set to N")',
+      'Username (553)': 'Username agreed in advance with NYSE Group; must match SenderCompID',
+      'Password (554)': 'Password agreed in advance with NYSE Group. Required on Logon Request; omitted from Logon Response',
+      'RawData (96)': 'Optional 3-byte session config string: [Byte1: CancelOnDisconnect 0/1/2] [Byte2: Order Priority Update Ack 0/1] [Byte3: SelfTradeType T/N/O/C/D]',
+      'Notes': 'Pillar authenticates the Logon by checking SenderCompID against Username (553) and Password (554). Mismatch sends Logout (35=5) with SessionStatus (1409=5) then closes TCP. Each session is pre-configured to access a single NYSE Group market.',
+    },
+    schedule: {
+      premarket:  { et: 'Early Trading Session (TradingSessionID=1)', utc: 'See NYSE published schedule' },
+      core:       { et: 'Core Trading Session 9:30 AM – 4:00 PM ET (TradingSessionID=2)', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Late Trading Session (TradingSessionID=3)', utc: 'See NYSE published schedule' },
+    },
+    orderTypes: [
+      { type: 'Market',             tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55', notes: 'OrdType=1. Executes at best available price. Valid TIF: 0=Day, 3=IOC, 4=FOK.' },
+      { type: 'Limit',              tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=2. Price (44) required. Valid TIF: 0=Day, 1=GTC, 3=IOC, 4=FOK, 5=GTX, 6=GTD.' },
+      { type: 'Inside Limit',       tag40: '7', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=7. NYSE Pillar-specific. Routes to the primary market at a price inside the prevailing quote.' },
+      { type: 'AutoMatch Limit',    tag40: '9', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=9. NYSE Pillar-specific. Automatically matches against available liquidity at or better than limit price.' },
+      { type: 'Market on Open',     tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 59', notes: 'OrdType=1 + TimeInForce=2 (At the Opening). Participates in NYSE Opening Auction.' },
+      { type: 'Limit on Open',      tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55, 59', notes: 'OrdType=2 + TimeInForce=2 (At the Opening) + Price (44). Participates in Opening Auction at limit or better.' },
+      { type: 'Market on Close',    tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 59', notes: 'OrdType=1 + TimeInForce=7 (On Close). Participates in NYSE Closing Auction. MOC orders for NYSE primary symbols freeze after 3:50 PM ET per spec.' },
+      { type: 'Limit on Close',     tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55, 59', notes: 'OrdType=2 + TimeInForce=7 (On Close) + Price (44). Spec explicitly states: "Limit On Close: OrdType (40) = 2 with TimeInForce (59) = 7". Freeze after 3:50 PM ET for NYSE primary symbols.' },
+      { type: 'Pegged (Primary)',    tag40: 'P', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 18', notes: 'OrdType=P + ExecInst=R (Primary Peg). Pegs to the primary side of the NBBO.' },
+      { type: 'Pegged (Market)',     tag40: 'P', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 18', notes: 'OrdType=P + ExecInst=P (Market Peg). Pegs to the less aggressive side of the NBBO.' },
+      { type: 'Pegged (Midpoint)',   tag40: 'P', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 18', notes: 'OrdType=P + ExecInst=M (MPL — Midpoint Liquidity). Non-displayed; pegs to NBBO midpoint.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: 'R / P / M', desc: 'Peg type when OrdType=P. R=Primary Peg, P=Market Peg, M=MPL (Midpoint Liquidity). All confirmed in spec.' },
+      { tag: '18', name: 'ExecInst', value: 'N', desc: 'Non-displayed. Used for Retail Price Improvement and Limit-Non Displayed orders. Confirmed in spec.' },
+      { tag: '18', name: 'ExecInst', value: 'f', desc: 'ISO (Intermarket Sweep Order). Bypasses NBBO check. Confirmed in spec.' },
+      { tag: '18', name: 'ExecInst', value: 'E / F', desc: 'E=DNI (Do Not Increase), F=DNR (Do Not Reduce). Prevents corporate action adjustments. Confirmed in spec.' },
+      { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve/iceberg display quantity. Must be ≥ 1 round lot. Confirmed in spec.' },
+      { tag: '336', name: 'TradingSessionID', value: '1/2/3/4/5/6', desc: '1=Early, 2=Core, 3=Late, 4=Early&Core, 5=Core&Late, 6=Early+Core+Late. Confirmed in spec section on New Order fields.' },
+      { tag: '7928', name: 'SelfTradeType', value: 'T/N/O/C/D', desc: 'T=No STP, N=Cancel Newest, O=Cancel Oldest, C=Cancel Both, D=Decrement. Session-level default set via RawData (96) Byte3; per-order override via this tag. Confirmed in spec.' },
+      { tag: '9303', name: 'RoutingInst', value: 'N/R/D/S/8/A/E', desc: 'N=Non Routable, R=Routable, D=Directed (Primary Only), S=Directed+Routable, 8=Minimum Fill (requires MinQty), A=Route to ATS, E=Route to Algo. Confirmed in spec.' },
+      { tag: '9416', name: 'ExtendedExecInst', value: '4 / 5', desc: '4=Retail Order Type 1, 5=Retail Order Type 2. Confirmed in spec Appendix D. Note: 9416 is ExtendedExecInst, not a branch seq number.' },
+    ],
+    gotchas: [
+      '<strong>ResetSeqNumFlag (141) must be N, not Y.</strong> The NYSE Pillar Gateway spec explicitly states: "If included, this tag must be set to N." Sending 141=Y will be rejected. Pillar manages sequence numbers independently — do not attempt to reset via the Logon.',
+      '<strong>TargetCompID must be the MIC, not a text name.</strong> The spec requires the ISO 10383 MIC in Tag 56 for inbound messages: XNYS=NYSE Equities, ARCX=NYSE Arca, XASE=NYSE American, XCIS=NYSE National, XCHI=NYSE Texas. Sending "NYSE" instead of "XNYS" will reject the Logon.',
+      '<strong>MOC/LOC on NYSE Pillar use OrdType=1/2 + TimeInForce=7, not OrdType=5 or OrdType=B.</strong> The spec lists only OrdType values 1, 2, 7, 9, P. Standard FIX OrdType=5 (Market on Close) and OrdType=B (Limit on Close) are not valid. LOC is explicitly "OrdType (40) = 2 with TimeInForce (59) = 7" per the spec.',
+      '<strong>MOC/LOC freeze for NYSE primary symbols is 3:50 PM ET</strong>, per the spec\'s CancelOnDisconnect exclusion list: "Primary Close Only Market/Limit (PO + MOC/LOC) orders for NYSE symbols after 3:50 PM." Do not conflate with Arca\'s 3:55 PM SpecialOrdType boundary.',
+      '<strong>Throttle limit is 500 messages per rolling 100 milliseconds.</strong> The spec states: "Inbound messages from a given session are read at a rate of 500 messages per rolling 100 milliseconds." Exceeding this throttles the session. After 100 login attempts or session-level rejects in one trading day, the SenderCompID/TargetIP goes into a 60-second lockout.',
+    ],
+    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification, Version 5.15', url: 'https://www.nyse.com/publicdocs/nyse/NYSE_Pillar_Gateway_FIX_Protocol_Specification.pdf', date: 'March 27, 2026' },
+  },
+
+  nasdaq: {
+    name: 'NASDAQ',
+    fullName: 'NASDAQ Stock Market',
+    mic: 'XNAS',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `NASDAQ is the second-largest US equities exchange and the primary listing venue for large-cap technology and growth companies. NASDAQ operates as a fully electronic, order-driven market with no trading floor. FIX connectivity uses the NASDAQ OUCH protocol for high-frequency flow, but standard FIX 4.2 over MITCH/ITCH is the interface for most members. NASDAQ also operates several sub-markets and its technology powers more than 100 exchanges globally. <strong>BeginString (Tag 8) = FIX.4.2</strong> is required for the order entry interface; NASDAQ does not support FIX 5.0 on the primary trading gateway.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Your MPID (4-character) or assigned session ID',
+      'TargetCompID (56)': 'NSDQ (production) / NSDQTEST (UAT)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0 (None)',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'FIX session username provided by NASDAQ Market Operations',
+      'Password (554)': 'Associated password; rotated every 90 days in production',
+      'Notes': 'NASDAQ requires separate FIX sessions for each order entry port. Session IDs are pre-provisioned and tied to your clearing firm and MPID. You cannot submit orders on a session registered to a different MPID.',
+    },
+    schedule: {
+      premarket:  { et: '4:00 AM – 9:30 AM ET', utc: '09:00 – 14:30 UTC' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: '4:00 PM – 8:00 PM ET', utc: '21:00 – 01:00 UTC' },
+    },
+    orderTypes: [
+      { type: 'Market',            tag40: '1', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Core hours only. Extended hours market orders are rejected.' },
+      { type: 'Limit',             tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'Standard limit. Accepted during all sessions.' },
+      { type: 'Stop',              tag40: '3', required: '49, 56, 11, 21, 55, 54, 38, 99', notes: 'Stop orders not available in pre/post market.' },
+      { type: 'Stop Limit',        tag40: '4', required: '49, 56, 11, 21, 55, 54, 38, 44, 99', notes: 'Both Price and StopPx required.' },
+      { type: 'Market on Close',   tag40: '5', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Participates in NASDAQ Closing Cross. Cutoff: 3:55 PM ET. Cancel by 3:58 PM ET.' },
+      { type: 'Limit on Close',    tag40: 'B', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'Participates in Closing Cross at limit or better. Same cutoff as MOC.' },
+      { type: 'Market on Open',    tag40: 'O', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Participates in NASDAQ Opening Cross. Must be entered before 9:28 AM ET.' },
+      { type: 'Midpoint Peg',      tag40: 'P', required: '49, 56, 11, 21, 55, 54, 38, 211', notes: 'PegOffsetValue (211) = 0 for exact midpoint. NASDAQ MELO order type.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: 'W', desc: 'Extended hours trading. Required for pre-market and after-hours orders to route rather than hold.' },
+      { tag: '18', name: 'ExecInst', value: 'n', desc: 'Do not increase (DNI). Prevents order quantity from being adjusted for stock dividends/splits.' },
+      { tag: '59', name: 'TimeInForce', value: '7', desc: 'At the Open (OPG). Routes order to participate in NASDAQ Opening Cross.' },
+      { tag: '59', name: 'TimeInForce', value: '6', desc: 'Good Till Date. NASDAQ requires ExpireDate (432) when TIF=6.' },
+      { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve order. Displayed quantity on the book; remainder hidden. Minimum lot is 1 share.' },
+      { tag: '9001', name: 'NasdaqBranchSeqNum', value: 'string', desc: 'NASDAQ branch sequence. Used for regulatory audit trail linking FIX orders to exchange reports.' },
+    ],
+    gotchas: [
+      '<strong>Closing Cross cutoff is 3:55 PM ET, not 4:00 PM ET.</strong> MOC and LOC orders for the NASDAQ Closing Cross must be entered by 3:55 PM ET. Imbalance-only (IO) orders can be entered until 3:58 PM ET. Orders submitted after cutoff are rejected immediately.',
+      '<strong>Opening Cross orders require TimeInForce=OPG (59=7), not just the order type.</strong> Sending a Market on Open without 59=7 will result in the order being treated as a regular core market order, executed at open rather than participating in the cross.',
+      '<strong>NASDAQ MPIDs are four characters and case-sensitive.</strong> If your SenderCompID does not match the MPID on file exactly, the Logon is rejected with a Text (58) message citing "Invalid SenderCompID."',
+      '<strong>Extended hours limit orders must be on the same side as their time-in-force.</strong> NASDAQ will reject extended hours orders where the limit price is so far through the market that they would immediately execute as a market order — use IOC for aggressive extended hours flow.',
+      '<strong>Cancel-replace (OrderCancelReplaceRequest, 35=G) changes the queue position.</strong> On NASDAQ, any modification to price or quantity causes the order to lose time priority. If you are only reducing quantity, use an OrderCancelRequest and re-enter to preserve priority on the price level.',
+    ],
+  },
+
+  arca: {
+    name: 'NYSE Arca',
+    fullName: 'NYSE Arca',
+    mic: 'ARCX',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `NYSE Arca is a fully electronic exchange operated by NYSE Group, and is the dominant venue for ETF trading in the US. It also trades equities listed on NYSE, NASDAQ, and other exchanges. NYSE Arca runs on the same Pillar FIX Gateway platform as NYSE Equities, NYSE American, NYSE National, and NYSE Texas Equities, all covered in the same NYSE Pillar Gateway FIX Protocol Specification. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID is <strong>ARCX</strong> (the ISO 10383 MIC), not "ARCA". Sessions are pre-configured per venue — Arca credentials are separate from NYSE Equities credentials even though both run on Pillar.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Agreed upon connection identifier between the Exchange and the entering firm',
+      'TargetCompID (56)': 'ARCX — Market Identifier Code for NYSE Arca (confirmed in spec section 6.1 Header; different session from XNYS)',
+      'HeartBtInt (108)': '1–60 seconds (valid range per spec; same as all Pillar venues)',
+      'EncryptMethod (98)': '0 — must be 0; TLS handled at transport layer',
+      'ResetSeqNumFlag (141)': 'N — if included, must be set to N (same Pillar rule as NYSE: "If included, this tag must be set to N")',
+      'Username (553)': 'Arca-specific username agreed with NYSE Group. Separate from NYSE Equities credentials.',
+      'Password (554)': 'Arca-specific password. Required on Logon Request; omitted from Logon Response.',
+      'RawData (96)': 'Optional 3-byte session config: [Byte1: CancelOnDisconnect 0/1/2] [Byte2: Order Priority Update Ack 0/1] [Byte3: SelfTradeType T/N/O/C/D]',
+      'Notes': 'NYSE Arca and NYSE Equities share the Pillar FIX spec but require separate sessions and credentials. The same Logon authentication logic applies: SenderCompID must match Username (553). The session is bound to Arca; you cannot submit NYSE Equities orders on an Arca session.',
+    },
+    schedule: {
+      premarket:  { et: 'Early Trading Session (TradingSessionID=1)', utc: 'See NYSE published schedule' },
+      core:       { et: 'Core Trading Session 9:30 AM – 4:00 PM ET (TradingSessionID=2)', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Late Trading Session (TradingSessionID=3)', utc: 'See NYSE published schedule' },
+    },
+    orderTypes: [
+      { type: 'Market',             tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55', notes: 'OrdType=1. Executes at best available price. Valid TIF: 0=Day, 3=IOC, 4=FOK.' },
+      { type: 'Limit',              tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=2. Price (44) required. Valid TIF: 0=Day, 1=GTC, 3=IOC, 4=FOK, 5=GTX, 6=GTD.' },
+      { type: 'Inside Limit',       tag40: '7', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=7. NYSE Pillar-specific. Routes to primary market at a price inside the prevailing quote. Confirmed in spec.' },
+      { type: 'AutoMatch Limit',    tag40: '9', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55', notes: 'OrdType=9. NYSE Pillar-specific. Automatically matches against available liquidity. Confirmed in spec.' },
+      { type: 'Market on Open',     tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 59', notes: 'OrdType=1 + TimeInForce=2 (At the Opening). Participates in NYSE Arca Opening Auction.' },
+      { type: 'Limit on Open',      tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55, 59', notes: 'OrdType=2 + TimeInForce=2 (At the Opening) + Price (44).' },
+      { type: 'Market on Close',    tag40: '1', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 59', notes: 'OrdType=1 + TimeInForce=7 (On Close). Participates in NYSE Arca Closing Auction. Closing auction cutoff: confirm with NYSE connectivity team.' },
+      { type: 'Limit on Close',     tag40: '2', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 44, 54, 55, 59', notes: 'OrdType=2 + TimeInForce=7 (On Close) + Price (44). Spec explicitly states: "Limit On Close: OrdType (40) = 2 with TimeInForce (59) = 7." Applies to all Pillar venues including Arca.' },
+      { type: 'Pegged (Primary)',    tag40: 'P', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 18', notes: 'OrdType=P + ExecInst=R (Primary Peg). Pegs to the primary side of the NBBO. Confirmed in spec.' },
+      { type: 'Pegged (Market)',     tag40: 'P', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 18', notes: 'OrdType=P + ExecInst=P (Market Peg). Pegs to the less aggressive side of the NBBO.' },
+      { type: 'Pegged (Midpoint)',   tag40: 'P', required: '8, 49, 56, 34, 52, 11, 21, 38, 40, 54, 55, 18', notes: 'OrdType=P + ExecInst=M (MPL — Midpoint Liquidity). Non-displayed; pegs to NBBO midpoint. Heavy use in ETF flow.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: 'R / P / M', desc: 'Peg type when OrdType=P. R=Primary Peg, P=Market Peg, M=MPL (Midpoint Liquidity). Confirmed in spec for all Pillar venues.' },
+      { tag: '18', name: 'ExecInst', value: 'N', desc: 'Non-displayed. Retail Price Improvement and Limit-Non Displayed orders. Confirmed in spec.' },
+      { tag: '18', name: 'ExecInst', value: 'f', desc: 'ISO (Intermarket Sweep Order). Bypasses NBBO check. Confirmed in spec.' },
+      { tag: '18', name: 'ExecInst', value: 'E / F', desc: 'E=DNI (Do Not Increase), F=DNR (Do Not Reduce). Corporate action protection. Confirmed in spec.' },
+      { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve/iceberg display quantity. Must be ≥ 1 round lot. Confirmed in spec.' },
+      { tag: '336', name: 'TradingSessionID', value: '1/2/3/4/5/6', desc: '1=Early, 2=Core, 3=Late, 4=Early&Core, 5=Core&Late, 6=All three. Confirmed in spec for all Pillar venues.' },
+      { tag: '7928', name: 'SelfTradeType', value: 'T/N/O/C/D', desc: 'T=No STP, N=Cancel Newest, O=Cancel Oldest, C=Cancel Both, D=Decrement. Per-order STP override; session default set via RawData Byte3. Confirmed in spec.' },
+      { tag: '9303', name: 'RoutingInst', value: 'N/R/D/S/8/A/E', desc: 'N=Non Routable, R=Routable, D=Directed, S=Directed+Routable, 8=Minimum Fill, A=Route to ATS, E=Route to Algo. Confirmed in spec.' },
+    ],
+    gotchas: [
+      '<strong>ResetSeqNumFlag (141) must be N on Arca, same as NYSE.</strong> The Pillar spec states "If included, this tag must be set to N" — applies to all Pillar-connected venues including Arca. Tag 141=Y is incorrect and will be rejected.',
+      '<strong>TargetCompID is ARCX, not ARCA.</strong> The ISO 10383 MIC for NYSE Arca is ARCX. The spec\'s section 6.1 Header lists ARCX as the TargetCompID value. Sending "ARCA" will reject the Logon.',
+      '<strong>ARCX and XNYS are different MICs for different venues, even though both are NYSE Group.</strong> ETFs primarily list on Arca (ARCX); equities primarily list on NYSE Equities (XNYS). Wrong MIC in Tag 207 (SecurityExchange) causes security master mismatches in post-trade systems.',
+      '<strong>MOC/LOC on Arca Pillar uses OrdType=1/2 + TimeInForce=7, not OrdType=5 or OrdType=B.</strong> The spec lists OrdType values 1, 2, 7, 9, P only. LOC is explicitly "OrdType (40) = 2 with TimeInForce (59) = 7" in the spec. Standard FIX OrdType=5 and OrdType=B are not valid on Pillar.',
+      '<strong>Pegged orders reprice continuously but do not change their MsgSeqNum.</strong> A pegged order on the book gets repriced as the NBBO moves. Track orders by ClOrdID (11) and consume ExecutionReport (35=8) updates; OMS systems that track by price will show stale state.',
+    ],
+    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification, Version 5.15', url: 'https://www.nyse.com/publicdocs/nyse/NYSE_Pillar_Gateway_FIX_Protocol_Specification.pdf', date: 'March 27, 2026' },
+  },
+
+  bzx: {
+    name: 'CBOE BZX',
+    fullName: 'Cboe BZX Exchange',
+    mic: 'BATS',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Cboe BZX (formerly BATS BZX) is the flagship US equity exchange operated by Cboe Global Markets. BZX is well-regarded for tight latency, competitive maker-taker pricing, and a clean FIX implementation. Along with BYX, EDGX, and EDGA (all Cboe-operated), BZX runs on a unified platform called Bats One. Cboe exchanges collectively capture a significant share of consolidated US equity volume. The MIC for BZX is BATS. <strong>Tag 8 = FIX.4.2</strong>. Cboe also supports FIXBOL (a binary order layer) for ultra-low-latency flow, but standard FIX 4.2 is the most common interface.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Your assigned BZX session ID (typically your MPID + suffix)',
+      'TargetCompID (56)': 'CBSX (production) / CBSXTEST (test)',
+      'HeartBtInt (108)': '60 seconds (Cboe defaults to 60; lower values accepted)',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Password (554)': 'BZX session password from Cboe Member Services',
+      'Notes': 'Cboe BZX, EDGX, and EDGA share a platform but have separate session IDs and routing. A single Cboe connectivity agreement covers all four Cboe equity venues. Logon credentials are provisioned per venue.',
+    },
+    schedule: {
+      premarket:  { et: '7:00 AM – 9:30 AM ET', utc: '12:00 – 14:30 UTC' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: '4:00 PM – 8:00 PM ET', utc: '21:00 – 01:00 UTC' },
+    },
+    orderTypes: [
+      { type: 'Market',         tag40: '1', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Core hours only. BZX rejects market orders outside regular session.' },
+      { type: 'Limit',          tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'Standard limit. Available all sessions.' },
+      { type: 'Stop',           tag40: '3', required: '49, 56, 11, 21, 55, 54, 38, 99', notes: 'Stop market. Converts on trigger.' },
+      { type: 'Stop Limit',     tag40: '4', required: '49, 56, 11, 21, 55, 54, 38, 44, 99', notes: 'Stop limit. Both Price and StopPx required.' },
+      { type: 'Market on Close',tag40: '5', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Participates in BZX Closing Cross. Cutoff: 3:35 PM ET.' },
+      { type: 'Limit on Close', tag40: 'B', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'BZX closing cross at limit. 3:35 PM ET cutoff.' },
+      { type: 'Midpoint Peg',   tag40: 'P', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Cboe\'s midpoint peg routes to BZX midpoint; uses BATS MidPoint Peg order type internally.' },
+      { type: 'Post-Only',      tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44, 18', notes: 'Limit + ExecInst=6 (18=6). If it would take liquidity, order is canceled (not held).' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: '6', desc: 'Participate do not initiate (post-only). Order will be canceled rather than execute as taker. Used to earn maker rebates.' },
+      { tag: '18', name: 'ExecInst', value: 'W', desc: 'Extended hours. Required for pre-market (7:00 AM ET) and post-market flow.' },
+      { tag: '59', name: 'TimeInForce', value: '5', desc: 'Good Till Cancel. BZX accepts GTC orders; they persist across sessions until explicitly canceled or expired.' },
+      { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve/display quantity for iceberg orders. BZX minimum display is 1 share.' },
+      { tag: '9730', name: 'CboeRoutingInst', value: 'string', desc: 'Cboe-specific routing instruction. Values: ROUT (route to away venues), CYCL (cycle on BZX then route), POST (post only, no routing).' },
+    ],
+    gotchas: [
+      '<strong>BZX pre-market starts at 7:00 AM ET, not 4:00 AM ET.</strong> Unlike NYSE and NASDAQ which open extended hours at 4:00 AM ET, Cboe BZX does not accept orders until 7:00 AM ET. Orders submitted before that window are rejected, not queued.',
+      '<strong>BZX Closing Cross cutoff is 3:35 PM ET</strong> — earlier than NYSE (3:45 PM ET) and NASDAQ (3:55 PM ET). This is the most commonly mishandled cutoff in multi-venue smart order routing. MOC/LOC orders after 3:35 PM ET are rejected.',
+      '<strong>Post-only orders on BZX are canceled, not repriced, if they would take liquidity.</strong> Unlike some venues that will re-price a post-only order to just behind the best bid/offer, BZX cancels it immediately and sends an Execution Report with ExecType=8 (Rejected). Your OMS must handle this and resubmit at the correct price.',
+      '<strong>The MIC for BZX is BATS, not BZX or CBOE.</strong> ISO 10383 assigned the MIC "BATS" when the exchange was originally BATS Trading. It was never updated when Cboe acquired BATS. Tag 207 = BATS is correct for BZX.',
+      '<strong>GTC orders survive overnight but do not survive corporate actions.</strong> BZX cancels GTC orders on ex-dividend date and on any stock split/reverse split. Your OMS must reconcile GTC working order state each morning against the previous night\'s cancel notifications.',
+    ],
+  },
+
+  edgx: {
+    name: 'EDGX',
+    fullName: 'Cboe EDGX Exchange',
+    mic: 'EDGX',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Cboe EDGX (formerly Direct Edge EDGX) is a taker-maker exchange — it charges a fee to post liquidity and pays a rebate to take liquidity. This inverted fee structure attracts aggressive, momentum-driven order flow and makes EDGX popular for strategies that want to be on the taking side without paying a taker fee. EDGX runs on the same Bats One platform as BZX, BYX, and EDGA. The MIC is EDGX. <strong>Tag 8 = FIX.4.2</strong>. Understanding the fee model is critical — a limit order that posts on EDGX incurs a fee rather than earning a rebate, which is the opposite of BZX.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned EDGX FIX session ID',
+      'TargetCompID (56)': 'EDGX (production) / EDGXTEST (test)',
+      'HeartBtInt (108)': '60 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Password (554)': 'EDGX session credential from Cboe Member Services',
+      'Notes': 'EDGX and EDGA share a Cboe connectivity agreement but have separate endpoints, session IDs, and order books. Routing logic that treats them as the same venue will send orders to the wrong book.',
+    },
+    schedule: {
+      premarket:  { et: '7:00 AM – 9:30 AM ET', utc: '12:00 – 14:30 UTC' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: '4:00 PM – 8:00 PM ET', utc: '21:00 – 01:00 UTC' },
+    },
+    orderTypes: [
+      { type: 'Market',       tag40: '1', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Core hours only.' },
+      { type: 'Limit',        tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'Standard limit. EDGX taker-maker fees apply when this takes liquidity.' },
+      { type: 'Stop',         tag40: '3', required: '49, 56, 11, 21, 55, 54, 38, 99', notes: 'Stop market.' },
+      { type: 'Stop Limit',   tag40: '4', required: '49, 56, 11, 21, 55, 54, 38, 44, 99', notes: 'Stop limit.' },
+      { type: 'Post-Only',    tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44, 18', notes: 'Limit + ExecInst=6. On EDGX this incurs a posting fee — unusual use case on an inverted venue.' },
+      { type: 'Midpoint Peg', tag40: 'P', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Midpoint peg. Hidden from the displayed book. EDGX midpoint pegs do not earn the taker rebate — they execute at a separate fee tier.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: '6', desc: 'Post-only. On EDGX (inverted), this causes the order to incur a posting fee. Generally avoided except for specific rebate strategies.' },
+      { tag: '18', name: 'ExecInst', value: 'W', desc: 'Extended hours. EDGX extended hours start at 7:00 AM ET.' },
+      { tag: '59', name: 'TimeInForce', value: '5', desc: 'GTC. Supported. Cboe cancels GTC orders on ex-dates and corporate actions.' },
+      { tag: '9730', name: 'CboeRoutingInst', value: 'ROUT', desc: 'Route to away venues after EDGX. Standard routing instruction on EDGX when displayed price improves.' },
+    ],
+    gotchas: [
+      '<strong>EDGX is taker-maker (inverted).</strong> Makers pay a fee; takers receive a rebate. If your order management system calculates expected transaction costs using maker-taker assumptions (typical for BZX, NASDAQ), your P&L will be wrong. Explicitly model EDGX fee tiers separately.',
+      '<strong>Midpoint pegged orders on EDGX do NOT earn the standard taker rebate.</strong> They execute at a neutral fee tier. A strategy built around EDGX taker rebates that routes midpoint flow to EDGX will see lower-than-expected rebates.',
+      '<strong>EDGX and EDGA have the same parent but opposite fee models.</strong> EDGA is maker-taker. A routing error that confuses the two costs real money on every fill. Use the distinct MICs (EDGX / EDGA) to validate routing logic and double-check your order routing table.',
+      '<strong>Post-5 PM order flow for extended hours requires ExecInst=W even on Cboe venues.</strong> Forgetting 18=W when submitting after-hours limit orders results in them being held until the next morning rather than routed to the EDGX after-hours session.',
+      '<strong>Cancel confirms on EDGX arrive with ExecType=4 (Canceled).</strong> Some OMS implementations expect ExecType=6 (Pending Cancel) followed by ExecType=4. EDGX skips the pending state and sends only the final cancel. If your OMS state machine waits for a pending cancel ACK, it will deadlock.',
+    ],
+  },
+
+  edga: {
+    name: 'EDGA',
+    fullName: 'Cboe EDGA Exchange',
+    mic: 'EDGA',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `Cboe EDGA (formerly Direct Edge EDGA) is a maker-taker exchange operated by Cboe Global Markets, running on the same Bats One platform as BZX, EDGX, and BYX. EDGA has lower maker rebates and lower taker fees than BZX — it is positioned as a low-cost venue for order flow that is price-sensitive but not latency-sensitive. EDGA captures a smaller share of consolidated volume than BZX or EDGX. The MIC is EDGA. <strong>Tag 8 = FIX.4.2</strong>. EDGA is commonly used as a secondary routing destination in smart order routers that want to exhaust BZX liquidity before hitting other maker-taker venues.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned EDGA FIX session ID',
+      'TargetCompID (56)': 'EDGA (production) / EDGATEST (test)',
+      'HeartBtInt (108)': '60 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Password (554)': 'EDGA session credential from Cboe Member Services',
+      'Notes': 'Same Cboe platform as EDGX and BZX. Separate session IDs and books. Connectivity agreement is shared across Cboe venues.',
+    },
+    schedule: {
+      premarket:  { et: '7:00 AM – 9:30 AM ET', utc: '12:00 – 14:30 UTC' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: '4:00 PM – 8:00 PM ET', utc: '21:00 – 01:00 UTC' },
+    },
+    orderTypes: [
+      { type: 'Market',        tag40: '1', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Core hours only.' },
+      { type: 'Limit',         tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'Standard maker-taker limit order.' },
+      { type: 'Stop',          tag40: '3', required: '49, 56, 11, 21, 55, 54, 38, 99', notes: 'Stop market.' },
+      { type: 'Stop Limit',    tag40: '4', required: '49, 56, 11, 21, 55, 54, 38, 44, 99', notes: 'Stop limit.' },
+      { type: 'Post-Only',     tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44, 18', notes: 'Limit + ExecInst=6. Earns maker rebate; canceled if it would take.' },
+      { type: 'Midpoint Peg',  tag40: 'P', required: '49, 56, 11, 21, 55, 54, 38', notes: 'EDGA midpoint peg. Hidden. Separate fee tier from maker and taker.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: '6', desc: 'Post-only. On EDGA (maker-taker), this earns a maker rebate. Canceled if it would cross.' },
+      { tag: '18', name: 'ExecInst', value: 'W', desc: 'Extended hours. Required for pre/post market flow on EDGA.' },
+      { tag: '59', name: 'TimeInForce', value: '5', desc: 'GTC. Supported. Corporate action cancellation rules apply (same as all Cboe venues).' },
+      { tag: '9730', name: 'CboeRoutingInst', value: 'ROUT', desc: 'Standard Cboe routing instruction. EDGA will route to away venues when price improves.' },
+    ],
+    gotchas: [
+      '<strong>EDGA is maker-taker; EDGX is taker-maker.</strong> They have the same parent and nearly identical FIX interfaces but opposite economics. A configuration error in your venue map that swaps EDGA and EDGX means you are systematically on the wrong side of the fee structure.',
+      '<strong>EDGA volume is lower than BZX and EDGX.</strong> If your smart order router hits EDGA aggressively expecting liquidity similar to BZX, you will get partial fills and end up with higher market impact than modeled. EDGA is best used as a passive posting venue, not an aggressive taking venue.',
+      '<strong>Post-only cancel behavior is the same as BZX.</strong> If a post-only limit order would take liquidity, EDGA cancels it rather than repricing. You receive ExecType=8 (Rejected), not ExecType=4 (Canceled). Model accordingly.',
+      '<strong>EDGA\'s Closing Cross cutoff matches BZX at 3:35 PM ET.</strong> All four Cboe equity venues share the same closing auction cutoff of 3:35 PM ET, which is earlier than NYSE and NASDAQ. EDGA\'s closing cross is smaller than BZX\'s in typical volume.',
+      '<strong>Sequence number gaps on reconnect trigger a resend request.</strong> Cboe exchanges will send a ResendRequest (35=2) for any gap they detect on logon. Your session layer must be able to respond with the correct messages or a SequenceReset (35=4) with GapFillFlag=Y (123=Y) for messages that cannot be replayed.',
+    ],
+  },
+
+  iex: {
+    name: 'IEX',
+    fullName: 'Investors Exchange',
+    mic: 'IEXG',
+    fixVersion: 'FIX 4.2',
+    tag8: 'FIX.4.2',
+    overview: `IEX (Investors Exchange) is unique among US equity exchanges for its deliberate 350-microsecond speed bump — a 38-mile coil of fiber optic cable that delays all incoming orders. This levels the playing field between high-frequency and institutional flow and is the core premise of the exchange (described in Michael Lewis's Flash Boys). IEX also offers the D-Peg and P-Peg discretionary peg order types, which pull back from aggressive fills when the quote is unstable, protecting long-term investors from adverse selection. FIX connectivity uses <strong>Tag 8 = FIX.4.2</strong>. IEX does not operate extended hours and has a simpler session schedule than other venues.`,
+    logon: {
+      'BeginString (8)': 'FIX.4.2',
+      'SenderCompID (49)': 'Assigned IEX FIX session ID',
+      'TargetCompID (56)': 'IEXG (production) / IEXGTEST (test)',
+      'HeartBtInt (108)': '30 seconds',
+      'EncryptMethod (98)': '0',
+      'ResetOnLogon (141)': 'Y',
+      'Username (553)': 'IEX session username',
+      'Password (554)': 'IEX session password',
+      'Notes': 'IEX requires all members to complete a connectivity checklist before going live. The 350-microsecond speed bump applies to all order entry — your Logon message itself is also delayed. IEX does not charge connectivity fees; revenue comes purely from transaction fees.',
+    },
+    schedule: {
+      premarket:  { et: 'Not supported', utc: 'Not supported' },
+      core:       { et: '9:30 AM – 4:00 PM ET', utc: '14:30 – 21:00 UTC' },
+      afterhours: { et: 'Not supported', utc: 'Not supported' },
+    },
+    orderTypes: [
+      { type: 'Market',        tag40: '1', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Executed immediately at best available price after the speed bump.' },
+      { type: 'Limit',         tag40: '2', required: '49, 56, 11, 21, 55, 54, 38, 44', notes: 'Standard limit. Core hours only.' },
+      { type: 'Market on Open',tag40: 'O', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Participates in IEX Opening Auction.' },
+      { type: 'Market on Close',tag40:'5', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Participates in IEX Closing Auction. Cutoff: 3:55 PM ET.' },
+      { type: 'D-Peg',         tag40: 'P', required: '49, 56, 11, 21, 55, 54, 38, 211', notes: 'Discretionary peg. Quotes at midpoint but pulls back to near side when IEX Signal detects adverse conditions. IEX signature order type.' },
+      { type: 'P-Peg',         tag40: 'P', required: '49, 56, 11, 21, 55, 54, 38', notes: 'Primary peg. Tracks best bid (buy) or best offer (sell). Also pulls back on adverse signal.' },
+    ],
+    specificTags: [
+      { tag: '18', name: 'ExecInst', value: 'e', desc: 'Do not take liquidity. On IEX, this is used for orders that should only add liquidity and should not execute on arrival even if marketable.' },
+      { tag: '59', name: 'TimeInForce', value: '5', desc: 'GTC. IEX supports GTC orders. They persist across sessions (core hours only) and are canceled by corporate actions.' },
+      { tag: '211', name: 'PegOffsetValue', value: '0.0 or negative', desc: 'Offset from midpoint for D-Peg orders. 0 = exact midpoint. Negative values set the peg below midpoint (buy) or above midpoint (sell).' },
+      { tag: '9483', name: 'IEXSignalInst', value: 'Y / N', desc: 'IEX-specific tag. Y = enable D-Peg crumbling quote detection (default for D-Peg). N = disable the pullback behavior and peg stays at midpoint.' },
+      { tag: '9484', name: 'IEXIndicativePegPrice', value: 'price', desc: 'Read-only tag on ExecutionReport. Shows the current peg reference price for pegged orders. Useful for OMS display and debugging peg behavior.' },
+    ],
+    gotchas: [
+      '<strong>The 350-microsecond speed bump is not a latency issue to troubleshoot.</strong> New connectivity teams sometimes open tickets with IEX because their order acknowledgment times are ~700 microseconds instead of the expected sub-100. That is intentional and correct — 350μs in, 350μs out. Do not attempt to "fix" it.',
+      '<strong>IEX does not support extended hours.</strong> Orders submitted outside 9:30 AM – 4:00 PM ET are rejected. There is no pre-market or after-hours session. Systems that route extended hours flow to IEX (because the venue exists in the routing table) will generate a stream of rejections outside core hours.',
+      '<strong>D-Peg and P-Peg pull back based on the IEX Signal, which is proprietary.</strong> The exact conditions that trigger a pullback are not published at the tick level. Do not assume that a D-Peg order at midpoint is equivalent to a NASDAQ midpoint peg or BZX midpoint peg — fill rates and timing differ materially on volatile stocks.',
+      '<strong>IEX Closing Cross cutoff is 3:55 PM ET, same as NASDAQ.</strong> IEX adopted a 3:55 PM ET cutoff for MOC orders to align with the NASDAQ timeline. However, IEX does not have a LOI (limit on imbalance) session — after 3:55 PM ET, no auction-directed orders are accepted.',
+      '<strong>ClOrdID (11) must be unique across your entire session lifetime, not just per day.</strong> IEX enforces ClOrdID uniqueness across all orders for the life of your FIX session. If you reuse a ClOrdID from a previous session (even a different calendar day), the order is rejected with OrdRejReason=6 (Duplicate Order).',
+    ],
+  },
+
+};
+
+// ── Nav and pill sync ─────────────────────────────────────────
+let _activeKey = null;
+
+function selectExchange(key, pillEl) {
+  _activeKey = key;
+
+  // Sync left nav items
+  document.querySelectorAll('.ex-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.key === key);
+  });
+
+  // Sync top pills
+  document.querySelectorAll('.ex-pill').forEach(btn => {
+    const matches = btn.textContent.trim() === EXCHANGES[key]?.name ||
+                    btn.getAttribute('onclick')?.includes(`'${key}'`);
+    btn.classList.toggle('active', matches);
+    btn.setAttribute('aria-selected', matches ? 'true' : 'false');
+  });
+
+  renderExchange(key);
+  document.getElementById('ex-right').scrollTop = 0;
+}
+
+function renderExchange(key) {
+  const ex = EXCHANGES[key];
+  if (!ex) return;
+
+  const schedHtml = `
+    <div class="ex-schedule">
+      <div class="ex-sched-block">
+        <div class="ex-sched-label">Pre-Market</div>
+        <div class="ex-sched-time">${esc(ex.schedule.premarket.et)}</div>
+        <div class="ex-sched-utc">${esc(ex.schedule.premarket.utc)}</div>
+      </div>
+      <div class="ex-sched-block">
+        <div class="ex-sched-label">Core Session</div>
+        <div class="ex-sched-time">${esc(ex.schedule.core.et)}</div>
+        <div class="ex-sched-utc">${esc(ex.schedule.core.utc)}</div>
+      </div>
+      <div class="ex-sched-block">
+        <div class="ex-sched-label">After Hours</div>
+        <div class="ex-sched-time">${esc(ex.schedule.afterhours.et)}</div>
+        <div class="ex-sched-utc">${esc(ex.schedule.afterhours.utc)}</div>
+      </div>
+    </div>`;
+
+  const logonRows = Object.entries(ex.logon).map(([k, v]) =>
+    k === 'Notes'
+      ? `<div style="grid-column:1/-1;margin-top:8px;font-size:13px;color:var(--text-dim);line-height:1.6">${esc(v)}</div>`
+      : `<div class="ex-logon-key">${esc(k)}</div><div class="ex-logon-val"><code>${esc(v)}</code></div>`
+  ).join('');
+
+  const orderRows = ex.orderTypes.map(o => `<tr>
+    <td class="ex-td-name">${esc(o.type)}</td>
+    <td class="ex-td-tag"><code>40=${esc(o.tag40)}</code></td>
+    <td class="ex-td-req" style="font-family:'JetBrains Mono',monospace;font-size:11px">${esc(o.required)}</td>
+    <td>${esc(o.notes)}</td>
+  </tr>`).join('');
+
+  const tagRows = ex.specificTags.map(t => `<tr>
+    <td class="ex-td-tag">${esc(t.tag)}</td>
+    <td class="ex-td-name">${esc(t.name)}</td>
+    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;white-space:nowrap"><code>${esc(t.value)}</code></td>
+    <td>${esc(t.desc)}</td>
+  </tr>`).join('');
+
+  const gotchaItems = ex.gotchas.map(g => `<li>${g}</li>`).join('');
+
+  document.getElementById('ex-right').innerHTML = `
+    <div class="ex-hdr">
+      <div class="ex-hdr-name">${esc(ex.fullName)}</div>
+      <div class="ex-hdr-meta">
+        <span class="ex-badge">${esc(ex.tag8)}</span>
+        <span class="ex-badge ex-badge-mic">MIC: ${esc(ex.mic)}</span>
+      </div>
+    </div>
+
+    <div class="ex-section">
+      <div class="ex-section-title">Overview</div>
+      <p class="ex-para">${ex.overview}</p>
+    </div>
+
+    <div class="ex-section">
+      <div class="ex-section-title">Logon</div>
+      <div class="ex-logon-grid">${logonRows}</div>
+    </div>
+
+    <div class="ex-section">
+      <div class="ex-section-title">Session Schedule</div>
+      ${schedHtml}
+    </div>
+
+    <div class="ex-section">
+      <div class="ex-section-title">Order Types</div>
+      <div class="ex-table-wrap">
+        <table class="ex-table">
+          <thead><tr>
+            <th>Order Type</th>
+            <th>OrdType (40)</th>
+            <th>Required Tags</th>
+            <th>Notes</th>
+          </tr></thead>
+          <tbody>${orderRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ex-section">
+      <div class="ex-section-title">Exchange-Specific Tags</div>
+      <div class="ex-table-wrap">
+        <table class="ex-table">
+          <thead><tr>
+            <th style="width:48px">Tag</th>
+            <th>Field Name</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr></thead>
+          <tbody>${tagRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ex-section">
+      <div class="ex-section-title">Common Gotchas</div>
+      <ul class="ex-gotchas">${gotchaItems}</ul>
+    </div>
+    ${ex.source ? `
+    <div class="ex-section ex-source-line">
+      <span class="ex-source-label">Source:</span>
+      <a href="${ex.source.url}" class="ex-source-link" target="_blank" rel="noopener">${ex.source.title}</a>
+      <span class="ex-source-date">— ${ex.source.date} — verified June 2026</span>
+    </div>` : ''}
+  `;
+}
+
+// ── Init ──────────────────────────────────────────────────────
+selectExchange('nyse', document.querySelector('.ex-pill'));
+</script>
+
+</body>
+</html>

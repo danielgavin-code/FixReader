@@ -324,6 +324,11 @@ def message_library():
                            **_ctx(preview=preview))
 
 
+@app.route('/exchange-specs')
+def exchange_specs():
+    return render_template('exchange_specs.html', **_ctx())
+
+
 _VERSION_ORDER = [
     'FIX 2.7', 'FIX 4.0', 'FIX 4.1', 'FIX 4.2', 'FIX 4.3',
     'FIX 4.4', 'FIX 5.0', 'FIX 5.0 SP1', 'FIX 5.0 SP2', 'FIXT 1.1',
