@@ -98,9 +98,22 @@
 <div class="ml-version-bar">
   <button class="ml-version-pill active" onclick="window.location='/'">FIX Decoder</button>
   <button class="ml-version-pill" onclick="window.location='/compare'">Compare Messages</button>
-  <button class="ml-version-pill" onclick="window.location='/field-reference'">Field Reference</button>
   <button class="ml-version-pill" onclick="window.location='/tools/message-builder'">Message Builder</button>
   <button class="ml-version-pill" onclick="window.location='/tools/tag-validator'">Tag Validator</button>
+</div>
+{% elif page_title == 'Message Builder' %}
+<div class="ml-version-bar">
+  <button class="ml-version-pill" onclick="window.location='/'">FIX Decoder</button>
+  <button class="ml-version-pill" onclick="window.location='/compare'">Compare Messages</button>
+  <button class="ml-version-pill active" role="tab" aria-selected="true">Message Builder</button>
+  <button class="ml-version-pill" onclick="window.location='/tools/tag-validator'">Tag Validator</button>
+</div>
+{% elif page_title == 'Tag Validator' %}
+<div class="ml-version-bar">
+  <button class="ml-version-pill" onclick="window.location='/'">FIX Decoder</button>
+  <button class="ml-version-pill" onclick="window.location='/compare'">Compare Messages</button>
+  <button class="ml-version-pill" onclick="window.location='/tools/message-builder'">Message Builder</button>
+  <button class="ml-version-pill active" role="tab" aria-selected="true">Tag Validator</button>
 </div>
 {% elif active_nav == 'tools' %}
 <div class="ml-version-bar">
@@ -138,77 +151,73 @@
         <span class="ml-msg-code">CMP</span>
         <span>Compare Messages</span>
       </a>
-      <a href="/field-reference" class="ml-msg-item">
-        <span class="ml-msg-code">TAG</span>
-        <span>Field Reference</span>
-      </a>
-      <a href="/tools/message-builder" class="ml-msg-item">
+      <a href="/tools/message-builder" class="ml-msg-item{% if page_title == 'Message Builder' %} active{% endif %}">
         <span class="ml-msg-code">BLD</span>
         <span>Message Builder</span>
       </a>
-      <a href="/tools/tag-validator" class="ml-msg-item">
+      <a href="/tools/tag-validator" class="ml-msg-item{% if page_title == 'Tag Validator' %} active{% endif %}">
         <span class="ml-msg-code">VAL</span>
         <span>Tag Validator</span>
       </a>
 
       <div class="ml-cat-hdr">Cert Scripts</div>
-      <a href="/tools/order-entry" class="ml-msg-item{% if active_nav == 'tools' %} active{% endif %}">
+      <a href="/tools/order-entry" class="ml-msg-item{% if page_title in ('Order Entry', 'Cert Scripts') %} active{% endif %}">
         <span class="ml-msg-code">ORD</span>
         <span>Order Entry</span>
       </a>
-      <a href="/tools/drop-copy" class="ml-msg-item">
+      <a href="/tools/drop-copy" class="ml-msg-item{% if page_title == 'Drop Copy' %} active{% endif %}">
         <span class="ml-msg-code">DRP</span>
         <span>Drop Copy</span>
       </a>
-      <a href="/tools/allocation" class="ml-msg-item">
+      <a href="/tools/allocation" class="ml-msg-item{% if page_title == 'Allocation' %} active{% endif %}">
         <span class="ml-msg-code">ALC</span>
         <span>Allocation</span>
       </a>
 
       <div class="ml-cat-hdr">Learn FIX</div>
-      <a href="/learn/fix-protocol-101" class="ml-msg-item{% if active_nav == 'learn' %} active{% endif %}">
+      <a href="/learn/fix-protocol-101" class="ml-msg-item{% if page_title == 'FIX Protocol 101' %} active{% endif %}">
         <span class="ml-msg-code">101</span>
         <span>FIX Protocol 101</span>
       </a>
-      <a href="/learn/message-types-guide" class="ml-msg-item">
+      <a href="/learn/message-types-guide" class="ml-msg-item{% if page_title == 'Message Types Guide' %} active{% endif %}">
         <span class="ml-msg-code">MSG</span>
         <span>Message Types Guide</span>
       </a>
-      <a href="/learn/session-management" class="ml-msg-item">
+      <a href="/learn/session-management" class="ml-msg-item{% if page_title == 'Session Management' %} active{% endif %}">
         <span class="ml-msg-code">SES</span>
         <span>Session Management</span>
       </a>
 
       <div class="ml-cat-hdr">Troubleshooting</div>
-      <a href="/troubleshooting/network" class="ml-msg-item{% if active_nav == 'troubleshooting' %} active{% endif %}">
+      <a href="/troubleshooting/network" class="ml-msg-item{% if page_title == 'Network & Connectivity' %} active{% endif %}">
         <span class="ml-msg-code">NET</span>
         <span>Network &amp; Connectivity</span>
       </a>
-      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item">
+      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item{% if page_title == 'Sequence Number Issues' %} active{% endif %}">
         <span class="ml-msg-code">SEQ</span>
         <span>Sequence Number Issues</span>
       </a>
-      <a href="/troubleshooting/logon" class="ml-msg-item">
+      <a href="/troubleshooting/logon" class="ml-msg-item{% if page_title == 'Logon Failures' %} active{% endif %}">
         <span class="ml-msg-code">LOG</span>
         <span>Logon Failures</span>
       </a>
-      <a href="/troubleshooting/fill-reconciliation" class="ml-msg-item">
+      <a href="/troubleshooting/fill-reconciliation" class="ml-msg-item{% if page_title == 'Fill Reconciliation' %} active{% endif %}">
         <span class="ml-msg-code">FIL</span>
         <span>Fill Reconciliation</span>
       </a>
-      <a href="/troubleshooting/rejects" class="ml-msg-item">
+      <a href="/troubleshooting/rejects" class="ml-msg-item{% if page_title == 'Order Rejects' %} active{% endif %}">
         <span class="ml-msg-code">REJ</span>
         <span>Order Rejects</span>
       </a>
-      <a href="/troubleshooting/latency" class="ml-msg-item">
+      <a href="/troubleshooting/latency" class="ml-msg-item{% if page_title == 'Latency & Timing' %} active{% endif %}">
         <span class="ml-msg-code">LAT</span>
         <span>Latency &amp; Timing</span>
       </a>
-      <a href="/troubleshooting/duplicate-orders" class="ml-msg-item">
+      <a href="/troubleshooting/duplicate-orders" class="ml-msg-item{% if page_title == 'Duplicate Orders' %} active{% endif %}">
         <span class="ml-msg-code">DUP</span>
         <span>Duplicate Orders</span>
       </a>
-      <a href="/troubleshooting/gap-fill" class="ml-msg-item">
+      <a href="/troubleshooting/gap-fill" class="ml-msg-item{% if page_title == 'Gap Fill & Resend' %} active{% endif %}">
         <span class="ml-msg-code">GAP</span>
         <span>Gap Fill &amp; Resend</span>
       </a>

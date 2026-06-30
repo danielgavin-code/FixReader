@@ -19,6 +19,197 @@
     .ml-nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 40px; }
     .ml-right { flex: 1; min-width: 0; overflow-y: auto; }
     a.ml-msg-item { text-decoration: none; }
+
+    /* ── Compare tool ── */
+    .cmp-wrap { padding: 20px 24px 40px; }
+
+    .cmp-card {
+      border: 1.5px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .cmp-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      background: #eef2fa;
+      border-bottom: 1px solid var(--border);
+    }
+    .cmp-header-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+    .cmp-examples-wrap { position: relative; }
+    .cmp-examples-btn {
+      font-family: var(--font);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--color-accent);
+      background: transparent;
+      border: 1px solid var(--color-accent);
+      border-radius: var(--radius-sm);
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: color var(--trans), background var(--trans), border-color var(--trans);
+    }
+    .cmp-examples-btn:hover {
+      background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    }
+    .cmp-examples-drop {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      z-index: 1000;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      min-width: 220px;
+      padding: 4px 0;
+    }
+    .cmp-examples-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font);
+      font-size: 12.5px;
+      color: var(--text);
+      background: transparent;
+      border: none;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: background 100ms;
+      white-space: nowrap;
+    }
+    .cmp-examples-item:hover { background: var(--color-sidebar-bg); }
+    .cmp-inputs { display: flex; flex-direction: column; gap: 12px; padding: 14px; }
+    .cmp-input-block { display: flex; flex-direction: column; gap: 5px; }
+    .cmp-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-accent); border-left: 3px solid var(--color-accent); padding-left: 6px; }
+    .cmp-textarea {
+      width: 100%;
+      height: 150px;
+      background: #1e2a3a;
+      color: #e8edf5;
+      border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.7;
+      padding: 10px 14px;
+      resize: vertical;
+      outline: none;
+      box-sizing: border-box;
+      caret-color: var(--color-accent);
+    }
+    .cmp-textarea::placeholder { color: #6b7fa3; }
+    .cmp-textarea:focus { border-color: var(--color-accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent) 15%, transparent); }
+
+    .cmp-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      background: var(--color-sidebar-bg);
+    }
+    .cmp-btn-compare {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--color-accent);
+      border: none;
+      border-radius: var(--radius);
+      padding: 8px 20px;
+      cursor: pointer;
+      transition: filter 120ms ease, box-shadow 120ms ease, transform 80ms ease;
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(0,0,0,.18);
+    }
+    .cmp-btn-compare:hover  { filter: brightness(0.88); box-shadow: 0 2px 8px rgba(0,0,0,.22); }
+    .cmp-btn-compare:active { transform: scale(0.98); }
+    .cmp-btn-clear {
+      font-family: var(--font);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--color-accent);
+      background: transparent;
+      border: 1px solid var(--color-accent);
+      border-radius: var(--radius);
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: color 120ms, border-color 120ms, background 120ms;
+    }
+    .cmp-btn-clear:hover { background: color-mix(in srgb, var(--color-accent) 8%, transparent); }
+
+    .cmp-summary {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .cmp-sum-item { display: flex; align-items: center; gap: 5px; }
+    .cmp-sum-num  { font-weight: 600; color: var(--text); }
+
+    .cmp-table-wrap { overflow-x: auto; }
+    .cmp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+    .cmp-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      padding: 7px 10px;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+      background: var(--color-sidebar-bg);
+    }
+    .cmp-table td { padding: 6px 10px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+    .cmp-th-tag    { width: 52px; }
+    .cmp-th-name   { width: 180px; }
+    .cmp-th-val    { min-width: 140px; }
+    .cmp-tag-link { color: var(--blue); font-family: var(--mono); font-size: 12px; font-weight: 600; text-decoration: none; }
+    .cmp-tag-link:hover { text-decoration: underline; }
+    .cmp-field-name { color: var(--text-muted); }
+    .cmp-val  { font-family: var(--mono); font-size: 12px; color: var(--text); }
+    .cmp-missing { color: var(--text-muted); }
+
+    .cmp-row-diff { background: #fff5f5; }
+    .cmp-row-diff:hover { background: #ffeeee; }
+
+    .cmp-sum-diff-zero { color: #15803d; font-weight: 600; }
+    .cmp-sum-diff-nonzero { color: var(--color-accent); font-weight: 700; }
+
+    .cmp-empty-state {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 36px 28px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13.5px;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+    .cmp-empty-state strong { color: var(--text); }
+
     @media (max-width: 680px) {
       .ml-shell { flex-direction: column; overflow: auto; }
       .ml-left  { width: 100%; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
@@ -36,7 +227,7 @@
       <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
     </a>
     <ul class="nav-links" role="list">
-      <li><a href="/tools" class="nav-item">Tools</a></li>
+      <li><a href="/tools" class="nav-item active">Tools</a></li>
       <li><a href="/tools/cert-scripts" class="nav-item">Cert Scripts</a></li>
       <li><a href="/learn" class="nav-item">Learn FIX</a></li>
       <li><a href="/troubleshooting" class="nav-item">Troubleshooting</a></li>
@@ -73,7 +264,10 @@
 </nav>
 
 <div class="ml-version-bar">
+  <button class="ml-version-pill" onclick="window.location='/'">FIX Decoder</button>
   <button class="ml-version-pill active" role="tab" aria-selected="true">Compare Messages</button>
+  <button class="ml-version-pill" onclick="window.location='/tools/message-builder'">Message Builder</button>
+  <button class="ml-version-pill" onclick="window.location='/tools/tag-validator'">Tag Validator</button>
 </div>
 
 <div class="ml-shell">
@@ -89,10 +283,6 @@
       <a href="/compare" class="ml-msg-item active" aria-current="page">
         <span class="ml-msg-code">CMP</span>
         <span>Compare Messages</span>
-      </a>
-      <a href="/field-reference" class="ml-msg-item">
-        <span class="ml-msg-code">TAG</span>
-        <span>Field Reference</span>
       </a>
       <a href="/tools/message-builder" class="ml-msg-item">
         <span class="ml-msg-code">BLD</span>
@@ -218,12 +408,62 @@
     </div>
   </nav>
 
-  <main class="ml-right">
-    <div class="stub-page">
-      <div class="stub-badge">Coming Soon</div>
-      <h1 class="stub-title">Compare Messages</h1>
-      <p class="stub-desc">Paste two FIX messages side by side and see a diff — identical tags in grey, changed values highlighted, missing tags flagged. Great for debugging order state transitions and spotting what changed between an original order and a cancel/replace.</p>
-      <a href="/" class="stub-back">← Back to Decoder</a>
+  <main class="ml-right" id="cmp-main">
+    <div class="cmp-wrap">
+      <div class="cmp-card">
+        <div class="cmp-header-bar">
+          <span class="cmp-header-label">Paste Your FIX Messages</span>
+          <div class="cmp-examples-wrap" id="cmp-ex-wrap">
+            <button class="cmp-examples-btn" id="cmp-examples-btn">EXAMPLES ▾</button>
+            <div class="cmp-examples-drop" id="cmp-examples-drop" style="display:none">
+              <button class="cmp-examples-item" onclick="cmpExLoad('new-vs-cancel')">New Order vs Cancel</button>
+              <button class="cmp-examples-item" onclick="cmpExLoad('order-vs-replace')">Order vs Cancel/Replace</button>
+              <button class="cmp-examples-item" onclick="cmpExLoad('two-execrpts')">Two Execution Reports</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="cmp-inputs">
+          <div class="cmp-input-block">
+            <label class="cmp-label" for="cmp-msg1">Message 1</label>
+            <textarea id="cmp-msg1" class="cmp-textarea" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
+              placeholder="8=FIX.4.2|9=178|35=D|49=ACME|56=NYSE|34=4|52=20060324-17:45:00|11=12345|..."></textarea>
+          </div>
+          <div class="cmp-input-block">
+            <label class="cmp-label" for="cmp-msg2">Message 2</label>
+            <textarea id="cmp-msg2" class="cmp-textarea" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
+              placeholder="8=FIX.4.2|9=192|35=G|49=ACME|56=NYSE|34=7|52=20060324-17:46:00|11=12345|..."></textarea>
+          </div>
+        </div>
+
+        <div class="cmp-actions">
+          <button class="cmp-btn-clear" id="cmp-clear" onclick="cmpClear()">Clear</button>
+          <button class="cmp-btn-compare" id="cmp-run" onclick="cmpRun()">COMPARE MESSAGES</button>
+        </div>
+      </div>
+
+      <div class="cmp-empty-state" id="cmp-empty">
+        A side-by-side diff of two FIX messages — matching tags in grey, changed values highlighted, missing tags flagged.
+        Paste two messages above and click <strong>Compare Messages</strong>, or pick an example from <strong>Examples</strong> on the right.
+      </div>
+
+      <div id="cmp-results" style="display:none">
+        <div class="cmp-summary" id="cmp-summary"></div>
+        <div class="cmp-table-wrap">
+          <table class="cmp-table">
+            <thead>
+              <tr>
+                <th class="cmp-th-tag">Tag</th>
+                <th class="cmp-th-name">Field Name</th>
+                <th class="cmp-th-val">Message 1</th>
+                <th class="cmp-th-val">Message 2</th>
+              </tr>
+            </thead>
+            <tbody id="cmp-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -240,5 +480,138 @@
   </div>
 </footer>
 
+<script>
+const FIX_TAGS = {{ tag_list_json | safe }};
+const _tagMap = {};
+for (const t of FIX_TAGS) { _tagMap[String(t.tag)] = t.name; }
+
+function _stripLogPrefix(s) {
+  const m = s.match(/8=FIXT?\.\d/);
+  if (!m) return s;
+  s = s.slice(m.index);
+  const end = s.match(/10=\d{3}[\|\\x01]?/);
+  if (end) s = s.slice(0, end.index + end[0].length);
+  return s;
+}
+
+function _parseFix(raw) {
+  raw = _stripLogPrefix((raw || '').trim());
+  if (!raw) return {};
+  const delim = raw.includes('\x01') ? '\x01' : '|';
+  const fields = {};
+  for (const part of raw.split(delim)) {
+    const eq = part.indexOf('=');
+    if (eq < 1) continue;
+    const tag = part.slice(0, eq).trim();
+    const val = part.slice(eq + 1).trim();
+    if (tag && val !== '') fields[tag] = val;
+  }
+  return fields;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function cmpRun() {
+  const raw1 = document.getElementById('cmp-msg1').value;
+  const raw2 = document.getElementById('cmp-msg2').value;
+  if (!raw1.trim() && !raw2.trim()) return;
+
+  const f1 = _parseFix(raw1);
+  const f2 = _parseFix(raw2);
+
+  const allTags = [...new Set([...Object.keys(f1), ...Object.keys(f2)])].sort((a,b) => Number(a) - Number(b));
+
+  let nDiff = 0;
+  let rows = '';
+
+  for (const tag of allTags) {
+    const v1 = f1[tag];
+    const v2 = f2[tag];
+    const name = _tagMap[tag] || '';
+
+    const isDiff = v1 !== v2;
+    if (isDiff) nDiff++;
+    const rowClass = isDiff ? ' class="cmp-row-diff"' : '';
+
+    const tagLink = `<a href="/tag/${esc(tag)}" target="_blank" rel="noopener" class="cmp-tag-link">${esc(tag)}</a>`;
+    const c1 = v1 !== undefined ? `<span class="cmp-val">${esc(v1)}</span>` : `<span class="cmp-missing">—</span>`;
+    const c2 = v2 !== undefined ? `<span class="cmp-val">${esc(v2)}</span>` : `<span class="cmp-missing">—</span>`;
+
+    rows += `<tr${rowClass}>
+      <td>${tagLink}</td>
+      <td class="cmp-field-name">${esc(name)}</td>
+      <td>${c1}</td>
+      <td>${c2}</td>
+    </tr>`;
+  }
+
+  document.getElementById('cmp-tbody').innerHTML = rows;
+
+  const nTotal = allTags.length;
+  const diffCls = nDiff === 0 ? 'cmp-sum-diff-zero' : 'cmp-sum-diff-nonzero';
+  document.getElementById('cmp-summary').innerHTML = `
+    <span class="cmp-sum-item"><span class="cmp-sum-num">${nTotal}</span> tags compared</span>
+    <span class="cmp-sum-item"><span class="${diffCls}">${nDiff}</span> differences found</span>
+  `;
+
+  document.getElementById('cmp-empty').style.display = 'none';
+  document.getElementById('cmp-results').style.display = '';
+}
+
+const _CMP_EXAMPLES = {
+  'new-vs-cancel': {
+    msg1: '8=FIX.4.2|9=148|35=D|49=CLIENTA|56=BROKRB|34=1|52=20240315-09:30:00.000|11=ORD-001|21=1|55=AAPL|54=1|38=500|40=2|44=178.50|59=0|60=20240315-09:30:00.000|10=128|',
+    msg2: '8=FIX.4.2|9=148|35=F|49=CLIENTA|56=BROKRB|34=5|52=20240315-09:45:00.000|11=CXL-001|41=ORD-001|55=AAPL|54=1|38=500|60=20240315-09:45:00.000|10=054|',
+  },
+  'order-vs-replace': {
+    msg1: '8=FIX.4.2|9=148|35=D|49=CLIENTA|56=BROKRB|34=1|52=20240315-09:30:00.000|11=ORD-002|21=1|55=MSFT|54=1|38=1000|40=2|44=415.00|59=0|60=20240315-09:30:00.000|10=201|',
+    msg2: '8=FIX.4.2|9=162|35=G|49=CLIENTA|56=BROKRB|34=3|52=20240315-09:35:00.000|11=ORD-002A|41=ORD-002|21=1|55=MSFT|54=1|38=500|40=2|44=416.00|59=0|60=20240315-09:35:00.000|10=187|',
+  },
+  'two-execrpts': {
+    msg1: '8=FIX.4.2|9=196|35=8|49=BROKRB|56=CLIENTA|34=6|52=20240315-09:31:00.000|11=ORD-001|17=EXEC-001|20=0|39=1|54=1|55=AAPL|38=500|32=200|31=178.45|14=200|6=178.45|151=300|60=20240315-09:31:00.000|10=112|',
+    msg2: '8=FIX.4.2|9=196|35=8|49=BROKRB|56=CLIENTA|34=7|52=20240315-09:32:00.000|11=ORD-001|17=EXEC-002|20=0|39=2|54=1|55=AAPL|38=500|32=300|31=178.50|14=500|6=178.48|151=0|60=20240315-09:32:00.000|10=198|',
+  },
+};
+
+const cmpExBtn  = document.getElementById('cmp-examples-btn');
+const cmpExDrop = document.getElementById('cmp-examples-drop');
+if (cmpExBtn && cmpExDrop) {
+  cmpExBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const open = cmpExDrop.style.display !== 'none';
+    if (open) {
+      cmpExDrop.style.display = 'none';
+    } else {
+      cmpExDrop.style.display = '';
+      const rect = cmpExDrop.getBoundingClientRect();
+      if (rect.bottom > window.innerHeight) {
+        cmpExDrop.style.top = 'auto';
+        cmpExDrop.style.bottom = 'calc(100% + 6px)';
+      }
+    }
+  });
+  document.addEventListener('click', () => {
+    cmpExDrop.style.display = 'none';
+  });
+}
+
+function cmpExLoad(key) {
+  const ex = _CMP_EXAMPLES[key];
+  if (!ex) return;
+  document.getElementById('cmp-msg1').value = ex.msg1;
+  document.getElementById('cmp-msg2').value = ex.msg2;
+  if (cmpExDrop) cmpExDrop.style.display = 'none';
+}
+
+function cmpClear() {
+  document.getElementById('cmp-msg1').value = '';
+  document.getElementById('cmp-msg2').value = '';
+  document.getElementById('cmp-empty').style.display = '';
+  document.getElementById('cmp-results').style.display = 'none';
+  document.getElementById('cmp-tbody').innerHTML = '';
+}
+</script>
 </body>
 </html>

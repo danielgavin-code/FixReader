@@ -19,6 +19,30 @@
     .ml-nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 40px; }
     .ml-right { flex: 1; min-width: 0; overflow-y: auto; }
     a.ml-msg-item { text-decoration: none; }
+    .input-card { border: 1.5px solid color-mix(in srgb, var(--color-accent) 30%, transparent) !important; border-radius: 8px !important; }
+    .editor-header { background: #eef2fa; border-bottom: 1px solid var(--border); border-left: none; }
+    .editor-header-label { color: var(--color-accent); font-weight: 600; }
+    .examples-btn { color: var(--color-accent) !important; border-color: var(--color-accent) !important; background: transparent !important; }
+    .examples-btn:hover { background: color-mix(in srgb, var(--color-accent) 8%, transparent) !important; }
+    .code-editor { border-left: 3px solid var(--color-accent); }
+    .editor-input { background: #1e2a3a; color: #e8edf5; border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent); }
+    .editor-input::placeholder { color: #6b7fa3; }
+    #state-decoded { border: 1.5px solid var(--border); border-radius: 8px; margin-bottom: 14px; overflow: hidden; padding: 20px; }
+    #state-multi   { border: 1.5px solid var(--border); border-radius: 8px; margin-bottom: 14px; overflow: hidden; padding: 20px; }
+    .tag-table tbody tr:nth-child(even) { background: color-mix(in srgb, var(--color-sidebar-bg) 50%, transparent); }
+    /* Empty state preview table */
+    .empty-preview { display: inline-block; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+    .ep-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); padding: 6px 12px 4px; background: var(--bg-header-row); border-bottom: 1px solid var(--border); }
+    .ep-table { border-collapse: collapse; font-size: 12.5px; }
+    .ep-th { padding: 5px 10px; background: var(--bg-header-row); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-dim); border-bottom: 1.5px solid var(--border); text-align: left; white-space: nowrap; }
+    .ep-table tbody tr { border-bottom: 1px solid var(--border-light); }
+    .ep-tr-alt { background: var(--bg-row-hover); }
+    .ep-td-tag { padding: 5px 10px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 600; color: var(--color-accent); white-space: nowrap; }
+    .ep-td-name { padding: 5px 10px; font-size: 12px; font-weight: 500; color: var(--text-dim); }
+    .ep-td-val { padding: 5px 12px; font-size: 12px; color: var(--text); }
+    .ep-tr-msgtype .ep-td-tag, .ep-tr-msgtype .ep-td-name { opacity: 0.85; }
+    .ep-badge-order { display: inline-block; font-size: 11px; font-weight: 600; background: color-mix(in srgb, #3b82f6 15%, transparent); color: #1d4ed8; border-radius: 4px; padding: 1px 7px; }
+    .ep-badge-buy   { display: inline-block; font-size: 11px; font-weight: 600; background: color-mix(in srgb, #16a34a 15%, transparent); color: #15803d; border-radius: 4px; padding: 1px 7px; }
     @media (max-width: 680px) {
       .ml-shell { flex-direction: column; overflow: auto; }
       .ml-left  { width: 100%; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
@@ -39,7 +63,7 @@
       <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
     </a>
     <ul class="nav-links" role="list">
-      <li><a href="/tools" class="nav-item">Tools</a></li>
+      <li><a href="/tools" class="nav-item active">Tools</a></li>
       <li><a href="/tools/cert-scripts" class="nav-item">Cert Scripts</a></li>
       <li><a href="/learn" class="nav-item">Learn FIX</a></li>
       <li><a href="/troubleshooting" class="nav-item">Troubleshooting</a></li>
@@ -77,6 +101,9 @@
 
 <div class="ml-version-bar">
   <button class="ml-version-pill active" role="tab" aria-selected="true">FIX Decoder</button>
+  <button class="ml-version-pill" onclick="window.location='/compare'">Compare Messages</button>
+  <button class="ml-version-pill" onclick="window.location='/tools/message-builder'">Message Builder</button>
+  <button class="ml-version-pill" onclick="window.location='/tools/tag-validator'">Tag Validator</button>
 </div>
 
 <!-- ════════════════════════════════════════════════════
@@ -98,10 +125,6 @@
       <a href="/compare" class="ml-msg-item">
         <span class="ml-msg-code">CMP</span>
         <span>Compare Messages</span>
-      </a>
-      <a href="/field-reference" class="ml-msg-item">
-        <span class="ml-msg-code">TAG</span>
-        <span>Field Reference</span>
       </a>
       <a href="/tools/message-builder" class="ml-msg-item">
         <span class="ml-msg-code">BLD</span>
@@ -260,9 +283,6 @@
       <form id="decode-form" novalidate>
         <!-- Code editor -->
         <div class="code-editor">
-          <div class="editor-gutter" id="editor-gutter" aria-hidden="true">
-            <div class="ln">1</div>
-          </div>
           <textarea
             id="fix-message"
             name="fix_message"
@@ -296,20 +316,34 @@
 
       <!-- STATE: empty (default) -->
       <div id="state-empty" class="empty-state">
-        <div class="empty-graphic" aria-hidden="true">
-          <div class="eg-row">
-            <span class="eg-tag">35</span><span class="eg-eq">=</span><span class="eg-val">D</span><span class="eg-sep">|</span>
-            <span class="eg-tag">55</span><span class="eg-eq">=</span><span class="eg-val">IBM</span><span class="eg-sep">|</span>
-            <span class="eg-tag">54</span><span class="eg-eq">=</span><span class="eg-val">1</span><span class="eg-sep">|</span>
-            <span class="eg-tag">44</span><span class="eg-eq">=</span><span class="eg-val">15.00</span>
-          </div>
-          <div class="eg-arrow">↓</div>
-          <div class="eg-decoded">
-            <div class="eg-decoded-row"><span class="eg-d-tag">35</span><span class="eg-d-name">MsgType</span><span class="eg-d-badge order">New Order — Single</span></div>
-            <div class="eg-decoded-row"><span class="eg-d-tag">55</span><span class="eg-d-name">Symbol</span><span class="eg-d-val">IBM</span></div>
-            <div class="eg-decoded-row"><span class="eg-d-tag">54</span><span class="eg-d-name">Side</span><span class="eg-d-badge buy">Buy</span></div>
-            <div class="eg-decoded-row"><span class="eg-d-tag">44</span><span class="eg-d-name">Price</span><span class="eg-d-val">$15.00</span></div>
-          </div>
+        <div class="empty-preview" aria-hidden="true">
+          <div class="ep-label">Example</div>
+          <table class="ep-table">
+            <thead>
+              <tr>
+                <th class="ep-th" style="width:50px">Tag</th>
+                <th class="ep-th" style="width:150px">Field Name</th>
+                <th class="ep-th">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="ep-tr-msgtype">
+                <td class="ep-td-tag">35</td>
+                <td class="ep-td-name">MsgType</td>
+                <td class="ep-td-val"><span class="ep-badge-order">D — New Order Single</span></td>
+              </tr>
+              <tr>
+                <td class="ep-td-tag">55</td>
+                <td class="ep-td-name">Symbol</td>
+                <td class="ep-td-val">AAPL</td>
+              </tr>
+              <tr class="ep-tr-alt">
+                <td class="ep-td-tag">54</td>
+                <td class="ep-td-name">Side</td>
+                <td class="ep-td-val"><span class="ep-badge-buy">1 — Buy</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <p class="empty-cta">Paste a FIX message above and click <strong>Decode</strong>,<br>or pick a sample from <strong>Popular Topics</strong> on the left.</p>
       </div>
@@ -376,7 +410,6 @@
         <div class="results-label-row">
           <span class="results-label-text">Decoded Message</span>
           <div class="pill-wrap">
-            <span id="pill-fix-version" class="pill-fix-version"></span>
             <span id="msg-type-pill" class="msg-type-pill"></span>
           </div>
         </div>
@@ -405,7 +438,6 @@
             </div>
             <div class="summary-meta" id="summary-meta">
               <span class="summary-badge" id="summary-badge"></span>
-              <span class="summary-version" id="summary-version"></span>
             </div>
             <div class="summary-latency" id="summary-latency" style="display:none">
               <div class="latency-hdr">Message Latency</div>
@@ -419,9 +451,10 @@
             <table class="tag-table">
               <thead>
                 <tr>
-                  <th>Tag</th>
+                  <th style="width:60px">Tag</th>
+                  <th style="width:180px">Field Name</th>
                   <th>Value</th>
-                  <th class="th-req" title="Required in all FIX messages">Req</th>
+                  <th class="th-req" style="width:40px" title="Required in all FIX messages">Req</th>
                 </tr>
               </thead>
               <tbody id="tag-tbody"></tbody>
@@ -473,40 +506,21 @@ const SAMPLES = {
 
 // ── DOM refs ──
 const editorInput  = document.getElementById('fix-message');
-const editorGutter = document.getElementById('editor-gutter');
 const decodeBtn    = document.querySelector('.btn-decode');
 // True while a multi-message timeline is active — locks analysis sections to log summary
 let _multiMode = false;
-
-// ── Line numbers ──
-function updateGutter() {
-  if (!editorInput || !editorGutter) return;
-  const lines = (editorInput.value || '').split('\n').length;
-  let html = '';
-  for (let i = 1; i <= Math.max(lines, 1); i++) html += `<div class="ln">${i}</div>`;
-  editorGutter.innerHTML = html;
-  editorGutter.scrollTop = editorInput.scrollTop;
-}
-
-if (editorInput) {
-  editorInput.addEventListener('input',  updateGutter);
-  editorInput.addEventListener('scroll', () => { editorGutter.scrollTop = editorInput.scrollTop; });
-  updateGutter();
-}
 
 // ── Sample loading ──
 function loadSample(key, autoSubmit) {
   if (!editorInput || !SAMPLES[key]) return;
   editorInput.value = SAMPLES[key];
   editorInput.focus();
-  updateGutter();
   if (autoSubmit) doDecodeMessage();
 }
 
 // ── Pre-populate textarea with new_order on first load ──
 if (editorInput && !editorInput.value.trim()) {
   editorInput.value = SAMPLES.new_order;
-  updateGutter();
 }
 
 // ── Clear button ──
@@ -515,7 +529,6 @@ if (clearBtn && editorInput) {
   clearBtn.addEventListener('click', () => {
     _multiMode = false;
     editorInput.value = '';
-    updateGutter();
     showState('empty');
     resetSidebar();
   });
@@ -1170,7 +1183,6 @@ function renderDecoded(data) {
   const pill = document.getElementById('msg-type-pill');
   pill.className = `msg-type-pill cat-${esc(summary.category)}`;
   pill.textContent = `${summary.msg_type_val} — ${summary.msg_type_name}`;
-  document.getElementById('pill-fix-version').textContent = summary.fix_version;
 
   // ── Quick quote ──
   const quote = buildQuote(fmap, summary);
@@ -1197,7 +1209,6 @@ function renderDecoded(data) {
 
   // ── Summary meta footer ──
   document.getElementById('summary-badge').textContent  = `${summary.msg_type_val} — ${summary.msg_type_name}`;
-  document.getElementById('summary-version').textContent = summary.fix_version;
 
   // ── Client identity (tags 109, 116, 76) ──
   const clientDefs = [[109,'ClientID'],[116,'OnBehalfOfSubID'],[76,'ExecBroker']];
@@ -1269,6 +1280,8 @@ function renderDecoded(data) {
     return `<tr class="${rowCls}">
        <td class="tag-cell">
          <a href="/tag/${f.tag}" target="_blank" rel="noopener" class="tag-link"><span class="tag-num">${esc(String(f.tag))}</span></a>
+       </td>
+       <td class="tag-name-cell">
          <span class="tag-name-wrap" data-tooltip="${esc(f.description)}">${esc(f.name)}</span>
        </td>
        <td class="tag-val">${valCell}</td>

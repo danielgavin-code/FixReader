@@ -271,7 +271,11 @@ def themes_admin_edit():
 
 @app.route('/compare')
 def compare():
-    return render_template('compare.html', **_ctx(preview=request.args.get('preview')))
+    with open(_TAGS_FILE) as f:
+        tag_list = json.load(f)
+    return render_template('compare.html',
+                           tag_list_json=json.dumps(tag_list),
+                           **_ctx(preview=request.args.get('preview')))
 
 
 @app.route('/learn')
@@ -308,10 +312,7 @@ def troubleshooting(subpath=None):
 
 @app.route('/tools')
 def tools():
-    return render_template('stub.html', **_ctx(
-        page_title='Tools',
-        page_description='A suite of FIX utilities in one place — FIX Decoder, Compare Messages, Field Reference, Message Builder, and Tag Validator. Select a tool from the left panel.'
-    ))
+    return redirect('/')
 
 
 @app.route('/library')
@@ -487,7 +488,7 @@ def tools_allocation():
 @app.route('/field-reference')
 @app.route('/reference')
 def field_reference_redirect():
-    return redirect('/reference/fix42')
+    return redirect('/message-library')
 
 
 @app.route('/tag-validator')
