@@ -39,11 +39,10 @@
       <li><a href="/tools" class="nav-item">Tools</a></li>
       <li><a href="/tools/cert-scripts" class="nav-item">Cert Scripts</a></li>
       <li><a href="/learn" class="nav-item">Learn FIX</a></li>
-      <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
+      <li><a href="/troubleshooting" class="nav-item">Troubleshooting</a></li>
       <li><a href="/message-library" class="nav-item">FIX Specs</a></li>
       <li><a href="/exchange-specs" class="nav-item">Exchange Specs</a></li>
       <li><a href="/resources" class="nav-item">Resources</a></li>
-      <li><a href="/about" class="nav-item">About</a></li>
     </ul>
     {% if theme_info.name != 'default' %}
     <div class="nav-end">
@@ -134,22 +133,38 @@
         <span>Session Management</span>
       </a>
 
-      <div class="ml-cat-hdr">Interview Prep</div>
-      <a href="/interview-prep/qa-bank" class="ml-msg-item">
-        <span class="ml-msg-code">Q&amp;A</span>
-        <span>Q&amp;A Bank</span>
+      <div class="ml-cat-hdr">Troubleshooting</div>
+      <a href="/troubleshooting/network" class="ml-msg-item">
+        <span class="ml-msg-code">NET</span>
+        <span>Network &amp; Connectivity</span>
       </a>
-      <a href="/interview-prep/mock-interview" class="ml-msg-item">
-        <span class="ml-msg-code">MK</span>
-        <span>Mock FIX Interview</span>
+      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item">
+        <span class="ml-msg-code">SEQ</span>
+        <span>Sequence Number Issues</span>
       </a>
-      <a href="/interview-prep/common-scenarios" class="ml-msg-item">
-        <span class="ml-msg-code">SCN</span>
-        <span>Common Scenarios</span>
+      <a href="/troubleshooting/logon" class="ml-msg-item">
+        <span class="ml-msg-code">LOG</span>
+        <span>Logon Failures</span>
       </a>
-      <a href="/interview-prep/cheat-sheet" class="ml-msg-item">
-        <span class="ml-msg-code">CHT</span>
-        <span>FIX Cheat Sheet</span>
+      <a href="/troubleshooting/fill-reconciliation" class="ml-msg-item">
+        <span class="ml-msg-code">FIL</span>
+        <span>Fill Reconciliation</span>
+      </a>
+      <a href="/troubleshooting/rejects" class="ml-msg-item">
+        <span class="ml-msg-code">REJ</span>
+        <span>Order Rejects</span>
+      </a>
+      <a href="/troubleshooting/latency" class="ml-msg-item">
+        <span class="ml-msg-code">LAT</span>
+        <span>Latency &amp; Timing</span>
+      </a>
+      <a href="/troubleshooting/duplicate-orders" class="ml-msg-item">
+        <span class="ml-msg-code">DUP</span>
+        <span>Duplicate Orders</span>
+      </a>
+      <a href="/troubleshooting/gap-fill" class="ml-msg-item">
+        <span class="ml-msg-code">GAP</span>
+        <span>Gap Fill &amp; Resend</span>
       </a>
 
       <div class="ml-cat-hdr">FIX Specs</div>
@@ -202,11 +217,6 @@
         <span>Resources</span>
       </a>
 
-      <div class="ml-cat-hdr">About</div>
-      <a href="/about" class="ml-msg-item">
-        <span class="ml-msg-code">ABT</span>
-        <span>About FIXReader</span>
-      </a>
     </div>
   </nav>
   <main class="ml-right tr-main">
@@ -276,7 +286,6 @@
     <div class="footer-links">
       <a href="/contact" class="footer-link">Contact</a>
       <a href="/feedback" class="footer-link">Feedback</a>
-      <a href="https://github.com/danielgavin-code/FixReader" class="footer-link" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
     <span class="footer-copy">© 2026 FIXReader.org</span>
   </div>

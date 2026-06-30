@@ -329,8 +329,20 @@ HIGHLIGHT_TAGS = {
 
 
 # ── Core decode function ───────────────────────────────────────────────────────
+def _strip_log_prefix(s):
+    import re
+    m = re.search(r'8=FIXT?\.\d', s)
+    if not m:
+        return s
+    s = s[m.start():]
+    end = re.search(r'10=\d{3}[\|\x01]?', s)
+    if end:
+        s = s[:end.end()]
+    return s
+
+
 def decode_fix(raw_message):
-    raw = (raw_message or '').strip()
+    raw = _strip_log_prefix((raw_message or '').strip())
     if not raw:
         return [], 'empty'
 

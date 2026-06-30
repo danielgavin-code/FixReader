@@ -12,20 +12,20 @@
      in <head> that overrides these before main.css applies.
   ──────────────────────────────────────────────────────── */
   --color-bg:         #ffffff;
-  --color-text:       #0f172a;
-  --color-accent:     #2563eb;
-  --color-highlight:  #f59e0b;
-  --color-sidebar-bg: #ffffff;
+  --color-text:       #1a1a1a;
+  --color-accent:     #2255aa;
+  --color-highlight:  #ff9eb5;
+  --color-sidebar-bg: #f0f4fa;
   --color-nav-bg:     #ffffff;
-  --color-nav-text:   #0f172a;
-  --color-input-bg:   #f8fafc;
+  --color-nav-text:   #1a1a1a;
+  --color-input-bg:   #f0f4fa;
 
   /* Backgrounds — hardcoded, never change with themes */
   --bg-page:       #ffffff;
   --bg-card:       #ffffff;
   --bg-sidebar:    #ffffff;
   --bg-row-hover:  #f7f9fc;
-  --bg-header-row: #f8fafc;
+  --bg-header-row: var(--color-sidebar-bg, #f8fafc);
 
   /* Nav background — the ONE background that themes control */
   --nav-bg: var(--color-nav-bg);
@@ -182,8 +182,8 @@ code {
   align-items: stretch;
   height: 100%;
   padding: 0 18px;
-  max-width: 1600px;
-  margin: 0 auto;
+  width: 100%;
+  justify-content: flex-start;
 }
 
 /* Logo block: FIXReader wordmark + tagline stacked */
@@ -219,8 +219,8 @@ code {
 .nav-links {
   display: flex;
   align-items: stretch;
-  flex: 1;
   list-style: none;
+  flex: 0 0 auto;
 }
 
 .nav-links li {
@@ -2410,9 +2410,9 @@ code {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #2563eb;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
   border-radius: 20px;
   padding: 3px 12px;
   margin-bottom: 20px;
@@ -3156,9 +3156,12 @@ code {
 }
 
 .ml-cat-hdr {
-  font-size: 9px; font-weight: 800; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--text-dim);
-  padding: 14px 16px 5px;
+  color: var(--color-accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 16px 16px 6px;
 }
 
 .ml-msg-item {
@@ -3183,7 +3186,7 @@ code {
   font-size: 11px; font-weight: 700;
   color: var(--color-accent);
   background: var(--tag-bg);
-  border: 1px solid var(--blue-light);
+  border: 1px solid var(--color-accent);
   border-radius: 4px;
   min-width: 28px; text-align: center;
   padding: 1px 5px; flex-shrink: 0;
@@ -3257,7 +3260,7 @@ code {
 .ml-ref-table tbody td:first-child { padding-left: 0; text-align: center; }
 .ml-ref-table tbody tr:last-child td { border-bottom: none; }
 .ml-ref-table tbody tr:hover td { background: var(--bg-row-hover); }
-.ml-ref-table tbody tr.ml-header-row td { background: var(--bg-header-row); color: var(--text-dim); }
+.ml-ref-table tbody tr.ml-header-row td { background: color-mix(in srgb, var(--color-sidebar-bg) 50%, white 50%); color: var(--text-dim); }
 .ml-ref-table tbody tr.ml-header-row:hover td { background: var(--bg-row-hover); }
 
 .ml-mark-req { color: #15803d; font-size: 13px; font-weight: 700; }

@@ -285,26 +285,33 @@ def learn():
     )
 
 
-@app.route('/interview-prep')
-def interview_prep():
-    return stub(
-        'Interview Prep',
-        '153 Q&A covering everything from session-level concepts to complex order routing. '
-        'Practice with mock interviews, common scenario walkthroughs, and a printable '
-        'FIX cheat sheet built for trading technology roles.',
-        'interview-prep',
-    )
+@app.route('/troubleshooting')
+@app.route('/troubleshooting/<path:subpath>')
+def troubleshooting(subpath=None):
+    titles = {
+        'network': 'Network & Connectivity',
+        'sequence-numbers': 'Sequence Number Issues',
+        'logon': 'Logon Failures',
+        'fill-reconciliation': 'Fill Reconciliation',
+        'rejects': 'Order Rejects',
+        'latency': 'Latency & Timing',
+        'duplicate-orders': 'Duplicate Orders',
+        'gap-fill': 'Gap Fill & Resend',
+    }
+    title = titles.get(subpath, 'Troubleshooting')
+    return render_template('stub.html', **_ctx(
+        page_title=title,
+        page_description=f'FIX Protocol troubleshooting guide: {title}.',
+        active_nav='troubleshooting',
+    ))
 
 
 @app.route('/tools')
 def tools():
-    return stub(
-        'Tools',
-        'A suite of FIX utilities in one place — build messages from scratch, validate '
-        'tag compliance, diff two messages side by side, or decode straight from a log '
-        'file. Everything you need without leaving the browser.',
-        'tools',
-    )
+    return render_template('stub.html', **_ctx(
+        page_title='Tools',
+        page_description='A suite of FIX utilities in one place — FIX Decoder, Compare Messages, Field Reference, Message Builder, and Tag Validator. Select a tool from the left panel.'
+    ))
 
 
 @app.route('/library')
@@ -396,13 +403,7 @@ def resources():
 
 @app.route('/about')
 def about():
-    return stub(
-        'About FIXReader',
-        'FIXReader is a free, open-source tool built for traders, developers, and anyone '
-        'who works with FIX Protocol. No login, no tracking — just fast, accurate message '
-        'decoding and a growing library of FIX learning resources.',
-        'about',
-    )
+    return redirect('/')
 
 
 @app.route('/tag/<int:tag_number>')
@@ -452,24 +453,6 @@ def learn_fix_glossary():
     return stub('FIX Glossary', 'Plain-English definitions for every FIX term — from BeginString to execType — with cross-references to relevant tags and message types.', 'learn')
 
 
-@app.route('/interview-prep/qa-bank')
-def interview_prep_qa_bank():
-    return stub('Q&A Bank', '153 FIX Protocol interview questions with detailed answers — covering session management, order types, execution reports, and more.', 'interview-prep')
-
-
-@app.route('/interview-prep/mock-interview')
-def interview_prep_mock_interview():
-    return stub('Mock FIX Interview', 'A simulated technical interview focused on FIX Protocol — questions presented one at a time with feedback and model answers.', 'interview-prep')
-
-
-@app.route('/interview-prep/common-scenarios')
-def interview_prep_common_scenarios():
-    return stub('Common Scenarios', 'Walk through the most common FIX scenarios asked in interviews — cancel/replace flows, partial fills, reject handling, and session recovery.', 'interview-prep')
-
-
-@app.route('/interview-prep/cheat-sheet')
-def interview_prep_cheat_sheet():
-    return stub('FIX Cheat Sheet', 'A printable one-pager covering the most important FIX tags, message types, and session rules — built for trading technology interviews.', 'interview-prep')
 
 
 @app.route('/tools/message-builder')
@@ -529,6 +512,46 @@ def message_builder():
         'validation as you go.',
         'message-builder',
     )
+
+
+@app.route('/troubleshooting/network')
+def ts_network():
+    return render_template('stub.html', **_ctx(page_title='Network & Connectivity', page_description='Diagnosing FIX network and connectivity issues.', active_nav='troubleshooting'))
+
+
+@app.route('/troubleshooting/sequence-numbers')
+def ts_sequence():
+    return render_template('stub.html', **_ctx(page_title='Sequence Number Issues', page_description='Diagnosing and resolving FIX sequence number problems.', active_nav='troubleshooting'))
+
+
+@app.route('/troubleshooting/logon')
+def ts_logon():
+    return render_template('stub.html', **_ctx(page_title='Logon Failures', page_description='Diagnosing FIX logon failures and session rejection.', active_nav='troubleshooting'))
+
+
+@app.route('/troubleshooting/fill-reconciliation')
+def ts_fills():
+    return render_template('stub.html', **_ctx(page_title='Fill Reconciliation', page_description='Reconciling FIX fills and identifying gaps in execution reports.', active_nav='troubleshooting'))
+
+
+@app.route('/troubleshooting/rejects')
+def ts_rejects():
+    return render_template('stub.html', **_ctx(page_title='Order Rejects', page_description='Understanding and resolving FIX order rejects.', active_nav='troubleshooting'))
+
+
+@app.route('/troubleshooting/latency')
+def ts_latency():
+    return render_template('stub.html', **_ctx(page_title='Latency & Timing', page_description='Diagnosing FIX message latency and timing issues.', active_nav='troubleshooting'))
+
+
+@app.route('/troubleshooting/duplicate-orders')
+def ts_duplicates():
+    return render_template('stub.html', **_ctx(page_title='Duplicate Orders', page_description='Identifying and preventing duplicate FIX orders.', active_nav='troubleshooting'))
+
+
+@app.route('/troubleshooting/gap-fill')
+def ts_gapfill():
+    return render_template('stub.html', **_ctx(page_title='Gap Fill & Resend', page_description='Understanding FIX gap fill and resend request procedures.', active_nav='troubleshooting'))
 
 
 if __name__ == '__main__':

@@ -28,20 +28,19 @@
 
     /* Resources page */
     .res-page { padding: 30px 36px 72px; }
-    a.res-link { color: var(--color-accent); text-decoration: none; font-weight: 600; }
-    a.res-link:hover { text-decoration: underline; }
     .ex-section { margin: 0 0 28px; }
     .ex-section-title {
       font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--text-dim);
+      text-transform: uppercase; color: var(--color-accent);
       border-bottom: 1px solid var(--border-light);
       padding-bottom: 6px; margin-bottom: 14px;
     }
-    .ex-logon-grid { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; align-items: baseline; font-size: 13px; }
-    .ex-logon-key { font-weight: 600; color: var(--text); white-space: nowrap; }
-    .ex-logon-val { color: var(--text-muted); }
-    .ex-logon-val code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--tag-bg); border: 1px solid var(--border-light); border-radius: 3px; padding: 0 4px; color: var(--color-accent); }
-    .res-desc { grid-column: 1 / -1; font-size: 13px; line-height: 1.6; color: var(--text-muted); margin: 0 0 12px; }
+    .res-entry { margin-bottom: 16px; }
+    .res-desc { font-size: 14px; color: var(--text); margin: 0 0 2px 0; }
+    .res-desc strong { font-weight: 600; }
+    .res-url { color: var(--color-accent); text-decoration: none; }
+    .res-url:hover { text-decoration: underline; }
+    .res-subdesc { font-size: 12px; color: var(--text-muted); margin: 0; }
     @media (max-width: 680px) { .res-page { padding: 20px 18px 48px; } }
   </style>
 </head>
@@ -57,11 +56,10 @@
       <li><a href="/tools" class="nav-item">Tools</a></li>
       <li><a href="/tools/cert-scripts" class="nav-item">Cert Scripts</a></li>
       <li><a href="/learn" class="nav-item">Learn FIX</a></li>
-      <li><a href="/interview-prep" class="nav-item">Interview Prep</a></li>
+      <li><a href="/troubleshooting" class="nav-item">Troubleshooting</a></li>
       <li><a href="/message-library" class="nav-item">FIX Specs</a></li>
       <li><a href="/exchange-specs" class="nav-item">Exchange Specs</a></li>
       <li><a href="/resources" class="nav-item active" aria-current="page">Resources</a></li>
-      <li><a href="/about" class="nav-item">About</a></li>
     </ul>
     {% if theme_info.name != 'default' %}
     <div class="nav-end">
@@ -150,22 +148,38 @@
         <span>Session Management</span>
       </a>
 
-      <div class="ml-cat-hdr">Interview Prep</div>
-      <a href="/interview-prep/qa-bank" class="ml-msg-item">
-        <span class="ml-msg-code">Q&amp;A</span>
-        <span>Q&amp;A Bank</span>
+      <div class="ml-cat-hdr">Troubleshooting</div>
+      <a href="/troubleshooting/network" class="ml-msg-item">
+        <span class="ml-msg-code">NET</span>
+        <span>Network &amp; Connectivity</span>
       </a>
-      <a href="/interview-prep/mock-interview" class="ml-msg-item">
-        <span class="ml-msg-code">MK</span>
-        <span>Mock FIX Interview</span>
+      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item">
+        <span class="ml-msg-code">SEQ</span>
+        <span>Sequence Number Issues</span>
       </a>
-      <a href="/interview-prep/common-scenarios" class="ml-msg-item">
-        <span class="ml-msg-code">SCN</span>
-        <span>Common Scenarios</span>
+      <a href="/troubleshooting/logon" class="ml-msg-item">
+        <span class="ml-msg-code">LOG</span>
+        <span>Logon Failures</span>
       </a>
-      <a href="/interview-prep/cheat-sheet" class="ml-msg-item">
-        <span class="ml-msg-code">CHT</span>
-        <span>FIX Cheat Sheet</span>
+      <a href="/troubleshooting/fill-reconciliation" class="ml-msg-item">
+        <span class="ml-msg-code">FIL</span>
+        <span>Fill Reconciliation</span>
+      </a>
+      <a href="/troubleshooting/rejects" class="ml-msg-item">
+        <span class="ml-msg-code">REJ</span>
+        <span>Order Rejects</span>
+      </a>
+      <a href="/troubleshooting/latency" class="ml-msg-item">
+        <span class="ml-msg-code">LAT</span>
+        <span>Latency &amp; Timing</span>
+      </a>
+      <a href="/troubleshooting/duplicate-orders" class="ml-msg-item">
+        <span class="ml-msg-code">DUP</span>
+        <span>Duplicate Orders</span>
+      </a>
+      <a href="/troubleshooting/gap-fill" class="ml-msg-item">
+        <span class="ml-msg-code">GAP</span>
+        <span>Gap Fill &amp; Resend</span>
       </a>
 
       <div class="ml-cat-hdr">FIX Specs</div>
@@ -218,11 +232,6 @@
         <span>Resources</span>
       </a>
 
-      <div class="ml-cat-hdr">About</div>
-      <a href="/about" class="ml-msg-item">
-        <span class="ml-msg-code">ABT</span>
-        <span>About FIXReader</span>
-      </a>
     </div>
   </nav>
 
@@ -230,108 +239,101 @@
     <div class="res-page">
 
       <div class="ex-section">
-        <div class="ex-section-title">Official FIX Protocol</div>
-        <div class="ex-logon-grid">
-          <div class="ex-logon-key"><a href="https://www.fixtrading.org" class="res-link" target="_blank" rel="noopener">FIX Trading Community</a></div>
-          <div class="ex-logon-val"><code>fixtrading.org</code></div>
-          <p class="res-desc">The official body that maintains the FIX Protocol standard. Primary source for all FIX specifications.</p>
-
-          <div class="ex-logon-key"><a href="https://www.fixtrading.org/standards" class="res-link" target="_blank" rel="noopener">FIX Protocol Specification</a></div>
-          <div class="ex-logon-val"><code>fixtrading.org/standards</code></div>
-          <p class="res-desc">Full technical specifications for FIX 4.0 through FIX 5.0 SP2 and FIXT 1.1.</p>
+        <div class="res-entry">
+          <p class="res-desc"><strong>FIX Trading Community</strong> — <a href="https://www.fixtrading.org" target="_blank" rel="noopener" class="res-url">fixtrading.org</a></p>
+          <p class="res-subdesc">The official body that maintains the FIX Protocol standard. Primary source for all FIX specifications.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>FIX Protocol Specification</strong> — <a href="https://www.fixtrading.org/standards" target="_blank" rel="noopener" class="res-url">fixtrading.org/standards</a></p>
+          <p class="res-subdesc">Full technical specifications for FIX 4.0 through FIX 5.0 SP2 and FIXT 1.1.</p>
         </div>
       </div>
 
       <div class="ex-section">
         <div class="ex-section-title">Exchange Connectivity Specifications</div>
-        <div class="ex-logon-grid">
-          <div class="ex-logon-key"><a href="https://www.nyse.com/connectivity/documents" class="res-link" target="_blank" rel="noopener">NYSE Pillar Gateway FIX Specification</a></div>
-          <div class="ex-logon-val"><code>nyse.com/connectivity/documents</code></div>
-          <p class="res-desc">Official FIX specification for connecting to NYSE Pillar trading platforms.</p>
-
-          <div class="ex-logon-key"><a href="https://www.nasdaqtrader.com/Trader.aspx?id=FIX" class="res-link" target="_blank" rel="noopener">NASDAQ FIX Connectivity</a></div>
-          <div class="ex-logon-val"><code>nasdaqtrader.com/Trader.aspx?id=FIX</code></div>
-          <p class="res-desc">NASDAQ's FIX connectivity documentation and technical specifications for market participants.</p>
-
-          <div class="ex-logon-key"><a href="https://www.cboe.com/us/equities/support/technical/" class="res-link" target="_blank" rel="noopener">Cboe U.S. Equities FIX Specification</a></div>
-          <div class="ex-logon-val"><code>cboe.com/us/equities/support/technical/</code></div>
-          <p class="res-desc">Technical specifications for Cboe's U.S. equities markets, including BZX, BYX, EDGX, and EDGA.</p>
-
-          <div class="ex-logon-key"><a href="https://iex.io/documents/iex-fix-specification" class="res-link" target="_blank" rel="noopener">IEX FIX Specification</a></div>
-          <div class="ex-logon-val"><code>iex.io/documents/iex-fix-specification</code></div>
-          <p class="res-desc">IEX Exchange FIX order entry specification for equity trading.</p>
+        <div class="res-entry">
+          <p class="res-desc"><strong>NYSE Pillar Gateway FIX Specification</strong> — <a href="https://www.nyse.com/connectivity/documents" target="_blank" rel="noopener" class="res-url">nyse.com/connectivity/documents</a></p>
+          <p class="res-subdesc">Official FIX specification for connecting to NYSE Pillar trading platforms.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>NASDAQ FIX Connectivity</strong> — <a href="https://www.nasdaqtrader.com/Trader.aspx?id=FIX" target="_blank" rel="noopener" class="res-url">nasdaqtrader.com/Trader.aspx?id=FIX</a></p>
+          <p class="res-subdesc">NASDAQ's FIX connectivity documentation and technical specifications for market participants.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>Cboe U.S. Equities FIX Specification</strong> — <a href="https://www.cboe.com/us/equities/support/technical/" target="_blank" rel="noopener" class="res-url">cboe.com/us/equities/support/technical/</a></p>
+          <p class="res-subdesc">Technical specifications for Cboe's U.S. equities markets, including BZX, BYX, EDGX, and EDGA.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>IEX FIX Specification</strong> — <a href="https://iex.io/documents/iex-fix-specification" target="_blank" rel="noopener" class="res-url">iex.io/documents/iex-fix-specification</a></p>
+          <p class="res-subdesc">IEX Exchange FIX order entry specification for equity trading.</p>
         </div>
       </div>
 
       <div class="ex-section">
         <div class="ex-section-title">Options Exchanges</div>
-        <div class="ex-logon-grid">
-          <div class="ex-logon-key"><a href="https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf" class="res-link" target="_blank" rel="noopener">Cboe Options FIX Specification</a></div>
-          <div class="ex-logon-val"><code>cdn.cboe.com/resources/membership/…</code></div>
-          <p class="res-desc">Covers all four Cboe options venues: Cboe Options (XCBO), C2 (C2OX), BZX Options (BATO), and EDGX Options (EDGO). Includes SPX, VIX, and equity options order entry.</p>
-
-          <div class="ex-logon-key"><a href="https://nasdaqtrader.com/trader.aspx?id=OptnsTechSpecs" class="res-link" target="_blank" rel="noopener">Nasdaq Options Technical Specifications</a></div>
-          <div class="ex-logon-val"><code>nasdaqtrader.com/trader.aspx?id=OptnsTechSpecs</code></div>
-          <p class="res-desc">Covers all five Nasdaq options venues: PHLX (XPHL), ISE (XISX), GEMX (GMNI), MRX (MCRY), and Nasdaq BX Options (XBXO).</p>
-
-          <div class="ex-logon-key"><a href="https://www.miaxoptions.com/specifications" class="res-link" target="_blank" rel="noopener">MIAX Options FIX Specification</a></div>
-          <div class="ex-logon-val"><code>miaxoptions.com/specifications</code></div>
-          <p class="res-desc">Covers MIAX (MIAX), MIAX Pearl (MPRL), and MIAX Emerald (EMLD). Three distinct fee models on shared MIAX technology.</p>
-
-          <div class="ex-logon-key"><a href="https://boxoptions.com/technology" class="res-link" target="_blank" rel="noopener">BOX Options FIX Specification</a></div>
-          <div class="ex-logon-val"><code>boxoptions.com/technology</code></div>
-          <p class="res-desc">BOX Options Exchange (XBOX) FIX specification including the Price Improvement Period (PIP) auction mechanism.</p>
-
-          <div class="ex-logon-key"><a href="https://www.nyse.com/connectivity/documents" class="res-link" target="_blank" rel="noopener">NYSE Options FIX Specification</a></div>
-          <div class="ex-logon-val"><code>nyse.com/connectivity/documents</code></div>
-          <p class="res-desc">Covers NYSE American Options (XASE) and NYSE Arca Options (ARCO). Separate from NYSE Pillar equities connectivity.</p>
-
-          <div class="ex-logon-key"><a href="https://memxtrading.com" class="res-link" target="_blank" rel="noopener">MEMX Options Specification</a></div>
-          <div class="ex-logon-val"><code>memxtrading.com</code></div>
-          <p class="res-desc">Recently launched (2023). Verify the current spec before implementing — fee schedules and technical parameters are subject to change. Source checked June 2026.</p>
+        <div class="res-entry">
+          <p class="res-desc"><strong>Cboe Options FIX Specification</strong> — <a href="https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf" target="_blank" rel="noopener" class="res-url">cdn.cboe.com/resources/membership/…</a></p>
+          <p class="res-subdesc">Covers all four Cboe options venues: Cboe Options (XCBO), C2 (C2OX), BZX Options (BATO), and EDGX Options (EDGO). Includes SPX, VIX, and equity options order entry.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>Nasdaq Options Technical Specifications</strong> — <a href="https://nasdaqtrader.com/trader.aspx?id=OptnsTechSpecs" target="_blank" rel="noopener" class="res-url">nasdaqtrader.com/trader.aspx?id=OptnsTechSpecs</a></p>
+          <p class="res-subdesc">Covers all five Nasdaq options venues: PHLX (XPHL), ISE (XISX), GEMX (GMNI), MRX (MCRY), and Nasdaq BX Options (XBXO).</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>MIAX Options FIX Specification</strong> — <a href="https://www.miaxoptions.com/specifications" target="_blank" rel="noopener" class="res-url">miaxoptions.com/specifications</a></p>
+          <p class="res-subdesc">Covers MIAX (MIAX), MIAX Pearl (MPRL), and MIAX Emerald (EMLD). Three distinct fee models on shared MIAX technology.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>BOX Options FIX Specification</strong> — <a href="https://boxoptions.com/technology" target="_blank" rel="noopener" class="res-url">boxoptions.com/technology</a></p>
+          <p class="res-subdesc">BOX Options Exchange (XBOX) FIX specification including the Price Improvement Period (PIP) auction mechanism.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>NYSE Options FIX Specification</strong> — <a href="https://www.nyse.com/connectivity/documents" target="_blank" rel="noopener" class="res-url">nyse.com/connectivity/documents</a></p>
+          <p class="res-subdesc">Covers NYSE American Options (XASE) and NYSE Arca Options (ARCO). Separate from NYSE Pillar equities connectivity.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>MEMX Options Specification</strong> — <a href="https://memxtrading.com" target="_blank" rel="noopener" class="res-url">memxtrading.com</a></p>
+          <p class="res-subdesc">Recently launched (2023). Verify the current spec before implementing — fee schedules and technical parameters are subject to change. Source checked June 2026.</p>
         </div>
       </div>
 
       <div class="ex-section">
         <div class="ex-section-title">ISO Standards</div>
-        <div class="ex-logon-grid">
-          <div class="ex-logon-key"><a href="https://www.iso20022.org/market-identifier-codes" class="res-link" target="_blank" rel="noopener">ISO 10383 Market Identifier Codes (MIC)</a></div>
-          <div class="ex-logon-val"><code>iso20022.org/market-identifier-codes</code></div>
-          <p class="res-desc">Updated quarterly. Used in FIX Tag 207 (SecurityExchange) to identify trading venues.</p>
-
-          <div class="ex-logon-key"><a href="https://www.six-group.com/en/products-services/financial-information/data-standards.html" class="res-link" target="_blank" rel="noopener">ISO 4217 Currency Codes</a></div>
-          <div class="ex-logon-val"><code>six-group.com</code></div>
-          <p class="res-desc">Used in FIX Tag 15 (Currency) and Tag 120 (SettlCurrency) for settlement currency identification.</p>
-
-          <div class="ex-logon-key"><a href="https://www.iso.org/iso-3166-country-codes.html" class="res-link" target="_blank" rel="noopener">ISO 3166 Country Codes</a></div>
-          <div class="ex-logon-val"><code>iso.org</code></div>
-          <p class="res-desc">Used in FIX Tag 470 (CountryOfIssue) and other country-identifying fields.</p>
+        <div class="res-entry">
+          <p class="res-desc"><strong>ISO 10383 Market Identifier Codes (MIC)</strong> — <a href="https://www.iso20022.org/market-identifier-codes" target="_blank" rel="noopener" class="res-url">iso20022.org/market-identifier-codes</a></p>
+          <p class="res-subdesc">Updated quarterly. Used in FIX Tag 207 (SecurityExchange) to identify trading venues.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>ISO 4217 Currency Codes</strong> — <a href="https://www.six-group.com/en/products-services/financial-information/data-standards.html" target="_blank" rel="noopener" class="res-url">six-group.com</a></p>
+          <p class="res-subdesc">Used in FIX Tag 15 (Currency) and Tag 120 (SettlCurrency) for settlement currency identification.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>ISO 3166 Country Codes</strong> — <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" rel="noopener" class="res-url">iso.org</a></p>
+          <p class="res-subdesc">Used in FIX Tag 470 (CountryOfIssue) and other country-identifying fields.</p>
         </div>
       </div>
 
       <div class="ex-section">
         <div class="ex-section-title">Regulatory</div>
-        <div class="ex-logon-grid">
-          <div class="ex-logon-key"><a href="https://www.sec.gov/cgi-bin/browse-edgar" class="res-link" target="_blank" rel="noopener">SEC EDGAR</a></div>
-          <div class="ex-logon-val"><code>sec.gov/edgar</code></div>
-          <p class="res-desc">Public filings including exchange rule changes and FIX-related regulatory notices.</p>
-
-          <div class="ex-logon-key"><a href="https://www.finra.org/rules-guidance" class="res-link" target="_blank" rel="noopener">FINRA Rules</a></div>
-          <div class="ex-logon-val"><code>finra.org/rules-guidance</code></div>
-          <p class="res-desc">Regulatory guidance relevant to FIX reporting and trade reporting facilities.</p>
+        <div class="res-entry">
+          <p class="res-desc"><strong>SEC EDGAR</strong> — <a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener" class="res-url">sec.gov/edgar</a></p>
+          <p class="res-subdesc">Public filings including exchange rule changes and FIX-related regulatory notices.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>FINRA Rules</strong> — <a href="https://www.finra.org/rules-guidance" target="_blank" rel="noopener" class="res-url">finra.org/rules-guidance</a></p>
+          <p class="res-subdesc">Regulatory guidance relevant to FIX reporting and trade reporting facilities.</p>
         </div>
       </div>
 
       <div class="ex-section">
         <div class="ex-section-title">Community</div>
-        <div class="ex-logon-grid">
-          <div class="ex-logon-key"><a href="https://www.linkedin.com/groups/71525/" class="res-link" target="_blank" rel="noopener">FIX Protocol LinkedIn Group</a></div>
-          <div class="ex-logon-val"><code>linkedin.com</code></div>
-          <p class="res-desc">Active community of FIX practitioners — vendors, sell-side, buy-side, and exchange technologists.</p>
-
-          <div class="ex-logon-key"><a href="https://stackoverflow.com/questions/tagged/fix-protocol" class="res-link" target="_blank" rel="noopener">Stack Overflow FIX tag</a></div>
-          <div class="ex-logon-val"><code>stackoverflow.com/questions/tagged/fix-protocol</code></div>
-          <p class="res-desc">Q&amp;A for FIX Protocol implementation questions, session troubleshooting, and message parsing.</p>
+        <div class="res-entry">
+          <p class="res-desc"><strong>FIX Protocol LinkedIn Group</strong> — <a href="https://www.linkedin.com/groups/71525/" target="_blank" rel="noopener" class="res-url">linkedin.com</a></p>
+          <p class="res-subdesc">Active community of FIX practitioners — vendors, sell-side, buy-side, and exchange technologists.</p>
+        </div>
+        <div class="res-entry">
+          <p class="res-desc"><strong>Stack Overflow FIX tag</strong> — <a href="https://stackoverflow.com/questions/tagged/fix-protocol" target="_blank" rel="noopener" class="res-url">stackoverflow.com/questions/tagged/fix-protocol</a></p>
+          <p class="res-subdesc">Q&amp;A for FIX Protocol implementation questions, session troubleshooting, and message parsing.</p>
         </div>
       </div>
 
@@ -346,7 +348,6 @@
     <div class="footer-links">
       <a href="/contact" class="footer-link">Contact</a>
       <a href="/feedback" class="footer-link">Feedback</a>
-      <a href="https://github.com/danielgavin-code/FixReader" class="footer-link" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
     <span class="footer-copy">© 2026 FIXReader.org</span>
   </div>

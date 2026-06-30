@@ -42,11 +42,10 @@
       <li><a href="/tools" class="nav-item{% if active_nav == 'tools' %} active{% endif %}">Tools</a></li>
       <li><a href="/tools/cert-scripts" class="nav-item{% if active_nav == 'cert-scripts' %} active{% endif %}">Cert Scripts</a></li>
       <li><a href="/learn" class="nav-item{% if active_nav == 'learn' %} active{% endif %}">Learn FIX</a></li>
-      <li><a href="/interview-prep" class="nav-item{% if active_nav == 'interview-prep' %} active{% endif %}">Interview Prep</a></li>
+      <li><a href="/troubleshooting" class="nav-item{% if active_nav == 'troubleshooting' %} active{% endif %}">Troubleshooting</a></li>
       <li><a href="/message-library" class="nav-item{% if active_nav == 'library' %} active{% endif %}">FIX Specs</a></li>
       <li><a href="/exchange-specs" class="nav-item{% if active_nav == 'exchange-specs' %} active{% endif %}">Exchange Specs</a></li>
       <li><a href="/resources" class="nav-item{% if active_nav == 'resources' %} active{% endif %}">Resources</a></li>
-      <li><a href="/about" class="nav-item{% if active_nav == 'about' %} active{% endif %}">About</a></li>
     </ul>
     {% if theme_info.name != 'default' %}
     <div class="nav-end">
@@ -84,12 +83,24 @@
   <button class="ml-version-pill">Session Management</button>
   <button class="ml-version-pill">FIX Glossary</button>
 </div>
-{% elif active_nav == 'interview-prep' %}
+{% elif active_nav == 'troubleshooting' %}
 <div class="ml-version-bar">
-  <button class="ml-version-pill active">Q&amp;A Bank</button>
-  <button class="ml-version-pill">Mock FIX Interview</button>
-  <button class="ml-version-pill">Common Scenarios</button>
-  <button class="ml-version-pill">FIX Cheat Sheet</button>
+  <button class="ml-version-pill active">Network &amp; Connectivity</button>
+  <button class="ml-version-pill">Sequence Numbers</button>
+  <button class="ml-version-pill">Logon Failures</button>
+  <button class="ml-version-pill">Fill Reconciliation</button>
+  <button class="ml-version-pill">Order Rejects</button>
+  <button class="ml-version-pill">Latency &amp; Timing</button>
+  <button class="ml-version-pill">Duplicate Orders</button>
+  <button class="ml-version-pill">Gap Fill &amp; Resend</button>
+</div>
+{% elif page_title == 'Tools' %}
+<div class="ml-version-bar">
+  <button class="ml-version-pill active" onclick="window.location='/'">FIX Decoder</button>
+  <button class="ml-version-pill" onclick="window.location='/compare'">Compare Messages</button>
+  <button class="ml-version-pill" onclick="window.location='/field-reference'">Field Reference</button>
+  <button class="ml-version-pill" onclick="window.location='/tools/message-builder'">Message Builder</button>
+  <button class="ml-version-pill" onclick="window.location='/tools/tag-validator'">Tag Validator</button>
 </div>
 {% elif active_nav == 'tools' %}
 <div class="ml-version-bar">
@@ -100,10 +111,6 @@
 {% elif active_nav == 'resources' %}
 <div class="ml-version-bar">
   <button class="ml-version-pill active">Resources</button>
-</div>
-{% elif active_nav == 'about' %}
-<div class="ml-version-bar">
-  <button class="ml-version-pill active">About FIXReader</button>
 </div>
 {% else %}
 <div class="ml-version-bar">
@@ -172,22 +179,38 @@
         <span>Session Management</span>
       </a>
 
-      <div class="ml-cat-hdr">Interview Prep</div>
-      <a href="/interview-prep/qa-bank" class="ml-msg-item{% if active_nav == 'interview-prep' %} active{% endif %}">
-        <span class="ml-msg-code">Q&amp;A</span>
-        <span>Q&amp;A Bank</span>
+      <div class="ml-cat-hdr">Troubleshooting</div>
+      <a href="/troubleshooting/network" class="ml-msg-item{% if active_nav == 'troubleshooting' %} active{% endif %}">
+        <span class="ml-msg-code">NET</span>
+        <span>Network &amp; Connectivity</span>
       </a>
-      <a href="/interview-prep/mock-interview" class="ml-msg-item">
-        <span class="ml-msg-code">MK</span>
-        <span>Mock FIX Interview</span>
+      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item">
+        <span class="ml-msg-code">SEQ</span>
+        <span>Sequence Number Issues</span>
       </a>
-      <a href="/interview-prep/common-scenarios" class="ml-msg-item">
-        <span class="ml-msg-code">SCN</span>
-        <span>Common Scenarios</span>
+      <a href="/troubleshooting/logon" class="ml-msg-item">
+        <span class="ml-msg-code">LOG</span>
+        <span>Logon Failures</span>
       </a>
-      <a href="/interview-prep/cheat-sheet" class="ml-msg-item">
-        <span class="ml-msg-code">CHT</span>
-        <span>FIX Cheat Sheet</span>
+      <a href="/troubleshooting/fill-reconciliation" class="ml-msg-item">
+        <span class="ml-msg-code">FIL</span>
+        <span>Fill Reconciliation</span>
+      </a>
+      <a href="/troubleshooting/rejects" class="ml-msg-item">
+        <span class="ml-msg-code">REJ</span>
+        <span>Order Rejects</span>
+      </a>
+      <a href="/troubleshooting/latency" class="ml-msg-item">
+        <span class="ml-msg-code">LAT</span>
+        <span>Latency &amp; Timing</span>
+      </a>
+      <a href="/troubleshooting/duplicate-orders" class="ml-msg-item">
+        <span class="ml-msg-code">DUP</span>
+        <span>Duplicate Orders</span>
+      </a>
+      <a href="/troubleshooting/gap-fill" class="ml-msg-item">
+        <span class="ml-msg-code">GAP</span>
+        <span>Gap Fill &amp; Resend</span>
       </a>
 
       <div class="ml-cat-hdr">FIX Specs</div>
@@ -240,11 +263,6 @@
         <span>Resources</span>
       </a>
 
-      <div class="ml-cat-hdr">About</div>
-      <a href="/about" class="ml-msg-item{% if active_nav == 'about' %} active{% endif %}">
-        <span class="ml-msg-code">ABT</span>
-        <span>About FIXReader</span>
-      </a>
     </div>
   </nav>
   <main class="ml-right" id="main-content">
@@ -270,7 +288,6 @@
     <div class="footer-links">
       <a href="/contact" class="footer-link">Contact</a>
       <a href="/feedback" class="footer-link">Feedback</a>
-      <a href="https://github.com/danielgavin-code/FixReader" class="footer-link" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
     <span class="footer-copy">© 2026 FIXReader.org</span>
   </div>
