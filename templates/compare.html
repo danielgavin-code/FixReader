@@ -21,38 +21,42 @@
     a.ml-msg-item { text-decoration: none; }
 
     /* ── Compare tool ── */
-    .cmp-wrap { padding: 20px 24px 40px; }
+    .cmp-wrap { padding: 0 0 40px; }
 
     .cmp-card {
-      border: 1.5px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
-      border-radius: var(--radius);
+      border: 1.5px solid rgba(34, 85, 170, 0.25);
+      border-radius: 8px;
       overflow: hidden;
+      margin-top: 0;
+      margin-left: 16px;
+      margin-right: 16px;
       margin-bottom: 20px;
+      background: var(--color-bg);
     }
     .cmp-header-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 14px;
-      background: #eef2fa;
+      padding: 10px 16px;
+      background: var(--color-sidebar-bg);
       border-bottom: 1px solid var(--border);
     }
     .cmp-header-label {
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.10em;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--color-accent);
     }
     .cmp-examples-wrap { position: relative; }
     .cmp-examples-btn {
       font-family: var(--font);
-      font-size: 11.5px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--color-accent);
       background: transparent;
       border: 1px solid var(--color-accent);
-      border-radius: var(--radius-sm);
+      border-radius: 4px;
       padding: 4px 10px;
       cursor: pointer;
       transition: color var(--trans), background var(--trans), border-color var(--trans);
@@ -93,14 +97,15 @@
     .cmp-textarea {
       width: 100%;
       height: 150px;
-      background: #1e2a3a;
-      color: #e8edf5;
-      border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.6;
+      padding: 14px 16px;
+      border: 1px solid rgba(34, 85, 170, 0.4);
       border-radius: 6px;
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height: 1.7;
-      padding: 10px 14px;
       resize: vertical;
       outline: none;
       box-sizing: border-box;

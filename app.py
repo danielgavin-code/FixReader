@@ -458,12 +458,20 @@ def learn_fix_glossary():
 
 @app.route('/tools/message-builder')
 def tools_message_builder():
-    return stub('Message Builder', 'Build valid FIX messages from scratch. Select a message type, fill in required fields, and export as a raw FIX string or JSON.', 'tools')
+    with open(_TAGS_FILE) as f:
+        tag_list = json.load(f)
+    return render_template('message_builder.html',
+                           tag_list_json=json.dumps(tag_list),
+                           **_ctx(preview=request.args.get('preview')))
 
 
 @app.route('/tools/tag-validator')
 def tools_tag_validator():
-    return stub('Tag Validator', 'Paste a FIX message and check it against the spec — required tags, valid values, and message-type constraints all flagged in one pass.', 'tools')
+    with open(_TAGS_FILE) as f:
+        tag_list = json.load(f)
+    return render_template('tag_validator.html',
+                           tag_list_json=json.dumps(tag_list),
+                           **_ctx(preview=request.args.get('preview')))
 
 
 @app.route('/tools/cert-scripts')
