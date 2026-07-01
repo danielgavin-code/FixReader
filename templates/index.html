@@ -1322,8 +1322,22 @@ async function doDecodeMessage() {
   const msg = (editorInput ? editorInput.value : '').trim();
   if (!msg) { showState('empty'); resetSidebar(); return; }
 
-  // Detect multiple FIX messages — each line starts with 8=FIX
-  const lines = msg.split('\n').map(l => l.trim()).filter(l => /^8=FIXT?[.\d]/.test(l));
+  // Detect multiple FIX messages, handling log-prefixed input.
+  // For each line, strip everything before the first 8=FIX/8=FIXT occurrence,
+  // then split on 8=FIX boundaries to handle concatenated messages on one line.
+  const lines = (function extractFIXMessages(raw) {
+    const msgs = [];
+    for (const line of raw.split('\n')) {
+      const m = line.match(/8=FIXT?\./);
+      if (!m) continue;
+      const stripped = line.slice(line.indexOf(m[0]));
+      // Split on 8=FIX boundaries in case multiple messages are on one line
+      const parts = stripped.split(/(?=8=FIXT?\.)/).map(s => s.trim()).filter(Boolean);
+      msgs.push(...parts);
+    }
+    // Keep only segments that contain 35= (look like real FIX messages)
+    return msgs.filter(s => /35=/.test(s));
+  })(msg);
   if (lines.length > 1) {
     renderTimeline(lines);
     resetSidebar();

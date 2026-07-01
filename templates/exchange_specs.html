@@ -417,7 +417,7 @@ const EXCHANGES = {
     mic: 'XNYS',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `The New York Stock Exchange (NYSE) is the largest equities exchange in the world by market capitalization, operating as a hybrid market combining a physical trading floor with electronic execution. NYSE lists primarily large-cap NYSE-named securities. FIX connectivity goes through NYSE Pillar, the unified trading platform that also powers NYSE Arca, NYSE American, NYSE National, and NYSE Texas Equities. The Pillar FIX Gateway implements <strong>FIX 4.2</strong> as stated in the specification: "TCP/IP is the required transmission protocol, and FIX 4.2 is the required application protocol." A single Pillar session is configured for exactly one NYSE Group market — sessions are not shared across venues.`,
+    overview: `The New York Stock Exchange (NYSE) is the largest equities exchange in the world by market capitalization, operating as a hybrid market combining a physical trading floor with electronic execution. NYSE lists primarily large-cap NYSE-named securities. FIX connectivity goes through NYSE Pillar, the unified trading platform that also powers NYSE Arca, NYSE American, NYSE National, and NYSE Texas Equities. A single Pillar session is configured for exactly one NYSE Group market — sessions are not shared across venues.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Agreed upon connection identifier set between the Exchange and the entering firm',
@@ -468,7 +468,7 @@ const EXCHANGES = {
     mic: 'XNAS',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `NASDAQ is the second-largest US equities exchange and the primary listing venue for large-cap technology and growth companies. NASDAQ operates as a fully electronic, order-driven market with no trading floor. FIX connectivity uses the NASDAQ OUCH protocol for high-frequency flow, but standard FIX 4.2 over MITCH/ITCH is the interface for most members. NASDAQ also operates several sub-markets and its technology powers more than 100 exchanges globally. <strong>BeginString (Tag 8) = FIX.4.2</strong> is required for the order entry interface; NASDAQ does not support FIX 5.0 on the primary trading gateway.`,
+    overview: `NASDAQ is the second-largest US equities exchange and the primary listing venue for large-cap technology and growth companies. NASDAQ operates as a fully electronic, order-driven market with no trading floor. NASDAQ also operates several sub-markets and its technology powers more than 100 exchanges globally.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Your MPID (4-character) or assigned session ID',
@@ -512,7 +512,7 @@ const EXCHANGES = {
     mic: 'ARCX',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `NYSE Arca is a fully electronic exchange operated by NYSE Group, and is the dominant venue for ETF trading in the US. It also trades equities listed on NYSE, NASDAQ, and other exchanges. NYSE Arca runs on the same Pillar FIX Gateway platform as NYSE Equities, NYSE American, NYSE National, and NYSE Texas Equities, all covered in the same NYSE Pillar Gateway FIX Protocol Specification. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID is <strong>ARCX</strong> (the ISO 10383 MIC), not "ARCA". Sessions are pre-configured per venue — Arca credentials are separate from NYSE Equities credentials even though both run on Pillar.`,
+    overview: `NYSE Arca is a fully electronic exchange operated by NYSE Group, and is the dominant venue for ETF trading in the US. It also trades equities listed on NYSE, NASDAQ, and other exchanges. NYSE Arca runs on the same Pillar FIX Gateway platform as NYSE Equities, NYSE American, NYSE National, and NYSE Texas Equities, all covered in the same NYSE Pillar Gateway FIX Protocol Specification. TargetCompID is <strong>ARCX</strong>, not "ARCA". Sessions are pre-configured per venue — Arca credentials are separate from NYSE Equities credentials even though both run on Pillar.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Agreed upon connection identifier between the Exchange and the entering firm',
@@ -562,7 +562,7 @@ const EXCHANGES = {
     mic: 'BATS',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Cboe BZX (formerly BATS BZX) is the flagship US equity exchange operated by Cboe Global Markets. BZX is well-regarded for tight latency, competitive maker-taker pricing, and a clean FIX implementation. Along with BYX, EDGX, and EDGA (all Cboe-operated), BZX runs on a unified platform called Bats One. Cboe exchanges collectively capture a significant share of consolidated US equity volume. The MIC for BZX is BATS. <strong>Tag 8 = FIX.4.2</strong>. Cboe also supports FIXBOL (a binary order layer) for ultra-low-latency flow, but standard FIX 4.2 is the most common interface.`,
+    overview: `Cboe BZX (formerly BATS BZX) is the flagship US equity exchange operated by Cboe Global Markets. BZX is well-regarded for tight latency, competitive maker-taker pricing, and a clean FIX implementation. Along with BYX, EDGX, and EDGA (all Cboe-operated), BZX runs on a unified platform called Bats One. Cboe exchanges collectively capture a significant share of consolidated US equity volume. Cboe also supports FIXBOL (a binary order layer) for ultra-low-latency flow.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Your assigned BZX session ID (typically your MPID + suffix)',
@@ -604,7 +604,7 @@ const EXCHANGES = {
     mic: 'EDGX',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Cboe EDGX (formerly Direct Edge EDGX) is a taker-maker exchange — it charges a fee to post liquidity and pays a rebate to take liquidity. This inverted fee structure attracts aggressive, momentum-driven order flow and makes EDGX popular for strategies that want to be on the taking side without paying a taker fee. EDGX runs on the same Bats One platform as BZX, BYX, and EDGA. The MIC is EDGX. <strong>Tag 8 = FIX.4.2</strong>. Understanding the fee model is critical — a limit order that posts on EDGX incurs a fee rather than earning a rebate, which is the opposite of BZX.`,
+    overview: `Cboe EDGX (formerly Direct Edge EDGX) is a taker-maker exchange — it charges a fee to post liquidity and pays a rebate to take liquidity. This inverted fee structure attracts aggressive, momentum-driven order flow and makes EDGX popular for strategies that want to be on the taking side without paying a taker fee. EDGX runs on the same Bats One platform as BZX, BYX, and EDGA. Understanding the fee model is critical — a limit order that posts on EDGX incurs a fee rather than earning a rebate, which is the opposite of BZX.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned EDGX FIX session ID',
@@ -643,7 +643,7 @@ const EXCHANGES = {
     mic: 'EDGA',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Cboe EDGA (formerly Direct Edge EDGA) is a maker-taker exchange operated by Cboe Global Markets, running on the same Bats One platform as BZX, EDGX, and BYX. EDGA has lower maker rebates and lower taker fees than BZX — it is positioned as a low-cost venue for order flow that is price-sensitive but not latency-sensitive. EDGA captures a smaller share of consolidated volume than BZX or EDGX. The MIC is EDGA. <strong>Tag 8 = FIX.4.2</strong>. EDGA is commonly used as a secondary routing destination in smart order routers that want to exhaust BZX liquidity before hitting other maker-taker venues.`,
+    overview: `Cboe EDGA (formerly Direct Edge EDGA) is a maker-taker exchange operated by Cboe Global Markets, running on the same Bats One platform as BZX, EDGX, and BYX. EDGA has lower maker rebates and lower taker fees than BZX — it is positioned as a low-cost venue for order flow that is price-sensitive but not latency-sensitive. EDGA captures a smaller share of consolidated volume than BZX or EDGX. EDGA is commonly used as a secondary routing destination in smart order routers that want to exhaust BZX liquidity before hitting other maker-taker venues.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned EDGA FIX session ID',
@@ -682,7 +682,7 @@ const EXCHANGES = {
     mic: 'IEXG',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `IEX (Investors Exchange) is unique among US equity exchanges for its deliberate 350-microsecond speed bump — a 38-mile coil of fiber optic cable that delays all incoming orders. This levels the playing field between high-frequency and institutional flow and is the core premise of the exchange (described in Michael Lewis's Flash Boys). IEX also offers the D-Peg and P-Peg discretionary peg order types, which pull back from aggressive fills when the quote is unstable, protecting long-term investors from adverse selection. FIX connectivity uses <strong>Tag 8 = FIX.4.2</strong>. IEX does not operate extended hours and has a simpler session schedule than other venues.`,
+    overview: `IEX (Investors Exchange) is unique among US equity exchanges for its deliberate 350-microsecond speed bump — a 38-mile coil of fiber optic cable that delays all incoming orders. This levels the playing field between high-frequency and institutional flow and is the core premise of the exchange (described in Michael Lewis's Flash Boys). IEX also offers the D-Peg and P-Peg discretionary peg order types, which pull back from aggressive fills when the quote is unstable, protecting long-term investors from adverse selection. IEX does not operate extended hours and has a simpler session schedule than other venues.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned IEX FIX session ID',
@@ -724,7 +724,7 @@ const EXCHANGES = {
     mic: 'BATY',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Cboe BYX (formerly BATS Y Exchange, MIC: BATY) is a maker-taker US equity exchange operated by Cboe Global Markets on the same Bats One platform as BZX, EDGX, and EDGA. BYX is positioned as a low-cost maker-taker alternative to BZX — it has lower maker rebates and lower taker fees, making it attractive for price-sensitive flow that does not require BZX's liquidity depth. BYX captures a smaller share of consolidated volume than BZX but is widely included in smart order routers as a secondary posting destination. <strong>Tag 8 = FIX.4.2</strong>. The ISO 10383 MIC is BATY — not BYX, CBOE, or BATS.`,
+    overview: `Cboe BYX (formerly BATS Y Exchange) is a maker-taker US equity exchange operated by Cboe Global Markets on the same Bats One platform as BZX, EDGX, and EDGA. BYX is positioned as a low-cost maker-taker alternative to BZX — it has lower maker rebates and lower taker fees, making it attractive for price-sensitive flow that does not require BZX's liquidity depth. BYX captures a smaller share of consolidated volume than BZX but is widely included in smart order routers as a secondary posting destination.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned BYX FIX session ID (provisioned by Cboe Member Services)',
@@ -766,7 +766,7 @@ const EXCHANGES = {
     mic: 'XASE',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `NYSE American (MIC: XASE) is the successor to the American Stock Exchange (AMEX), a historic floor-based exchange now operated electronically by NYSE Group under the Pillar FIX Gateway platform. NYSE American is the primary listing venue for smaller and mid-cap companies, ETFs, and structured products. It runs on the same NYSE Pillar technology as NYSE Equities (XNYS), NYSE Arca (ARCX), and NYSE National (XCIS). The FIX interface is identical to NYSE Equities — <strong>Tag 8 = FIX.4.2</strong>, TargetCompID = XASE — with the same Pillar order types, logon rules, and session configuration string.`,
+    overview: `NYSE American is the successor to the American Stock Exchange (AMEX), a historic floor-based exchange now operated electronically by NYSE Group under the Pillar FIX Gateway platform. NYSE American is the primary listing venue for smaller and mid-cap companies, ETFs, and structured products. It runs on the same NYSE Pillar technology as NYSE Equities, NYSE Arca, and NYSE National. The FIX interface is identical to NYSE Equities — same Pillar order types, logon rules, and session configuration string.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Agreed upon connection identifier set between NYSE Group and the entering firm',
@@ -811,7 +811,7 @@ const EXCHANGES = {
     mic: 'XCIS',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `NYSE National (MIC: XCIS), formerly the National Stock Exchange (NSX), is operated by NYSE Group on the Pillar FIX Gateway platform alongside NYSE Equities, NYSE Arca, and NYSE American. NYSE National operates with a maker-taker fee model — a deliberate contrast to NYSE Equities which charges takers at a different tier. NYSE National relaunched in 2018 after NYSE Group acquired it in 2014 and migrated it to Pillar. It captures a small share of consolidated US equity volume but provides an additional posting venue for smart order routers within the NYSE Group ecosystem. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = XCIS.`,
+    overview: `NYSE National, formerly the National Stock Exchange (NSX), is operated by NYSE Group on the Pillar FIX Gateway platform alongside NYSE Equities, NYSE Arca, and NYSE American. NYSE National operates with a maker-taker fee model — a deliberate contrast to NYSE Equities which charges takers at a different tier. NYSE National relaunched in 2018 after NYSE Group acquired it in 2014 and migrated it to Pillar. It captures a small share of consolidated US equity volume but provides an additional posting venue for smart order routers within the NYSE Group ecosystem.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Agreed upon connection identifier set between NYSE Group and the entering firm',
@@ -854,7 +854,7 @@ const EXCHANGES = {
     mic: 'XBOS',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Nasdaq BX (MIC: XBOS), formerly the Boston Stock Exchange, is operated by Nasdaq Inc. and runs on the same NASDAQ technology as the primary NASDAQ market (XNAS). BX is a taker-maker (inverted) exchange — takers earn a rebate and makers pay a fee — making it the Nasdaq equivalent of Cboe EDGX or Cboe BYX in fee structure. BX has lower volume than XNAS but is widely included in smart order routers as an inverted venue for aggressive flow. FIX connectivity uses the same protocol as NASDAQ with <strong>Tag 8 = FIX.4.2</strong>, and TargetCompID = NQBX. Sessions for XNAS and XBOS are separate.`,
+    overview: `Nasdaq BX, formerly the Boston Stock Exchange, is operated by Nasdaq Inc. and runs on the same NASDAQ technology as the primary NASDAQ market. BX is a taker-maker (inverted) exchange — takers earn a rebate and makers pay a fee — making it the Nasdaq equivalent of Cboe EDGX or Cboe BYX in fee structure. BX has lower volume than the primary NASDAQ market but is widely included in smart order routers as an inverted venue for aggressive flow. Sessions for the primary Nasdaq market and BX are separate.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Your MPID or assigned XBOS session ID (provisioned by Nasdaq Market Operations)',
@@ -897,7 +897,7 @@ const EXCHANGES = {
     mic: 'MEMX',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `MEMX (Members Exchange, MIC: MEMX) is a US equity exchange launched in 2020 and backed by a consortium of major broker-dealers and market makers including Bank of America, Charles Schwab, Citadel Securities, Fidelity Investments, Goldman Sachs, Jane Street, JPMorgan, Morgan Stanley, TD Ameritrade, UBS, and Virtu Financial. MEMX was created to increase competition, reduce trading costs, and improve transparency. It operates a simple maker-taker fee model with publicly posted, low, and transparent fees. MEMX supports standard FIX 4.2 connectivity with <strong>Tag 8 = FIX.4.2</strong> and a straightforward order type set focused on core trading functionality.`,
+    overview: `MEMX (Members Exchange) is a US equity exchange launched in 2020 and backed by a consortium of major broker-dealers and market makers including Bank of America, Charles Schwab, Citadel Securities, Fidelity Investments, Goldman Sachs, Jane Street, JPMorgan, Morgan Stanley, TD Ameritrade, UBS, and Virtu Financial. MEMX was created to increase competition, reduce trading costs, and improve transparency. It operates a simple maker-taker fee model with publicly posted, low, and transparent fees, and a straightforward order type set focused on core trading functionality.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned MEMX FIX session ID (provisioned by MEMX Member Services)',
@@ -941,7 +941,7 @@ const EXCHANGES = {
     mic: 'XCBO',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Cboe Options Exchange (MIC: XCBO) is the largest US options exchange by volume and the birthplace of listed options trading, dating to 1973. It is home to benchmark index products including SPX (S&P 500), SPXW (weekly SPX), VIX, XSP (mini-SPX), NANOS (nano-SPX), NDX (Nasdaq-100), RUT (Russell 2000), and OEX (S&P 100). Cboe Options uses a Designated Market Maker (DMM) model for most products, with price/time priority within the same price level. <strong>Tag 8 = FIX.4.2</strong>. The Cboe FIX specification covers all four Cboe options venues (XCBO, C2OX, BATO, EDGO). SPX and VIX standard options settle on AM — the opening value of the index — requiring care around expiration day order handling.`,
+    overview: `Cboe Options Exchange is the largest US options exchange by volume and the birthplace of listed options trading, dating to 1973. It is home to benchmark index products including SPX (S&P 500), SPXW (weekly SPX), VIX, XSP (mini-SPX), NANOS (nano-SPX), NDX (Nasdaq-100), RUT (Russell 2000), and OEX (S&P 100). Cboe Options uses a Designated Market Maker (DMM) model for most products, with price/time priority within the same price level. The Cboe FIX specification covers all four Cboe options venues (XCBO, C2OX, BATO, EDGO). SPX and VIX standard options settle on AM — the opening value of the index — requiring care around expiration day order handling.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned Cboe FIX session ID (provisioned by Cboe Member Services)',
@@ -983,7 +983,7 @@ const EXCHANGES = {
     mic: 'C2OX',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Cboe C2 (MIC: C2OX) is a maker-taker US equity options exchange launched in 2010 as an electronic alternative within the Cboe family. Unlike Cboe Options Exchange (XCBO), which uses a DMM model with price/time priority, C2 uses a pro-rata allocation model for standard equity options — meaning fills at a given price level are distributed proportionally to resting order size rather than in strict time order. C2 does not trade the flagship index products (SPX, VIX) — those are exclusive to XCBO. <strong>Tag 8 = FIX.4.2</strong>. C2 uses the same Cboe FIX specification as all four Cboe options venues, with TargetCompID = C2.`,
+    overview: `Cboe C2 is a maker-taker US equity options exchange launched in 2010 as an electronic alternative within the Cboe family. Unlike Cboe Options Exchange (XCBO), which uses a DMM model with price/time priority, C2 uses a pro-rata allocation model for standard equity options — meaning fills at a given price level are distributed proportionally to resting order size rather than in strict time order. C2 does not trade the flagship index products (SPX, VIX) — those are exclusive to XCBO. C2 uses the same Cboe FIX specification as all four Cboe options venues.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned C2 FIX session ID',
@@ -1024,7 +1024,7 @@ const EXCHANGES = {
     mic: 'BATO',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Cboe BZX Options (MIC: BATO) is the options market operated on the Cboe BZX equities platform. It is one of four Cboe options venues (XCBO, C2OX, BATO, EDGO) covered by the unified Cboe Options FIX specification. BATO uses a maker-taker fee structure and price/time priority. It trades a broad set of multi-listed equity and ETF options. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = BATO. The venue is a popular destination for algorithmic order flow seeking maker rebates in equity options without the complexity of index products.`,
+    overview: `Cboe BZX Options is the options market operated on the Cboe BZX equities platform. It is one of four Cboe options venues (XCBO, C2OX, BATO, EDGO) covered by the unified Cboe Options FIX specification. BATO uses a maker-taker fee structure and price/time priority. It trades a broad set of multi-listed equity and ETF options. The venue is a popular destination for algorithmic order flow seeking maker rebates in equity options without the complexity of index products.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned BATO session ID',
@@ -1065,7 +1065,7 @@ const EXCHANGES = {
     mic: 'EDGO',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Cboe EDGX Options (MIC: EDGO) is the options market operated on the Cboe EDGX platform, sharing the same inverted (taker-maker) fee philosophy as EDGX equities. On EDGO, aggressive (taking) orders earn a rebate and passive (making) orders pay a fee — the opposite of standard maker-taker. This inverted structure attracts flow from market makers who want to take liquidity and receive a rebate, and from strategies that need certainty of execution above fee concerns. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = EDGO. EDGO is covered by the same Cboe Options FIX specification as XCBO, C2OX, and BATO.`,
+    overview: `Cboe EDGX Options is the options market operated on the Cboe EDGX platform, sharing the same inverted (taker-maker) fee philosophy as EDGX equities. On EDGO, aggressive (taking) orders earn a rebate and passive (making) orders pay a fee — the opposite of standard maker-taker. This inverted structure attracts flow from market makers who want to take liquidity and receive a rebate, and from strategies that need certainty of execution above fee concerns. EDGO is covered by the same Cboe Options FIX specification as XCBO, C2OX, and BATO.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned EDGO session ID',
@@ -1105,7 +1105,7 @@ const EXCHANGES = {
     mic: 'XPHL',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Nasdaq PHLX (Philadelphia Stock Exchange, MIC: XPHL) is the oldest stock exchange in the United States (founded 1790) and one of the largest US options exchanges by volume. PHLX trades equity and ETF options across the full product universe and is a primary venue for technology sector options due to strong overlap with NASDAQ-listed stocks. PHLX uses a hybrid model: a specialist/DMM-like structure for some products and electronic price/time priority for others. <strong>Tag 8 = FIX.4.2</strong>. PHLX is part of the Nasdaq Options family and uses the Nasdaq Options FIX specification shared with ISE, GEMX, MRX, and BX Options.`,
+    overview: `Nasdaq PHLX (Philadelphia Stock Exchange) is the oldest stock exchange in the United States (founded 1790) and one of the largest US options exchanges by volume. PHLX trades equity and ETF options across the full product universe and is a primary venue for technology sector options due to strong overlap with NASDAQ-listed stocks. PHLX uses a hybrid model: a specialist/DMM-like structure for some products and electronic price/time priority for others. PHLX is part of the Nasdaq Options family and uses the Nasdaq Options FIX specification shared with ISE, GEMX, MRX, and BX Options.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned PHLX FIX session ID (provisioned by Nasdaq Market Operations)',
@@ -1148,7 +1148,7 @@ const EXCHANGES = {
     mic: 'XISX',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Nasdaq ISE (International Securities Exchange, MIC: XISX) is a fully electronic US equity options exchange founded in 2000 and acquired by Nasdaq in 2016. ISE was the first fully electronic options exchange in the United States, and its technology underpins several other Nasdaq options venues. ISE uses a maker-taker fee model with price/time priority. It trades the full universe of multi-listed equity and ETF options and is a primary destination for systematic and algorithmic options flow. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = ISE.`,
+    overview: `Nasdaq ISE (International Securities Exchange) is a fully electronic US equity options exchange founded in 2000 and acquired by Nasdaq in 2016. ISE was the first fully electronic options exchange in the United States, and its technology underpins several other Nasdaq options venues. ISE uses a maker-taker fee model with price/time priority. It trades the full universe of multi-listed equity and ETF options and is a primary destination for systematic and algorithmic options flow.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned ISE FIX session ID',
@@ -1189,7 +1189,7 @@ const EXCHANGES = {
     mic: 'GMNI',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Nasdaq GEMX (MIC: GMNI), formerly ISE Gemini, is a taker-maker (inverted) US equity options exchange operated by Nasdaq. GEMX launched in 2013 as ISE Gemini to provide a fee-inverted alternative within what was then the ISE group. Under the taker-maker model, aggressive (taking) orders earn a rebate and passive (making) orders pay a fee. GEMX is used primarily by market makers and high-frequency options traders seeking rebates on taking flow. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = GEMX.`,
+    overview: `Nasdaq GEMX, formerly ISE Gemini, is a taker-maker (inverted) US equity options exchange operated by Nasdaq. GEMX launched in 2013 as ISE Gemini to provide a fee-inverted alternative within what was then the ISE group. Under the taker-maker model, aggressive (taking) orders earn a rebate and passive (making) orders pay a fee. GEMX is used primarily by market makers and high-frequency options traders seeking rebates on taking flow.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned GEMX FIX session ID',
@@ -1229,7 +1229,7 @@ const EXCHANGES = {
     mic: 'MCRY',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Nasdaq MRX (MIC: MCRY), formerly ISE Mercury, is a US equity options exchange in the Nasdaq Options Group. MRX launched in 2016 as ISE Mercury, providing an additional maker-taker venue within what was then the ISE family. MRX uses a standard maker-taker fee model with price/time priority. It captures a smaller share of multi-listed options volume compared to ISE or PHLX, and is typically used as a supplemental routing destination in options smart order routers. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = MRX.`,
+    overview: `Nasdaq MRX, formerly ISE Mercury, is a US equity options exchange in the Nasdaq Options Group. MRX launched in 2016 as ISE Mercury, providing an additional maker-taker venue within what was then the ISE family. MRX uses a standard maker-taker fee model with price/time priority. It captures a smaller share of multi-listed options volume compared to ISE or PHLX, and is typically used as a supplemental routing destination in options smart order routers.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned MRX FIX session ID',
@@ -1270,7 +1270,7 @@ const EXCHANGES = {
     mic: 'XBXO',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `Nasdaq BX Options (MIC: XBXO) is the options market operated on the Nasdaq BX (Boston Stock Exchange) platform, part of the Nasdaq Options Group. BX Options uses a taker-maker (inverted) fee structure, matching the inverted model of GEMX within the Nasdaq family. Aggressive (taking) orders earn a rebate; passive (making) orders pay a fee. BX Options trades multi-listed equity options. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = BX.`,
+    overview: `Nasdaq BX Options is the options market operated on the Nasdaq BX (Boston Stock Exchange) platform, part of the Nasdaq Options Group. BX Options uses a taker-maker (inverted) fee structure, matching the inverted model of GEMX within the Nasdaq family. Aggressive (taking) orders earn a rebate; passive (making) orders pay a fee. BX Options trades multi-listed equity options.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned BX Options FIX session ID',
@@ -1310,7 +1310,7 @@ const EXCHANGES = {
     mic: 'XASE',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `NYSE American Options (MIC: XASE, formerly AMEX Options) is one of the largest US options exchanges by volume, operated by NYSE Group. NYSE American Options uses a "Customer Priority" model — public customer orders receive execution priority over professional (firm) orders at the same price, similar to PHLX. It trades the full universe of multi-listed equity and ETF options. NYSE American Options runs on NYSE's dedicated options technology platform (separate from the equity Pillar gateway). <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = AMXO.`,
+    overview: `NYSE American Options (formerly AMEX Options) is one of the largest US options exchanges by volume, operated by NYSE Group. NYSE American Options uses a "Customer Priority" model — public customer orders receive execution priority over professional (firm) orders at the same price, similar to PHLX. It trades the full universe of multi-listed equity and ETF options. NYSE American Options runs on NYSE's dedicated options technology platform (separate from the equity Pillar gateway).`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned NYSE American Options FIX session ID',
@@ -1352,7 +1352,7 @@ const EXCHANGES = {
     mic: 'ARCO',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `NYSE Arca Options (MIC: ARCO) is one of the largest US options exchanges, operated by NYSE Group on its dedicated options platform. NYSE Arca Options is particularly strong in ETF options — matching NYSE Arca's equities dominance in ETFs — and trades the full multi-listed equity options universe. Arca Options uses a hybrid Customer Priority model similar to NYSE American Options, giving public customer orders execution priority over professional orders at the same price. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = ARCO.`,
+    overview: `NYSE Arca Options is one of the largest US options exchanges, operated by NYSE Group on its dedicated options platform. NYSE Arca Options is particularly strong in ETF options — matching NYSE Arca's equities dominance in ETFs — and trades the full multi-listed equity options universe. Arca Options uses a hybrid Customer Priority model similar to NYSE American Options, giving public customer orders execution priority over professional orders at the same price.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned NYSE Arca Options FIX session ID',
@@ -1395,7 +1395,7 @@ const EXCHANGES = {
     mic: 'MIAX',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `MIAX Options Exchange (MIC: MIAX) is a US equity options exchange founded in 2012, operated by Miami International Holdings. MIAX is known for its advanced technology platform and focus on tight latency. MIAX uses a price/time priority model with customer priority for public customer orders over firm orders at the same price. MIAX also operates MIAX Pearl (MIC: MPRL) and MIAX Emerald (MIC: EMLD), providing three distinct fee models under one connectivity agreement. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = MIAX.`,
+    overview: `MIAX Options Exchange is a US equity options exchange founded in 2012, operated by Miami International Holdings. MIAX is known for its advanced technology platform and focus on tight latency. MIAX uses a price/time priority model with customer priority for public customer orders over firm orders at the same price. MIAX also operates MIAX Pearl and MIAX Emerald, providing three distinct fee models under one connectivity agreement.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned MIAX FIX session ID (provisioned by MIAX Member Services)',
@@ -1438,7 +1438,7 @@ const EXCHANGES = {
     mic: 'MPRL',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `MIAX Pearl (MIC: MPRL) is a taker-maker (inverted) US equity options exchange operated by Miami International Holdings, launched in 2017. Unlike MIAX Options (maker-taker with customer priority), Pearl uses an inverted fee structure: aggressive orders taking liquidity earn a rebate, and passive orders making liquidity pay a fee. MIAX Pearl also operates as an equities exchange (MPRL equities launched 2020). <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = MPRL.`,
+    overview: `MIAX Pearl is a taker-maker (inverted) US equity options exchange operated by Miami International Holdings, launched in 2017. Unlike MIAX Options (maker-taker with customer priority), Pearl uses an inverted fee structure: aggressive orders taking liquidity earn a rebate, and passive orders making liquidity pay a fee. MIAX Pearl also operates as an equities exchange (MPRL equities launched 2020).`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned MIAX Pearl FIX session ID',
@@ -1478,7 +1478,7 @@ const EXCHANGES = {
     mic: 'EMLD',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `MIAX Emerald (MIC: EMLD) is a US equity options exchange operated by Miami International Holdings, launched in 2019 as the third exchange in the MIAX family. MIAX Emerald is designed to provide an additional routing destination with competitive fees, focusing on customer flow and priority allocation. It offers a maker-taker structure with customer order priority similar to MIAX Options but with distinct fee tiers. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = EMLD.`,
+    overview: `MIAX Emerald is a US equity options exchange operated by Miami International Holdings, launched in 2019 as the third exchange in the MIAX family. MIAX Emerald is designed to provide an additional routing destination with competitive fees, focusing on customer flow and priority allocation. It offers a maker-taker structure with customer order priority similar to MIAX Options but with distinct fee tiers.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned MIAX Emerald FIX session ID',
@@ -1520,7 +1520,7 @@ const EXCHANGES = {
     mic: 'XBOX',
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
-    overview: `BOX Options Exchange (MIC: XBOX) is a US equity options exchange founded in 2004 and operated by BOX Exchange LLC, with ownership from Cboe Global Markets and several broker-dealers. BOX is notable for its Price Improvement Period (PIP) mechanism — a unique auction process where an executing broker can guarantee a price improvement for a customer order by exposing it to a 100-millisecond electronic auction. This makes BOX particularly relevant for retail options flow seeking price improvement. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = BOX.`,
+    overview: `BOX Options Exchange is a US equity options exchange founded in 2004 and operated by BOX Exchange LLC, with ownership from Cboe Global Markets and several broker-dealers. BOX is notable for its Price Improvement Period (PIP) mechanism — a unique auction process where an executing broker can guarantee a price improvement for a customer order by exposing it to a 100-millisecond electronic auction. This makes BOX particularly relevant for retail options flow seeking price improvement.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned BOX FIX session ID (provisioned by BOX Exchange Operations)',
@@ -1564,7 +1564,7 @@ const EXCHANGES = {
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
     notice: '<strong>Recently launched (2023).</strong> FIX specification available at memxtrading.com. Verify the current spec before implementing — fee schedules and technical parameters are subject to change as the exchange matures. Data in this entry reflects best available public information as of June 2026.',
-    overview: `MEMX Options Exchange (MIC: MXOP) is the options market operated by Members Exchange (MEMX), launched in 2023 following the success of MEMX equities. MEMX Options uses a maker-taker fee model with transparent, publicly posted fees — consistent with MEMX's mission to reduce trading costs and increase transparency. MEMX Options trades multi-listed US equity options. <strong>Tag 8 = FIX.4.2</strong>. TargetCompID = MXOP.`,
+    overview: `MEMX Options Exchange is the options market operated by Members Exchange (MEMX), launched in 2023 following the success of MEMX equities. MEMX Options uses a maker-taker fee model with transparent, publicly posted fees — consistent with MEMX's mission to reduce trading costs and increase transparency. MEMX Options trades multi-listed US equity options.`,
     logon: {
       'BeginString (8)': 'FIX.4.2',
       'SenderCompID (49)': 'Assigned MEMX Options FIX session ID',
@@ -1605,7 +1605,7 @@ const EXCHANGES = {
     fixVersion: 'FIX 4.2',
     tag8: 'FIX.4.2',
     notice: '<strong>Regulatory approval pending as of June 2026.</strong> IEX filed its Form 1 application to register as a national securities exchange for options. A FIX connectivity specification has not yet been published. Check iex.io for updates on regulatory status and technical documentation. This entry will be updated when the spec is available.',
-    overview: `IEX Options Exchange is a proposed options exchange filed by IEX Group, the operator of the Investors Exchange (IEXG). IEX has applied for regulatory approval to launch an options exchange under the MIC IEXO. IEX Options is expected to incorporate IEX's speed bump technology (350-microsecond delay) for options order entry, and to offer innovative order types consistent with IEX's investor-protection focus. As of June 2026, regulatory approval is pending and no FIX connectivity specification has been publicly released.`,
+    overview: `IEX Options Exchange is a proposed options exchange filed by IEX Group, the operator of the Investors Exchange (IEXG). IEX has applied for regulatory approval to launch an options exchange. IEX Options is expected to incorporate IEX's speed bump technology (350-microsecond delay) for options order entry, and to offer innovative order types consistent with IEX's investor-protection focus. As of June 2026, regulatory approval is pending and no FIX connectivity specification has been publicly released.`,
     logon: {
       'BeginString (8)': 'FIX.4.2 (expected — not yet published)',
       'SenderCompID (49)': 'Not yet published',

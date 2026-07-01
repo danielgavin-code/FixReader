@@ -478,9 +478,10 @@ def tools_tag_validator():
 def tools_cert_scripts():
     return stub('Cert Scripts', 'Certification test scripts for FIX connectivity — order entry, drop copy, and allocation flows ready for exchange cert sessions.', 'cert-scripts')
 
+@app.route('/cert/order-entry')
 @app.route('/tools/order-entry')
-def tools_order_entry():
-    return stub('Order Entry', 'Certification-ready FIX order entry scripts — New Order Single, Cancel, and Replace flows with configurable counterparty settings.', 'tools')
+def cert_order_entry():
+    return render_template('cert_order_entry.html', **_ctx())
 
 
 @app.route('/tools/drop-copy')
