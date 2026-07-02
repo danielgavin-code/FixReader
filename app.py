@@ -476,7 +476,7 @@ def tools_tag_validator():
 
 @app.route('/tools/cert-scripts')
 def tools_cert_scripts():
-    return stub('Cert Scripts', 'Certification test scripts for FIX connectivity — order entry, drop copy, and allocation flows ready for exchange cert sessions.', 'cert-scripts')
+    return redirect('/cert/order-entry')
 
 @app.route('/cert/order-entry')
 @app.route('/tools/order-entry')
@@ -484,14 +484,30 @@ def cert_order_entry():
     return render_template('cert_order_entry.html', **_ctx())
 
 
+@app.route('/cert/drop-copy')
+def cert_drop_copy():
+    return render_template('stub.html', **_ctx(
+        page_title='Drop Copy Certification',
+        page_description='FIX certification test scripts for drop copy sessions.',
+    ))
+
+
+@app.route('/cert/allocation')
+def cert_allocation():
+    return render_template('stub.html', **_ctx(
+        page_title='Allocation Certification',
+        page_description='FIX certification test scripts for allocation workflows.',
+    ))
+
+
 @app.route('/tools/drop-copy')
 def tools_drop_copy():
-    return stub('Drop Copy', 'Monitor execution reports and order state via drop copy — subscribe to a session and watch fills arrive in real time.', 'tools')
+    return redirect('/cert/drop-copy')
 
 
 @app.route('/tools/allocation')
 def tools_allocation():
-    return stub('Allocation', 'Post-trade allocation scripts for FIX — split fills across accounts, generate AllocationInstruction messages, and confirm allocations.', 'tools')
+    return redirect('/cert/allocation')
 
 
 @app.route('/field-reference')
