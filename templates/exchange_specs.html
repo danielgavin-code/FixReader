@@ -415,11 +415,11 @@ const EXCHANGES = {
     name: 'NYSE',
     fullName: 'New York Stock Exchange',
     mic: 'XNYS',
-    fixVersion: 'FIX 4.2',
-    tag8: 'FIX.4.2',
+    fixVersion: 'FIX 4.4',
+    tag8: 'FIX.4.4',
     overview: `The New York Stock Exchange (NYSE) is the largest equities exchange in the world by market capitalization, operating as a hybrid market combining a physical trading floor with electronic execution. NYSE lists primarily large-cap NYSE-named securities. FIX connectivity goes through NYSE Pillar, the unified trading platform that also powers NYSE Arca, NYSE American, NYSE National, and NYSE Texas Equities. A single Pillar session is configured for exactly one NYSE Group market — sessions are not shared across venues.`,
     logon: {
-      'BeginString (8)': 'FIX.4.2',
+      'BeginString (8)': 'FIX.4.4',
       'SenderCompID (49)': 'Agreed upon connection identifier set between the Exchange and the entering firm',
       'TargetCompID (56)': 'XNYS — Market Identifier Code for NYSE Equities (confirmed in spec section 6.1 Header)',
       'HeartBtInt (108)': '1–60 seconds (valid range per spec; no specific default stated)',
@@ -459,7 +459,7 @@ const EXCHANGES = {
       { tag: '9303', name: 'RoutingInst', value: 'N/R/D/S/8/A/E', desc: 'N=Non Routable, R=Routable, D=Directed (Primary Only), S=Directed+Routable, 8=Minimum Fill (requires MinQty), A=Route to ATS, E=Route to Algo. Confirmed in spec.' },
       { tag: '9416', name: 'ExtendedExecInst', value: '4 / 5', desc: '4=Retail Order Type 1, 5=Retail Order Type 2. Confirmed in spec Appendix D. Note: 9416 is ExtendedExecInst, not a branch seq number.' },
     ],
-    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification, Version 5.15', url: 'https://www.nyse.com/publicdocs/nyse/NYSE_Pillar_Gateway_FIX_Protocol_Specification.pdf', date: 'March 27, 2026' },
+    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification', url: 'https://nyse.com/connectivity/documents', date: 'nyse.com/connectivity/documents' },
   },
 
   nasdaq: {
@@ -510,11 +510,11 @@ const EXCHANGES = {
     name: 'NYSE Arca',
     fullName: 'NYSE Arca',
     mic: 'ARCX',
-    fixVersion: 'FIX 4.2',
-    tag8: 'FIX.4.2',
+    fixVersion: 'FIX 4.4',
+    tag8: 'FIX.4.4',
     overview: `NYSE Arca is a fully electronic exchange operated by NYSE Group, and is the dominant venue for ETF trading in the US. It also trades equities listed on NYSE, NASDAQ, and other exchanges. NYSE Arca runs on the same Pillar FIX Gateway platform as NYSE Equities, NYSE American, NYSE National, and NYSE Texas Equities, all covered in the same NYSE Pillar Gateway FIX Protocol Specification. TargetCompID is <strong>ARCX</strong>, not "ARCA". Sessions are pre-configured per venue — Arca credentials are separate from NYSE Equities credentials even though both run on Pillar.`,
     logon: {
-      'BeginString (8)': 'FIX.4.2',
+      'BeginString (8)': 'FIX.4.4',
       'SenderCompID (49)': 'Agreed upon connection identifier between the Exchange and the entering firm',
       'TargetCompID (56)': 'ARCX — Market Identifier Code for NYSE Arca (confirmed in spec section 6.1 Header; different session from XNYS)',
       'HeartBtInt (108)': '1–60 seconds (valid range per spec; same as all Pillar venues)',
@@ -553,7 +553,7 @@ const EXCHANGES = {
       { tag: '7928', name: 'SelfTradeType', value: 'T/N/O/C/D', desc: 'T=No STP, N=Cancel Newest, O=Cancel Oldest, C=Cancel Both, D=Decrement. Per-order STP override; session default set via RawData Byte3. Confirmed in spec.' },
       { tag: '9303', name: 'RoutingInst', value: 'N/R/D/S/8/A/E', desc: 'N=Non Routable, R=Routable, D=Directed, S=Directed+Routable, 8=Minimum Fill, A=Route to ATS, E=Route to Algo. Confirmed in spec.' },
     ],
-    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification, Version 5.15', url: 'https://www.nyse.com/publicdocs/nyse/NYSE_Pillar_Gateway_FIX_Protocol_Specification.pdf', date: 'March 27, 2026' },
+    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification', url: 'https://nyse.com/connectivity/documents', date: 'nyse.com/connectivity/documents' },
   },
 
   bzx: {
@@ -595,7 +595,7 @@ const EXCHANGES = {
       { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve/display quantity for iceberg orders. BZX minimum display is 1 share.' },
       { tag: '9730', name: 'CboeRoutingInst', value: 'string', desc: 'Cboe-specific routing instruction. Values: ROUT (route to away venues), CYCL (cycle on BZX then route), POST (post only, no routing).' },
     ],
-    source: { title: 'Cboe Titanium U.S. Equities FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+    source: { title: 'Cboe Titanium U.S. Equities FIX Specification v2.9.54', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf — April 10, 2026' },
   },
 
   edgx: {
@@ -634,7 +634,7 @@ const EXCHANGES = {
       { tag: '59', name: 'TimeInForce', value: '5', desc: 'GTC. Supported. Cboe cancels GTC orders on ex-dates and corporate actions.' },
       { tag: '9730', name: 'CboeRoutingInst', value: 'ROUT', desc: 'Route to away venues after EDGX. Standard routing instruction on EDGX when displayed price improves.' },
     ],
-    source: { title: 'Cboe Titanium U.S. Equities FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+    source: { title: 'Cboe Titanium U.S. Equities FIX Specification v2.9.54', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf — April 10, 2026' },
   },
 
   edga: {
@@ -673,7 +673,7 @@ const EXCHANGES = {
       { tag: '59', name: 'TimeInForce', value: '5', desc: 'GTC. Supported. Corporate action cancellation rules apply (same as all Cboe venues).' },
       { tag: '9730', name: 'CboeRoutingInst', value: 'ROUT', desc: 'Standard Cboe routing instruction. EDGA will route to away venues when price improves.' },
     ],
-    source: { title: 'Cboe Titanium U.S. Equities FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+    source: { title: 'Cboe Titanium U.S. Equities FIX Specification v2.9.54', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf — April 10, 2026' },
   },
 
   iex: {
@@ -757,18 +757,18 @@ const EXCHANGES = {
       { tag: '111', name: 'MaxFloor', value: 'integer', desc: 'Reserve/display quantity for iceberg orders. BYX minimum display is 1 share.' },
       { tag: '9730', name: 'CboeRoutingInst', value: 'string', desc: 'Cboe-specific routing instruction. ROUT=route to away venues, CYCL=cycle on BYX first, POST=post only no routing.' },
     ],
-    source: { title: 'Cboe Titanium U.S. Equities FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+    source: { title: 'Cboe Titanium U.S. Equities FIX Specification v2.9.54', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf — April 10, 2026' },
   },
 
   american: {
     name: 'NYSE American',
     fullName: 'NYSE American',
     mic: 'XASE',
-    fixVersion: 'FIX 4.2',
-    tag8: 'FIX.4.2',
+    fixVersion: 'FIX 4.4',
+    tag8: 'FIX.4.4',
     overview: `NYSE American is the successor to the American Stock Exchange (AMEX), a historic floor-based exchange now operated electronically by NYSE Group under the Pillar FIX Gateway platform. NYSE American is the primary listing venue for smaller and mid-cap companies, ETFs, and structured products. It runs on the same NYSE Pillar technology as NYSE Equities, NYSE Arca, and NYSE National. The FIX interface is identical to NYSE Equities — same Pillar order types, logon rules, and session configuration string.`,
     logon: {
-      'BeginString (8)': 'FIX.4.2',
+      'BeginString (8)': 'FIX.4.4',
       'SenderCompID (49)': 'Agreed upon connection identifier set between NYSE Group and the entering firm',
       'TargetCompID (56)': 'XASE — Market Identifier Code for NYSE American (same spec section 6.1 rule as XNYS/ARCX)',
       'HeartBtInt (108)': '1–60 seconds (valid range per NYSE Pillar spec)',
@@ -802,18 +802,18 @@ const EXCHANGES = {
       { tag: '336', name: 'TradingSessionID', value: '1/2/3/4/5/6', desc: '1=Early, 2=Core, 3=Late, 4=Early&Core, 5=Core&Late, 6=All three. Applies to all Pillar venues.' },
       { tag: '7928', name: 'SelfTradeType', value: 'T/N/O/C/D', desc: 'Per-order STP override. Session-level default set via RawData (96) Byte3.' },
     ],
-    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification, Version 5.15', url: 'https://www.nyse.com/publicdocs/nyse/NYSE_Pillar_Gateway_FIX_Protocol_Specification.pdf', date: 'March 27, 2026' },
+    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification', url: 'https://nyse.com/connectivity/documents', date: 'nyse.com/connectivity/documents' },
   },
 
   national: {
     name: 'NYSE National',
     fullName: 'NYSE National',
     mic: 'XCIS',
-    fixVersion: 'FIX 4.2',
-    tag8: 'FIX.4.2',
+    fixVersion: 'FIX 4.4',
+    tag8: 'FIX.4.4',
     overview: `NYSE National, formerly the National Stock Exchange (NSX), is operated by NYSE Group on the Pillar FIX Gateway platform alongside NYSE Equities, NYSE Arca, and NYSE American. NYSE National operates with a maker-taker fee model — a deliberate contrast to NYSE Equities which charges takers at a different tier. NYSE National relaunched in 2018 after NYSE Group acquired it in 2014 and migrated it to Pillar. It captures a small share of consolidated US equity volume but provides an additional posting venue for smart order routers within the NYSE Group ecosystem.`,
     logon: {
-      'BeginString (8)': 'FIX.4.2',
+      'BeginString (8)': 'FIX.4.4',
       'SenderCompID (49)': 'Agreed upon connection identifier set between NYSE Group and the entering firm',
       'TargetCompID (56)': 'XCIS — Market Identifier Code for NYSE National',
       'HeartBtInt (108)': '1–60 seconds (valid range per NYSE Pillar spec)',
@@ -845,7 +845,7 @@ const EXCHANGES = {
       { tag: '336', name: 'TradingSessionID', value: '1/2/3/4/5/6', desc: 'Same session ID values as all Pillar venues. 2=Core session.' },
       { tag: '7928', name: 'SelfTradeType', value: 'T/N/O/C/D', desc: 'STP prevention per-order override.' },
     ],
-    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification, Version 5.15', url: 'https://www.nyse.com/publicdocs/nyse/NYSE_Pillar_Gateway_FIX_Protocol_Specification.pdf', date: 'March 27, 2026' },
+    source: { title: 'NYSE Pillar Gateway FIX Protocol Specification', url: 'https://nyse.com/connectivity/documents', date: 'nyse.com/connectivity/documents' },
   },
 
   nasdaqbx: {
@@ -974,7 +974,7 @@ const EXCHANGES = {
       { tag: '202', name: 'StrikePrice',      value: 'decimal',      desc: 'Required. Strike price in dollars for equity options; index points for index options.' },
       { tag: '207', name: 'SecurityExchange', value: 'XCBO',         desc: 'Required for multi-listed options. Routes order to Cboe Options specifically. Omit to allow smart order routing.' },
     ],
-    source: { title: 'Cboe U.S. Options FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+    source: { title: 'Cboe Titanium U.S. Options FIX Specification v2.8.5', url: 'https://cdn.cboe.com/resources/membership/US_Options_FIX_Specification.pdf', date: 'cdn.cboe.com/resources/membership/US_Options_FIX_Specification.pdf — February 27, 2026' },
   },
 
   cboec2: {
@@ -1015,7 +1015,7 @@ const EXCHANGES = {
       { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
       { tag: '207', name: 'SecurityExchange', value: 'C2OX',   desc: 'Routes to C2 specifically for multi-listed series.' },
     ],
-    source: { title: 'Cboe U.S. Options FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+    source: { title: 'Cboe Titanium U.S. Options FIX Specification v2.8.5', url: 'https://cdn.cboe.com/resources/membership/US_Options_FIX_Specification.pdf', date: 'cdn.cboe.com/resources/membership/US_Options_FIX_Specification.pdf — February 27, 2026' },
   },
 
   bato: {
@@ -1056,7 +1056,7 @@ const EXCHANGES = {
       { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike price in dollars.' },
       { tag: '207', name: 'SecurityExchange', value: 'BATO',    desc: 'Routes to BZX Options specifically.' },
     ],
-    source: { title: 'Cboe U.S. Options FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+    source: { title: 'Cboe Titanium U.S. Options FIX Specification v2.8.5', url: 'https://cdn.cboe.com/resources/membership/US_Options_FIX_Specification.pdf', date: 'cdn.cboe.com/resources/membership/US_Options_FIX_Specification.pdf — February 27, 2026' },
   },
 
   edgo: {
@@ -1096,7 +1096,7 @@ const EXCHANGES = {
       { tag: '202', name: 'StrikePrice',      value: 'decimal', desc: 'Strike in dollars.' },
       { tag: '207', name: 'SecurityExchange', value: 'EDGO',    desc: 'Routes to EDGX Options specifically.' },
     ],
-    source: { title: 'Cboe U.S. Options FIX Specification', url: 'https://cdn.cboe.com/resources/membership/Cboe_US_Equities_FIX_Specification.pdf', date: 'June 2026' },
+    source: { title: 'Cboe Titanium U.S. Options FIX Specification v2.8.5', url: 'https://cdn.cboe.com/resources/membership/US_Options_FIX_Specification.pdf', date: 'cdn.cboe.com/resources/membership/US_Options_FIX_Specification.pdf — February 27, 2026' },
   },
 
   phlx: {
@@ -1761,7 +1761,7 @@ function renderExchange(key) {
     <div class="ex-section ex-source-line">
       <span class="ex-source-label">Source:</span>
       <a href="${ex.source.url}" class="ex-source-link" target="_blank" rel="noopener">${ex.source.title}</a>
-      <span class="ex-source-date">${ex.source.date ? `— ${ex.source.date}` : ''}${ex.source.verified !== false ? ' — verified June 2026' : ''}</span>
+      <span class="ex-source-date">${ex.source.date ? `— ${ex.source.date}` : ''}${ex.source.verified !== false ? ' — verified July 2026' : ''}</span>
     </div>` : ''}
   `;
 }
