@@ -488,21 +488,13 @@ def cert_order_entry():
 @app.route('/cert/drop-copy')
 @app.route('/tools/drop-copy')
 def cert_drop_copy():
-    return render_template('stub.html', **_ctx(
-        page_title='Drop Copy Certification',
-        page_description='FIX certification test scripts for drop copy sessions.',
-        active_nav='drop-copy',
-    ))
+    return render_template('cert_drop_copy.html', **_ctx())
 
 
 @app.route('/cert/allocation')
 @app.route('/tools/allocation')
 def cert_allocation():
-    return render_template('stub.html', **_ctx(
-        page_title='Allocation Certification',
-        page_description='FIX certification test scripts for allocation workflows.',
-        active_nav='allocation',
-    ))
+    return render_template('cert_allocation.html', **_ctx())
 
 
 @app.route('/field-reference')
