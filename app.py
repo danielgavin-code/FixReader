@@ -280,18 +280,15 @@ def compare():
 
 @app.route('/learn')
 def learn():
-    return stub(
-        'Learn FIX',
-        'A structured curriculum for understanding FIX Protocol from the ground up — '
-        'message types, session management, order flows, and field-by-field breakdowns '
-        'across FIX 4.0 through FIXT 1.1.',
-        'learn',
-    )
+    return redirect('/learn/fix-protocol-101')
 
 
 @app.route('/troubleshooting')
+def troubleshooting():
+    return redirect('/troubleshooting/network')
+
 @app.route('/troubleshooting/<path:subpath>')
-def troubleshooting(subpath=None):
+def troubleshooting_sub(subpath=None):
     titles = {
         'network': 'Network & Connectivity',
         'sequence-numbers': 'Sequence Number Issues',
@@ -436,7 +433,11 @@ def fix_specs_redirect():
 
 @app.route('/learn/fix-protocol-101')
 def learn_fix_protocol_101():
-    return stub('FIX Protocol 101', 'A ground-up introduction to the FIX Protocol — message structure, field types, and the core concepts behind every FIX session.', 'learn')
+    return render_template('stub.html', **_ctx(
+        page_title='FIX Protocol 101',
+        page_description='Introduction to the FIX Protocol for financial technology practitioners.',
+        active_nav='fix-protocol-101',
+    ))
 
 
 @app.route('/learn/message-types-guide')
@@ -485,29 +486,23 @@ def cert_order_entry():
 
 
 @app.route('/cert/drop-copy')
+@app.route('/tools/drop-copy')
 def cert_drop_copy():
     return render_template('stub.html', **_ctx(
         page_title='Drop Copy Certification',
         page_description='FIX certification test scripts for drop copy sessions.',
+        active_nav='drop-copy',
     ))
 
 
 @app.route('/cert/allocation')
+@app.route('/tools/allocation')
 def cert_allocation():
     return render_template('stub.html', **_ctx(
         page_title='Allocation Certification',
         page_description='FIX certification test scripts for allocation workflows.',
+        active_nav='allocation',
     ))
-
-
-@app.route('/tools/drop-copy')
-def tools_drop_copy():
-    return redirect('/cert/drop-copy')
-
-
-@app.route('/tools/allocation')
-def tools_allocation():
-    return redirect('/cert/allocation')
 
 
 @app.route('/field-reference')
@@ -542,42 +537,46 @@ def message_builder():
 
 @app.route('/troubleshooting/network')
 def ts_network():
-    return render_template('stub.html', **_ctx(page_title='Network & Connectivity', page_description='Diagnosing FIX network and connectivity issues.', active_nav='troubleshooting'))
+    return render_template('stub.html', **_ctx(
+        page_title='Network & Connectivity',
+        page_description='Diagnosing FIX network and connectivity issues.',
+        active_nav='network',
+    ))
 
 
 @app.route('/troubleshooting/sequence-numbers')
 def ts_sequence():
-    return render_template('stub.html', **_ctx(page_title='Sequence Number Issues', page_description='Diagnosing and resolving FIX sequence number problems.', active_nav='troubleshooting'))
+    return render_template('stub.html', **_ctx(page_title='Sequence Number Issues', page_description='Diagnosing and resolving FIX sequence number problems.', active_nav='sequence-numbers'))
 
 
 @app.route('/troubleshooting/logon')
 def ts_logon():
-    return render_template('stub.html', **_ctx(page_title='Logon Failures', page_description='Diagnosing FIX logon failures and session rejection.', active_nav='troubleshooting'))
+    return render_template('stub.html', **_ctx(page_title='Logon Failures', page_description='Diagnosing FIX logon failures and session rejection.', active_nav='logon'))
 
 
 @app.route('/troubleshooting/fill-reconciliation')
 def ts_fills():
-    return render_template('stub.html', **_ctx(page_title='Fill Reconciliation', page_description='Reconciling FIX fills and identifying gaps in execution reports.', active_nav='troubleshooting'))
+    return render_template('stub.html', **_ctx(page_title='Fill Reconciliation', page_description='Reconciling FIX fills and identifying gaps in execution reports.', active_nav='fill-reconciliation'))
 
 
 @app.route('/troubleshooting/rejects')
 def ts_rejects():
-    return render_template('stub.html', **_ctx(page_title='Order Rejects', page_description='Understanding and resolving FIX order rejects.', active_nav='troubleshooting'))
+    return render_template('stub.html', **_ctx(page_title='Order Rejects', page_description='Understanding and resolving FIX order rejects.', active_nav='rejects'))
 
 
 @app.route('/troubleshooting/latency')
 def ts_latency():
-    return render_template('stub.html', **_ctx(page_title='Latency & Timing', page_description='Diagnosing FIX message latency and timing issues.', active_nav='troubleshooting'))
+    return render_template('stub.html', **_ctx(page_title='Latency & Timing', page_description='Diagnosing FIX message latency and timing issues.', active_nav='latency'))
 
 
 @app.route('/troubleshooting/duplicate-orders')
 def ts_duplicates():
-    return render_template('stub.html', **_ctx(page_title='Duplicate Orders', page_description='Identifying and preventing duplicate FIX orders.', active_nav='troubleshooting'))
+    return render_template('stub.html', **_ctx(page_title='Duplicate Orders', page_description='Identifying and preventing duplicate FIX orders.', active_nav='duplicate-orders'))
 
 
 @app.route('/troubleshooting/gap-fill')
 def ts_gapfill():
-    return render_template('stub.html', **_ctx(page_title='Gap Fill & Resend', page_description='Understanding FIX gap fill and resend request procedures.', active_nav='troubleshooting'))
+    return render_template('stub.html', **_ctx(page_title='Gap Fill & Resend', page_description='Understanding FIX gap fill and resend request procedures.', active_nav='gap-fill'))
 
 
 if __name__ == '__main__':

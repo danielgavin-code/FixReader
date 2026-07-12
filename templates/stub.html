@@ -77,22 +77,20 @@
 
 {% if active_nav == 'learn' %}
 <div class="ml-version-bar">
-  <button class="ml-version-pill active">FIX Protocol 101</button>
-  <button class="ml-version-pill">Message Types Guide</button>
-  <button class="ml-version-pill">Tag Reference</button>
-  <button class="ml-version-pill">Session Management</button>
-  <button class="ml-version-pill">FIX Glossary</button>
+  <button class="ml-version-pill{% if page_title == 'FIX Protocol 101' %} active{% endif %}" onclick="window.location='/learn/fix-protocol-101'">FIX Protocol 101</button>
+  <button class="ml-version-pill{% if page_title == 'Message Types Guide' %} active{% endif %}" onclick="window.location='/learn/message-types-guide'">Message Types Guide</button>
+  <button class="ml-version-pill{% if page_title == 'Session Management' %} active{% endif %}" onclick="window.location='/learn/session-management'">Session Management</button>
 </div>
-{% elif active_nav == 'troubleshooting' %}
+{% elif active_nav in ('network', 'sequence-numbers', 'logon', 'fill-reconciliation', 'rejects', 'latency', 'duplicate-orders', 'gap-fill') %}
 <div class="ml-version-bar">
-  <button class="ml-version-pill active">Network &amp; Connectivity</button>
-  <button class="ml-version-pill">Sequence Numbers</button>
-  <button class="ml-version-pill">Logon Failures</button>
-  <button class="ml-version-pill">Fill Reconciliation</button>
-  <button class="ml-version-pill">Order Rejects</button>
-  <button class="ml-version-pill">Latency &amp; Timing</button>
-  <button class="ml-version-pill">Duplicate Orders</button>
-  <button class="ml-version-pill">Gap Fill &amp; Resend</button>
+  <button class="ml-version-pill {% if active_nav == 'network' %}active{% endif %}" onclick="window.location='/troubleshooting/network'">Network &amp; Connectivity</button>
+  <button class="ml-version-pill {% if active_nav == 'sequence-numbers' %}active{% endif %}" onclick="window.location='/troubleshooting/sequence-numbers'">Sequence Numbers</button>
+  <button class="ml-version-pill {% if active_nav == 'logon' %}active{% endif %}" onclick="window.location='/troubleshooting/logon'">Logon Failures</button>
+  <button class="ml-version-pill {% if active_nav == 'fill-reconciliation' %}active{% endif %}" onclick="window.location='/troubleshooting/fill-reconciliation'">Fill Reconciliation</button>
+  <button class="ml-version-pill {% if active_nav == 'rejects' %}active{% endif %}" onclick="window.location='/troubleshooting/rejects'">Order Rejects</button>
+  <button class="ml-version-pill {% if active_nav == 'latency' %}active{% endif %}" onclick="window.location='/troubleshooting/latency'">Latency &amp; Timing</button>
+  <button class="ml-version-pill {% if active_nav == 'duplicate-orders' %}active{% endif %}" onclick="window.location='/troubleshooting/duplicate-orders'">Duplicate Orders</button>
+  <button class="ml-version-pill {% if active_nav == 'gap-fill' %}active{% endif %}" onclick="window.location='/troubleshooting/gap-fill'">Gap Fill &amp; Resend</button>
 </div>
 {% elif page_title == 'Tools' %}
 <div class="ml-version-bar">
@@ -114,6 +112,12 @@
   <button class="ml-version-pill" onclick="window.location='/compare'">Compare Messages</button>
   <button class="ml-version-pill" onclick="window.location='/tools/message-builder'">Message Builder</button>
   <button class="ml-version-pill active" role="tab" aria-selected="true">Tag Validator</button>
+</div>
+{% elif page_title in ('Order Entry Certification', 'Drop Copy Certification', 'Allocation Certification') %}
+<div class="ml-version-bar">
+  <button class="ml-version-pill{% if page_title == 'Order Entry Certification' %} active{% endif %}" onclick="window.location='/cert/order-entry'">Order Entry</button>
+  <button class="ml-version-pill{% if page_title == 'Drop Copy Certification' %} active{% endif %}" onclick="window.location='/cert/drop-copy'">Drop Copy</button>
+  <button class="ml-version-pill{% if page_title == 'Allocation Certification' %} active{% endif %}" onclick="window.location='/cert/allocation'">Allocation</button>
 </div>
 {% elif active_nav == 'tools' %}
 <div class="ml-version-bar">
@@ -165,17 +169,17 @@
         <span class="ml-msg-code">ORD</span>
         <span>Order Entry</span>
       </a>
-      <a href="/tools/drop-copy" class="ml-msg-item{% if page_title == 'Drop Copy' %} active{% endif %}">
+      <a href="/cert/drop-copy" class="ml-msg-item{% if active_nav == 'drop-copy' %} active{% endif %}">
         <span class="ml-msg-code">DRP</span>
         <span>Drop Copy</span>
       </a>
-      <a href="/tools/allocation" class="ml-msg-item{% if page_title == 'Allocation' %} active{% endif %}">
+      <a href="/cert/allocation" class="ml-msg-item{% if active_nav == 'allocation' %} active{% endif %}">
         <span class="ml-msg-code">ALC</span>
         <span>Allocation</span>
       </a>
 
       <div class="ml-cat-hdr">Learn FIX</div>
-      <a href="/learn/fix-protocol-101" class="ml-msg-item{% if page_title == 'FIX Protocol 101' %} active{% endif %}">
+      <a href="/learn/fix-protocol-101" class="ml-msg-item{% if active_nav == 'fix-protocol-101' %} active{% endif %}">
         <span class="ml-msg-code">101</span>
         <span>FIX Protocol 101</span>
       </a>
@@ -189,7 +193,7 @@
       </a>
 
       <div class="ml-cat-hdr">Troubleshooting</div>
-      <a href="/troubleshooting/network" class="ml-msg-item{% if page_title == 'Network & Connectivity' %} active{% endif %}">
+      <a href="/troubleshooting/network" class="ml-msg-item{% if active_nav == 'network' %} active{% endif %}">
         <span class="ml-msg-code">NET</span>
         <span>Network &amp; Connectivity</span>
       </a>
