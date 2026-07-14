@@ -128,7 +128,7 @@ const SEARCH_INDEX = [
   { type:'troubleshooting', title:'Gap Fill & Resend', subtitle:'Troubleshooting', url:'/troubleshooting/gap-fill', aliases:['gap fill','resend request','sequence gap','missing messages'] },
 ];
 
-const FIX_TAG_REF = {
+const FIXREADER_TAG_ENUM = {
   1: { name: 'Account', desc: 'Account mnemonic for clearing and allocation' },
   6: { name: 'AvgPx', desc: 'Calculated average price of fills' },
   7: { name: 'BeginSeqNo', desc: 'Beginning sequence number for resend range' },
@@ -430,7 +430,7 @@ const FIX_TAG_REF = {
     if (tagEqMatch) {
       const tagNum = parseInt(tagEqMatch[1]);
       const valueStr = tagEqMatch[2].trim();
-      const tagInfo = FIX_TAG_REF[tagNum];
+      const tagInfo = FIXREADER_TAG_ENUM[tagNum];
 
       if (tagInfo && tagInfo.values) {
         // Multi-value: "336=1 2 3" → one result per value
@@ -590,7 +590,7 @@ const FIX_TAG_REF = {
     if (exactTagVal) {
       const tagNum = parseInt(exactTagVal[1]);
       const rawVal = exactTagVal[2].trim();
-      const tagInfo = FIX_TAG_REF[tagNum];
+      const tagInfo = FIXREADER_TAG_ENUM[tagNum];
       const results = [];
 
       if (tagInfo) {
@@ -627,7 +627,7 @@ const FIX_TAG_REF = {
     const tagNumMatch = q.match(/^(?:tag\s*)?(\d+)$/i);
     if (tagNumMatch) {
       const tagNum = parseInt(tagNumMatch[1]);
-      const tagInfo = FIX_TAG_REF[tagNum];
+      const tagInfo = FIXREADER_TAG_ENUM[tagNum];
       if (tagInfo) {
         // Show first 5 known values inline when the tag has a values map
         let subtitle = tagInfo.desc;
