@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ mic.mic }} — {{ mic.name }} — FIXReader</title>
+  <meta name="description" content="MIC code {{ mic.mic }}: {{ mic.name }} ({{ mic.country }}). Market Identifier Code detail — FIXReader.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {{ theme_vars | safe }}
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230f1c2e'/%3E%3Ctext x='16' y='23' font-family='Arial%2Csans-serif' font-size='22' font-weight='800' fill='%233b82f6' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+  <style>
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+    .ml-shell { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+    .ml-left  { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+    .ml-nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 40px; }
+    .ml-right { flex: 1; min-width: 0; overflow-y: auto; }
+    .mic-detail-card { padding: 32px; max-width: 500px; }
+    .detail-type-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      background: var(--color-sidebar-bg);
+      border: 1px solid var(--color-accent);
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-bottom: 16px;
+    }
+    .mic-detail-row { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border-light); align-items: center; }
+    .mic-detail-row:last-of-type { border-bottom: none; }
+    .mic-detail-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); width: 140px; flex-shrink: 0; }
+    .mic-detail-value { font-size: 15px; color: var(--text); }
+    .mic-detail-code { font-family: var(--font-mono); font-weight: 700; color: var(--color-accent); font-size: 18px; }
+    .mic-detail-back { padding-top: 24px; }
+    .mic-back-link { font-size: 13px; color: var(--color-accent); text-decoration: none; }
+    .mic-back-link:hover { text-decoration: underline; }
+    @media (max-width: 680px) {
+      .ml-shell { flex-direction: column; overflow: auto; }
+      .ml-left  { width: 100%; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
+      .ml-nav-scroll { max-height: 220px; overflow-y: auto; }
+      .ml-right { overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="logo-mark"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></div>
+      <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="/tools" class="nav-item">Tools</a></li>
+      <li><a href="/tools/cert-scripts" class="nav-item">Cert Scripts</a></li>
+      <li><a href="/learn" class="nav-item">Learn FIX</a></li>
+      <li><a href="/troubleshooting" class="nav-item">Troubleshooting</a></li>
+      <li><a href="/message-library" class="nav-item active">FIX Specs</a></li>
+      <li><a href="/exchange-specs" class="nav-item">Exchange Specs</a></li>
+      <li><a href="/resources" class="nav-item">Resources</a></li>
+    </ul>
+    {% if theme_info.name != 'default' %}
+    <div class="nav-end">
+      <div class="nav-theme">
+        <span class="nav-theme-emoji">{{ theme_info.emoji }}</span>
+        <div class="nav-theme-text">
+          <div class="nav-theme-line1">
+            {% if theme_info.type == 'birthday' %}
+            <span class="nav-theme-label">Happy Birthday,</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.person_name }}!</a>
+            {% else %}
+            <span class="nav-theme-label">Today's Theme:</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.display_name }}</a>
+            {% endif %}
+          </div>
+          <div class="nav-theme-line2">
+            {% if theme_info.type == 'birthday' %}
+            {{ theme_info.subtitle }}{% if theme_info.wiki_url %} · <a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% else %}
+            {% if theme_info.date %}{{ theme_info.date }}{% if theme_info.subtitle %} · {% endif %}{% endif %}{% if theme_info.subtitle %}{{ theme_info.subtitle }}{% if theme_info.wiki_url %} · {% endif %}{% endif %}{% if theme_info.wiki_url %}<a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <div class="nav-search" id="nav-search-wrap">
+      <div class="nav-search-inner">
+        <svg class="nav-search-icon" viewBox="0 0 16 16" fill="none">
+          <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <input type="search" class="nav-search-input" id="nav-search-input" placeholder="Search tags, messages..." autocomplete="off" spellcheck="false">
+        <span class="nav-search-kbd" id="nav-search-kbd">⌘K</span>
+      </div>
+      <div class="nav-search-dropdown" id="nav-search-dropdown" style="display:none"></div>
+    </div>
+  </div>
+</nav>
+
+<div class="ml-version-bar">
+  <a class="ml-version-pill" href="/message-library#ref-mic">MIC Codes</a>
+</div>
+
+<div class="ml-shell">
+
+  <nav class="ml-left" aria-label="Message types">
+    <div class="ml-nav-scroll">
+      <div id="ml-nav"></div>
+    </div>
+  </nav>
+
+  <main class="ml-right">
+    <div class="mic-detail-card">
+      <span class="detail-type-badge">MIC Code</span>
+      <div class="mic-detail-row">
+        <span class="mic-detail-label">MIC</span>
+        <span class="mic-detail-value mic-detail-code">{{ mic.mic }}</span>
+      </div>
+      <div class="mic-detail-row">
+        <span class="mic-detail-label">Exchange / Venue</span>
+        <span class="mic-detail-value">{{ mic.name }}</span>
+      </div>
+      <div class="mic-detail-row">
+        <span class="mic-detail-label">Country</span>
+        <span class="mic-detail-value">{{ mic.country }}</span>
+      </div>
+      <div class="mic-detail-row">
+        <span class="mic-detail-label">Flag</span>
+        <span class="mic-detail-value" id="mic-flag"></span>
+      </div>
+      <div class="mic-detail-back">
+        <a href="/message-library#ref-mic" class="mic-back-link">← Back to MIC Codes</a>
+      </div>
+    </div>
+  </main>
+
+</div><!-- /ml-shell -->
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
+    <div class="footer-links">
+      <a href="/contact" class="footer-link">Contact</a>
+      <a href="/feedback" class="footer-link">Feedback</a>
+    </div>
+    <span class="footer-copy">© 2026 FIXReader.org</span>
+  </div>
+</footer>
+
+<script>
+// ── Left nav ──────────────────────────────────────────────────
+const VER_ORDER = ['4.0','4.1','4.2','4.3','4.4','5.0','5.0sp1','5.0sp2'];
+const SINCE_TO_KEY = {
+  'FIX 2.7':'4.0','FIX 4.0':'4.0','FIX 4.1':'4.1','FIX 4.2':'4.2',
+  'FIX 4.3':'4.3','FIX 4.4':'4.4','FIX 5.0':'5.0',
+  'FIX 5.0 SP1':'5.0sp1','FIX 5.0 SP2':'5.0sp2','FIXT 1.1':'5.0sp2',
+};
+const _currentVerKey = '4.2';
+function msgInVer(m) {
+  const sk = SINCE_TO_KEY[m.since || 'FIX 2.7'] || '4.0';
+  return VER_ORDER.indexOf(sk) <= VER_ORDER.indexOf(_currentVerKey);
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+const CATEGORIES = [
+  { label: 'Session', msgs: [
+    { code: 'A',  name: 'Logon',                       since: 'FIX 2.7' },
+    { code: '0',  name: 'Heartbeat',                    since: 'FIX 2.7' },
+    { code: '1',  name: 'Test Request',                 since: 'FIX 2.7' },
+    { code: '2',  name: 'Resend Request',               since: 'FIX 2.7' },
+    { code: '3',  name: 'Reject',                       since: 'FIX 2.7' },
+    { code: '4',  name: 'Sequence Reset',               since: 'FIX 2.7' },
+    { code: '5',  name: 'Logout',                       since: 'FIX 2.7' },
+    { code: 'j',  name: 'Business Message Reject',      since: 'FIX 4.2' },
+  ]},
+  { label: 'Order Entry', msgs: [
+    { code: 'D',  name: 'New Order Single',             since: 'FIX 2.7' },
+    { code: 'E',  name: 'New Order List',               since: 'FIX 2.7' },
+    { code: 'F',  name: 'Order Cancel Request',         since: 'FIX 2.7' },
+    { code: 'G',  name: 'Order Cancel/Replace Request', since: 'FIX 2.7' },
+    { code: 'H',  name: 'Order Status Request',         since: 'FIX 2.7' },
+    { code: 's',  name: 'New Order — Cross',            since: 'FIX 4.4' },
+    { code: 'q',  name: 'Order Mass Cancel Request',    since: 'FIX 4.3' },
+    { code: 'r',  name: 'Order Mass Cancel Report',     since: 'FIX 4.3' },
+  ]},
+  { label: 'Execution', msgs: [
+    { code: '8',  name: 'Execution Report',             since: 'FIX 2.7' },
+    { code: '9',  name: 'Order Cancel Reject',          since: 'FIX 2.7' },
+    { code: 'i',  name: 'Mass Quote',                   since: 'FIX 4.2' },
+    { code: 'S',  name: 'Quote',                        since: 'FIX 2.7' },
+    { code: 'AF', name: 'Order Mass Status Request',    since: 'FIX 4.4' },
+  ]},
+  { label: 'IOI & Advertisements', msgs: [
+    { code: '6',  name: 'Indication of Interest',       since: 'FIX 2.7' },
+    { code: '7',  name: 'Advertisement',                since: 'FIX 2.7' },
+  ]},
+  { label: 'Market Data', msgs: [
+    { code: 'V',  name: 'Market Data Request',          since: 'FIX 4.2' },
+    { code: 'W',  name: 'Market Data Snapshot',         since: 'FIX 4.2' },
+    { code: 'X',  name: 'Market Data Incremental',      since: 'FIX 4.2' },
+    { code: 'Y',  name: 'Market Data Request Reject',   since: 'FIX 4.2' },
+  ]},
+  { label: 'Post-Trade', msgs: [
+    { code: 'J',  name: 'Allocation Instruction',       since: 'FIX 2.7' },
+    { code: 'P',  name: 'Allocation Instruction Ack',   since: 'FIX 2.7' },
+    { code: 'Q',  name: "Don't Know Trade",             since: 'FIX 2.7' },
+    { code: 'AE', name: 'Trade Capture Report',         since: 'FIX 4.4' },
+    { code: 'AP', name: 'Position Report',              since: 'FIX 4.4' },
+  ]},
+];
+const REF_ITEMS = [
+  { code: 'mic',      label: 'MIC Codes',          badge: 'MIC' },
+  { code: 'currency', label: 'Currency Codes',      badge: 'CCY' },
+  { code: 'country',  label: 'Country Codes',       badge: 'CTY' },
+  { code: 'timezone', label: 'Time Zones',          badge: 'TZ'  },
+  { code: 'secidsrc', label: 'Security ID Sources', badge: 'SID' },
+];
+function buildNav() {
+  let html = '';
+  for (const cat of CATEGORIES) {
+    const visible = cat.msgs.filter(msgInVer);
+    if (!visible.length) continue;
+    html += `<div class="ml-cat-hdr">${esc(cat.label)}</div>`;
+    for (const m of visible) {
+      html += `<a href="/message-library#msg-${esc(m.code)}" style="text-decoration:none;color:inherit;display:block" onclick="event.preventDefault()"><div class="ml-msg-item" data-code="${esc(m.code)}" onclick="selectMsg('${esc(m.code)}')">
+        <span class="ml-msg-code">${esc(m.code)}</span>
+        <span>${esc(m.name)}</span>
+      </div></a>`;
+    }
+  }
+  html += `<div class="ml-appendix-nav-hdr">Appendix</div>`;
+  for (const item of REF_ITEMS) {
+    html += `<a id="ref-${item.code}" href="/message-library#ref-${item.code}" style="text-decoration:none;color:inherit;display:block" onclick="event.preventDefault()"><div class="ml-appendix-item" data-ref="${item.code}" onclick="selectRefItem('${item.code}')">
+      <span class="ml-msg-code">${esc(item.badge)}</span>
+      <span>${esc(item.label)}</span>
+    </div></a>`;
+  }
+  document.getElementById('ml-nav').innerHTML = html;
+}
+function selectMsg(code) { window.location.href = '/message-library#msg-' + code; }
+function selectRefItem(code) { window.location.href = '/message-library#ref-' + code; }
+buildNav();
+document.querySelector('.ml-appendix-item[data-ref="mic"]').classList.add('active');
+</script>
+<script>
+const _micCountry = "{{ mic.country }}";
+if (_micCountry && _micCountry.length === 2) {
+  document.getElementById('mic-flag').textContent = String.fromCodePoint(
+    _micCountry.toUpperCase().charCodeAt(0) + 127397,
+    _micCountry.toUpperCase().charCodeAt(1) + 127397
+  );
+}
+</script>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+</body>
+</html>

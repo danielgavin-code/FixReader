@@ -328,6 +328,63 @@ def exchange_specs():
     return render_template('exchange_specs.html', **_ctx())
 
 
+@app.route('/mic')
+def mic_index():
+    return redirect('/message-library')
+
+
+@app.route('/mic/<mic_code>')
+def mic_detail(mic_code):
+    try:
+        with open(os.path.join(_BASE, 'fixreader_data', 'mic_codes.json')) as f:
+            mics = {m['mic']: m for m in json.load(f)}
+    except Exception:
+        mics = {}
+    mic = mics.get(mic_code.upper())
+    if not mic:
+        abort(404)
+    return render_template('mic_detail.html', **_ctx(), mic=mic)
+
+
+@app.route('/currency/<ccy_code>')
+def currency_detail(ccy_code):
+    try:
+        with open(os.path.join(_BASE, 'fixreader_data', 'currency_codes.json')) as f:
+            data = {c['code']: c for c in json.load(f)}
+    except Exception:
+        data = {}
+    item = data.get(ccy_code.upper())
+    if not item:
+        abort(404)
+    return render_template('currency_detail.html', **_ctx(), item=item)
+
+
+@app.route('/country/<country_code>')
+def country_detail(country_code):
+    try:
+        with open(os.path.join(_BASE, 'fixreader_data', 'country_codes.json')) as f:
+            data = {c['code']: c for c in json.load(f)}
+    except Exception:
+        data = {}
+    item = data.get(country_code.upper())
+    if not item:
+        abort(404)
+    return render_template('country_detail.html', **_ctx(), item=item)
+
+
+@app.route('/timezone/<zone_code>')
+def timezone_detail(zone_code):
+    try:
+        with open(os.path.join(_BASE, 'fixreader_data', 'timezone_data.json')) as f:
+            data = {t['zone'].replace('/', '_').replace(' ', '_'): t for t in json.load(f)}
+    except Exception:
+        data = {}
+    item = data.get(zone_code)
+    if not item:
+        abort(404)
+    return render_template('timezone_detail.html', **_ctx(), item=item)
+
+
 _VERSION_ORDER = [
     'FIX 2.7', 'FIX 4.0', 'FIX 4.1', 'FIX 4.2', 'FIX 4.3',
     'FIX 4.4', 'FIX 5.0', 'FIX 5.0 SP1', 'FIX 5.0 SP2', 'FIXT 1.1',

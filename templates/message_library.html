@@ -267,7 +267,7 @@ function buildNav() {
   }
   html += `<div class="ml-appendix-nav-hdr">Appendix</div>`;
   for (const item of REF_ITEMS) {
-    html += `<a href="/message-library#ref-${item.code}" style="text-decoration:none;color:inherit;display:block" onclick="event.preventDefault()"><div class="ml-appendix-item" data-ref="${item.code}" onclick="selectRefItem('${item.code}')">
+    html += `<a id="ref-${item.code}" href="/message-library#ref-${item.code}" style="text-decoration:none;color:inherit;display:block" onclick="event.preventDefault()"><div class="ml-appendix-item" data-ref="${item.code}" onclick="selectRefItem('${item.code}')">
       <span class="ml-msg-code">${esc(item.badge)}</span>
       <span>${esc(item.label)}</span>
     </div></a>`;
@@ -2456,7 +2456,7 @@ function renderMic() {
   const rows = MIC_DATA.map(r => {
     const s = `${r.mic} ${r.name} ${r.country}`.toLowerCase();
     return `<tr data-s="${esc(s)}">
-      <td class="rp-code">${esc(r.mic)}</td>
+      <td class="rp-code"><a href="/mic/${esc(r.mic)}" class="ref-tag-link">${esc(r.mic)}</a></td>
       <td class="rp-name">${esc(r.name)}</td>
       <td class="rp-dim">${esc(r.country)}</td>
       <td class="rp-flag">${countryFlag(r.country)}</td>
@@ -2475,7 +2475,7 @@ function renderCurrency() {
   const rows = CCY_DATA.map(r => {
     const s = `${r.code} ${r.name} ${r.country}`.toLowerCase();
     return `<tr data-s="${esc(s)}">
-      <td class="rp-code">${esc(r.code)}</td>
+      <td class="rp-code"><a href="/currency/${esc(r.code)}" class="ref-tag-link">${esc(r.code)}</a></td>
       <td class="rp-name">${esc(r.name)}</td>
       <td class="rp-dim">${esc(r.country)}</td>
       <td class="rp-flag">${countryFlag(CCY_TO_COUNTRY[r.code] || '')}</td>
@@ -2494,7 +2494,7 @@ function renderCountry() {
   const rows = CTY_DATA.map(r => {
     const s = `${r.code} ${r.name} ${r.region}`.toLowerCase();
     return `<tr data-s="${esc(s)}">
-      <td class="rp-code">${esc(r.code)}</td>
+      <td class="rp-code"><a href="/country/${esc(r.code)}" class="ref-tag-link">${esc(r.code)}</a></td>
       <td class="rp-name">${esc(r.name)}</td>
       <td class="rp-dim">${esc(r.region)}</td>
       <td class="rp-flag">${countryFlag(r.code)}</td>
@@ -2513,7 +2513,7 @@ function renderTimezone() {
   const rows = TZ_DATA.map(r => {
     const s = `${r.zone} ${r.name} ${r.std}`.toLowerCase();
     return `<tr data-s="${esc(s)}">
-      <td class="rp-code">${esc(r.zone)}</td>
+      <td class="rp-code"><a href="/timezone/${esc(r.zone.replace(/[/ ]/g,'_'))}" class="ref-tag-link">${esc(r.zone)}</a></td>
       <td class="rp-name">${esc(r.name)}</td>
       <td class="rp-dim">${esc(r.std)}</td>
       <td class="rp-dim">${esc(r.dst)}</td>
@@ -2575,9 +2575,20 @@ function renderSecIdSrc() {
 
 // ── Init ──────────────────────────────────────────────────────
 buildNav();
-const _defaultPill = document.querySelector('.ml-version-pill[aria-selected="true"]') || document.querySelector('.ml-version-pill');
-if (_defaultPill) { _currentVerKey = '4.2'; }
-selectMsg('D');
+const _hash = window.location.hash;
+if (_hash === '#ref-mic') {
+  selectRefItem('mic');
+} else if (_hash === '#ref-currency') {
+  selectRefItem('currency');
+} else if (_hash === '#ref-country') {
+  selectRefItem('country');
+} else if (_hash === '#ref-timezone') {
+  selectRefItem('timezone');
+} else if (_hash === '#ref-secidsrc') {
+  selectRefItem('secidsrc');
+} else {
+  selectMsg('D');
+}
 </script>
 
 <footer class="site-footer">

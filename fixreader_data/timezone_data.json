@@ -1,0 +1,86 @@
+[
+  {
+    "zone": "UTC",
+    "name": "Coordinated Universal Time",
+    "std": "UTC+0",
+    "dst": "—",
+    "example": "14:30 UTC  →  20240115-14:30:00"
+  },
+  {
+    "zone": "ET",
+    "name": "Eastern Time (US)",
+    "std": "UTC−5 EST",
+    "dst": "UTC−4 EDT",
+    "example": "09:30 EST  →  20240115-14:30:00"
+  },
+  {
+    "zone": "CT",
+    "name": "Central Time (US)",
+    "std": "UTC−6 CST",
+    "dst": "UTC−5 CDT",
+    "example": "08:30 CST  →  20240115-14:30:00"
+  },
+  {
+    "zone": "MT",
+    "name": "Mountain Time (US)",
+    "std": "UTC−7 MST",
+    "dst": "UTC−6 MDT",
+    "example": "07:30 MST  →  20240115-14:30:00"
+  },
+  {
+    "zone": "PT",
+    "name": "Pacific Time (US)",
+    "std": "UTC−8 PST",
+    "dst": "UTC−7 PDT",
+    "example": "06:30 PST  →  20240115-14:30:00"
+  },
+  {
+    "zone": "GMT / BST",
+    "name": "London Time (UK)",
+    "std": "UTC+0 GMT",
+    "dst": "UTC+1 BST",
+    "example": "14:30 GMT  →  20240115-14:30:00"
+  },
+  {
+    "zone": "CET / CEST",
+    "name": "Central European Time",
+    "std": "UTC+1",
+    "dst": "UTC+2",
+    "example": "15:30 CET  →  20240115-14:30:00"
+  },
+  {
+    "zone": "IST",
+    "name": "India Standard Time",
+    "std": "UTC+5:30",
+    "dst": "—",
+    "example": "20:00 IST  →  20240115-14:30:00"
+  },
+  {
+    "zone": "HKT",
+    "name": "Hong Kong Time",
+    "std": "UTC+8",
+    "dst": "—",
+    "example": "22:30 HKT  →  20240115-14:30:00"
+  },
+  {
+    "zone": "SGT",
+    "name": "Singapore Time",
+    "std": "UTC+8",
+    "dst": "—",
+    "example": "22:30 SGT  →  20240115-14:30:00"
+  },
+  {
+    "zone": "JST",
+    "name": "Japan Standard Time",
+    "std": "UTC+9",
+    "dst": "—",
+    "example": "23:30 JST  →  20240115-14:30:00"
+  },
+  {
+    "zone": "AEST/AEDT",
+    "name": "Australian Eastern Time",
+    "std": "UTC+10",
+    "dst": "UTC+11",
+    "example": "00:30+1d AEST  →  20240115-14:30:00"
+  }
+]
