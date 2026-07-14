@@ -1,5 +1,6 @@
 /* ── FIXReader Search ─────────────────────────────────────────── */
 
+(function() {
 const SEARCH_INDEX = [
 
   /* MESSAGES */
@@ -355,7 +356,6 @@ const FIX_TAG_REF = {
   20011: { name: 'RouteToBroker', desc: 'NYSE Texas route to broker indicator' },
 };
 
-(function() {
 
   const TYPE_LABELS = {
     message: 'Message',
