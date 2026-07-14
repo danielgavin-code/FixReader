@@ -591,7 +591,7 @@ def ts_network():
 
 @app.route('/troubleshooting/sequence-numbers')
 def ts_sequence():
-    return render_template('stub.html', **_ctx(page_title='Sequence Number Issues', page_description='Diagnosing and resolving FIX sequence number problems.', active_nav='sequence-numbers'))
+    return render_template('troubleshooting_sequence.html', **_ctx(active_nav='sequence-numbers'))
 
 
 @app.route('/troubleshooting/logon')

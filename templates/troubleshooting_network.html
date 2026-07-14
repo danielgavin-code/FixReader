@@ -287,6 +287,12 @@
       margin-top: 2px;
     }
 
+    input[type="checkbox"] {
+      cursor: pointer;
+      pointer-events: auto;
+      accent-color: var(--color-accent);
+    }
+
     /* ── Status badges ── */
     .tsn-badge-ok   { color: #15803d; font-weight: 600; }
     .tsn-badge-err  { color: #b91c1c; font-weight: 600; }
@@ -1015,50 +1021,50 @@ tcpdump -i eth0 'host fix-prod.exchange.com and port 9001 and (tcp[tcpflags] &am
         <div class="tsn-prod-checklist">
           <div class="tsn-prod-checklist-hdr">Network &amp; Connectivity — Pre-Flight</div>
           <div class="tsn-prod-checklist-body">
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>Hostname and port confirmed against the current exchange spec (not from memory or an old config)</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span><code>telnet</code> or <code>nc</code> to the FIX port succeeds from the machine that will run the FIX application</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>Outbound firewall rule allows traffic to exchange IP range on the FIX port</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>Your egress IP is on the exchange's IP whitelist (confirmed with exchange contact)</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>SenderCompID and TargetCompID match exactly what the exchange provided (case-sensitive, no trailing spaces)</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>BeginString matches the session FIX version in the exchange spec</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>HeartBtInt (108) value matches what the exchange expects (typically 30 or 60 seconds)</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>TLS configuration verified: trust store includes exchange CA, client cert loaded if mTLS required</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>Current time is within the exchange's session hours for this environment</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>Application logs show the outbound Logon message being sent immediately after TCP connect</span>
-            </div>
-            <div class="tsn-prod-item">
-              <div class="tsn-prod-item-icon"></div>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:0;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
               <span>For production go-live: UAT config reviewed side-by-side with production config, no UAT values remain</span>
-            </div>
+            </label>
           </div>
         </div>
       </div>
