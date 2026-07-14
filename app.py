@@ -596,12 +596,12 @@ def ts_sequence():
 
 @app.route('/troubleshooting/logon')
 def ts_logon():
-    return render_template('stub.html', **_ctx(page_title='Logon Failures', page_description='Diagnosing FIX logon failures and session rejection.', active_nav='logon'))
+    return render_template('troubleshooting_logon.html', **_ctx(active_nav='logon'))
 
 
 @app.route('/troubleshooting/fill-reconciliation')
 def ts_fills():
-    return render_template('stub.html', **_ctx(page_title='Fill Reconciliation', page_description='Reconciling FIX fills and identifying gaps in execution reports.', active_nav='fill-reconciliation'))
+    return render_template('troubleshooting_fill_reconciliation.html', **_ctx(active_nav='fill-reconciliation'))
 
 
 @app.route('/troubleshooting/rejects')

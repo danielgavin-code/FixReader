@@ -524,6 +524,7 @@
       <div class="tsn-page-hdr">
         <div class="tsn-page-hdr-top">
           <span class="tsn-badge">NET</span>
+          <span class="tsn-badge" style="color:#6b7280;background:color-mix(in srgb,#6b7280 8%,transparent);border-color:color-mix(in srgb,#6b7280 25%,transparent)">10 min read</span>
           <span class="tsn-badge" style="color:#6b7280;background:color-mix(in srgb,#6b7280 8%,transparent);border-color:color-mix(in srgb,#6b7280 25%,transparent)">Troubleshooting</span>
         </div>
         <div class="tsn-page-title">Network &amp; Connectivity</div>
@@ -1066,6 +1067,21 @@ tcpdump -i eth0 'host fix-prod.exchange.com and port 9001 and (tcp[tcpflags] &am
               <span>For production go-live: UAT config reviewed side-by-side with production config, no UAT values remain</span>
             </label>
           </div>
+        </div>
+      </div>
+
+      <!-- ── 5-Minute Diagnosis ──────────────────────────── -->
+      <div class="tsn-section">
+        <div class="tsn-section-hdr">5-Minute Diagnosis</div>
+        <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+          <div style="background:var(--color-sidebar-bg);border-bottom:1px solid var(--border);padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted)">Network &amp; Connectivity — TL;DR</div>
+          <ol style="margin:0;padding:14px 16px 14px 32px;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.5;color:var(--text)">
+            <li>Can you <code>telnet</code> or <code>nc</code> to the FIX port from your machine?</li>
+            <li>Is the Logon (<code>35=A</code>) being sent immediately after TCP connects?</li>
+            <li>What's the first response — TCP reset, TLS error, or FIX Logout/Reject?</li>
+            <li>Is this a firewall issue, TLS mismatch, or wrong comp IDs?</li>
+            <li>Check application logs and <code>tcpdump</code> before changing any configuration.</li>
+          </ol>
         </div>
       </div>
 

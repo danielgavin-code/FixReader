@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sequence Number Issues — FIXReader Troubleshooting</title>
-  <meta name="description" content="Diagnose and recover from FIX sequence number problems without disrupting live sessions. ResendRequest, GapFill, and hard reset explained.">
+  <title>Fill Reconciliation — FIXReader Troubleshooting</title>
+  <meta name="description" content="Diagnose missing, duplicate, or mismatched executions between your application and the broker or exchange.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -20,287 +20,97 @@
     .ml-right { flex: 1; min-width: 0; overflow-y: auto; }
     a.ml-msg-item { text-decoration: none; }
 
-    /* ── Page layout ── */
     .tsn-wrap { padding: 0 28px 56px; max-width: 860px; }
 
-    /* ── Page header ── */
-    .tsn-page-hdr {
-      padding: 28px 0 20px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 28px;
-    }
-    .tsn-page-hdr-top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 6px;
-    }
+    .tsn-page-hdr { padding: 28px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+    .tsn-page-hdr-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
     .tsn-badge {
-      display: inline-flex;
-      align-items: center;
-      font-size: 11px;
-      font-weight: 700;
-      font-family: var(--mono);
-      letter-spacing: 0.04em;
-      color: var(--color-accent);
+      display: inline-flex; align-items: center; font-size: 11px; font-weight: 700;
+      font-family: var(--mono); letter-spacing: 0.04em; color: var(--color-accent);
       background: color-mix(in srgb, var(--color-accent) 8%, transparent);
       border: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
-      border-radius: 4px;
-      padding: 2px 7px;
+      border-radius: 4px; padding: 2px 7px;
     }
-    .tsn-page-title {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--text);
-      line-height: 1.2;
-    }
-    .tsn-page-desc {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-top: 6px;
-      max-width: 640px;
-    }
+    .tsn-page-title { font-size: 24px; font-weight: 800; color: var(--text); line-height: 1.2; }
+    .tsn-page-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-top: 6px; max-width: 640px; }
 
-    /* ── Section ── */
     .tsn-section { margin-bottom: 36px; }
     .tsn-section-hdr {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--color-accent);
-      margin-bottom: 12px;
-      padding-bottom: 6px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--color-accent); margin-bottom: 12px; padding-bottom: 6px;
       border-bottom: 1px solid var(--border-light);
     }
     .tsn-section-body { font-size: 13.5px; color: var(--text); line-height: 1.7; }
     .tsn-section-body p { margin: 0 0 10px; }
     .tsn-section-body p:last-child { margin-bottom: 0; }
 
-    /* ── Checklist ── */
-    .tsn-checklist {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .tsn-checklist li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 13.5px;
-      color: var(--text);
-      line-height: 1.5;
-    }
+    .tsn-checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .tsn-checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: var(--text); line-height: 1.5; }
     .tsn-check-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 20px;
-      height: 20px;
-      min-width: 20px;
-      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; min-width: 20px; border-radius: 50%;
       background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-      color: var(--color-accent);
-      font-size: 10px;
-      font-weight: 700;
-      margin-top: 2px;
+      color: var(--color-accent); font-size: 10px; font-weight: 700; margin-top: 2px;
     }
 
-    /* ── Code block ── */
     .tsn-code {
-      background: #0d1117;
-      color: #c9d1d9;
+      background: #0d1117; color: #c9d1d9;
       font-family: 'JetBrains Mono', 'Courier New', monospace;
-      font-size: 12.5px;
-      line-height: 1.65;
-      padding: 14px 16px;
-      border-radius: 6px;
-      overflow-x: auto;
-      margin: 10px 0;
+      font-size: 12.5px; line-height: 1.65; padding: 14px 16px;
+      border-radius: 6px; overflow-x: auto; margin: 10px 0;
       border: 1px solid rgba(34, 85, 170, 0.3);
     }
-    .tsn-code .c  { color: #8b949e; }  /* comment */
-    .tsn-code .kw { color: #ff7b72; }  /* keyword */
-    .tsn-code .st { color: #a5d6ff; }  /* string/value */
-    .tsn-code .cm { color: #79c0ff; }  /* command */
-    .tsn-code .nu { color: #f2cc60; }  /* number/tag */
+    .tsn-code .c  { color: #8b949e; }
+    .tsn-code .kw { color: #ff7b72; }
+    .tsn-code .st { color: #a5d6ff; }
+    .tsn-code .nu { color: #f2cc60; }
 
-    /* ── Inline code ── */
     code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
       background: color-mix(in srgb, var(--color-accent) 7%, transparent);
       color: var(--color-accent);
       border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
-      border-radius: 3px;
-      padding: 1px 5px;
+      border-radius: 3px; padding: 1px 5px;
     }
 
-    /* ── Table ── */
     .tsn-table-wrap { overflow-x: auto; margin: 10px 0; }
-    .tsn-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
+    .tsn-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .tsn-table th {
-      text-align: left;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--color-accent);
-      background: var(--color-sidebar-bg);
-      padding: 7px 12px;
-      border-bottom: 2px solid var(--border);
-      white-space: nowrap;
+      text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--color-accent); background: var(--color-sidebar-bg);
+      padding: 7px 12px; border-bottom: 2px solid var(--border); white-space: nowrap;
     }
-    .tsn-table td {
-      padding: 7px 12px;
-      border-bottom: 1px solid var(--border-light);
-      vertical-align: top;
-      line-height: 1.5;
-    }
+    .tsn-table td { padding: 7px 12px; border-bottom: 1px solid var(--border-light); vertical-align: top; line-height: 1.5; }
     .tsn-table tr:last-child td { border-bottom: none; }
     .tsn-table .mono { font-family: var(--mono); font-size: 12px; }
-    .tsn-table .muted { color: var(--text-muted); }
 
-    /* ── Callout boxes ── */
     .tsn-callout {
       border-left: 3px solid var(--color-accent);
       background: color-mix(in srgb, var(--color-accent) 6%, transparent);
-      border-radius: 0 6px 6px 0;
-      padding: 12px 16px;
-      margin: 12px 0;
-      font-size: 13.5px;
-      line-height: 1.6;
+      border-radius: 0 6px 6px 0; padding: 12px 16px; margin: 12px 0;
+      font-size: 13.5px; line-height: 1.6;
     }
-    .tsn-callout-warn {
-      border-left-color: #d97706;
-      background: color-mix(in srgb, #d97706 8%, transparent);
-    }
-    .tsn-callout-danger {
-      border-left-color: #dc2626;
-      background: color-mix(in srgb, #dc2626 7%, transparent);
-    }
-    .tsn-callout-ok {
-      border-left-color: #15803d;
-      background: color-mix(in srgb, #15803d 7%, transparent);
-    }
+    .tsn-callout-danger { border-left-color: #dc2626; background: color-mix(in srgb, #dc2626 7%, transparent); }
     .tsn-callout strong { color: var(--text); }
 
-    /* ── Two-column grid ── */
-    .tsn-grid2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin: 10px 0;
-    }
-    .tsn-grid2-cell {
-      background: var(--color-sidebar-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 14px;
-    }
-    .tsn-grid2-cell-hdr {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--color-accent);
-      margin-bottom: 8px;
-    }
-    .tsn-grid2-cell ul {
-      margin: 0;
-      padding: 0 0 0 16px;
-      font-size: 13px;
-      line-height: 1.65;
-    }
+    .tsn-fix-line { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+    .tsn-fix-row { display: flex; align-items: baseline; gap: 10px; font-size: 13px; }
+    .tsn-fix-tag { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--color-accent); min-width: 80px; flex-shrink: 0; }
+    .tsn-fix-desc { font-size: 12px; color: var(--text-muted); }
 
-    /* ── Tag/value display ── */
-    .tsn-fix-line {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin: 8px 0;
-    }
-    .tsn-fix-row {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      font-size: 13px;
-    }
-    .tsn-fix-tag {
-      font-family: var(--mono);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--color-accent);
-      min-width: 100px;
-      flex-shrink: 0;
-    }
-    .tsn-fix-val {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--text);
-    }
-    .tsn-fix-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    /* ── Production checklist ── */
-    .tsn-prod-checklist {
-      border: 1.5px solid var(--color-accent);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-top: 8px;
-    }
+    .tsn-prod-checklist { border: 1.5px solid var(--color-accent); border-radius: 8px; overflow: hidden; margin-top: 8px; }
     .tsn-prod-checklist-hdr {
       background: color-mix(in srgb, var(--color-accent) 10%, transparent);
       border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
-      padding: 10px 16px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--color-accent);
+      padding: 10px 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--color-accent);
     }
-    .tsn-prod-checklist-body {
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .tsn-prod-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-    .tsn-prod-item-icon {
-      width: 16px;
-      height: 16px;
-      min-width: 16px;
-      border-radius: 3px;
-      border: 1.5px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
-      margin-top: 2px;
-    }
+    .tsn-prod-checklist-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
 
-    input[type="checkbox"] {
-      cursor: pointer;
-      pointer-events: auto;
-      accent-color: var(--color-accent);
-    }
+    input[type="checkbox"] { cursor: pointer; pointer-events: auto; accent-color: var(--color-accent); }
 
-    /* ── Status badges ── */
-    .tsn-badge-ok   { color: #15803d; font-weight: 600; }
-    .tsn-badge-err  { color: #b91c1c; font-weight: 600; }
-    .tsn-badge-warn { color: #d97706; font-weight: 600; }
+    .tsn-badge-ok  { color: #15803d; font-weight: 600; }
+    .tsn-badge-err { color: #b91c1c; font-weight: 600; }
 
     @media (max-width: 680px) {
       .ml-shell { flex-direction: column; overflow: auto; }
@@ -308,7 +118,6 @@
       .ml-nav-scroll { max-height: 220px; overflow-y: auto; }
       .ml-right { overflow: visible; }
       .tsn-wrap { padding: 0 16px 40px; }
-      .tsn-grid2 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -370,9 +179,9 @@
 
 <div class="ml-version-bar">
   <a class="ml-version-pill" href="/troubleshooting/network">Network &amp; Connectivity</a>
-  <a class="ml-version-pill active" href="/troubleshooting/sequence-numbers">Sequence Numbers</a>
+  <a class="ml-version-pill" href="/troubleshooting/sequence-numbers">Sequence Numbers</a>
   <a class="ml-version-pill" href="/troubleshooting/logon">Logon Failures</a>
-  <a class="ml-version-pill" href="/troubleshooting/fill-reconciliation">Fill Reconciliation</a>
+  <a class="ml-version-pill active" href="/troubleshooting/fill-reconciliation">Fill Reconciliation</a>
   <a class="ml-version-pill" href="/troubleshooting/rejects">Order Rejects</a>
   <a class="ml-version-pill" href="/troubleshooting/latency">Latency &amp; Timing</a>
   <a class="ml-version-pill" href="/troubleshooting/duplicate-orders">Duplicate Orders</a>
@@ -380,8 +189,6 @@
 </div>
 
 <div class="ml-shell">
-
-  <!-- ── LEFT SIDEBAR ─────────────────────────────────────────── -->
 
   <nav class="ml-left" aria-label="Site navigation">
     <div class="ml-nav-scroll">
@@ -437,7 +244,7 @@
         <span class="ml-msg-code">NET</span>
         <span>Network &amp; Connectivity</span>
       </a>
-      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item active" aria-current="page">
+      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item">
         <span class="ml-msg-code">SEQ</span>
         <span>Sequence Number Issues</span>
       </a>
@@ -445,7 +252,7 @@
         <span class="ml-msg-code">LOG</span>
         <span>Logon Failures</span>
       </a>
-      <a href="/troubleshooting/fill-reconciliation" class="ml-msg-item">
+      <a href="/troubleshooting/fill-reconciliation" class="ml-msg-item active" aria-current="page">
         <span class="ml-msg-code">FIL</span>
         <span>Fill Reconciliation</span>
       </a>
@@ -519,43 +326,41 @@
     </div>
   </nav>
 
-  <!-- ── RIGHT PANEL ─────────────────────────────────────────── -->
-
-  <main class="ml-right" id="ts-sequence-main">
+  <main class="ml-right" id="ts-fills-main">
     <div class="tsn-wrap">
 
       <!-- Page header -->
       <div class="tsn-page-hdr">
         <div class="tsn-page-hdr-top">
-          <span class="tsn-badge">SEQ</span>
+          <span class="tsn-badge">FIL</span>
           <span class="tsn-badge" style="color:#6b7280;background:color-mix(in srgb,#6b7280 8%,transparent);border-color:color-mix(in srgb,#6b7280 25%,transparent)">10 min read</span>
           <span class="tsn-badge" style="color:#6b7280;background:color-mix(in srgb,#6b7280 8%,transparent);border-color:color-mix(in srgb,#6b7280 25%,transparent)">Troubleshooting</span>
         </div>
-        <div class="tsn-page-title">Sequence Number Issues</div>
-        <div class="tsn-page-desc">Diagnose and recover from FIX sequence number problems without disrupting live sessions.</div>
+        <div class="tsn-page-title">Fill Reconciliation</div>
+        <div class="tsn-page-desc">Diagnose missing, duplicate, or mismatched executions between your application and the broker or exchange.</div>
       </div>
 
       <!-- ── SECTION 1: Critical Warning ───────────────────── -->
       <div class="tsn-section">
         <div class="tsn-section-hdr">Critical Warning</div>
         <div class="tsn-callout tsn-callout-danger">
-          <strong>Never reset sequence numbers while orders are live</strong>
+          <strong>A healthy FIX session does not guarantee accurate executions.</strong>
           <div style="margin-top:10px;display:flex;flex-direction:column;gap:4px">
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Confirm no open orders before resetting</span>
+              <span>Verify the order reached the exchange before anything else</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Coordinate with counterparty before any sequence reset</span>
+              <span>Compare every Execution Report (<code>35=8</code>) — not just totals</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Document sequence numbers before and after recovery</span>
+              <span>Match using ExecID (<code>17</code>) before anything else — it is the primary deduplication key</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:0;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Test in certification environment first</span>
+              <span>Never manually book or remove trades until reconciliation is complete</span>
             </label>
           </div>
         </div>
@@ -567,27 +372,27 @@
         <ul class="tsn-checklist">
           <li>
             <span class="tsn-check-num">1</span>
-            <span><strong>Check the error message</strong> — does it say <code>MsgSeqNum too low</code> or <code>MsgSeqNum too high</code>? The direction tells you which side is out of sync.</span>
+            <span><strong>Is the order missing, or just the execution?</strong> Confirm the order was accepted (<code>39=0</code>) before assuming a fill was lost. A rejected order produces no fills.</span>
           </li>
           <li>
             <span class="tsn-check-num">2</span>
-            <span><strong>Note the expected vs received sequence numbers</strong> from the reject message — <code>Tag 45 (RefSeqNum)</code> and <code>Tag 58 (Text)</code> contain the expected and received values.</span>
+            <span><strong>Compare total filled quantity on both sides.</strong> Pull your CumQty and compare it to the broker's position. The difference tells you how many shares are unaccounted for.</span>
           </li>
           <li>
             <span class="tsn-check-num">3</span>
-            <span><strong>Check your outbound sequence counter</strong> — does it match what the counterparty expects? A stale or corrupted sequence store after a restart is the most common cause.</span>
+            <span><strong>Match every ExecID (<code>17</code>).</strong> Build a list of ExecIDs from your logs and compare against the broker's list. A gap identifies the exact execution that was missed.</span>
           </li>
           <li>
             <span class="tsn-check-num">4</span>
-            <span><strong>Check your inbound sequence counter</strong> — are you missing messages from the counterparty? If your counter is behind theirs, you need to send a ResendRequest.</span>
+            <span><strong>Verify CumQty (<code>14</code>) progression.</strong> Each Execution Report should increase CumQty monotonically. A jump or repetition indicates a missing or duplicate message.</span>
           </li>
           <li>
             <span class="tsn-check-num">5</span>
-            <span><strong>Determine if the gap occurred on your side, their side, or both</strong> — this determines whether you send a ResendRequest, respond to theirs, or need a coordinated reset.</span>
+            <span><strong>Check for recent Resend Requests or Gap Fills.</strong> A session recovery during active trading is the most common cause of duplicate or missing executions.</span>
           </li>
           <li>
             <span class="tsn-check-num">6</span>
-            <span><strong>Decide: ResendRequest, GapFill, or Hard Reset</strong> — see Recovery Basics below. Use the least disruptive option first.</span>
+            <span><strong>Compare Drop Copy if available.</strong> Drop Copy is an independent feed — if your order-entry session has a gap, Drop Copy may have the missing Execution Reports.</span>
           </li>
         </ul>
       </div>
@@ -599,152 +404,171 @@
           <table class="tsn-table">
             <thead>
               <tr>
-                <th style="width:210px">Symptom</th>
-                <th style="width:220px">Likely Cause</th>
-                <th>What to Check</th>
+                <th style="width:200px">Symptom</th>
+                <th style="width:200px">Likely Cause</th>
+                <th>First Check</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="mono tsn-badge-err">MsgSeqNum too low</td>
-                <td>Sequence not reset after previous session reset</td>
-                <td>Your outbound counter vs counterparty's expected value</td>
+                <td>Missing execution</td>
+                <td>Execution Report not received</td>
+                <td>Session logs — look for a gap in inbound messages</td>
               </tr>
               <tr>
-                <td class="mono tsn-badge-warn">MsgSeqNum too high</td>
-                <td>Missed inbound messages</td>
-                <td>Send ResendRequest for the missing range</td>
+                <td>Duplicate fill booked</td>
+                <td>Resent message processed twice</td>
+                <td><code>ExecID (17)</code> and <code>PossDupFlag (43)</code></td>
               </tr>
               <tr>
-                <td>Sequence gap on reconnect</td>
-                <td>Abrupt disconnect without Logout</td>
-                <td>Reconnect without <code>ResetSeqNumFlag</code>, then send ResendRequest</td>
+                <td>Quantity mismatch</td>
+                <td>Missing partial fill</td>
+                <td><code>CumQty (14)</code> progression across all Execution Reports</td>
               </tr>
               <tr>
-                <td>Duplicate sequence numbers</td>
-                <td>Counter reset mid-session</td>
-                <td>Audit your sequence storage — file or database</td>
+                <td>Broker shows more fills</td>
+                <td>Session gap during trading</td>
+                <td>Resend Requests and Gap Fill messages in session log</td>
               </tr>
               <tr>
-                <td>Counterparty sends ResendRequest</td>
-                <td>You missed their message</td>
-                <td>Retransmit with <code>PossDupFlag=Y</code></td>
+                <td>Client shows extra fill</td>
+                <td>Duplicate processing of resent message</td>
+                <td>ExecID uniqueness — same ID should only be booked once</td>
               </tr>
               <tr>
-                <td>Both sides out of sync</td>
-                <td>Crash or hard restart</td>
-                <td>Coordinate reset with counterparty, confirm no open orders</td>
+                <td>Average price mismatch</td>
+                <td>One execution missing from sequence</td>
+                <td>Reconstruct AvgPx (<code>6</code>) from individual fill prices</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- ── SECTION 4: Recovery Basics ─────────────────── -->
+      <!-- ── SECTION 4: Key Execution Report Fields ──────── -->
       <div class="tsn-section">
-        <div class="tsn-section-hdr">Recovery Basics</div>
-        <div class="tsn-section-body">
-          <p>Three tools to recover sequence numbers. Use the least disruptive option first.</p>
+        <div class="tsn-section-hdr">Key Execution Report Fields</div>
+        <div class="tsn-section-body" style="margin-bottom:10px">
+          <p>These are the fields used during reconciliation. Pull them for every <code>35=8</code> in the sequence.</p>
         </div>
-        <div class="tsn-table-wrap">
-          <table class="tsn-table">
-            <thead>
-              <tr>
-                <th style="width:220px">Method</th>
-                <th style="width:260px">When to Use</th>
-                <th>Risk</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>ResendRequest</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">35=2</span></td>
-                <td>Gap in inbound messages</td>
-                <td><span class="tsn-badge-ok">Low</span> — no disruption to outbound</td>
-              </tr>
-              <tr>
-                <td><strong>GapFill</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">35=4, GapFillFlag=Y</span></td>
-                <td>Skip administrative messages during resend</td>
-                <td><span class="tsn-badge-ok">Low</span> — standard FIX behavior</td>
-              </tr>
-              <tr>
-                <td><strong>Hard Reset</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">ResetSeqNumFlag=Y</span></td>
-                <td>Both sides confirmed out of sync, no open orders</td>
-                <td><span class="tsn-badge-err">High</span> — must coordinate with counterparty</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="tsn-fix-line">
+          <div class="tsn-fix-row">
+            <span class="tsn-fix-tag">17 (ExecID)</span>
+            <span class="tsn-fix-desc">unique identifier — primary deduplication key; never book the same ExecID twice</span>
+          </div>
+          <div class="tsn-fix-row">
+            <span class="tsn-fix-tag">37 (OrderID)</span>
+            <span class="tsn-fix-desc">exchange-assigned order identifier — links executions back to the order</span>
+          </div>
+          <div class="tsn-fix-row">
+            <span class="tsn-fix-tag">11 (ClOrdID)</span>
+            <span class="tsn-fix-desc">your client order ID — use alongside OrderID to identify which order was filled</span>
+          </div>
+          <div class="tsn-fix-row">
+            <span class="tsn-fix-tag">150 (ExecType)</span>
+            <span class="tsn-fix-desc"><code>F</code> = fill, <code>1</code> = partial fill; filter for these when counting executions</span>
+          </div>
+          <div class="tsn-fix-row">
+            <span class="tsn-fix-tag">32 (LastQty)</span>
+            <span class="tsn-fix-desc">shares filled in this specific execution</span>
+          </div>
+          <div class="tsn-fix-row">
+            <span class="tsn-fix-tag">31 (LastPx)</span>
+            <span class="tsn-fix-desc">price of this specific execution</span>
+          </div>
+          <div class="tsn-fix-row">
+            <span class="tsn-fix-tag">14 (CumQty)</span>
+            <span class="tsn-fix-desc">cumulative shares filled as of this message — should increase monotonically</span>
+          </div>
+          <div class="tsn-fix-row">
+            <span class="tsn-fix-tag">151 (LeavesQty)</span>
+            <span class="tsn-fix-desc">shares still open; CumQty + LeavesQty should always equal the original order quantity</span>
+          </div>
+          <div class="tsn-fix-row">
+            <span class="tsn-fix-tag">6 (AvgPx)</span>
+            <span class="tsn-fix-desc">running average execution price — recalculate manually if a fill is missing</span>
+          </div>
         </div>
-        <div class="tsn-section-body" style="margin-top:12px">
-          <p>Example ResendRequest — <code>Tag 7 (BeginSeqNo)</code> is the first missing message; <code>Tag 16 (EndSeqNo) = 0</code> means through the last sent.</p>
-        </div>
-        <div class="tsn-code">8=FIX.4.2|9=65|35=2|49=CLIENTA|56=BROKRB|34=8|52=20240315-09:35:00|7=5|16=0|10=xxx|</div>
       </div>
 
       <!-- ── SECTION 5: Reading the Logs ─────────────────── -->
       <div class="tsn-section">
         <div class="tsn-section-hdr">Reading the Logs</div>
-        <div class="tsn-code">ERROR: Received MsgSeqNum 47, expected 43
-INFO:  Sending ResendRequest BeginSeqNo=43 EndSeqNo=0
-INFO:  Received Resend: MsgSeqNum=43 PossDupFlag=Y
-INFO:  Received Resend: MsgSeqNum=44 PossDupFlag=Y
-INFO:  Received GapFill: NewSeqNo=47
-INFO:  Session synchronized. Next expected: 47</div>
+        <div class="tsn-section-body" style="margin-bottom:8px">
+          <p><strong>Example 1 — Partial fill Execution Report:</strong></p>
+        </div>
+        <div class="tsn-code">35=8|150=1|39=1|17=ABC12345|32=100|31=185.50|14=300|151=700|</div>
         <ul class="tsn-checklist" style="margin-top:14px">
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span>The gap was inbound — messages 43–46 were missed, likely due to a network blip. Your engine sent a ResendRequest for the range automatically.</span>
+            <span>100 shares executed at 185.50 in this fill.</span>
           </li>
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span><code>PossDupFlag=Y</code> on retransmitted messages — process them but check <code>ExecID (17)</code> for duplicates before applying any fills to your position.</span>
+            <span>CumQty is now 300 — this means 200 shares were filled in earlier Execution Reports. If your position shows less than 300, you are missing at least one prior execution.</span>
           </li>
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span>The GapFill skipped messages 45–46 — the counterparty is telling you those were administrative messages (heartbeats, test requests) that you do not need.</span>
+            <span>700 shares remain open. CumQty + LeavesQty = 1000 — the original order quantity checks out.</span>
+          </li>
+        </ul>
+
+        <div class="tsn-section-body" style="margin-top:20px;margin-bottom:8px">
+          <p><strong>Example 2 — Retransmitted Execution Report:</strong></p>
+        </div>
+        <div class="tsn-code">35=8|17=ABC12345|43=Y|122=20240714-13:45:22|</div>
+        <ul class="tsn-checklist" style="margin-top:14px">
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span><code>PossDupFlag (43) = Y</code> signals this message was retransmitted — it may have already been processed.</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span><code>ExecID = ABC12345</code> is the same as Example 1. If you already booked that ExecID, discard this message. Do not book another fill.</span>
           </li>
         </ul>
       </div>
 
       <!-- ── SECTION 6: Recovery Checklist ──────────────── -->
       <div class="tsn-section">
-        <div class="tsn-section-hdr">Before You Reset</div>
+        <div class="tsn-section-hdr">Recovery Checklist</div>
         <div class="tsn-section-body">
-          <p>Run through this before touching any sequence numbers. A 5-minute check here prevents hours of reconciliation later.</p>
+          <p>Work through this in order. Do not adjust positions until step 8 confirms both sides match.</p>
         </div>
         <div class="tsn-prod-checklist">
-          <div class="tsn-prod-checklist-hdr">Sequence Numbers — Pre-Reset Checklist</div>
+          <div class="tsn-prod-checklist-hdr">Fill Reconciliation — Recovery</div>
           <div class="tsn-prod-checklist-body">
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>No open orders on either side</span>
+              <span>Export all Execution Reports from session logs — every <code>35=8</code> for the affected order</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Counterparty confirmed and ready</span>
+              <span>Compare ExecIDs against broker's list — identify any gaps or duplicates</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Sequence numbers documented — yours and theirs</span>
+              <span>Verify CumQty progression is monotonically increasing with no jumps or repetitions</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Logon will include <code>ResetSeqNumFlag=Y</code></span>
+              <span>Recalculate AvgPx from individual LastQty and LastPx values — confirm it matches both sides</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Both sides start at <code>MsgSeqNum=1</code> after reset</span>
+              <span>Review PossDupFlag on all retransmitted messages — confirm no ExecID was booked twice</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Monitor first 10 messages after reset for sequence errors</span>
+              <span>Compare Drop Copy feed — if your order-entry session had a gap, Drop Copy may have the missing executions</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Update sequence number storage after successful reset</span>
+              <span>Identify the first missing or duplicate execution — resolve from that point forward, not backward</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:0;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Notify operations team if reset occurs during market hours</span>
+              <span>Confirm both sides now reconcile before booking, removing, or correcting any positions</span>
             </label>
           </div>
         </div>
@@ -754,13 +578,13 @@ INFO:  Session synchronized. Next expected: 47</div>
       <div class="tsn-section">
         <div class="tsn-section-hdr">5-Minute Diagnosis</div>
         <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
-          <div style="background:var(--color-sidebar-bg);border-bottom:1px solid var(--border);padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted)">Sequence Numbers — TL;DR</div>
+          <div style="background:var(--color-sidebar-bg);border-bottom:1px solid var(--border);padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted)">Fill Reconciliation — TL;DR</div>
           <ol style="margin:0;padding:14px 16px 14px 32px;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.5;color:var(--text)">
-            <li>Is the error <code>MsgSeqNum too low</code> or <code>too high</code>?</li>
-            <li>What sequence numbers does each side expect?</li>
-            <li>Is the gap on your inbound, your outbound, or both?</li>
-            <li>Can ResendRequest (<code>35=2</code>) or GapFill recover — or is a reset required?</li>
-            <li>Reconcile open orders before changing any sequence state.</li>
+            <li>Who has more fills — you or the broker?</li>
+            <li>Match ExecIDs — are there gaps or duplicates?</li>
+            <li>Does CumQty tell the same story on both sides?</li>
+            <li>Were there Resend Requests or Gap Fills during active trading?</li>
+            <li>Compare Drop Copy before booking or removing any positions.</li>
           </ol>
         </div>
       </div>

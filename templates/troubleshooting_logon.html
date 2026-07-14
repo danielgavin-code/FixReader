@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sequence Number Issues — FIXReader Troubleshooting</title>
-  <meta name="description" content="Diagnose and recover from FIX sequence number problems without disrupting live sessions. ResendRequest, GapFill, and hard reset explained.">
+  <title>Logon Failures — FIXReader Troubleshooting</title>
+  <meta name="description" content="Diagnose why a FIX session is rejected during Logon (35=A), identify the rejection reason, and establish a healthy session.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -123,11 +123,11 @@
       margin: 10px 0;
       border: 1px solid rgba(34, 85, 170, 0.3);
     }
-    .tsn-code .c  { color: #8b949e; }  /* comment */
-    .tsn-code .kw { color: #ff7b72; }  /* keyword */
-    .tsn-code .st { color: #a5d6ff; }  /* string/value */
-    .tsn-code .cm { color: #79c0ff; }  /* command */
-    .tsn-code .nu { color: #f2cc60; }  /* number/tag */
+    .tsn-code .c  { color: #8b949e; }
+    .tsn-code .kw { color: #ff7b72; }
+    .tsn-code .st { color: #a5d6ff; }
+    .tsn-code .cm { color: #79c0ff; }
+    .tsn-code .nu { color: #f2cc60; }
 
     /* ── Inline code ── */
     code {
@@ -370,8 +370,8 @@
 
 <div class="ml-version-bar">
   <a class="ml-version-pill" href="/troubleshooting/network">Network &amp; Connectivity</a>
-  <a class="ml-version-pill active" href="/troubleshooting/sequence-numbers">Sequence Numbers</a>
-  <a class="ml-version-pill" href="/troubleshooting/logon">Logon Failures</a>
+  <a class="ml-version-pill" href="/troubleshooting/sequence-numbers">Sequence Numbers</a>
+  <a class="ml-version-pill active" href="/troubleshooting/logon">Logon Failures</a>
   <a class="ml-version-pill" href="/troubleshooting/fill-reconciliation">Fill Reconciliation</a>
   <a class="ml-version-pill" href="/troubleshooting/rejects">Order Rejects</a>
   <a class="ml-version-pill" href="/troubleshooting/latency">Latency &amp; Timing</a>
@@ -437,11 +437,11 @@
         <span class="ml-msg-code">NET</span>
         <span>Network &amp; Connectivity</span>
       </a>
-      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item active" aria-current="page">
+      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item">
         <span class="ml-msg-code">SEQ</span>
         <span>Sequence Number Issues</span>
       </a>
-      <a href="/troubleshooting/logon" class="ml-msg-item">
+      <a href="/troubleshooting/logon" class="ml-msg-item active" aria-current="page">
         <span class="ml-msg-code">LOG</span>
         <span>Logon Failures</span>
       </a>
@@ -521,41 +521,45 @@
 
   <!-- ── RIGHT PANEL ─────────────────────────────────────────── -->
 
-  <main class="ml-right" id="ts-sequence-main">
+  <main class="ml-right" id="ts-logon-main">
     <div class="tsn-wrap">
 
       <!-- Page header -->
       <div class="tsn-page-hdr">
         <div class="tsn-page-hdr-top">
-          <span class="tsn-badge">SEQ</span>
+          <span class="tsn-badge">LOG</span>
           <span class="tsn-badge" style="color:#6b7280;background:color-mix(in srgb,#6b7280 8%,transparent);border-color:color-mix(in srgb,#6b7280 25%,transparent)">10 min read</span>
           <span class="tsn-badge" style="color:#6b7280;background:color-mix(in srgb,#6b7280 8%,transparent);border-color:color-mix(in srgb,#6b7280 25%,transparent)">Troubleshooting</span>
         </div>
-        <div class="tsn-page-title">Sequence Number Issues</div>
-        <div class="tsn-page-desc">Diagnose and recover from FIX sequence number problems without disrupting live sessions.</div>
+        <div class="tsn-page-title">Logon Failures</div>
+        <div class="tsn-page-desc">Diagnose why a FIX session is rejected during Logon (<code style="font-size:13px">35=A</code>), identify the rejection reason, and establish a healthy session.</div>
       </div>
 
       <!-- ── SECTION 1: Critical Warning ───────────────────── -->
       <div class="tsn-section">
         <div class="tsn-section-hdr">Critical Warning</div>
         <div class="tsn-callout tsn-callout-danger">
-          <strong>Never reset sequence numbers while orders are live</strong>
+          <strong>A successful TCP connection does not mean FIX Logon succeeded.</strong>
           <div style="margin-top:10px;display:flex;flex-direction:column;gap:4px">
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Confirm no open orders before resetting</span>
+              <span>Confirm SenderCompID and TargetCompID exactly match onboarding documentation</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Coordinate with counterparty before any sequence reset</span>
+              <span>Verify Username (<code>553</code>) and Password (<code>554</code>) if required by the exchange</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Document sequence numbers before and after recovery</span>
+              <span>Confirm BeginString matches the exchange specification exactly</span>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
+              <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
+              <span>Check MsgSeqNum before resetting sequence numbers</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:0;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Test in certification environment first</span>
+              <span>Review the Logout (<code>35=5</code>) or Reject (<code>35=3</code>) message before changing any configuration</span>
             </label>
           </div>
         </div>
@@ -567,184 +571,274 @@
         <ul class="tsn-checklist">
           <li>
             <span class="tsn-check-num">1</span>
-            <span><strong>Check the error message</strong> — does it say <code>MsgSeqNum too low</code> or <code>MsgSeqNum too high</code>? The direction tells you which side is out of sync.</span>
+            <span><strong>Did the TCP connection establish successfully?</strong> Use <code>telnet fix-host port</code> or <code>nc -zv fix-host port</code>. If TCP fails, the problem is at the network layer — not FIX.</span>
           </li>
           <li>
             <span class="tsn-check-num">2</span>
-            <span><strong>Note the expected vs received sequence numbers</strong> from the reject message — <code>Tag 45 (RefSeqNum)</code> and <code>Tag 58 (Text)</code> contain the expected and received values.</span>
+            <span><strong>Was Logon (<code>35=A</code>) actually sent?</strong> Check your application's outbound message log. If no Logon appears, the issue is in your engine's startup sequence.</span>
           </li>
           <li>
             <span class="tsn-check-num">3</span>
-            <span><strong>Check your outbound sequence counter</strong> — does it match what the counterparty expects? A stale or corrupted sequence store after a restart is the most common cause.</span>
+            <span><strong>Did the exchange respond with Logout (<code>35=5</code>) or Reject (<code>35=3</code>)?</strong> The <code>Text (58)</code> field almost always says why — read it before anything else.</span>
           </li>
           <li>
             <span class="tsn-check-num">4</span>
-            <span><strong>Check your inbound sequence counter</strong> — are you missing messages from the counterparty? If your counter is behind theirs, you need to send a ResendRequest.</span>
+            <span><strong>Verify SenderCompID (<code>49</code>), TargetCompID (<code>56</code>), and BeginString (<code>8</code>)</strong> — these three fields are case-sensitive and must match the exchange's records exactly.</span>
           </li>
           <li>
             <span class="tsn-check-num">5</span>
-            <span><strong>Determine if the gap occurred on your side, their side, or both</strong> — this determines whether you send a ResendRequest, respond to theirs, or need a coordinated reset.</span>
+            <span><strong>Verify credentials and session hours</strong> — Username (<code>553</code>) and Password (<code>554</code>) if required, and confirm the current time is within the exchange's session window.</span>
           </li>
           <li>
             <span class="tsn-check-num">6</span>
-            <span><strong>Decide: ResendRequest, GapFill, or Hard Reset</strong> — see Recovery Basics below. Use the least disruptive option first.</span>
+            <span><strong>Review sequence numbers before attempting any reset</strong> — a sequence mismatch is common after a hard restart. Check both sides' expected values before touching <code>ResetSeqNumFlag (141)</code>.</span>
           </li>
         </ul>
       </div>
 
-      <!-- ── SECTION 3: Common Problems ──────────────────── -->
+      <!-- ── SECTION 3: Common Logon Problems ───────────── -->
       <div class="tsn-section">
-        <div class="tsn-section-hdr">Common Problems</div>
+        <div class="tsn-section-hdr">Common Logon Problems</div>
         <div class="tsn-table-wrap">
           <table class="tsn-table">
             <thead>
               <tr>
                 <th style="width:210px">Symptom</th>
-                <th style="width:220px">Likely Cause</th>
-                <th>What to Check</th>
+                <th style="width:210px">Likely Cause</th>
+                <th>Check</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="mono tsn-badge-err">MsgSeqNum too low</td>
-                <td>Sequence not reset after previous session reset</td>
-                <td>Your outbound counter vs counterparty's expected value</td>
+                <td>Connection closes immediately</td>
+                <td>Logon never sent</td>
+                <td>Application outbound logs</td>
               </tr>
               <tr>
-                <td class="mono tsn-badge-warn">MsgSeqNum too high</td>
-                <td>Missed inbound messages</td>
-                <td>Send ResendRequest for the missing range</td>
+                <td>Logout immediately after Logon</td>
+                <td>Invalid CompIDs</td>
+                <td>Tags <code>49</code> / <code>56</code> vs onboarding docs</td>
               </tr>
               <tr>
-                <td>Sequence gap on reconnect</td>
-                <td>Abrupt disconnect without Logout</td>
-                <td>Reconnect without <code>ResetSeqNumFlag</code>, then send ResendRequest</td>
+                <td>Reject with invalid credentials</td>
+                <td>Username or password wrong</td>
+                <td>Tags <code>553</code> / <code>554</code></td>
               </tr>
               <tr>
-                <td>Duplicate sequence numbers</td>
-                <td>Counter reset mid-session</td>
-                <td>Audit your sequence storage — file or database</td>
+                <td>Logon rejected due to sequence</td>
+                <td>MsgSeqNum mismatch</td>
+                <td>Tag <code>34</code> — both sides' expected values</td>
               </tr>
               <tr>
-                <td>Counterparty sends ResendRequest</td>
-                <td>You missed their message</td>
-                <td>Retransmit with <code>PossDupFlag=Y</code></td>
+                <td>Session unavailable</td>
+                <td>Outside session hours</td>
+                <td>Exchange schedule for this environment</td>
               </tr>
               <tr>
-                <td>Both sides out of sync</td>
-                <td>Crash or hard restart</td>
-                <td>Coordinate reset with counterparty, confirm no open orders</td>
+                <td>TLS handshake failure</td>
+                <td>Certificate or protocol mismatch</td>
+                <td>TLS configuration and exchange CA trust store</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- ── SECTION 4: Recovery Basics ─────────────────── -->
+      <!-- ── SECTION 4: Required Logon Fields ──────────── -->
       <div class="tsn-section">
-        <div class="tsn-section-hdr">Recovery Basics</div>
-        <div class="tsn-section-body">
-          <p>Three tools to recover sequence numbers. Use the least disruptive option first.</p>
-        </div>
+        <div class="tsn-section-hdr">Required Logon Fields</div>
         <div class="tsn-table-wrap">
           <table class="tsn-table">
             <thead>
               <tr>
-                <th style="width:220px">Method</th>
-                <th style="width:260px">When to Use</th>
-                <th>Risk</th>
+                <th style="width:80px">Tag</th>
+                <th>Purpose</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>ResendRequest</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">35=2</span></td>
-                <td>Gap in inbound messages</td>
-                <td><span class="tsn-badge-ok">Low</span> — no disruption to outbound</td>
+                <td class="mono">8</td>
+                <td>BeginString — FIX version, must match exchange spec exactly</td>
               </tr>
               <tr>
-                <td><strong>GapFill</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">35=4, GapFillFlag=Y</span></td>
-                <td>Skip administrative messages during resend</td>
-                <td><span class="tsn-badge-ok">Low</span> — standard FIX behavior</td>
+                <td class="mono">35=A</td>
+                <td>Logon message type</td>
               </tr>
               <tr>
-                <td><strong>Hard Reset</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">ResetSeqNumFlag=Y</span></td>
-                <td>Both sides confirmed out of sync, no open orders</td>
-                <td><span class="tsn-badge-err">High</span> — must coordinate with counterparty</td>
+                <td class="mono">34</td>
+                <td>MsgSeqNum — 1 for a new session; must match counterparty's expected value</td>
+              </tr>
+              <tr>
+                <td class="mono">49</td>
+                <td>SenderCompID — your assigned ID, case-sensitive, no trailing spaces</td>
+              </tr>
+              <tr>
+                <td class="mono">56</td>
+                <td>TargetCompID — exchange's comp ID, per spec</td>
+              </tr>
+              <tr>
+                <td class="mono">98</td>
+                <td>EncryptMethod — must be <code>0</code> (None) even when using TLS</td>
+              </tr>
+              <tr>
+                <td class="mono">108</td>
+                <td>HeartBtInt — heartbeat interval in seconds; must match exchange config</td>
+              </tr>
+              <tr>
+                <td class="mono">553</td>
+                <td>Username — required by some exchanges; confirm with onboarding documentation</td>
+              </tr>
+              <tr>
+                <td class="mono">554</td>
+                <td>Password — required by some exchanges; confirm with onboarding documentation</td>
+              </tr>
+              <tr>
+                <td class="mono">141</td>
+                <td>ResetSeqNumFlag — only include when performing a coordinated reset; omit otherwise</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="tsn-section-body" style="margin-top:12px">
-          <p>Example ResendRequest — <code>Tag 7 (BeginSeqNo)</code> is the first missing message; <code>Tag 16 (EndSeqNo) = 0</code> means through the last sent.</p>
-        </div>
-        <div class="tsn-code">8=FIX.4.2|9=65|35=2|49=CLIENTA|56=BROKRB|34=8|52=20240315-09:35:00|7=5|16=0|10=xxx|</div>
       </div>
 
-      <!-- ── SECTION 5: Reading the Logs ─────────────────── -->
+      <!-- ── SECTION 5: Reading the Logs ─────────────── -->
       <div class="tsn-section">
         <div class="tsn-section-hdr">Reading the Logs</div>
-        <div class="tsn-code">ERROR: Received MsgSeqNum 47, expected 43
-INFO:  Sending ResendRequest BeginSeqNo=43 EndSeqNo=0
-INFO:  Received Resend: MsgSeqNum=43 PossDupFlag=Y
-INFO:  Received Resend: MsgSeqNum=44 PossDupFlag=Y
-INFO:  Received GapFill: NewSeqNo=47
-INFO:  Session synchronized. Next expected: 47</div>
+        <div class="tsn-section-body" style="margin-bottom:8px">
+          <p><strong>Example 1 — Logon rejected with invalid SenderCompID:</strong></p>
+        </div>
+        <div class="tsn-code">OUT 35=A|49=CLIENT|56=NYSE|34=1|98=0|108=30|
+IN  35=5|58=Invalid SenderCompID|</div>
         <ul class="tsn-checklist" style="margin-top:14px">
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span>The gap was inbound — messages 43–46 were missed, likely due to a network blip. Your engine sent a ResendRequest for the range automatically.</span>
+            <span>TCP succeeded — the session reached the FIX layer and the Logon was received by the exchange.</span>
           </li>
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span><code>PossDupFlag=Y</code> on retransmitted messages — process them but check <code>ExecID (17)</code> for duplicates before applying any fills to your position.</span>
+            <span>The exchange responded with a Logout — <code>Tag 58</code> says exactly why: <code>Invalid SenderCompID</code>.</span>
           </li>
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span>The GapFill skipped messages 45–46 — the counterparty is telling you those were administrative messages (heartbeats, test requests) that you do not need.</span>
+            <span>The network is healthy; the configuration is not. Fix <code>Tag 49</code> before trying again — do not reset sequence numbers.</span>
+          </li>
+        </ul>
+
+        <div class="tsn-section-body" style="margin-top:20px;margin-bottom:8px">
+          <p><strong>Example 2 — No response after Logon:</strong></p>
+        </div>
+        <div class="tsn-code">OUT 35=A|49=CLIENT|56=NYSE|34=1|98=0|108=30|
+<span class="c">(no inbound response)</span>
+<span class="c">TCP disconnect after ~10s</span></div>
+        <div class="tsn-section-body" style="margin-top:10px">
+          <p>Likely causes:</p>
+        </div>
+        <ul class="tsn-checklist">
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>Firewall dropped the Logon before it reached the exchange — run <code>tcpdump</code> to confirm bytes were transmitted</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>TLS handshake failure — the connection was dropped before FIX bytes could be exchanged</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>Session unavailable — the exchange gateway is outside its session window and closed the connection on receipt</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>IP not whitelisted — the exchange accepted the TCP connection then dropped it before processing the Logon</span>
           </li>
         </ul>
       </div>
 
-      <!-- ── SECTION 6: Recovery Checklist ──────────────── -->
+      <!-- ── SECTION 6: Before Contacting the Exchange ── -->
       <div class="tsn-section">
-        <div class="tsn-section-hdr">Before You Reset</div>
+        <div class="tsn-section-hdr">Before Contacting the Exchange</div>
         <div class="tsn-section-body">
-          <p>Run through this before touching any sequence numbers. A 5-minute check here prevents hours of reconciliation later.</p>
+          <p>Collect these before opening a ticket or calling support. Most exchange support teams will ask for all of them immediately.</p>
+        </div>
+        <ul class="tsn-checklist">
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>SenderCompID used in the Logon</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>TargetCompID used in the Logon</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>BeginString (FIX version)</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>MsgSeqNum sent in the Logon</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>HeartBtInt value</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>Username used (if applicable)</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>Timestamp of the failed Logon attempt (UTC)</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>Full outbound Logon message (raw FIX)</span>
+          </li>
+          <li>
+            <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
+            <span>Full inbound Logout or Reject response (raw FIX), if any</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ── SECTION 7: Recovery Checklist ──────────────── -->
+      <div class="tsn-section">
+        <div class="tsn-section-hdr">Recovery Checklist</div>
+        <div class="tsn-section-body">
+          <p>Work through this before retrying the Logon. Retrying with the same misconfiguration produces the same result.</p>
         </div>
         <div class="tsn-prod-checklist">
-          <div class="tsn-prod-checklist-hdr">Sequence Numbers — Pre-Reset Checklist</div>
+          <div class="tsn-prod-checklist-hdr">Logon Failures — Pre-Retry Checklist</div>
           <div class="tsn-prod-checklist-body">
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>No open orders on either side</span>
+              <span>Verify configuration before resetting sequence numbers</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Counterparty confirmed and ready</span>
+              <span>Confirm exchange session hours for this environment (UAT hours often differ from production)</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Sequence numbers documented — yours and theirs</span>
+              <span>Validate credentials — Username and Password exactly as provided by the exchange</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Logon will include <code>ResetSeqNumFlag=Y</code></span>
+              <span>Compare SenderCompID and TargetCompID with onboarding documentation character-by-character</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Both sides start at <code>MsgSeqNum=1</code> after reset</span>
+              <span>Review Reject or Logout <code>Text (58)</code> — it usually names the exact field that failed</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Monitor first 10 messages after reset for sequence errors</span>
+              <span>Coordinate <code>ResetSeqNumFlag (141)</code> with counterparty if a sequence reset is required</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Update sequence number storage after successful reset</span>
+              <span>Retry Logon and confirm the outbound message in logs matches expected configuration</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:0;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>Notify operations team if reset occurs during market hours</span>
+              <span>Confirm heartbeat exchange within the first <code>HeartBtInt</code> seconds after successful Logon</span>
             </label>
           </div>
         </div>
@@ -754,13 +848,13 @@ INFO:  Session synchronized. Next expected: 47</div>
       <div class="tsn-section">
         <div class="tsn-section-hdr">5-Minute Diagnosis</div>
         <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
-          <div style="background:var(--color-sidebar-bg);border-bottom:1px solid var(--border);padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted)">Sequence Numbers — TL;DR</div>
+          <div style="background:var(--color-sidebar-bg);border-bottom:1px solid var(--border);padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted)">Logon Failures — TL;DR</div>
           <ol style="margin:0;padding:14px 16px 14px 32px;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.5;color:var(--text)">
-            <li>Is the error <code>MsgSeqNum too low</code> or <code>too high</code>?</li>
-            <li>What sequence numbers does each side expect?</li>
-            <li>Is the gap on your inbound, your outbound, or both?</li>
-            <li>Can ResendRequest (<code>35=2</code>) or GapFill recover — or is a reset required?</li>
-            <li>Reconcile open orders before changing any sequence state.</li>
+            <li>Is TCP up? (<code>telnet</code> or <code>nc</code> to the FIX port)</li>
+            <li>Did Logon go out? (check outbound application logs)</li>
+            <li>What was the first response — Logout (<code>35=5</code>), Reject (<code>35=3</code>), or silence?</li>
+            <li>Network, configuration, or sequence?</li>
+            <li>Only reset after you've proven recovery isn't possible.</li>
           </ol>
         </div>
       </div>
