@@ -529,11 +529,7 @@ def message_builder():
 
 @app.route('/troubleshooting/network')
 def ts_network():
-    return render_template('stub.html', **_ctx(
-        page_title='Network & Connectivity',
-        page_description='Diagnosing FIX network and connectivity issues.',
-        active_nav='network',
-    ))
+    return render_template('troubleshooting_network.html', **_ctx(active_nav='network'))
 
 
 @app.route('/troubleshooting/sequence-numbers')
