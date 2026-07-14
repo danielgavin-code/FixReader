@@ -3193,6 +3193,8 @@ code {
 .ml-msg-item.active .ml-msg-code {
   background: var(--color-accent); color: #fff; border-color: var(--color-accent);
 }
+a.ml-msg-item { text-decoration: none; }
+a.ml-version-pill { text-decoration: none; display: inline-flex; align-items: center; }
 
 /* Right panel */
 .ml-right {

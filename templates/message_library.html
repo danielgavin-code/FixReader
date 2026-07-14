@@ -259,18 +259,18 @@ function buildNav() {
     if (!visible.length) continue;
     html += `<div class="ml-cat-hdr">${esc(cat.label)}</div>`;
     for (const m of visible) {
-      html += `<div class="ml-msg-item${rareVer ? ' ml-msg-item-rare' : ''}" data-code="${esc(m.code)}" onclick="selectMsg('${esc(m.code)}')">
+      html += `<a href="/message-library#msg-${esc(m.code)}" style="text-decoration:none;color:inherit;display:block" onclick="event.preventDefault()"><div class="ml-msg-item${rareVer ? ' ml-msg-item-rare' : ''}" data-code="${esc(m.code)}" onclick="selectMsg('${esc(m.code)}')">
         <span class="ml-msg-code">${esc(m.code)}</span>
         <span>${esc(m.name)}</span>
-      </div>`;
+      </div></a>`;
     }
   }
   html += `<div class="ml-appendix-nav-hdr">Appendix</div>`;
   for (const item of REF_ITEMS) {
-    html += `<div class="ml-appendix-item" data-ref="${item.code}" onclick="selectRefItem('${item.code}')">
+    html += `<a href="/message-library#ref-${item.code}" style="text-decoration:none;color:inherit;display:block" onclick="event.preventDefault()"><div class="ml-appendix-item" data-ref="${item.code}" onclick="selectRefItem('${item.code}')">
       <span class="ml-msg-code">${esc(item.badge)}</span>
       <span>${esc(item.label)}</span>
-    </div>`;
+    </div></a>`;
   }
   document.getElementById('ml-nav').innerHTML = html;
 }
