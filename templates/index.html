@@ -499,7 +499,7 @@
 
 
 <script>
-const FIX_TAG_REF = {{ tag_ref_json | safe }};
+const FIXREADER_TAG_ENUM = {{ tag_ref_json | safe }};
 
 const SAMPLES = {
   new_order:      '8=FIX.4.2|9=178|35=D|49=ACME|56=NYSE|34=4|52=20060324-17:45:00|11=CL12345|21=1|55=AAPL|54=1|38=100|40=2|44=185.50|10=050|',
@@ -1282,7 +1282,7 @@ function renderDecoded(data) {
     const rowCls = analysis.flaggedTags.has(f.tag)
       ? (`${esc(f.highlight)} hl-flagged`).trim()
       : esc(f.highlight);
-    const ref = FIX_TAG_REF[String(f.tag)];
+    const ref = FIXREADER_TAG_ENUM[String(f.tag)];
     const valHint = ref && ref.valid_values && ref.valid_values[f.value]
       ? ref.valid_values[f.value] : '';
     const valCell = valHint
