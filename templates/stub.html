@@ -41,7 +41,6 @@
     <ul class="nav-links" role="list">
       <li><a href="/tools" class="nav-item{% if active_nav == 'tools' %} active{% endif %}">Tools</a></li>
       <li><a href="/tools/cert-scripts" class="nav-item{% if active_nav == 'cert-scripts' %} active{% endif %}">Cert Scripts</a></li>
-      <li><a href="/learn" class="nav-item{% if active_nav == 'learn' %} active{% endif %}">Learn FIX</a></li>
       <li><a href="/troubleshooting" class="nav-item{% if active_nav == 'troubleshooting' %} active{% endif %}">Troubleshooting</a></li>
       <li><a href="/message-library" class="nav-item{% if active_nav == 'library' %} active{% endif %}">FIX Specs</a></li>
       <li><a href="/exchange-specs" class="nav-item{% if active_nav == 'exchange-specs' %} active{% endif %}">Exchange Specs</a></li>
@@ -86,13 +85,7 @@
   </div>
 </nav>
 
-{% if active_nav == 'learn' %}
-<div class="ml-version-bar">
-  <a class="ml-version-pill{% if page_title == 'FIX Protocol 101' %} active{% endif %}" href="/learn/fix-protocol-101">FIX Protocol 101</a>
-  <a class="ml-version-pill{% if page_title == 'Message Types Guide' %} active{% endif %}" href="/learn/message-types-guide">Message Types Guide</a>
-  <a class="ml-version-pill{% if page_title == 'Session Management' %} active{% endif %}" href="/learn/session-management">Session Management</a>
-</div>
-{% elif active_nav in ('network', 'sequence-numbers', 'logon', 'fill-reconciliation', 'rejects', 'latency', 'duplicate-orders', 'gap-fill') %}
+{% if active_nav in ('network', 'sequence-numbers', 'logon', 'fill-reconciliation', 'rejects', 'latency', 'duplicate-orders', 'gap-fill') %}
 <div class="ml-version-bar">
   <a class="ml-version-pill {% if active_nav == 'network' %}active{% endif %}" href="/troubleshooting/network">Network &amp; Connectivity</a>
   <a class="ml-version-pill {% if active_nav == 'sequence-numbers' %}active{% endif %}" href="/troubleshooting/sequence-numbers">Sequence Numbers</a>
@@ -187,20 +180,6 @@
       <a href="/cert/allocation" class="ml-msg-item{% if active_nav == 'allocation' %} active{% endif %}">
         <span class="ml-msg-code">ALC</span>
         <span>Allocation</span>
-      </a>
-
-      <div class="ml-cat-hdr">Learn FIX</div>
-      <a href="/learn/fix-protocol-101" class="ml-msg-item{% if active_nav == 'fix-protocol-101' %} active{% endif %}">
-        <span class="ml-msg-code">101</span>
-        <span>FIX Protocol 101</span>
-      </a>
-      <a href="/learn/message-types-guide" class="ml-msg-item{% if page_title == 'Message Types Guide' %} active{% endif %}">
-        <span class="ml-msg-code">MSG</span>
-        <span>Message Types Guide</span>
-      </a>
-      <a href="/learn/session-management" class="ml-msg-item{% if page_title == 'Session Management' %} active{% endif %}">
-        <span class="ml-msg-code">SES</span>
-        <span>Session Management</span>
       </a>
 
       <div class="ml-cat-hdr">Troubleshooting</div>

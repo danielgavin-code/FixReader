@@ -278,10 +278,6 @@ def compare():
                            **_ctx(preview=request.args.get('preview')))
 
 
-@app.route('/learn')
-def learn():
-    return redirect('/learn/fix-protocol-101')
-
 
 @app.route('/troubleshooting')
 def troubleshooting():
@@ -486,31 +482,6 @@ def tag_reference(tag_number):
 @app.route('/fix-specs')
 def fix_specs_redirect():
     return redirect('/message-library')
-
-
-@app.route('/learn/fix-protocol-101')
-def learn_fix_protocol_101():
-    return render_template('stub.html', **_ctx(
-        page_title='FIX Protocol 101',
-        page_description='Introduction to the FIX Protocol for financial technology practitioners.',
-        active_nav='fix-protocol-101',
-    ))
-
-
-@app.route('/learn/message-types-guide')
-def learn_message_types_guide():
-    return stub('Message Types Guide', 'Every FIX message type explained — from New Order Single to Execution Report — with required fields, valid values, and real-world context.', 'learn')
-
-
-@app.route('/learn/session-management')
-def learn_session_management():
-    return stub('Session Management', 'How FIX sessions connect, authenticate, and recover — Logon, Heartbeat, ResendRequest, and the full sequence-number lifecycle.', 'learn')
-
-
-@app.route('/learn/fix-glossary')
-def learn_fix_glossary():
-    return stub('FIX Glossary', 'Plain-English definitions for every FIX term — from BeginString to execType — with cross-references to relevant tags and message types.', 'learn')
-
 
 
 
