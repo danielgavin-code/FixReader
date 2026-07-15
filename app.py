@@ -611,17 +611,17 @@ def ts_rejects():
 
 @app.route('/troubleshooting/latency')
 def ts_latency():
-    return render_template('stub.html', **_ctx(page_title='Latency & Timing', page_description='Diagnosing FIX message latency and timing issues.', active_nav='latency'))
+    return render_template('troubleshooting_latency.html', **_ctx(active_nav='latency'))
 
 
 @app.route('/troubleshooting/duplicate-orders')
 def ts_duplicates():
-    return render_template('stub.html', **_ctx(page_title='Duplicate Orders', page_description='Identifying and preventing duplicate FIX orders.', active_nav='duplicate-orders'))
+    return render_template('troubleshooting_duplicate_orders.html', **_ctx(active_nav='duplicate-orders'))
 
 
 @app.route('/troubleshooting/gap-fill')
 def ts_gapfill():
-    return render_template('stub.html', **_ctx(page_title='Gap Fill & Resend', page_description='Understanding FIX gap fill and resend request procedures.', active_nav='gap-fill'))
+    return render_template('troubleshooting_gap_fill.html', **_ctx(active_nav='gap-fill'))
 
 
 if __name__ == '__main__':
