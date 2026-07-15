@@ -123,7 +123,7 @@ const SEARCH_INDEX = [
   { type:'troubleshooting', title:'Sequence Number Issues', subtitle:'Troubleshooting', url:'/troubleshooting/sequence-numbers', aliases:['sequence numbers','seq num','msgseqnum','out of sequence','gap','resend'] },
   { type:'troubleshooting', title:'Logon Failures', subtitle:'Troubleshooting', url:'/troubleshooting/logon', aliases:['logon failure','login failure','logon reject','session reject logon'] },
   { type:'troubleshooting', title:'Fill Reconciliation', subtitle:'Troubleshooting', url:'/troubleshooting/fill-reconciliation', aliases:['fill reconciliation','fill recon','cumqty mismatch','lastqty','missing fill'] },
-  { type:'troubleshooting', title:'Order Rejects', subtitle:'Troubleshooting', url:'/troubleshooting/rejects', aliases:['order rejects','reject','execution report reject','ordstatus 8'] },
+  { type:'troubleshooting', title:'Order Rejects', subtitle:'Troubleshooting', url:'/troubleshooting/rejects', aliases:['order rejects','rejected order','reject','execution report reject','ordstatus 8','150=8','39=8','35=3','35=j','35=9','371','373','duplicate clordid','invalid account','invalid symbol','risk reject','session reject','ord rej reason','ordrejmreason','business message reject','bmr'] },
   { type:'troubleshooting', title:'Duplicate Orders', subtitle:'Troubleshooting', url:'/troubleshooting/duplicate-orders', aliases:['duplicate orders','duplicate clordid','duplicate order','resend order'] },
   { type:'troubleshooting', title:'Gap Fill & Resend', subtitle:'Troubleshooting', url:'/troubleshooting/gap-fill', aliases:['gap fill','resend request','sequence gap','missing messages'] },
 ];

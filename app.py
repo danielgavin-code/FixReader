@@ -606,7 +606,7 @@ def ts_fills():
 
 @app.route('/troubleshooting/rejects')
 def ts_rejects():
-    return render_template('stub.html', **_ctx(page_title='Order Rejects', page_description='Understanding and resolving FIX order rejects.', active_nav='rejects'))
+    return render_template('troubleshooting_order_rejects.html', **_ctx(active_nav='rejects'))
 
 
 @app.route('/troubleshooting/latency')
