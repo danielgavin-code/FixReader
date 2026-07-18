@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback — FIXReader</title>
+  <meta name="description" content="Report bugs, incorrect FIX information, broken links, search issues, and suggestions for FIXReader.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css">
+  {{ theme_vars | safe }}
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230f1c2e'/%3E%3Ctext x='16' y='23' font-family='Arial%2Csans-serif' font-size='22' font-weight='800' fill='%233b82f6' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+  <style>
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+    .ml-shell { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+    .ml-left  { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; padding: 0; border-right: 1px solid var(--border); }
+    .ml-nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 40px; }
+    .ml-right { flex: 1; min-width: 0; overflow-y: auto; }
+    a.ml-msg-item { text-decoration: none; }
+    @media (max-width: 680px) {
+      .ml-shell { flex-direction: column; overflow: auto; }
+      .ml-left  { width: 100%; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
+      .ml-nav-scroll { max-height: 220px; overflow-y: auto; }
+      .ml-right { overflow: visible; }
+    }
+
+    .fb-page { padding: 30px 36px 72px; max-width: 640px; }
+    .fb-h1 { font-size: 24px; font-weight: 800; color: var(--text); line-height: 1.2; margin: 0 0 10px; }
+    .fb-lead { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin: 0 0 28px; }
+    .fb-section { margin-bottom: 28px; }
+    .fb-section-title {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--color-accent);
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 6px; margin-bottom: 14px;
+    }
+    .fb-list {
+      list-style: none; margin: 0; padding: 0;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .fb-list li {
+      display: flex; align-items: baseline; gap: 10px;
+      font-size: 14px; color: var(--text); line-height: 1.5;
+    }
+    .fb-list li::before {
+      content: ''; display: inline-block; width: 5px; height: 5px;
+      border-radius: 50%; flex-shrink: 0;
+      background: var(--color-accent); margin-top: 4px; align-self: flex-start;
+    }
+    .fb-email {
+      font-size: 14px; color: var(--text); margin: 0;
+      font-family: var(--mono); letter-spacing: 0.01em;
+    }
+    .fb-email a { color: var(--color-accent); text-decoration: none; }
+    .fb-email a:hover { text-decoration: underline; }
+    @media (max-width: 680px) { .fb-page { padding: 20px 18px 48px; } }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="logo-mark"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></div>
+      <div class="logo-tagline">Understand FIX. Solve problems. Move faster.</div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="/tools" class="nav-item">Tools</a></li>
+      <li><a href="/tools/cert-scripts" class="nav-item">Cert Scripts</a></li>
+      <li><a href="/troubleshooting" class="nav-item">Troubleshooting</a></li>
+      <li><a href="/message-library" class="nav-item">FIX Specs</a></li>
+      <li><a href="/exchange-specs" class="nav-item">Exchange Specs</a></li>
+      <li><a href="/resources" class="nav-item">Resources</a></li>
+    </ul>
+    {% if theme_info.name != 'default' %}
+    <div class="nav-end">
+      <div class="nav-theme">
+        <span class="nav-theme-emoji">{{ theme_info.emoji }}</span>
+        <div class="nav-theme-text">
+          <div class="nav-theme-line1">
+            {% if theme_info.type == 'birthday' %}
+            <span class="nav-theme-label">Happy Birthday,</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.person_name }}!</a>
+            {% else %}
+            <span class="nav-theme-label">Today's Theme:</span>
+            <a href="/themes-admin" class="nav-theme-name">{{ theme_info.display_name }}</a>
+            {% endif %}
+          </div>
+          <div class="nav-theme-line2">
+            {% if theme_info.type == 'birthday' %}
+            {{ theme_info.subtitle }}{% if theme_info.wiki_url %} · <a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% else %}
+            {% if theme_info.date %}{{ theme_info.date }}{% if theme_info.subtitle %} · {% endif %}{% endif %}{% if theme_info.subtitle %}{{ theme_info.subtitle }}{% if theme_info.wiki_url %} · {% endif %}{% endif %}{% if theme_info.wiki_url %}<a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <div class="nav-search" id="nav-search-wrap">
+      <div class="nav-search-inner">
+        <svg class="nav-search-icon" viewBox="0 0 16 16" fill="none">
+          <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <input type="search" class="nav-search-input" id="nav-search-input" placeholder="Search tags, messages..." autocomplete="off" spellcheck="false">
+        <span class="nav-search-kbd" id="nav-search-kbd">⌘K</span>
+      </div>
+      <div class="nav-search-dropdown" id="nav-search-dropdown" style="display:none"></div>
+    </div>
+  </div>
+</nav>
+
+<div class="ml-shell">
+
+  <nav class="ml-left" aria-label="Site navigation">
+    <div class="ml-nav-scroll">
+
+      <div class="ml-cat-hdr">Tools</div>
+      <a href="/" class="ml-msg-item">
+        <span class="ml-msg-code">DCO</span>
+        <span>FIX Decoder</span>
+      </a>
+      <a href="/compare" class="ml-msg-item">
+        <span class="ml-msg-code">CMP</span>
+        <span>Compare Messages</span>
+      </a>
+      <a href="/tools/message-builder" class="ml-msg-item">
+        <span class="ml-msg-code">BLD</span>
+        <span>Message Builder</span>
+      </a>
+      <a href="/tools/tag-validator" class="ml-msg-item">
+        <span class="ml-msg-code">VAL</span>
+        <span>Tag Validator</span>
+      </a>
+
+      <div class="ml-cat-hdr">Cert Scripts</div>
+      <a href="/tools/order-entry" class="ml-msg-item">
+        <span class="ml-msg-code">ORD</span>
+        <span>Order Entry</span>
+      </a>
+      <a href="/tools/drop-copy" class="ml-msg-item">
+        <span class="ml-msg-code">DRP</span>
+        <span>Drop Copy</span>
+      </a>
+      <a href="/tools/allocation" class="ml-msg-item">
+        <span class="ml-msg-code">ALC</span>
+        <span>Allocation</span>
+      </a>
+
+      <div class="ml-cat-hdr">Troubleshooting</div>
+      <a href="/troubleshooting/network" class="ml-msg-item">
+        <span class="ml-msg-code">NET</span>
+        <span>Network &amp; Connectivity</span>
+      </a>
+      <a href="/troubleshooting/sequence-numbers" class="ml-msg-item">
+        <span class="ml-msg-code">SEQ</span>
+        <span>Sequence Number Issues</span>
+      </a>
+      <a href="/troubleshooting/logon" class="ml-msg-item">
+        <span class="ml-msg-code">LOG</span>
+        <span>Logon Failures</span>
+      </a>
+      <a href="/troubleshooting/fill-reconciliation" class="ml-msg-item">
+        <span class="ml-msg-code">FIL</span>
+        <span>Fill Reconciliation</span>
+      </a>
+      <a href="/troubleshooting/rejects" class="ml-msg-item">
+        <span class="ml-msg-code">REJ</span>
+        <span>Order Rejects</span>
+      </a>
+      <a href="/troubleshooting/latency" class="ml-msg-item">
+        <span class="ml-msg-code">LAT</span>
+        <span>Latency &amp; Timing</span>
+      </a>
+      <a href="/troubleshooting/duplicate-orders" class="ml-msg-item">
+        <span class="ml-msg-code">DUP</span>
+        <span>Duplicate Orders</span>
+      </a>
+      <a href="/troubleshooting/gap-fill" class="ml-msg-item">
+        <span class="ml-msg-code">GAP</span>
+        <span>Gap Fill &amp; Resend</span>
+      </a>
+
+      <div class="ml-cat-hdr">FIX Specs</div>
+      <a href="/message-library" class="ml-msg-item">
+        <span class="ml-msg-code">4.2</span>
+        <span>FIX 4.2</span>
+      </a>
+      <a href="/message-library" class="ml-msg-item">
+        <span class="ml-msg-code">4.4</span>
+        <span>FIX 4.4</span>
+      </a>
+      <a href="/message-library" class="ml-msg-item">
+        <span class="ml-msg-code">5.0</span>
+        <span>FIX 5.0</span>
+      </a>
+
+      <div class="ml-cat-hdr">Exchange Specs</div>
+      <a href="/exchange-specs" class="ml-msg-item">
+        <span class="ml-msg-code">XNYS</span>
+        <span>NYSE</span>
+      </a>
+      <a href="/exchange-specs" class="ml-msg-item">
+        <span class="ml-msg-code">XNAS</span>
+        <span>NASDAQ</span>
+      </a>
+      <a href="/exchange-specs" class="ml-msg-item">
+        <span class="ml-msg-code">ARCX</span>
+        <span>NYSE Arca</span>
+      </a>
+      <a href="/exchange-specs" class="ml-msg-item">
+        <span class="ml-msg-code">XCBO</span>
+        <span>CBOE BZX</span>
+      </a>
+      <a href="/exchange-specs" class="ml-msg-item">
+        <span class="ml-msg-code">EDGX</span>
+        <span>EDGX</span>
+      </a>
+      <a href="/exchange-specs" class="ml-msg-item">
+        <span class="ml-msg-code">EDGA</span>
+        <span>EDGA</span>
+      </a>
+      <a href="/exchange-specs" class="ml-msg-item">
+        <span class="ml-msg-code">IEXG</span>
+        <span>IEX</span>
+      </a>
+
+      <div class="ml-cat-hdr">Resources</div>
+      <a href="/resources" class="ml-msg-item">
+        <span class="ml-msg-code">RES</span>
+        <span>Resources</span>
+      </a>
+
+    </div>
+  </nav>
+
+  <main class="ml-right">
+    <div class="fb-page">
+
+      <h1 class="fb-h1">Feedback</h1>
+      <p class="fb-lead">Help improve FIXReader by reporting any of the following.</p>
+
+      <div class="fb-section">
+        <div class="fb-section-title">What to report</div>
+        <ul class="fb-list">
+          <li>Incorrect FIX protocol information</li>
+          <li>Bugs</li>
+          <li>Broken pages or links</li>
+          <li>Search issues</li>
+          <li>Accessibility issues</li>
+          <li>Suggestions for improving FIXReader</li>
+        </ul>
+      </div>
+
+      <div class="fb-section">
+        <div class="fb-section-title">Send feedback</div>
+        <p class="fb-email"><a href="mailto:feedback@fixreader.org?subject=FIXReader.org%20Feedback">feedback@fixreader.org</a></p>
+      </div>
+
+    </div>
+  </main>
+
+</div><!-- /ml-shell -->
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
+    <div class="footer-links">
+      <a href="/feedback" class="footer-link" aria-current="page">Feedback</a>
+    </div>
+    <span class="footer-copy">© 2026 FIXReader.org</span>
+  </div>
+</footer>
+
+<script src="/static/js/search.js"></script>
+</body>
+</html>

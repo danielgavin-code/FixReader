@@ -457,6 +457,11 @@ def about():
     return redirect('/')
 
 
+@app.route('/feedback')
+def feedback():
+    return render_template('feedback.html', **_ctx())
+
+
 @app.route('/tag/<int:tag_number>')
 def tag_reference(tag_number):
     try:
@@ -533,26 +538,14 @@ def field_reference_redirect():
 
 @app.route('/tag-validator')
 @app.route('/validator')
-def tag_validator():
-    return stub(
-        'Tag Validator',
-        'Paste a FIX message and check it against the spec — required tags, valid values, '
-        'sequence rules, and message-type constraints all flagged in one pass. Catch '
-        'issues before they hit a counterparty.',
-        'tag-validator',
-    )
+def tag_validator_redirect():
+    return redirect('/tools/tag-validator')
 
 
 @app.route('/message-builder')
 @app.route('/builder')
-def message_builder():
-    return stub(
-        'Message Builder',
-        'Build valid FIX messages from scratch. Select a message type, fill in required '
-        'fields, and export the result as a raw FIX string or JSON — with real-time '
-        'validation as you go.',
-        'message-builder',
-    )
+def message_builder_redirect():
+    return redirect('/tools/message-builder')
 
 
 @app.route('/troubleshooting/network')
