@@ -95,13 +95,13 @@
       </div>
     </div>
     {% endif %}
-    <div class="nav-search" id="nav-search-wrap">
+    <div class="nav-search" id="nav-search-wrap" role="search">
       <div class="nav-search-inner">
         <svg class="nav-search-icon" viewBox="0 0 16 16" fill="none">
           <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/>
           <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
         </svg>
-        <input type="search" class="nav-search-input" id="nav-search-input" placeholder="Search tags, messages..." autocomplete="off" spellcheck="false">
+        <input type="search" class="nav-search-input" id="nav-search-input" aria-label="Search tags and messages" placeholder="Search tags, messages..." autocomplete="off" spellcheck="false">
         <span class="nav-search-kbd" id="nav-search-kbd">⌘K</span>
       </div>
       <div class="nav-search-dropdown" id="nav-search-dropdown" style="display:none"></div>
@@ -246,11 +246,12 @@
     </div>
   </nav>
   <main class="ml-right" id="main-content">
+    <h1 class="sr-only">FIX Decoder</h1>
 
     <!-- Input card -->
     <div class="card input-card">
       <div class="editor-header">
-        <span class="editor-header-label">Paste Your FIX Message</span>
+        <span class="editor-header-label" id="decoder-label">Paste Your FIX Message</span>
         <div class="examples-wrap">
           <button type="button" class="examples-btn" id="examples-btn">EXAMPLES ▾</button>
           <div class="examples-drop" id="examples-drop" style="display:none">
@@ -284,6 +285,7 @@
             name="fix_message"
             class="editor-input"
             rows="8"
+            aria-labelledby="decoder-label"
             placeholder="8=FIX.4.2|9=178|35=D|49=ACME|56=NYSE|34=4|52=20060324-17:45:00|11=12345|21=1|55=IBM|54=1|38=100|40=2|44=15.00|10=050|"
             spellcheck="false"
             autocomplete="off"

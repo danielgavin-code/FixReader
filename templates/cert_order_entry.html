@@ -404,13 +404,13 @@
       </div>
     </div>
     {% endif %}
-    <div class="nav-search" id="nav-search-wrap">
+    <div class="nav-search" id="nav-search-wrap" role="search">
       <div class="nav-search-inner">
         <svg class="nav-search-icon" viewBox="0 0 16 16" fill="none">
           <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/>
           <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
         </svg>
-        <input type="search" class="nav-search-input" id="nav-search-input" placeholder="Search tags, messages..." autocomplete="off" spellcheck="false">
+        <input type="search" class="nav-search-input" id="nav-search-input" aria-label="Search tags and messages" placeholder="Search tags, messages..." autocomplete="off" spellcheck="false">
         <span class="nav-search-kbd" id="nav-search-kbd">⌘K</span>
       </div>
       <div class="nav-search-dropdown" id="nav-search-dropdown" style="display:none"></div>
@@ -531,7 +531,7 @@
       <!-- Header -->
       <div class="ck-hdr">
         <div class="ck-hdr-left">
-          <div class="ck-title">Order Entry Certification</div>
+          <h1 class="ck-title">Order Entry Certification</h1>
           <div class="ck-subtitle">FIX 4.2 · US Equity Venues · Exchange Connectivity Certification</div>
         </div>
       </div>
@@ -557,11 +557,11 @@
 
       <!-- Filters -->
       <div class="ck-filters">
-        <input type="text" class="ck-search" id="searchInput" placeholder="Search tasks…" oninput="applyFilters()">
-        <select class="ck-filter-sel" id="sectionFilter" onchange="applyFilters()">
+        <input type="text" class="ck-search" id="searchInput" aria-label="Search tasks" placeholder="Search tasks…" oninput="applyFilters()">
+        <select class="ck-filter-sel" id="sectionFilter" aria-label="Filter by section" onchange="applyFilters()">
           <option value="">All Sections</option>
         </select>
-        <select class="ck-filter-sel" id="statusFilter" onchange="applyFilters()">
+        <select class="ck-filter-sel" id="statusFilter" aria-label="Filter by status" onchange="applyFilters()">
           <option value="">All Statuses</option>
           <option value="not-started">Not Started</option>
           <option value="in-progress">In Progress</option>
@@ -570,13 +570,13 @@
           <option value="blocked">Blocked</option>
           <option value="na">N/A</option>
         </select>
-        <select class="ck-filter-sel" id="levelFilter" onchange="applyFilters()">
+        <select class="ck-filter-sel" id="levelFilter" aria-label="Filter by level" onchange="applyFilters()">
           <option value="">All Levels</option>
           <option value="basic">Self-Verified</option>
           <option value="intermediate">Exchange Required</option>
           <option value="advanced">Coordinated</option>
         </select>
-        <select class="ck-filter-sel" id="reqFilter" onchange="applyFilters()">
+        <select class="ck-filter-sel" id="reqFilter" aria-label="Filter by requirement type" onchange="applyFilters()">
           <option value="">All Types</option>
           <option value="true">Required</option>
           <option value="false">Optional</option>

@@ -292,13 +292,13 @@
       </div>
     </div>
     {% endif %}
-    <div class="nav-search" id="nav-search-wrap">
+    <div class="nav-search" id="nav-search-wrap" role="search">
       <div class="nav-search-inner">
         <svg class="nav-search-icon" viewBox="0 0 16 16" fill="none">
           <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4"/>
           <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
         </svg>
-        <input type="search" class="nav-search-input" id="nav-search-input" placeholder="Search tags, messages..." autocomplete="off" spellcheck="false">
+        <input type="search" class="nav-search-input" id="nav-search-input" aria-label="Search tags and messages" placeholder="Search tags, messages..." autocomplete="off" spellcheck="false">
         <span class="nav-search-kbd" id="nav-search-kbd">⌘K</span>
       </div>
       <div class="nav-search-dropdown" id="nav-search-dropdown" style="display:none"></div>
@@ -438,12 +438,13 @@
   </nav>
 
   <main class="ml-right" id="val-main">
+    <h1 class="sr-only">Tag Validator</h1>
     <div class="val-wrap">
 
       <!-- Input card -->
       <div class="val-card">
         <div class="val-header-bar">
-          <span class="val-header-label">Paste Your FIX Message</span>
+          <span class="val-header-label" id="val-label">Paste Your FIX Message</span>
           <div class="val-examples-wrap">
             <button class="val-examples-btn" id="val-examples-btn">EXAMPLES ▾</button>
             <div class="val-examples-drop" id="val-examples-drop" style="display:none">
@@ -456,7 +457,7 @@
         </div>
 
         <div class="val-inputs">
-          <textarea id="val-input" class="val-textarea" spellcheck="false" autocomplete="off"
+          <textarea id="val-input" class="val-textarea" aria-labelledby="val-label" spellcheck="false" autocomplete="off"
             placeholder="8=FIX.4.2|9=148|35=D|49=CLIENTA|56=BROKRB|34=1|52=20240315-09:30:00.000|11=ORD-001|21=1|55=AAPL|54=1|38=500|40=2|44=178.50|59=0|60=20240315-09:30:00.000|10=128|"></textarea>
         </div>
 
