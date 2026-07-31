@@ -270,9 +270,13 @@
             <button type="button" class="examples-drop-item" data-msg="logon" role="menuitem">Logon <span class="ed-badge">35=A</span></button>
             <button type="button" class="examples-drop-item" data-msg="logout" role="menuitem">Logout <span class="ed-badge">35=5</span></button>
             <button type="button" class="examples-drop-item" data-msg="heartbeat" role="menuitem">Heartbeat <span class="ed-badge">35=0</span></button>
+            <button type="button" class="examples-drop-item" data-msg="test_request" role="menuitem">Test Request <span class="ed-badge">35=1</span></button>
+            <button type="button" class="examples-drop-item" data-msg="resend_request" role="menuitem">Resend Request <span class="ed-badge">35=2</span></button>
+            <button type="button" class="examples-drop-item" data-msg="sequence_reset" role="menuitem">Sequence Reset <span class="ed-badge">35=4</span></button>
             <div class="examples-drop-sep" role="separator"></div>
+            <button type="button" class="examples-drop-item" data-msg="cancel_reject" role="menuitem">Order Cancel Reject <span class="ed-badge">35=9</span></button>
             <button type="button" class="examples-drop-item" data-msg="md_request" role="menuitem">Market Data Request <span class="ed-badge">35=V</span></button>
-            <button type="button" class="examples-drop-item" data-msg="reject" role="menuitem">Reject <span class="ed-badge">35=3</span></button>
+            <button type="button" class="examples-drop-item" data-msg="reject" role="menuitem">Session Reject <span class="ed-badge">35=3</span></button>
           </div>
         </div>
       </div>
@@ -298,7 +302,6 @@
           <div class="btn-group">
             <button type="button" class="btn-subtle" id="btn-clear">Clear</button>
             <button type="button" class="btn-subtle" id="btn-export-csv">Export CSV</button>
-            <button type="button" class="btn-subtle" id="btn-export-xlsx">Export Excel</button>
           </div>
           <div class="btn-group">
             <button type="submit" class="btn-decode">DECODE MESSAGE</button>
@@ -499,6 +502,10 @@ const SAMPLES = {
   heartbeat:      '8=FIX.4.2|9=52|35=0|49=ACME|56=NYSE|34=12|52=20060324-17:50:00|10=110|',
   md_request:     '8=FIX.4.2|9=102|35=V|49=ACME|56=NYSE|34=20|52=20060324-17:55:00|262=MDR001|263=1|264=1|267=2|269=0|269=1|55=IBM|10=199|',
   reject:         '8=FIX.4.2|9=103|35=3|49=NYSE|56=ACME|34=10|52=20060324-17:44:59|45=3|371=35|372=D|373=11|58=Invalid MsgType|10=066|',
+  test_request:   '8=FIX.4.2|9=75|35=1|49=CLIENTA|56=BROKRB|34=12|52=20240315-09:35:00.000|112=TESTREQ-001|10=031|',
+  resend_request: '8=FIX.4.2|9=67|35=2|49=CLIENTA|56=BROKRB|34=13|52=20240315-09:36:00.000|7=5|16=0|10=188|',
+  sequence_reset: '8=FIX.4.2|9=74|35=4|49=BROKRB|56=CLIENTA|34=1|52=20240315-09:37:00.000|123=Y|36=20|10=155|',
+  cancel_reject:  '8=FIX.4.2|9=155|35=9|49=BROKRB|56=CLIENTA|34=5|52=20240315-09:45:05.000|11=CXL-001|37=BRKORD-001|39=2|41=ORD-001|434=1|58=Order already filled|10=177|',
 };
 
 // ── DOM refs ──
@@ -506,6 +513,9 @@ const editorInput  = document.getElementById('fix-message');
 const decodeBtn    = document.querySelector('.btn-decode');
 // True while a multi-message timeline is active — locks analysis sections to log summary
 let _multiMode = false;
+// Last decoded result — used for CSV export
+let _lastDecodedFields = [];
+let _lastDecodedMsgType = '';
 
 // ── Sample loading ──
 function loadSample(key, autoSubmit) {
@@ -581,17 +591,23 @@ document.querySelectorAll('[data-autosubmit="true"]').forEach(el => {
   el.addEventListener('click', e => { e.preventDefault(); loadSample(el.dataset.msg, true); });
 });
 
-// ── Copy raw ──
-const copyBtn = document.getElementById('copy-raw');
-if (copyBtn) {
-  copyBtn.addEventListener('click', () => {
-    if (editorInput && editorInput.value) {
-      navigator.clipboard.writeText(editorInput.value).then(() => {
-        const orig = copyBtn.innerHTML;
-        copyBtn.textContent = 'Copied!';
-        setTimeout(() => { copyBtn.innerHTML = orig; }, 1800);
-      });
+// ── Export CSV ──
+const exportCsvBtn = document.getElementById('btn-export-csv');
+if (exportCsvBtn) {
+  exportCsvBtn.addEventListener('click', () => {
+    if (!_lastDecodedFields.length) return;
+    const rows = [['Tag', 'Field Name', 'Value', 'Decoded Value', 'Section']];
+    for (const f of _lastDecodedFields) {
+      rows.push([f.tag, f.name, f.value, f.enum_value || '', f.section]);
     }
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `fix_${_lastDecodedMsgType || 'message'}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   });
 }
 
@@ -632,8 +648,9 @@ const MSG_TYPE_CAT = {
 const SIDE_DISP = {'1':'Buy','2':'Sell','5':'Sell Short','6':'SS Exempt','3':'Buy Minus','4':'Sell Plus'};
 
 function parseFIXQuick(raw) {
+  const normalized = raw.replace(/\^A/g, '\x01');
   const fm = {};
-  for (const pair of raw.split(/[|\x01]/)) {
+  for (const pair of normalized.split(/[|\x01]/)) {
     const i = pair.indexOf('=');
     if (i > 0) fm[pair.slice(0, i).trim()] = pair.slice(i + 1).trim();
   }
@@ -990,10 +1007,12 @@ function iconFor(type, style) {
   })[type] || '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="2"/></svg>';
 }
 
-function reqDot(f) {
-  return f.section !== 'body'
-    ? '<span class="req-check" title="Required">✓</span>'
-    : '';
+function reqDot(f, msgType) {
+  if (f.section !== 'body') return '<span class="req-check" title="Required">✓</span>';
+  const tagRef = FIXREADER_TAG_ENUM[String(f.tag)];
+  if (!tagRef || !tagRef.required_in) return '';
+  const isReq = tagRef.required_in.some(ri => ri.code === msgType || ri.code === 'All');
+  return isReq ? '<span class="req-check" title="Required for this message type">✓</span>' : '';
 }
 
 function formatLatency(ms) {
@@ -1187,6 +1206,8 @@ function buildAnalysis(fmap, summary) {
 
 function renderDecoded(data) {
   const { fields, summary } = data;
+  _lastDecodedFields = fields;
+  _lastDecodedMsgType = summary.msg_type_val;
   const fmap = {};
   for (const f of fields) fmap[f.tag] = f.value;
 
@@ -1296,7 +1317,7 @@ function renderDecoded(data) {
          <span class="tag-name-wrap" data-tooltip="${esc(f.description)}">${esc(f.name)}</span>
        </td>
        <td class="tag-val">${valCell}</td>
-       <td class="tag-req">${reqDot(f)}</td>
+       <td class="tag-req">${reqDot(f, summary.msg_type_val)}</td>
      </tr>`;
   }).join('');
 

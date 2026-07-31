@@ -331,6 +331,7 @@ HIGHLIGHT_TAGS = {
 # ── Core decode function ───────────────────────────────────────────────────────
 def _strip_log_prefix(s):
     import re
+    s = s.replace('^A', '\x01')  # normalize caret-A notation to SOH
     m = re.search(r'8=FIXT?\.\d', s)
     if not m:
         return s

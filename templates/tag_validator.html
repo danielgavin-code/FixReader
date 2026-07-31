@@ -451,7 +451,15 @@
               <button class="val-examples-item" onclick="valExLoad('new_order')">New Order Single <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=D</span></button>
               <button class="val-examples-item" onclick="valExLoad('exec_report')">Execution Report <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=8</span></button>
               <button class="val-examples-item" onclick="valExLoad('cancel_request')">Order Cancel Request <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=F</span></button>
+              <button class="val-examples-item" onclick="valExLoad('cancel_replace')">Order Cancel/Replace <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=G</span></button>
+              <button class="val-examples-item" onclick="valExLoad('cancel_reject')">Order Cancel Reject <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=9</span></button>
               <button class="val-examples-item" onclick="valExLoad('logon')">Logon <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=A</span></button>
+              <button class="val-examples-item" onclick="valExLoad('logout')">Logout <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=5</span></button>
+              <button class="val-examples-item" onclick="valExLoad('heartbeat')">Heartbeat <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=0</span></button>
+              <button class="val-examples-item" onclick="valExLoad('test_request')">Test Request <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=1</span></button>
+              <button class="val-examples-item" onclick="valExLoad('resend_request')">Resend Request <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=2</span></button>
+              <button class="val-examples-item" onclick="valExLoad('sequence_reset')">Sequence Reset <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=4</span></button>
+              <button class="val-examples-item" onclick="valExLoad('reject')">Session Reject <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=3</span></button>
             </div>
           </div>
         </div>
@@ -534,9 +542,17 @@ for (const tag of TAG_LIST) {
 // Examples
 const VAL_SAMPLES = {
   new_order:      '8=FIX.4.2|9=148|35=D|49=CLIENTA|56=BROKRB|34=1|52=20240315-09:30:00.000|11=ORD-001|21=1|55=AAPL|54=1|38=500|40=2|44=178.50|59=0|60=20240315-09:30:00.000|10=128|',
-  exec_report:    '8=FIX.4.2|9=196|35=8|49=BROKRB|56=CLIENTA|34=6|52=20240315-09:31:00.000|11=ORD-001|17=EXEC-001|20=0|39=1|54=1|55=AAPL|38=500|32=200|31=178.45|14=200|6=178.45|151=300|60=20240315-09:31:00.000|10=112|',
+  exec_report:    '8=FIX.4.2|9=222|35=8|49=BROKRB|56=CLIENTA|34=2|52=20240315-09:30:00.100|11=ORD-001|17=EXEC-001|37=BRKORD-001|150=0|39=0|55=AAPL|54=1|38=500|40=2|44=178.50|32=0|31=0.00|151=500|14=0|6=0.00|60=20240315-09:30:00.100|10=033|',
   cancel_request: '8=FIX.4.2|9=140|35=F|49=CLIENTA|56=BROKRB|34=5|52=20240315-09:45:00.000|11=CXL-001|41=ORD-001|55=AAPL|54=1|38=500|60=20240315-09:45:00.000|10=054|',
+  cancel_replace: '8=FIX.4.2|9=175|35=G|49=CLIENTA|56=BROKRB|34=3|52=20240315-09:33:00.000|11=REP-001|41=ORD-001|55=AAPL|54=1|38=300|40=2|44=179.00|59=0|60=20240315-09:33:00.000|10=089|',
+  cancel_reject:  '8=FIX.4.2|9=155|35=9|49=BROKRB|56=CLIENTA|34=5|52=20240315-09:45:05.000|11=CXL-001|37=BRKORD-001|39=2|41=ORD-001|434=1|58=Order already filled|10=177|',
   logon:          '8=FIX.4.2|9=73|35=A|49=CLIENTA|56=BROKRB|34=1|52=20240315-09:00:00.000|98=0|108=30|10=049|',
+  logout:         '8=FIX.4.2|9=76|35=5|49=CLIENTA|56=BROKRB|34=20|52=20240315-09:40:00.000|58=Goodbye|10=211|',
+  heartbeat:      '8=FIX.4.2|9=57|35=0|49=BROKRB|56=CLIENTA|34=15|52=20240315-09:30:00.000|10=202|',
+  test_request:   '8=FIX.4.2|9=75|35=1|49=CLIENTA|56=BROKRB|34=12|52=20240315-09:35:00.000|112=TESTREQ-001|10=031|',
+  resend_request: '8=FIX.4.2|9=67|35=2|49=CLIENTA|56=BROKRB|34=13|52=20240315-09:36:00.000|7=5|16=0|10=188|',
+  sequence_reset: '8=FIX.4.2|9=74|35=4|49=BROKRB|56=CLIENTA|34=1|52=20240315-09:37:00.000|123=Y|36=20|10=155|',
+  reject:         '8=FIX.4.2|9=103|35=3|49=BROKRB|56=CLIENTA|34=10|52=20240315-09:30:02.000|45=1|371=38|372=D|373=5|58=Required tag missing|10=099|',
 };
 
 function esc(s) {
@@ -544,10 +560,11 @@ function esc(s) {
 }
 
 function _stripLogPrefix(raw) {
-  const m = raw.match(/8=FIXT?\.\d/);
-  if (!m) return raw;
-  let s = raw.slice(m.index);
-  const end = s.match(/10=\d{3}[\|\\x01]?/);
+  const normalized = raw.replace(/\^A/g, '\x01');
+  const m = normalized.match(/8=FIXT?\.\d/);
+  if (!m) return normalized;
+  let s = normalized.slice(m.index);
+  const end = s.match(/10=\d{3}[\|\x01]?/);
   if (end) s = s.slice(0, end.index + end[0].length);
   return s;
 }
@@ -595,15 +612,26 @@ function valRun() {
   // Track which required tags we've seen
   const seenTags = new Set(ordered.map(o => parseInt(o.tag, 10)));
 
+  // Count occurrences of each tag for duplicate detection
+  const tagOccurrenceCount = {};
+  for (const { tag } of ordered) tagOccurrenceCount[tag] = (tagOccurrenceCount[tag] || 0) + 1;
+  const tagSeenSoFar = {};
+
   // Build result rows for each parsed tag
   const rows = [];
   let nValid = 0, nWarn = 0, nError = 0, nUnknown = 0;
 
   for (const { tag, val } of ordered) {
+    tagSeenSoFar[tag] = (tagSeenSoFar[tag] || 0) + 1;
+    const isDuplicate = tagOccurrenceCount[tag] > 1 && tagSeenSoFar[tag] > 1;
     const tagDef = FIX_TAGS[tag];
     let status, cls, note;
 
-    if (!tagDef) {
+    if (isDuplicate) {
+      status = 'ERROR'; cls = 'val-badge-error';
+      note = `Duplicate — tag ${tag} appears ${tagOccurrenceCount[tag]} times`;
+      nError++;
+    } else if (!tagDef) {
       status = 'UNKNOWN'; cls = 'val-badge-unknown'; note = 'Tag not in FIX reference data';
       nUnknown++;
     } else {
@@ -620,7 +648,7 @@ function valRun() {
     }
 
     const tagNum = parseInt(tag, 10);
-    const rowCls = status === 'WARNING' ? 'val-row-warn' : (status === 'UNKNOWN' ? '' : '');
+    const rowCls = status === 'ERROR' ? 'val-row-missing' : (status === 'WARNING' ? 'val-row-warn' : '');
     const name = tagDef ? tagDef.name : '';
     const vvHint = tagDef && tagDef.valid_values && tagDef.valid_values[val]
       ? ` — ${tagDef.valid_values[val]}` : '';
@@ -632,6 +660,29 @@ function valRun() {
       <td><span class="val-badge ${cls}">${status}</span></td>
       <td class="val-notes">${esc(note)}</td>
     </tr>`);
+  }
+
+  // Tag ordering checks — tag 8 must be first, tag 10 must be last
+  if (ordered.length > 0) {
+    if (ordered[0].tag !== '8') {
+      rows.unshift(`<tr class="val-row-missing">
+        <td>8</td><td class="val-field-name">BeginString</td>
+        <td class="val-missing-val">must be first</td>
+        <td><span class="val-badge val-badge-error">ERROR</span></td>
+        <td class="val-notes">Tag 8 (BeginString) must be the first field in every FIX message</td>
+      </tr>`);
+      nError++;
+    }
+    const lastTag = ordered[ordered.length - 1].tag;
+    if (lastTag !== '10' && seenTags.has(10)) {
+      rows.push(`<tr class="val-row-warn">
+        <td>10</td><td class="val-field-name">CheckSum</td>
+        <td class="val-missing-val">not last</td>
+        <td><span class="val-badge val-badge-warn">WARNING</span></td>
+        <td class="val-notes">Tag 10 (CheckSum) must be the last field in every FIX message</td>
+      </tr>`);
+      nWarn++;
+    }
   }
 
   // Missing required tags

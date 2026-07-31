@@ -630,6 +630,7 @@
                 <option value="0">Heartbeat (0)</option>
                 <option value="1">Test Request (1)</option>
                 <option value="2">Resend Request (2)</option>
+                <option value="4">Sequence Reset (4)</option>
                 <option value="5">Logout (5)</option>
               </optgroup>
               <optgroup label="ORDER ENTRY">
@@ -640,9 +641,13 @@
               </optgroup>
               <optgroup label="EXECUTION">
                 <option value="8">Execution Report (8)</option>
+                <option value="9">Order Cancel Reject (9)</option>
               </optgroup>
               <optgroup label="POST-TRADE">
                 <option value="J">Allocation Instruction (J)</option>
+              </optgroup>
+              <optgroup label="ADMIN">
+                <option value="j">Business Message Reject (j)</option>
               </optgroup>
             </select>
             <button class="bld-btn-autogen" onclick="bldAutogenerate()">AUTOGENERATE</button>
@@ -713,6 +718,7 @@
         </div>
         <div class="bld-actions">
           <button class="bld-btn-clear" onclick="bldClear()">Clear</button>
+          <button class="bld-btn-clear" onclick="bldSendToDecoder()" id="bld-decode-btn" style="display:none">DECODE THIS</button>
           <button class="bld-btn-build" onclick="bldBuild()">BUILD MESSAGE</button>
         </div>
       </div>
@@ -888,7 +894,16 @@ function bldUpdateOutput() {
 
 function bldBuild() {
   bldUpdateOutput();
-  document.getElementById('bld-output').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  const out = document.getElementById('bld-output');
+  out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (out.value) document.getElementById('bld-decode-btn').style.display = '';
+}
+
+function bldSendToDecoder() {
+  const out = document.getElementById('bld-output');
+  if (!out.value) return;
+  sessionStorage.setItem('mlSample', out.value);
+  window.location.href = '/';
 }
 
 function bldClear() {
@@ -988,6 +1003,7 @@ function bldCustomLookup(el, id) {
 }
 
 function bldStripLogPrefix(s) {
+  s = s.replace(/\^A/g, '\x01');
   const m = s.match(/8=FIXT?\.\d/);
   if (!m) return s;
   s = s.slice(m.index);
