@@ -698,28 +698,4 @@ const FIXREADER_TAG_ENUM = {
     }
   });
 
-  /* Global ⌘F / Ctrl+F shortcut */
-  document.addEventListener('keydown', function(e) {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
-      const active = document.activeElement;
-      if (active && active !== input && (
-        active.tagName === 'INPUT' ||
-        active.tagName === 'TEXTAREA' ||
-        active.isContentEditable ||
-        active.classList.contains('editor-input') ||
-        active.classList.contains('cmp-textarea') ||
-        active.classList.contains('val-textarea') ||
-        active.classList.contains('bld-input')
-      )) return;
-      e.preventDefault();
-      input.focus();
-      input.select();
-    }
-  });
-
-  /* Platform-aware kbd label */
-  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-  const kbd = document.getElementById('nav-search-kbd');
-  if (kbd) kbd.textContent = isMac ? '⌘F' : 'Ctrl F';
-
 })();
