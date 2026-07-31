@@ -654,8 +654,8 @@
                 <td>BeginString — FIX version, must match exchange spec exactly</td>
               </tr>
               <tr>
-                <td class="mono">35=A</td>
-                <td>Logon message type</td>
+                <td class="mono">35</td>
+                <td>MsgType — value <code>A</code> identifies this as a Logon message</td>
               </tr>
               <tr>
                 <td class="mono">34</td>
@@ -846,8 +846,8 @@ IN  35=5|58=Invalid SenderCompID|</div>
             <li>Is TCP up? (<code>telnet</code> or <code>nc</code> to the FIX port)</li>
             <li>Did Logon go out? (check outbound application logs)</li>
             <li>What was the first response — Logout (<code>35=5</code>), Reject (<code>35=3</code>), or silence?</li>
-            <li>Network, configuration, or sequence?</li>
-            <li>Only reset after you've proven recovery isn't possible.</li>
+            <li>Is the failure network-related, a configuration error, or a sequence number mismatch?</li>
+            <li>Only reset sequence numbers after confirming message recovery is not possible.</li>
           </ol>
         </div>
       </div>

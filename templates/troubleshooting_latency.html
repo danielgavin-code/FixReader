@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Latency &amp; Timing — FIXReader</title>
-  <meta name="description" content="Diagnose slow order acknowledgements, delayed executions, timestamp mismatches, and clock-synchronization problems across a FIX workflow.">
+  <meta name="description" content="Diagnose slow order acknowledgments, delayed executions, timestamp mismatches, and clock synchronization problems across a FIX workflow.">
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -318,7 +318,7 @@
           <span class="tsn-badge" style="color:#6b7280;background:color-mix(in srgb,#6b7280 8%,transparent);border-color:color-mix(in srgb,#6b7280 25%,transparent)">Troubleshooting</span>
         </div>
         <h1 class="tsn-page-title">Latency &amp; Timing</h1>
-        <div class="tsn-page-desc">Diagnose slow order acknowledgements, delayed executions, timestamp mismatches, and clock-synchronization problems across a FIX workflow.</div>
+        <div class="tsn-page-desc">Diagnose slow order acknowledgments, delayed executions, timestamp mismatches, and clock synchronization problems across a FIX workflow.</div>
       </div>
 
       <!-- ── SECTION 1: Critical Warning ───────────────────── -->
@@ -326,7 +326,7 @@
         <div class="tsn-section-hdr">Critical Warning</div>
         <div class="tsn-callout tsn-callout-danger">
           <strong>Do not treat every timestamp difference as exchange latency.</strong>
-          <p style="margin:10px 0 6px">A delayed acknowledgement may be caused by:</p>
+          <p style="margin:10px 0 6px">A delayed acknowledgment may be caused by:</p>
           <ul style="margin:0 0 12px 0;padding:0 0 0 18px;display:flex;flex-direction:column;gap:4px;font-size:13px">
             <li>application queuing</li>
             <li>FIX-engine queuing</li>
@@ -410,7 +410,7 @@
           </li>
           <li>
             <span class="tsn-check-num">4</span>
-            <span><strong>Measure from outbound send time to inbound acknowledgement time.</strong> Use the <code>52</code> on the outbound message and the receipt timestamp on the inbound <code>35=8</code>.</span>
+            <span><strong>Measure from outbound send time to inbound acknowledgment time.</strong> Use the <code>52</code> on the outbound message and the receipt timestamp on the inbound <code>35=8</code>.</span>
           </li>
           <li>
             <span class="tsn-check-num">5</span>
@@ -447,7 +447,7 @@
                 <td>Host clock and application logic</td>
               </tr>
               <tr>
-                <td>Slow order acknowledgement</td>
+                <td>Slow order acknowledgment</td>
                 <td>Network, risk, broker, or exchange delay</td>
                 <td>Outbound <code>52</code> vs inbound receipt time</td>
               </tr>
@@ -500,7 +500,7 @@
               <li>FIX send-to-wire delay</li>
               <li>network transit time</li>
               <li>broker or exchange processing time</li>
-              <li>round-trip order acknowledgement time</li>
+              <li>round-trip order acknowledgment time</li>
               <li>execution-report delivery time</li>
             </ul>
             <p style="margin:0"><strong>Use a clear start timestamp and end timestamp.</strong> "The order was slow" is not a measurement.</p>
@@ -524,11 +524,11 @@ IN  13:30:00.188 35=8|11=ABC123|150=0|39=0|</div>
           </li>
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span>FIX send-to-acknowledgement delay: 43 ms (outbound <code>52</code> → inbound receipt).</span>
+            <span>FIX send-to-acknowledgment delay: 43 ms (outbound <code>52</code> → inbound receipt).</span>
           </li>
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span>End-to-end order creation-to-acknowledgement: 68 ms.</span>
+            <span>End-to-end order creation-to-acknowledgment: 68 ms.</span>
           </li>
         </ul>
 
@@ -607,7 +607,7 @@ IN  13:30:00.188 35=8|11=ABC123|150=0|39=0|</div>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">
-              <span>measure outbound <code>52</code> to inbound acknowledgement receipt time</span>
+              <span>measure outbound <code>52</code> to inbound acknowledgment receipt time</span>
             </label>
             <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:8px;">
               <input type="checkbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--color-accent);width:16px;height:16px;cursor:pointer;">

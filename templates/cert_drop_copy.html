@@ -309,7 +309,7 @@ const ROWS = [
   { section:'s1', step:'1.2', area:'Network',     task:'Verify TCP connectivity from trading host to drop copy destination IP and port — telnet or port-scan to confirm reachability', level:'basic', req:true },
   { section:'s1', step:'1.3', area:'Config',      task:'Configure drop copy FIX session in engine with dedicated SenderCompID/TargetCompID — verify no config overlap with order entry session', level:'basic', req:true },
   { section:'s1', step:'1.4', area:'Session',     task:'Send Logon (35=A) on drop copy session — verify exchange acknowledges and session reaches active state', level:'basic', req:true },
-  { section:'s1', step:'1.5', area:'Session',     task:'Send Logout (35=5) on drop copy session — verify clean termination and exchange acknowledgement', level:'basic', req:true },
+  { section:'s1', step:'1.5', area:'Session',     task:'Send Logout (35=5) on drop copy session — verify clean termination and exchange acknowledgment', level:'basic', req:true },
   { section:'s1', step:'1.6', area:'Session',     task:'Verify Heartbeat (35=0) exchange on drop copy session at configured HeartBtInt interval', level:'basic', req:true },
 
   // ── Session Layer
@@ -318,8 +318,8 @@ const ROWS = [
   { section:'s2', step:'2.3', area:'Heartbeat',   task:'Verify bidirectional Heartbeat (35=0) on drop copy session — send and receive at HeartBtInt, confirm TestReqID echoed correctly', level:'basic', req:true },
   { section:'s2', step:'2.4', area:'Test Request', task:'Send Test Request (35=1) with TestReqID on drop copy session — verify exchange returns matching Heartbeat with same TestReqID', level:'basic', req:true },
   { section:'s2', step:'2.5', area:'Sequence',    task:'Verify drop copy session sequence numbers increment independently from order entry session and are tracked separately', level:'basic', req:true },
-  { section:'s2', step:'2.6', area:'Recovery',    task:'Trigger ResendRequest (35=2) on drop copy session — verify exchange replays missed Execution Reports with PossDupFlag=Y', level:'intermediate', req:true },
-  { section:'s2', step:'2.7', area:'Recovery',    task:'Test Sequence Reset (35=4) with GapFillFlag=Y on drop copy — verify sequence gap is bridged and session continuity restored', level:'intermediate', req:true },
+  { section:'s2', step:'2.6', area:'Recovery',    task:'Trigger Resend Request (35=2) on drop copy session — verify exchange replays missed Execution Reports with PossDupFlag (43) = Y', level:'intermediate', req:true },
+  { section:'s2', step:'2.7', area:'Recovery',    task:'Test Sequence Reset (35=4) with GapFillFlag (123) = Y on drop copy — verify sequence gap is bridged and session continuity restored', level:'intermediate', req:true },
 
   // ── Execution Report Reception
   { section:'s3', step:'3.1', area:'ExecType',    task:'Receive New Acknowledgement (35=8, ExecType=0, OrdStatus=0) on drop copy — verify ClOrdID, OrderID, Symbol match order entry session', level:'basic', req:true },
@@ -334,7 +334,7 @@ const ROWS = [
   // ── Sequencing & Timing
   { section:'s4', step:'4.1', area:'Timing',      task:'Verify case where drop copy Execution Report arrives before order entry Execution Report — confirm system handles out-of-order receipt without errors', level:'intermediate', req:true },
   { section:'s4', step:'4.2', area:'Timing',      task:'Verify case where drop copy Execution Report arrives after order entry — confirm delayed delivery reconciliation still succeeds', level:'basic', req:true },
-  { section:'s4', step:'4.3', area:'Sequencing',  task:'Receive duplicate Execution Report (PossDupFlag=Y, Tag 43=Y) on drop copy — verify system deduplicates by ExecID without double-booking fills', level:'intermediate', req:true },
+  { section:'s4', step:'4.3', area:'Sequencing',  task:'Receive duplicate Execution Report with PossDupFlag (43) = Y on drop copy — verify system deduplicates by ExecID without double-booking fills', level:'intermediate', req:true },
   { section:'s4', step:'4.4', area:'Timing',      task:'Receive late fill on drop copy after order entry session has already processed the fill — verify late-arrival reconciliation handles the gap', level:'intermediate', req:true },
   { section:'s4', step:'4.5', area:'Recovery',    task:'Disconnect and reconnect drop copy session while orders are active on order entry — verify gap fill restores all missed Execution Reports', level:'intermediate', req:true },
   { section:'s4', step:'4.6', area:'Sequencing',  task:'Verify PossDupFlag=Y (Tag 43) handling on replayed drop copy messages — confirm ExecID deduplication logic prevents duplicate position updates', level:'intermediate', req:true },
@@ -342,7 +342,7 @@ const ROWS = [
   // ── Multi-Order Scenarios
   { section:'s5', step:'5.1', area:'Multi-Order', task:'Submit multiple concurrent orders via order entry — verify all corresponding Execution Reports appear on drop copy session with correct ClOrdID mapping', level:'basic', req:true },
   { section:'s5', step:'5.2', area:'Lifecycle',   task:'Submit order, send replace, then receive fill on drop copy — verify ExecType sequence: New (0) → Replaced (5) → Fill (1 or 2)', level:'basic', req:true },
-  { section:'s5', step:'5.3', area:'Lifecycle',   task:'Submit order, receive partial fill, then cancel remainder on drop copy — verify CumQty plus LeavesQty accounting through cancel acknowledgement', level:'basic', req:true },
+  { section:'s5', step:'5.3', area:'Lifecycle',   task:'Submit order, receive partial fill, then cancel remainder on drop copy — verify CumQty plus LeavesQty accounting through cancel acknowledgment', level:'basic', req:true },
   { section:'s5', step:'5.4', area:'Lifecycle',   task:'Submit order, receive multiple partial fills to full fill on drop copy — verify CumQty and AvgPx (6) accumulate correctly across all fill reports', level:'basic', req:true },
   { section:'s5', step:'5.5', area:'TIF',         task:'Submit IOC order (TimeInForce=3) on order entry — verify immediate fill or cancel Execution Report appears correctly on drop copy session', level:'basic', req:true },
   { section:'s5', step:'5.6', area:'TIF',         task:'Submit FOK order (TimeInForce=4) on order entry — verify all-or-nothing fill or kill Execution Report appears correctly on drop copy session', level:'basic', req:true },
@@ -350,12 +350,12 @@ const ROWS = [
   { section:'s5', step:'5.8', area:'Market',      task:'Submit market order (OrdType=1) on order entry — verify fill Execution Report on drop copy contains LastPx set to actual execution price', level:'basic', req:true },
 
   // ── Advanced & Recovery
-  { section:'s6', step:'6.1', area:'Recovery',    task:'Disconnect drop copy session, reconnect after brief outage — verify ResendRequest issued and all Execution Reports received during downtime are restored', level:'intermediate', req:true },
+  { section:'s6', step:'6.1', area:'Recovery',    task:'Disconnect drop copy session, reconnect after brief outage — verify Resend Request (35=2) issued and all Execution Reports received during downtime are restored', level:'intermediate', req:true },
   { section:'s6', step:'6.2', area:'Recovery',    task:'Simulate high-volume trading burst, introduce drop copy session gap — verify all Execution Reports recovered via gap fill without loss or duplication', level:'intermediate', req:true },
   { section:'s6', step:'6.3', area:'Recovery',    task:'Simulate exchange restart scenario — reconnect drop copy session and verify open order Execution Reports are replayed with PossDupFlag=Y', level:'intermediate', req:true },
   { section:'s6', step:'6.4', area:'Recovery',    task:'Reset drop copy session sequence numbers with ResetSeqNumFlag=Y on Logon — verify exchange accepts reset and session initializes at sequence 1 cleanly', level:'intermediate', req:true },
   { section:'s6', step:'6.5', area:'Recovery',    task:'Simultaneously disconnect order entry and drop copy sessions — reconnect both and verify fill reconciliation across both sessions is fully consistent', level:'advanced', req:true },
-  { section:'s6', step:'6.6', area:'Sequencing',  task:'Receive drop copy Execution Report with sequence number ahead of expected — verify gap detection triggers ResendRequest for missing messages', level:'intermediate', req:true },
+  { section:'s6', step:'6.6', area:'Sequencing',  task:'Receive drop copy Execution Report with sequence number ahead of expected — verify gap detection triggers Resend Request (35=2) for missing messages', level:'intermediate', req:true },
   { section:'s6', step:'6.7', area:'Reconciliation', task:'Run complete end-to-end fill reconciliation comparing all fills on order entry session versus drop copy session — verify zero discrepancies in ExecID, LastPx, LastQty', level:'advanced', req:true },
 ];
 

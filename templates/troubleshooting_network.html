@@ -521,7 +521,7 @@
           <span class="tsn-badge" style="color:#6b7280;background:color-mix(in srgb,#6b7280 8%,transparent);border-color:color-mix(in srgb,#6b7280 25%,transparent)">Troubleshooting</span>
         </div>
         <h1 class="tsn-page-title">Network &amp; Connectivity</h1>
-        <div class="tsn-page-desc">Diagnosing FIX TCP connection failures, logon timeouts, firewall issues, TLS errors, and latency problems. Start with the quick triage checklist, then work through the relevant sections.</div>
+        <div class="tsn-page-desc">Diagnose FIX TCP connection failures, logon timeouts, firewall issues, TLS errors, and latency problems. Start with the quick triage checklist, then work through the relevant sections.</div>
       </div>
 
       <!-- ── SECTION 1: Quick Triage ─────────────────────── -->
@@ -647,7 +647,7 @@
 
       <!-- ── SECTION 4: Logon Timeout Behavior ────────────── -->
       <div class="tsn-section">
-        <div class="tsn-section-hdr">Logon Sequence &amp; Timeout</div>
+        <div class="tsn-section-hdr">Logon Sequence and Timeout</div>
         <div class="tsn-section-body">
           <p>When your application opens a TCP connection, the FIX session protocol expects a Logon (<code>35=A</code>) to be sent immediately. Most exchanges enforce a tight window — often 10–30 seconds — before closing the connection.</p>
         </div>
@@ -695,7 +695,7 @@
 
       <!-- ── SECTION 5: HeartBeat & TestRequest ────────────── -->
       <div class="tsn-section">
-        <div class="tsn-section-hdr">Heartbeat &amp; TestRequest Diagnostics</div>
+        <div class="tsn-section-hdr">Heartbeat and TestRequest Diagnostics</div>
         <div class="tsn-section-body">
           <p>Once a session is established, the FIX heartbeat mechanism serves as the connectivity health check. Understanding it lets you diagnose mid-session disconnects.</p>
         </div>
@@ -741,7 +741,7 @@ grep "112=" fix_session.log
 
       <!-- ── SECTION 6: Firewall & Port Configuration ───────── -->
       <div class="tsn-section">
-        <div class="tsn-section-hdr">Firewall &amp; Port Configuration</div>
+        <div class="tsn-section-hdr">Firewall and Port Configuration</div>
         <div class="tsn-section-body">
           <p>FIX sessions use persistent long-lived TCP connections. Stateful firewalls that time out idle connections are a common source of mid-session drops, especially in low-volume environments.</p>
         </div>
@@ -799,7 +799,7 @@ nc -v fix-prod.exchange.com 9001
 
       <!-- ── SECTION 7: SSL/TLS ────────────────────────────── -->
       <div class="tsn-section">
-        <div class="tsn-section-hdr">SSL / TLS Configuration</div>
+        <div class="tsn-section-hdr">SSL/TLS Configuration</div>
         <div class="tsn-section-body">
           <p>Many exchanges now require TLS for FIX sessions, especially in production. TLS failures at the handshake stage look identical to a TCP RST from the application's perspective — the connection is dropped before any FIX bytes are exchanged.</p>
         </div>

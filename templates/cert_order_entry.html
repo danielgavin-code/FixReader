@@ -326,13 +326,13 @@ const ROWS = [
   { section:'s2', step:'2.7', area:'Config', task:'Verify ResetSeqNumFlag (141) behavior — exchange must accept flag=Y on reconnect', level:'intermediate', req:true },
 
   // ── Message Flow
-  { section:'s3', step:'3.1', area:'Session', task:'Send Logon (35=A) — verify exchange returns Logon acknowledgement', level:'basic', req:true },
+  { section:'s3', step:'3.1', area:'Session', task:'Send Logon (35=A) — verify exchange returns Logon acknowledgment', level:'basic', req:true },
   { section:'s3', step:'3.2', area:'Session', task:'Verify bidirectional Heartbeat (35=0) exchange at configured HeartBtInt interval', level:'basic', req:true },
   { section:'s3', step:'3.3', area:'Session', task:'Send Test Request (35=1) with TestReqID — verify matching Heartbeat response', level:'basic', req:true },
   { section:'s3', step:'3.4', area:'Session', task:'Verify exchange initiates Test Request and client responds with correct Heartbeat', level:'basic', req:true },
   { section:'s3', step:'3.5', area:'Recovery', task:'Trigger Resend Request (35=2) — verify exchange replays with PossDupFlag=Y on replayed messages', level:'intermediate', req:true },
   { section:'s3', step:'3.6', area:'Recovery', task:'Test Sequence Reset (35=4) with GapFillFlag=Y — verify sequence gap is bridged cleanly', level:'intermediate', req:true },
-  { section:'s3', step:'3.7', area:'Session', task:'Send Logout (35=5) — verify graceful session termination and acknowledgement', level:'basic', req:true },
+  { section:'s3', step:'3.7', area:'Session', task:'Send Logout (35=5) — verify graceful session termination and acknowledgment', level:'basic', req:true },
   { section:'s3', step:'3.8', area:'Recovery', task:'Disconnect without Logout — reconnect and verify gap fill / sequence recovery', level:'intermediate', req:true },
 
   // ── Order Entry

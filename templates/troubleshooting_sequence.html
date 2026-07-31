@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sequence Number Issues — FIXReader</title>
-  <meta name="description" content="Diagnose and recover from FIX sequence number problems without disrupting live sessions. ResendRequest, GapFill, and hard reset explained.">
+  <meta name="description" content="Diagnose and recover from FIX sequence number problems without disrupting live sessions. Resend Request, Gap Fill, and hard reset explained.">
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -572,15 +572,15 @@
           </li>
           <li>
             <span class="tsn-check-num">4</span>
-            <span><strong>Check your inbound sequence counter</strong> — are you missing messages from the counterparty? If your counter is behind theirs, you need to send a ResendRequest.</span>
+            <span><strong>Check your inbound sequence counter</strong> — are you missing messages from the counterparty? If your counter is behind theirs, you need to send a Resend Request.</span>
           </li>
           <li>
             <span class="tsn-check-num">5</span>
-            <span><strong>Determine if the gap occurred on your side, their side, or both</strong> — this determines whether you send a ResendRequest, respond to theirs, or need a coordinated reset.</span>
+            <span><strong>Determine if the gap occurred on your side, their side, or both</strong> — this determines whether you send a Resend Request, respond to theirs, or need a coordinated reset.</span>
           </li>
           <li>
             <span class="tsn-check-num">6</span>
-            <span><strong>Decide: ResendRequest, GapFill, or Hard Reset</strong> — see Recovery Basics below. Use the least disruptive option first.</span>
+            <span><strong>Decide: Resend Request, Gap Fill, or Hard Reset</strong> — see Recovery Basics below. Use the least disruptive option first.</span>
           </li>
         </ul>
       </div>
@@ -606,12 +606,12 @@
               <tr>
                 <td class="mono tsn-badge-warn">MsgSeqNum too high</td>
                 <td>Missed inbound messages</td>
-                <td>Send ResendRequest for the missing range</td>
+                <td>Send Resend Request (35=2) for the missing range</td>
               </tr>
               <tr>
                 <td>Sequence gap on reconnect</td>
                 <td>Abrupt disconnect without Logout</td>
-                <td>Reconnect without <code>ResetSeqNumFlag</code>, then send ResendRequest</td>
+                <td>Reconnect without <code>ResetSeqNumFlag</code>, then send Resend Request (35=2)</td>
               </tr>
               <tr>
                 <td>Duplicate sequence numbers</td>
@@ -619,7 +619,7 @@
                 <td>Audit your sequence storage — file or database</td>
               </tr>
               <tr>
-                <td>Counterparty sends ResendRequest</td>
+                <td>Counterparty sends Resend Request (35=2)</td>
                 <td>You missed their message</td>
                 <td>Retransmit with <code>PossDupFlag=Y</code></td>
               </tr>
@@ -650,12 +650,12 @@
             </thead>
             <tbody>
               <tr>
-                <td><strong>ResendRequest</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">35=2</span></td>
+                <td><strong>Resend Request</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">35=2</span></td>
                 <td>Gap in inbound messages</td>
                 <td><span class="tsn-badge-ok">Low</span> — no disruption to outbound</td>
               </tr>
               <tr>
-                <td><strong>GapFill</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">35=4, GapFillFlag=Y</span></td>
+                <td><strong>Sequence Reset</strong> <span class="mono" style="color:var(--text-muted);font-size:11px">35=4, GapFillFlag (123) = Y</span></td>
                 <td>Skip administrative messages during resend</td>
                 <td><span class="tsn-badge-ok">Low</span> — standard FIX behavior</td>
               </tr>
@@ -668,9 +668,9 @@
           </table>
         </div>
         <div class="tsn-section-body" style="margin-top:12px">
-          <p>Example ResendRequest — <code>Tag 7 (BeginSeqNo)</code> is the first missing message; <code>Tag 16 (EndSeqNo) = 0</code> means through the last sent.</p>
+          <p>Example Resend Request — <code>Tag 7 (BeginSeqNo)</code> is the first missing message; <code>Tag 16 (EndSeqNo) = 0</code> means through the last sent.</p>
         </div>
-        <div class="tsn-code">8=FIX.4.2|9=65|35=2|49=CLIENTA|56=BROKRB|34=8|52=20240315-09:35:00|7=5|16=0|10=xxx|</div>
+        <div class="tsn-code">8=FIX.4.2|9=65|35=2|49=CLIENTA|56=BROKRB|34=8|52=20240315-09:35:00|7=5|16=0|10=000|</div>
       </div>
 
       <!-- ── SECTION 5: Reading the Logs ─────────────────── -->
@@ -685,7 +685,7 @@ INFO:  Session synchronized. Next expected: 47</div>
         <ul class="tsn-checklist" style="margin-top:14px">
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span>The gap was inbound — messages 43–46 were missed, likely due to a network blip. Your engine sent a ResendRequest for the range automatically.</span>
+            <span>The gap was inbound — messages 43–46 were missed, likely due to a network blip. Your engine sent a Resend Request for the range automatically.</span>
           </li>
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
@@ -693,7 +693,7 @@ INFO:  Session synchronized. Next expected: 47</div>
           </li>
           <li>
             <span class="tsn-check-num" style="background:color-mix(in srgb,#6b7280 12%,transparent);color:#6b7280;font-size:12px">•</span>
-            <span>The GapFill skipped messages 45–46 — the counterparty is telling you those were administrative messages (heartbeats, test requests) that you do not need.</span>
+            <span>The Gap Fill skipped messages 45–46 — the counterparty is telling you those were administrative messages (heartbeats, test requests) that you do not need.</span>
           </li>
         </ul>
       </div>
@@ -752,7 +752,7 @@ INFO:  Session synchronized. Next expected: 47</div>
             <li>Is the error <code>MsgSeqNum too low</code> or <code>too high</code>?</li>
             <li>What sequence numbers does each side expect?</li>
             <li>Is the gap on your inbound, your outbound, or both?</li>
-            <li>Can ResendRequest (<code>35=2</code>) or GapFill recover — or is a reset required?</li>
+            <li>Can Resend Request (<code>35=2</code>) or Gap Fill recover — or is a reset required?</li>
             <li>Reconcile open orders before changing any sequence state.</li>
           </ol>
         </div>
