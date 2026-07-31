@@ -213,6 +213,14 @@
   </nav>
   <main class="ml-right tr-main">
 
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/message-library">FIX Specs</a></li>
+        <li><span aria-current="page">Tag {{ tag.tag }} — {{ tag.name }}</span></li>
+      </ol>
+    </nav>
+
     <a href="/reference/{{ ver }}" class="tr-back">← Back</a>
 
     <!-- Header card -->
@@ -265,6 +273,87 @@
       <a href="/reference/{{ ver }}" class="tr-nav-btn tr-nav-ref">All Tags ↗</a>
       <a href="/tag/{{ tag.tag + 1 }}" class="tr-nav-btn">Tag {{ tag.tag + 1 }} →</a>
     </div>
+
+    <!-- Related content -->
+    {% set req_msgs = tag.required_in | default([]) %}
+    {% set opt_msgs = tag.optional_in | default([]) %}
+    {% set fix_vers = tag.fix_versions | default([]) %}
+    {% set tag_str  = tag.tag | string %}
+    {% set trouble_map = {
+      '6':   [('/troubleshooting/fill-reconciliation', 'Fill Reconciliation')],
+      '14':  [('/troubleshooting/fill-reconciliation', 'Fill Reconciliation')],
+      '32':  [('/troubleshooting/fill-reconciliation', 'Fill Reconciliation')],
+      '34':  [('/troubleshooting/sequence-numbers', 'Sequence Number Issues')],
+      '36':  [('/troubleshooting/gap-fill', 'Gap Fill & Resend'), ('/troubleshooting/sequence-numbers', 'Sequence Number Issues')],
+      '39':  [('/troubleshooting/rejects', 'Order Rejects')],
+      '43':  [('/troubleshooting/duplicate-orders', 'Duplicate Orders')],
+      '49':  [('/troubleshooting/logon', 'Logon Failures'), ('/troubleshooting/network', 'Network & Connectivity')],
+      '56':  [('/troubleshooting/logon', 'Logon Failures')],
+      '58':  [('/troubleshooting/rejects', 'Order Rejects')],
+      '98':  [('/troubleshooting/logon', 'Logon Failures'), ('/troubleshooting/network', 'Network & Connectivity')],
+      '102': [('/troubleshooting/rejects', 'Order Rejects')],
+      '103': [('/troubleshooting/rejects', 'Order Rejects')],
+      '108': [('/troubleshooting/logon', 'Logon Failures'), ('/troubleshooting/network', 'Network & Connectivity')],
+      '122': [('/troubleshooting/duplicate-orders', 'Duplicate Orders')],
+      '123': [('/troubleshooting/gap-fill', 'Gap Fill & Resend'), ('/troubleshooting/sequence-numbers', 'Sequence Number Issues')],
+      '141': [('/troubleshooting/sequence-numbers', 'Sequence Number Issues'), ('/troubleshooting/logon', 'Logon Failures')],
+      '150': [('/troubleshooting/rejects', 'Order Rejects'), ('/troubleshooting/fill-reconciliation', 'Fill Reconciliation')],
+      '151': [('/troubleshooting/fill-reconciliation', 'Fill Reconciliation')],
+      '371': [('/troubleshooting/rejects', 'Order Rejects')],
+      '373': [('/troubleshooting/rejects', 'Order Rejects')],
+      '380': [('/troubleshooting/rejects', 'Order Rejects')]
+    } %}
+    {% set related_trouble = trouble_map.get(tag_str, []) %}
+    {% if req_msgs or opt_msgs or fix_vers or related_trouble %}
+    <section class="tr-related" aria-label="Related content">
+      <h2 class="tr-related-hdr">Related</h2>
+
+      {% if req_msgs %}
+      <div class="tr-related-group">
+        <div class="tr-related-group-label">Required in</div>
+        <div class="tr-related-chips">
+          {% for msg in req_msgs %}
+          <a href="/message-library" class="tr-related-chip">{{ msg.name }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% if opt_msgs %}
+      <div class="tr-related-group">
+        <div class="tr-related-group-label">Optional in</div>
+        <div class="tr-related-chips">
+          {% for msg in opt_msgs %}
+          <a href="/message-library" class="tr-related-chip">{{ msg.name }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% if related_trouble %}
+      <div class="tr-related-group">
+        <div class="tr-related-group-label">Troubleshooting</div>
+        <div class="tr-related-chips">
+          {% for url, title in related_trouble %}
+          <a href="{{ url }}" class="tr-related-chip">{{ title }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% if fix_vers %}
+      <div class="tr-related-group">
+        <div class="tr-related-group-label">FIX Versions</div>
+        <div class="tr-related-chips">
+          {% for fv in fix_vers %}
+          <a href="/reference/fix{{ fv | replace('.', '') }}" class="tr-related-chip">FIX {{ fv }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+    </section>
+    {% endif %}
 
   </main>
 

@@ -385,6 +385,33 @@ const FIXREADER_TAG_ENUM = (function() {
   };
 }());
 
+  /* ── Field-name → tag-number lookup ── */
+  const FIELD_TO_TAG = (function() {
+    const m = {};
+    Object.keys(FIXREADER_TAG_ENUM).forEach(function(k) {
+      const info = FIXREADER_TAG_ENUM[k];
+      if (info.name) m[info.name.toLowerCase()] = k;
+    });
+    return m;
+  }());
+
+  /* ── Category display constants ── */
+  const _CAT_KEY = {
+    'tag': 'tags', 'tag-value': 'tags', 'message': 'messages',
+    'enum': 'enums', 'cert': 'certs', 'tool': 'tools',
+    'exchange': 'exchanges', 'troubleshooting': 'troubleshooting'
+  };
+  const _CAT_LABELS = {
+    'tags': 'Tags', 'messages': 'Messages', 'enums': 'Enumeration Values',
+    'certs': 'Components', 'tools': 'Tools', 'exchanges': 'Exchange Specifications',
+    'troubleshooting': 'Troubleshooting'
+  };
+  const _CAT_CAPS = {
+    'tags': 5, 'messages': 5, 'enums': 4, 'certs': 3, 'tools': 4,
+    'exchanges': 4, 'troubleshooting': 4
+  };
+  const _CAT_ORDER = ['tags', 'messages', 'enums', 'certs', 'tools', 'exchanges', 'troubleshooting'];
+
   const TYPE_LABELS = {
     message: 'Message',
     tag: 'Tag',
@@ -415,25 +442,32 @@ const FIXREADER_TAG_ENUM = (function() {
     let s = 0;
     const titleL  = item.title.toLowerCase();
     const subL    = (item.subtitle || '').toLowerCase();
+    const fieldL  = (item.field || '').toLowerCase();
     const aliases = item.aliases || [];
     const { tagNum, mode } = parsed;
 
-    // Tag number lookup
+    // Exact numeric tag match
     if ((mode === 'tag' || mode === 'num') && tagNum) {
-      if (item.tag === tagNum) s += 80;
+      if (item.tag === tagNum) s += 90;
     }
+
+    // Exact field name
+    if (fieldL && fieldL === q) s += 80;
 
     // Alias exact
     if (aliases.some(a => a === q)) s += 70;
 
+    // Title exact
+    if (titleL === q) s += 65;
+
+    // Field name starts-with
+    if (fieldL && fieldL !== q && fieldL.startsWith(q)) s += 50;
+
     // Alias starts-with
     if (aliases.some(a => a !== q && a.startsWith(q))) s += 45;
 
-    // Title exact
-    if (titleL === q) s += 60;
-
     // Title starts-with
-    if (titleL !== q && titleL.startsWith(q)) s += 35;
+    if (titleL !== q && titleL.startsWith(q)) s += 40;
 
     // Title includes (not starts-with)
     if (!titleL.startsWith(q) && titleL.includes(q)) s += 20;
@@ -547,7 +581,7 @@ const FIXREADER_TAG_ENUM = (function() {
       .map(item => ({ item, s: scoreItem(item, qL, parsed) }))
       .filter(x => x.s > 0)
       .sort((a, b) => b.s - a.s)
-      .slice(0, 10)
+      .slice(0, 30)
       .map(x => x.item);
   }
 
@@ -562,31 +596,48 @@ const FIXREADER_TAG_ENUM = (function() {
   /* ── Renderer ── */
   function renderResults(results) {
     if (!results.length) {
-      dropdown.innerHTML = `<div class="nav-search-empty">No FIXReader results found` +
-        `<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">` +
-        `<span data-chip="35=8" style="${CHIP_STYLE}">Try 35=8</span>` +
-        `<span data-chip="Tag 55" style="${CHIP_STYLE}">Try Tag 55</span>` +
-        `<span data-chip="IOC" style="${CHIP_STYLE}">Try IOC</span>` +
-        `<span data-chip="NYSE session" style="${CHIP_STYLE}">Try NYSE session</span>` +
-        `</div></div>`;
+      dropdown.innerHTML = '<div class="nav-search-empty">No FIXReader results found' +
+        '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">' +
+        '<span data-chip="35=8" style="' + CHIP_STYLE + '">Try 35=8</span>' +
+        '<span data-chip="Tag 55" style="' + CHIP_STYLE + '">Try Tag 55</span>' +
+        '<span data-chip="IOC" style="' + CHIP_STYLE + '">Try IOC</span>' +
+        '<span data-chip="NYSE session" style="' + CHIP_STYLE + '">Try NYSE session</span>' +
+        '</div></div>';
       return;
     }
-    dropdown.innerHTML = results.map(r => {
-      if (r.type === 'tag-value') {
-        return `<a class="nav-search-result" href="${r.url}">` +
-          `<span class="nav-search-result-title">` +
-          `<span class="ml-msg-code" style="font-size:10px;padding:1px 5px;margin-right:6px;vertical-align:middle">${r.tagNum}</span>` +
-          `${r.title}</span>` +
-          `<span class="nav-search-result-meta">${r.subtitle}</span>` +
-          `</a>`;
-      }
-      const typeLabel = TYPE_LABELS[r.type] || r.type;
-      const meta = typeLabel + (r.subtitle ? ' · ' + r.subtitle : '');
-      return `<a class="nav-search-result" href="${r.url}">` +
-        `<span class="nav-search-result-title">${r.title}</span>` +
-        `<span class="nav-search-result-meta">${meta}</span>` +
-        `</a>`;
-    }).join('');
+    /* Group results by display category */
+    const groups = {};
+    results.forEach(function(r) {
+      const hk = _CAT_KEY[r.type] || 'tags';
+      if (!groups[hk]) groups[hk] = [];
+      if (groups[hk].length < (_CAT_CAPS[hk] || 5)) groups[hk].push(r);
+    });
+    let idx = 0;
+    let html = '';
+    _CAT_ORDER.forEach(function(hk) {
+      const items = groups[hk];
+      if (!items || !items.length) return;
+      html += '<div class="nav-search-cat-hdr" role="presentation">' + _CAT_LABELS[hk] + '</div>';
+      items.forEach(function(r) {
+        const rid = 'nav-sr-' + (idx++);
+        if (r.type === 'tag-value') {
+          html += '<a class="nav-search-result" id="' + rid + '" role="option" href="' + r.url + '">' +
+            '<span class="nav-search-result-title">' +
+            '<span class="ml-msg-code" style="font-size:10px;padding:1px 5px;margin-right:6px;vertical-align:middle">' + r.tagNum + '</span>' +
+            r.title + '</span>' +
+            '<span class="nav-search-result-meta">' + r.subtitle + '</span>' +
+            '</a>';
+        } else {
+          const typeLabel = TYPE_LABELS[r.type] || r.type;
+          const meta = typeLabel + (r.subtitle ? ' · ' + r.subtitle : '');
+          html += '<a class="nav-search-result" id="' + rid + '" role="option" href="' + r.url + '">' +
+            '<span class="nav-search-result-title">' + r.title + '</span>' +
+            '<span class="nav-search-result-meta">' + meta + '</span>' +
+            '</a>';
+        }
+      });
+    });
+    dropdown.innerHTML = html;
   }
 
   let selectedIndex = -1;
@@ -606,12 +657,23 @@ const FIXREADER_TAG_ENUM = (function() {
       }
     });
     selectedIndex = idx;
+    if (idx >= 0) {
+      const el = getResultEls()[idx];
+      if (el && el.id) input.setAttribute('aria-activedescendant', el.id);
+    } else {
+      input.removeAttribute('aria-activedescendant');
+    }
   }
 
   function triggerSearch() {
     const q = input.value.trim();
     selectedIndex = -1;
-    if (!q) { dropdown.style.display = 'none'; return; }
+    if (!q) {
+      dropdown.style.display = 'none';
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
+      return;
+    }
 
     // ── tag=value exact match ──────────────────────────────────
     const exactTagVal = q.match(/^\s*(\d+)\s*=\s*(.+)\s*$/i);
@@ -647,6 +709,7 @@ const FIXREADER_TAG_ENUM = (function() {
       if (results.length) {
         renderResults(results);
         dropdown.style.display = 'block';
+        input.setAttribute('aria-expanded', 'true');
         return;
       }
     }
@@ -657,7 +720,6 @@ const FIXREADER_TAG_ENUM = (function() {
       const tagNum = parseInt(tagNumMatch[1]);
       const tagInfo = FIXREADER_TAG_ENUM[tagNum];
       if (tagInfo) {
-        // Show first 5 known values inline when the tag has a values map
         let subtitle = tagInfo.desc;
         if (tagInfo.values) {
           subtitle = Object.entries(tagInfo.values).slice(0, 5)
@@ -675,13 +737,54 @@ const FIXREADER_TAG_ENUM = (function() {
         const allResults = [tagResult, ...existingResults];
         renderResults(allResults);
         dropdown.style.display = 'block';
+        input.setAttribute('aria-expanded', 'true');
         return;
+      }
+    }
+
+    // ── Field-name + value: "MsgType D", "OrdStatus 2" ──────────
+    const fieldValM = q.match(/^([a-zA-Z][a-zA-Z0-9]+)\s+(\S.*)$/);
+    if (fieldValM) {
+      const fvTag = FIELD_TO_TAG[fieldValM[1].toLowerCase()];
+      if (fvTag !== undefined) {
+        const fvInfo = FIXREADER_TAG_ENUM[parseInt(fvTag)];
+        if (fvInfo) {
+          const fvVals = fieldValM[2].trim().split(/[\s,]+/).filter(Boolean);
+          const fvResults = fvVals.map(function(v) {
+            const vDesc = fvInfo.values
+              ? (fvInfo.values[v] || fvInfo.values[v.toUpperCase()] || fvInfo.values[v.toLowerCase()] || null)
+              : null;
+            return {
+              type: 'tag-value',
+              tagNum: parseInt(fvTag),
+              title: fvInfo.name + ' = ' + v + (vDesc ? ' — ' + vDesc : ' — value not in reference'),
+              subtitle: 'Tag ' + fvTag + ' · ' + fvInfo.desc,
+              url: '/tag/' + fvTag
+            };
+          });
+          if (fvResults.length) {
+            renderResults(fvResults);
+            dropdown.style.display = 'block';
+            input.setAttribute('aria-expanded', 'true');
+            return;
+          }
+        }
       }
     }
 
     renderResults(runSearch(q));
     dropdown.style.display = 'block';
+    input.setAttribute('aria-expanded', 'true');
   }
+
+  /* ── ARIA initialization ── */
+  input.setAttribute('role', 'combobox');
+  input.setAttribute('aria-expanded', 'false');
+  input.setAttribute('aria-autocomplete', 'list');
+  input.setAttribute('aria-controls', 'nav-search-dropdown');
+  input.setAttribute('aria-haspopup', 'listbox');
+  dropdown.setAttribute('role', 'listbox');
+  dropdown.setAttribute('aria-label', 'Search results');
 
   input.addEventListener('input', triggerSearch);
 
@@ -702,10 +805,13 @@ const FIXREADER_TAG_ENUM = (function() {
     if (wrap && !wrap.contains(e.target)) {
       dropdown.style.display = 'none';
       selectedIndex = -1;
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
     }
   });
 
   /* Arrow key navigation + Enter + Escape */
+  let _prevFocus = null;
   input.addEventListener('keydown', function(e) {
     if (dropdown.style.display === 'none') return;
     const els = getResultEls();
@@ -721,8 +827,28 @@ const FIXREADER_TAG_ENUM = (function() {
     } else if (e.key === 'Escape') {
       dropdown.style.display = 'none';
       selectedIndex = -1;
-      input.blur();
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
+      if (_prevFocus && _prevFocus !== input) {
+        _prevFocus.focus();
+        _prevFocus = null;
+      } else {
+        input.blur();
+      }
     }
+  });
+
+  /* / shortcut — open search from anywhere on the page */
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+    const t = e.target;
+    if (t === input) return;
+    if (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT') return;
+    if (t.isContentEditable || t.getAttribute('contenteditable') === 'true') return;
+    e.preventDefault();
+    _prevFocus = document.activeElement;
+    input.focus();
+    input.select();
   });
 
 })();

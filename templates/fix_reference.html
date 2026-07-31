@@ -218,6 +218,14 @@
 <main class="ml-right">
 <div class="ref-page">
 
+  <nav class="breadcrumb" aria-label="Breadcrumb" style="margin-bottom:0;padding-bottom:0">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/message-library">FIX Specs</a></li>
+      <li><span aria-current="page">{{ ver_info.name }} Tag Reference</span></li>
+    </ol>
+  </nav>
+
   {% if ver_info.withdrawn %}
   <div class="ref-withdrawn-banner">
     <strong>FIX 4.3 was withdrawn and is rarely used in production.</strong>
