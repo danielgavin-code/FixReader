@@ -178,10 +178,11 @@ def _ctx(preview=None, **kwargs):
     render_name = preview if (preview and preview in themes) else _resolve_active_theme(themes)
     theme       = themes.get(render_name) or themes.get('default') or {}
     return {
-        'theme_vars':    _build_theme_vars(theme),
-        'theme_info':    _build_theme_info(theme),
-        'preview_name':  preview,
-        'tag_list_json': _ALL_TAGS_JSON,
+        'theme_vars':     _build_theme_vars(theme),
+        'theme_info':     _build_theme_info(theme),
+        'preview_name':   preview,
+        'tag_list_json':  _ALL_TAGS_JSON,
+        'canonical_url':  f'https://{CANONICAL_HOST}{request.path}',
         **kwargs,
     }
 

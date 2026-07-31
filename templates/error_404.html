@@ -58,7 +58,11 @@
             {% endif %}
           </div>
           <div class="nav-theme-line2">
-            {% if theme_info.wiki_url %}<a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% if theme_info.type == 'birthday' %}
+            {{ theme_info.subtitle }}{% if theme_info.wiki_url %} · <a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% else %}
+            {% if theme_info.date %}{{ theme_info.date }}{% if theme_info.subtitle %} · {% endif %}{% endif %}{% if theme_info.subtitle %}{{ theme_info.subtitle }}{% if theme_info.wiki_url %} · {% endif %}{% endif %}{% if theme_info.wiki_url %}<a href="{{ theme_info.wiki_url }}" class="nav-theme-wiki" target="_blank" rel="noopener">Wiki ↗</a>{% endif %}
+            {% endif %}
           </div>
         </div>
       </div>
@@ -93,7 +97,7 @@
       <a href="/tools/tag-validator" class="ml-msg-item"><span class="ml-msg-code">VAL</span><span>Tag Validator</span></a>
 
       <div class="ml-cat-hdr">Cert Scripts</div>
-      <a href="/tools/order-entry" class="ml-msg-item"><span class="ml-msg-code">ORD</span><span>Order Entry</span></a>
+      <a href="/cert/order-entry" class="ml-msg-item"><span class="ml-msg-code">ORD</span><span>Order Entry</span></a>
       <a href="/cert/drop-copy" class="ml-msg-item"><span class="ml-msg-code">DRP</span><span>Drop Copy</span></a>
       <a href="/cert/allocation" class="ml-msg-item"><span class="ml-msg-code">ALC</span><span>Allocation</span></a>
 
@@ -116,6 +120,10 @@
       <a href="/exchange-specs" class="ml-msg-item"><span class="ml-msg-code">XNYS</span><span>NYSE</span></a>
       <a href="/exchange-specs" class="ml-msg-item"><span class="ml-msg-code">XNAS</span><span>NASDAQ</span></a>
       <a href="/exchange-specs" class="ml-msg-item"><span class="ml-msg-code">ARCX</span><span>NYSE Arca</span></a>
+      <a href="/exchange-specs" class="ml-msg-item"><span class="ml-msg-code">XCBO</span><span>CBOE BZX</span></a>
+      <a href="/exchange-specs" class="ml-msg-item"><span class="ml-msg-code">EDGX</span><span>EDGX</span></a>
+      <a href="/exchange-specs" class="ml-msg-item"><span class="ml-msg-code">EDGA</span><span>EDGA</span></a>
+      <a href="/exchange-specs" class="ml-msg-item"><span class="ml-msg-code">IEXG</span><span>IEX</span></a>
 
       <div class="ml-cat-hdr">Resources</div>
       <a href="/resources" class="ml-msg-item"><span class="ml-msg-code">RES</span><span>Resources</span></a>

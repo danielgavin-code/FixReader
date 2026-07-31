@@ -122,12 +122,6 @@
   <a class="ml-version-pill{% if page_title == 'Drop Copy Certification' %} active{% endif %}" href="/cert/drop-copy">Drop Copy</a>
   <a class="ml-version-pill{% if page_title == 'Allocation Certification' %} active{% endif %}" href="/cert/allocation">Allocation</a>
 </div>
-{% elif active_nav == 'tools' %}
-<div class="ml-version-bar">
-  <button class="ml-version-pill active">Order Entry</button>
-  <button class="ml-version-pill">Drop Copy</button>
-  <button class="ml-version-pill">Allocation</button>
-</div>
 {% elif active_nav == 'resources' %}
 <div class="ml-version-bar">
   <button class="ml-version-pill active">Resources</button>
@@ -168,7 +162,7 @@
       </a>
 
       <div class="ml-cat-hdr">Cert Scripts</div>
-      <a href="/tools/order-entry" class="ml-msg-item{% if page_title in ('Order Entry', 'Cert Scripts') %} active{% endif %}">
+      <a href="/cert/order-entry" class="ml-msg-item{% if page_title in ('Order Entry', 'Cert Scripts') %} active{% endif %}">
         <span class="ml-msg-code">ORD</span>
         <span>Order Entry</span>
       </a>

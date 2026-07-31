@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FIX Message Decoder — FIXReader</title>
   <meta name="description" content="Decode FIX Protocol messages instantly. Field-by-field breakdown with plain English explanations.">
+  <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -145,15 +146,15 @@
       </a>
 
       <div class="ml-cat-hdr">Cert Scripts</div>
-      <a href="/tools/order-entry" class="ml-msg-item">
+      <a href="/cert/order-entry" class="ml-msg-item">
         <span class="ml-msg-code">ORD</span>
         <span>Order Entry</span>
       </a>
-      <a href="/tools/drop-copy" class="ml-msg-item">
+      <a href="/cert/drop-copy" class="ml-msg-item">
         <span class="ml-msg-code">DRP</span>
         <span>Drop Copy</span>
       </a>
-      <a href="/tools/allocation" class="ml-msg-item">
+      <a href="/cert/allocation" class="ml-msg-item">
         <span class="ml-msg-code">ALC</span>
         <span>Allocation</span>
       </a>
@@ -301,7 +302,7 @@
           </div>
           <div class="btn-group">
             <button type="submit" class="btn-decode">DECODE MESSAGE</button>
-            <button type="button" class="btn-compare" onclick="window.location.href='/compare'">COMPARE MESSAGES</button>
+            <a href="/compare" class="btn-compare">COMPARE MESSAGES</a>
           </div>
         </div>
       </form>
