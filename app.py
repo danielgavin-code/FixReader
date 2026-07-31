@@ -12,6 +12,13 @@ _THEMES_FILE = os.path.join(_BASE, 'fixreader_data', 'themes.json')
 _TAGS_FILE   = os.path.join(_BASE, 'fixreader_data', 'fix_tags.json')
 _ACTIVE_FILE = os.path.join(_BASE, 'fixreader_active_theme.json')
 
+try:
+    with open(_TAGS_FILE) as _f:
+        _ALL_TAGS = json.load(_f)
+except Exception:
+    _ALL_TAGS = []
+_ALL_TAGS_JSON = json.dumps(_ALL_TAGS)
+
 
 # ── Theme engine ─────────────────────────────────────────────
 
@@ -159,9 +166,10 @@ def _ctx(preview=None, **kwargs):
     render_name = preview if (preview and preview in themes) else _resolve_active_theme(themes)
     theme       = themes.get(render_name) or themes.get('default') or {}
     return {
-        'theme_vars':   _build_theme_vars(theme),
-        'theme_info':   _build_theme_info(theme),
-        'preview_name': preview,
+        'theme_vars':    _build_theme_vars(theme),
+        'theme_info':    _build_theme_info(theme),
+        'preview_name':  preview,
+        'tag_list_json': _ALL_TAGS_JSON,
         **kwargs,
     }
 
@@ -271,10 +279,7 @@ def themes_admin_edit():
 
 @app.route('/compare')
 def compare():
-    with open(_TAGS_FILE) as f:
-        tag_list = json.load(f)
     return render_template('compare.html',
-                           tag_list_json=json.dumps(tag_list),
                            **_ctx(preview=request.args.get('preview')))
 
 
@@ -312,10 +317,7 @@ def tools():
 @app.route('/message-library')
 def message_library():
     preview = request.args.get('preview')
-    with open(_TAGS_FILE) as f:
-        tag_list = json.load(f)
     return render_template('message_library.html',
-                           tag_list_json=json.dumps(tag_list),
                            **_ctx(preview=preview))
 
 
@@ -492,19 +494,13 @@ def fix_specs_redirect():
 
 @app.route('/tools/message-builder')
 def tools_message_builder():
-    with open(_TAGS_FILE) as f:
-        tag_list = json.load(f)
     return render_template('message_builder.html',
-                           tag_list_json=json.dumps(tag_list),
                            **_ctx(preview=request.args.get('preview')))
 
 
 @app.route('/tools/tag-validator')
 def tools_tag_validator():
-    with open(_TAGS_FILE) as f:
-        tag_list = json.load(f)
     return render_template('tag_validator.html',
-                           tag_list_json=json.dumps(tag_list),
                            **_ctx(preview=request.args.get('preview')))
 
 

@@ -129,7 +129,34 @@ const SEARCH_INDEX = [
   { type:'troubleshooting', title:'Gap Fill & Resend', subtitle:'Troubleshooting', url:'/troubleshooting/gap-fill', aliases:['gap fill','gapfill','resend request','35=2','35=4','123=y','newseqno','beginseqno','endseqno','resend loop','missing sequence','sequence gap','missing messages','posdup','replay messages','sequence reset','gapfillflag','resend','recovery'] },
 ];
 
-const FIXREADER_TAG_ENUM = {
+if (window.FIXREADER_ALL_TAGS) {
+  window.FIXREADER_ALL_TAGS.forEach(function(t) {
+    SEARCH_INDEX.push({
+      type:    'tag',
+      title:   'Tag ' + t.tag + ' — ' + t.name,
+      subtitle: t.description ? t.description.substring(0, 80) : '',
+      url:     '/tag/' + t.tag,
+      tag:     String(t.tag),
+      field:   t.name,
+      aliases: [String(t.tag), 'tag ' + t.tag, (t.name || '').toLowerCase()]
+    });
+  });
+}
+
+const FIXREADER_TAG_ENUM = (function() {
+  if (window.FIXREADER_ALL_TAGS && window.FIXREADER_ALL_TAGS.length) {
+    const map = {};
+    window.FIXREADER_ALL_TAGS.forEach(function(t) {
+      map[t.tag] = {
+        name:   t.name,
+        desc:   t.description || '',
+        values: t.valid_values || null
+      };
+    });
+    return map;
+  }
+  // Static fallback (used only if window.FIXREADER_ALL_TAGS is unavailable)
+  return {
   1: { name: 'Account', desc: 'Account mnemonic for clearing and allocation' },
   6: { name: 'AvgPx', desc: 'Calculated average price of fills' },
   7: { name: 'BeginSeqNo', desc: 'Beginning sequence number for resend range' },
@@ -355,8 +382,8 @@ const FIXREADER_TAG_ENUM = {
   9483: { name: 'DealID', desc: 'Cboe deal identifier for paired allocations — numeric, unique per pair' },
   9702: { name: 'RouteToBroker', desc: 'NYSE route to floor broker indicator', values: { 'Y': 'Route to floor broker', 'N': 'Do not route to floor broker' } },
   20011: { name: 'RouteToBroker', desc: 'NYSE Texas route to broker indicator' },
-};
-
+  };
+}());
 
   const TYPE_LABELS = {
     message: 'Message',
