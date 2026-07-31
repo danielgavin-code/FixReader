@@ -3,7 +3,7 @@ import os
 import os as _os
 from datetime import date as _date
 
-from flask import Flask, render_template, request, jsonify, redirect, abort
+from flask import Flask, render_template, request, jsonify, redirect, abort, make_response
 from fix_decoder import decode_fix, generate_summary
 
 
@@ -15,6 +15,9 @@ def _require_theme_admin():
         abort(404)
 
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2 MB upload cap
+
+CANONICAL_HOST = os.getenv('CANONICAL_HOST', 'fixreader.net')
 
 _BASE        = os.path.dirname(__file__)
 _THEMES_FILE = os.path.join(_BASE, 'fixreader_data', 'themes.json')
@@ -188,6 +191,54 @@ def _save_active_theme(name):
     with open(_ACTIVE_FILE, 'w') as f:
         json.dump(data, f, indent=2)
         f.write('\n')
+
+
+# ── Security headers ──────────────────────────────────────────
+
+_CSP = (
+    "default-src 'self'; "
+    "script-src 'self' 'unsafe-inline'; "
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+    "font-src 'self' https://fonts.gstatic.com; "
+    "img-src 'self' data:; "
+    "connect-src 'self'; "
+    "frame-ancestors 'none';"
+)
+
+
+@app.after_request
+def _add_security_headers(response):
+    response.headers.setdefault('X-Content-Type-Options', 'nosniff')
+    response.headers.setdefault('X-Frame-Options', 'DENY')
+    response.headers.setdefault('Referrer-Policy', 'strict-origin-when-cross-origin')
+    response.headers.setdefault('Permissions-Policy', 'geolocation=(), microphone=(), camera=()')
+    response.headers.setdefault('Content-Security-Policy', _CSP)
+    return response
+
+
+# ── Error handlers ────────────────────────────────────────────
+
+@app.errorhandler(404)
+def error_404(e):
+    return render_template('error_404.html', **_ctx()), 404
+
+
+@app.errorhandler(413)
+def error_413(e):
+    return render_template('error_413.html', **_ctx()), 413
+
+
+@app.errorhandler(500)
+def error_500(e):
+    try:
+        return render_template('error_500.html', **_ctx()), 500
+    except Exception:
+        return (
+            '<!doctype html><html lang="en"><head><meta charset="UTF-8">'
+            '<title>Server Error — FIXReader</title></head><body>'
+            '<h1>Server Error</h1><p>An error occurred. Please try again.</p>'
+            '<p><a href="/">Return to FIXReader</a></p></body></html>'
+        ), 500
 
 
 # ── Stub helper ──────────────────────────────────────────────
@@ -595,6 +646,65 @@ def ts_duplicates():
 @app.route('/troubleshooting/gap-fill')
 def ts_gapfill():
     return render_template('troubleshooting_gap_fill.html', **_ctx(active_nav='gap-fill'))
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    content = (
+        'User-agent: *\n'
+        'Allow: /\n'
+        'Disallow: /themes-admin\n'
+        'Disallow: /themes-admin/\n'
+        f'Sitemap: https://{CANONICAL_HOST}/sitemap.xml\n'
+    )
+    return make_response(content, 200, {'Content-Type': 'text/plain; charset=utf-8'})
+
+
+_SITEMAP_URLS = [
+    '/',
+    '/compare',
+    '/tools/tag-validator',
+    '/tools/message-builder',
+    '/message-library',
+    '/exchange-specs',
+    '/resources',
+    '/cert/order-entry',
+    '/cert/drop-copy',
+    '/cert/allocation',
+    '/reference/fix40',
+    '/reference/fix41',
+    '/reference/fix42',
+    '/reference/fix43',
+    '/reference/fix44',
+    '/reference/fix50',
+    '/reference/fix50sp1',
+    '/reference/fix50sp2',
+    '/troubleshooting/network',
+    '/troubleshooting/sequence-numbers',
+    '/troubleshooting/logon',
+    '/troubleshooting/fill-reconciliation',
+    '/troubleshooting/rejects',
+    '/troubleshooting/latency',
+    '/troubleshooting/duplicate-orders',
+    '/troubleshooting/gap-fill',
+]
+
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    today = _date.today().isoformat()
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for path in _SITEMAP_URLS:
+        lines.append(
+            f'  <url>'
+            f'<loc>https://{CANONICAL_HOST}{path}</loc>'
+            f'<lastmod>{today}</lastmod>'
+            f'</url>'
+        )
+    lines.append('</urlset>')
+    return make_response('\n'.join(lines) + '\n', 200,
+                         {'Content-Type': 'application/xml; charset=utf-8'})
 
 
 if __name__ == '__main__':

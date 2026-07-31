@@ -8,6 +8,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 import app as _app_module
 
 
+# Register test-only routes before the first request is ever made
+@_app_module.app.route('/test-force-500-internal')
+def _force_500_test_route():
+    raise RuntimeError('intentional test error')
+
+
 @pytest.fixture()
 def client():
     _app_module.app.config['TESTING'] = True
