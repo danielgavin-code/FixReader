@@ -707,6 +707,7 @@
         </div>
         <div class="bld-output-body">
           <textarea id="bld-output" class="bld-output" readonly
+            aria-label="Generated FIX message output"
             placeholder="Fill in fields above to generate the FIX message…"></textarea>
         </div>
         <div class="bld-actions">
@@ -724,7 +725,7 @@
   <div class="footer-inner">
     <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
     <div class="footer-links">
-      <a href="/feedback" class="footer-link">Feedback</a>
+      <a href="mailto:feedback@fixreader.org?subject=FIXReader.org%20Feedback" class="footer-link">Feedback</a>
     </div>
     <span class="footer-copy">© 2026 FIXReader.org</span>
   </div>
@@ -964,10 +965,10 @@ function bldAddCustomTag() {
   row.id = `bld-cr-${id}`;
   row.innerHTML = `
     <input type="text" class="bld-custom-tag-num" placeholder="Tag #"
-           oninput="bldCustomLookup(this,${id})">
-    <span class="bld-custom-tag-name" id="bld-cn-${id}">—</span>
+           aria-label="Tag number" oninput="bldCustomLookup(this,${id})">
+    <span class="bld-custom-tag-name" id="bld-cn-${id}" aria-live="polite">—</span>
     <input type="text" class="bld-custom-val" placeholder="Value"
-           oninput="bldUpdateOutput()">
+           aria-label="Tag value" oninput="bldUpdateOutput()">
     <button class="bld-custom-remove" onclick="document.getElementById('bld-cr-${id}').remove();bldUpdateOutput()" title="Remove">×</button>
   `;
   wrap.appendChild(row);

@@ -1588,6 +1588,7 @@ code {
 
 .tag-table {
   width: 100%;
+  min-width: 480px;
   border-collapse: collapse;
   font-size: 12.5px;
   line-height: 1.35;
@@ -1953,6 +1954,11 @@ code {
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
   white-space: nowrap;
+  /* Reset button defaults when element is a <button> */
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
 }
 .examples-drop-item:hover {
   background: rgba(255,255,255,.07);
@@ -2378,8 +2384,9 @@ code {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   font-size: 12px;
-  gap: 16px;
+  gap: 8px 16px;
 }
 
 .footer-logo {
@@ -3355,7 +3362,7 @@ a.ml-version-pill { text-decoration: none; display: inline-flex; align-items: ce
   .btn-decode       { width: 100%; justify-content: center; }
   .results-panel    { flex-direction: column; }
   .msg-summary      { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
-  .tag-table-wrap   { width: 100%; }
+  .tag-table-wrap   { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .feature-cards    { grid-template-columns: 1fr; }
   .empty-state      { padding: 28px 16px; }
   .nav-theme        { display: none; }
@@ -3609,6 +3616,9 @@ a.ml-version-pill { text-decoration: none; display: inline-flex; align-items: ce
   display: flex; align-items: center; gap: 10px;
   padding: 9px 16px; cursor: pointer; user-select: none;
   transition: background 0.1s;
+  /* Reset button defaults */
+  border: none; background: transparent; width: 100%; text-align: left;
+  font-family: var(--font);
 }
 .ml-app-sec-hdr:hover { background: var(--bg-row-hover); }
 .ml-app-tag-num {

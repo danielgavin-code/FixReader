@@ -445,7 +445,7 @@
         <div class="val-header-bar">
           <span class="val-header-label" id="val-label">Paste Your FIX Message</span>
           <div class="val-examples-wrap">
-            <button class="val-examples-btn" id="val-examples-btn">EXAMPLES ▾</button>
+            <button class="val-examples-btn" id="val-examples-btn" aria-expanded="false" aria-haspopup="true">EXAMPLES ▾</button>
             <div class="val-examples-drop" id="val-examples-drop" style="display:none">
               <button class="val-examples-item" onclick="valExLoad('new_order')">New Order Single <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=D</span></button>
               <button class="val-examples-item" onclick="valExLoad('exec_report')">Execution Report <span style="font-size:10px;color:var(--text-dim);margin-left:6px;">35=8</span></button>
@@ -500,7 +500,7 @@
   <div class="footer-inner">
     <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
     <div class="footer-links">
-      <a href="/feedback" class="footer-link">Feedback</a>
+      <a href="mailto:feedback@fixreader.org?subject=FIXReader.org%20Feedback" class="footer-link">Feedback</a>
     </div>
     <span class="footer-copy">© 2026 FIXReader.org</span>
   </div>
@@ -675,13 +675,32 @@ function valClear() {
 // Examples dropdown
 const valExBtn  = document.getElementById('val-examples-btn');
 const valExDrop = document.getElementById('val-examples-drop');
+function _valExClose() {
+  valExDrop.style.display = 'none';
+  valExBtn.setAttribute('aria-expanded', 'false');
+}
 if (valExBtn && valExDrop) {
   valExBtn.addEventListener('click', e => {
     e.stopPropagation();
     const open = valExDrop.style.display !== 'none';
-    valExDrop.style.display = open ? 'none' : '';
+    if (open) {
+      _valExClose();
+    } else {
+      valExDrop.style.display = '';
+      valExBtn.setAttribute('aria-expanded', 'true');
+    }
   });
-  document.addEventListener('click', () => { valExDrop.style.display = 'none'; });
+  document.addEventListener('click', e => {
+    if (!valExBtn.contains(e.target) && !valExDrop.contains(e.target)) {
+      _valExClose();
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && valExDrop.style.display !== 'none') {
+      _valExClose();
+      valExBtn.focus();
+    }
+  });
 }
 
 function valExLoad(key) {

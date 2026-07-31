@@ -1,9 +1,18 @@
 import json
 import os
+import os as _os
 from datetime import date as _date
 
 from flask import Flask, render_template, request, jsonify, redirect, abort
 from fix_decoder import decode_fix, generate_summary
+
+
+def _theme_admin_enabled():
+    return _os.getenv('ENABLE_THEME_ADMIN', '').lower() == 'true'
+
+def _require_theme_admin():
+    if not _theme_admin_enabled():
+        abort(404)
 
 app = Flask(__name__)
 
@@ -220,6 +229,7 @@ def decode():
 
 @app.route('/themes-admin')
 def themes_admin():
+    _require_theme_admin()
     preview  = request.args.get('preview')
     themes   = _load_themes()
     active   = _resolve_active_theme(themes)
@@ -237,6 +247,7 @@ def themes_admin():
 
 @app.route('/themes-admin/apply', methods=['POST'])
 def themes_admin_apply():
+    _require_theme_admin()
     name   = request.form.get('theme', 'default')
     themes = _load_themes()
     if name in themes:
@@ -246,6 +257,7 @@ def themes_admin_apply():
 
 @app.route('/themes-admin/edit', methods=['POST'])
 def themes_admin_edit():
+    _require_theme_admin()
     import re
     data = request.get_json(force=True) or {}
     name = data.get('name', '').strip()
@@ -459,9 +471,10 @@ def about():
     return redirect('/')
 
 
+@app.route('/contact')
 @app.route('/feedback')
-def feedback():
-    return render_template('feedback.html', **_ctx())
+def contact_feedback():
+    abort(404)
 
 
 @app.route('/tag/<int:tag_number>')

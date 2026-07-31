@@ -487,13 +487,13 @@ function buildAppendix(tags, prefix) {
           <td class="ml-app-desc">${esc(v)}</td>
         </tr>`).join('');
       return `<div class="ml-app-section" id="${id}">
-        <div class="ml-app-sec-hdr" onclick="toggleApp('${id}')">
+        <button type="button" class="ml-app-sec-hdr" onclick="toggleApp('${id}')" aria-expanded="false" aria-controls="${id}-body">
           <span class="ml-app-tag-num">${t.tag}</span>
           <span class="ml-app-tag-name">${esc(t.name)}</span>
           <span class="ml-app-val-count">${cnt} values</span>
-          <span class="ml-app-chevron">▾</span>
-        </div>
-        <div class="ml-app-sec-body" style="display:none">
+          <span class="ml-app-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="ml-app-sec-body" id="${id}-body" style="display:none">
           <table class="ml-app-table">
             <thead><tr><th>Value</th><th>Meaning</th></tr></thead>
             <tbody>${rows}</tbody>
@@ -513,9 +513,11 @@ function toggleApp(id) {
   if (!sec) return;
   const body = sec.querySelector('.ml-app-sec-body');
   const chev = sec.querySelector('.ml-app-chevron');
+  const btn  = sec.querySelector('.ml-app-sec-hdr');
   const open = body.style.display !== 'none';
   body.style.display = open ? 'none' : '';
   if (chev) chev.textContent = open ? '▾' : '▴';
+  if (btn)  btn.setAttribute('aria-expanded', open ? 'false' : 'true');
 }
 
 // ── Version pill handler ──────────────────────────────────────
@@ -2423,12 +2425,12 @@ function selectRefItem(code) {
 function refSearch(val) {
   const q = val.toLowerCase();
   let n = 0;
-  document.querySelectorAll('#rp-table tbody tr').forEach(tr => {
+  document.querySelectorAll('.rp-table-live tbody tr').forEach(tr => {
     const match = !q || tr.dataset.s.includes(q);
     tr.style.display = match ? '' : 'none';
     if (match) n++;
   });
-  const ce = document.getElementById('rp-count');
+  const ce = document.querySelector('.rp-count-live');
   if (ce) ce.textContent = n + ' entries';
 }
 
@@ -2440,10 +2442,10 @@ function rpHtml({ title, intro, colDefs, rows }) {
     <div class="rp-search-bar">
       <input type="search" class="ref-search rp-search" placeholder="Search…"
         autocomplete="off" spellcheck="false" oninput="refSearch(this.value)">
-      <span class="rp-count" id="rp-count">${rows.length} entries</span>
+      <span class="rp-count rp-count-live">${rows.length} entries</span>
     </div>
     <div class="rp-table-wrap">
-      <table class="rp-table" id="rp-table">
+      <table class="rp-table rp-table-live">
         <thead><tr>${ths}</tr></thead>
         <tbody>${rows.join('')}</tbody>
       </table>
@@ -2533,10 +2535,10 @@ function renderTimezone() {
     <div class="rp-search-bar">
       <input type="search" class="ref-search rp-search" placeholder="Search…"
         autocomplete="off" spellcheck="false" oninput="refSearch(this.value)">
-      <span class="rp-count" id="rp-count">${TZ_DATA.length} entries</span>
+      <span class="rp-count rp-count-live">${TZ_DATA.length} entries</span>
     </div>
     <div class="rp-table-wrap">
-      <table class="rp-table" id="rp-table">${thead}${tbody}</table>
+      <table class="rp-table rp-table-live">${thead}${tbody}</table>
     </div>`;
 }
 
@@ -2565,10 +2567,10 @@ function renderSecIdSrc() {
     <div class="rp-search-bar">
       <input type="search" class="ref-search rp-search" placeholder="Search…"
         autocomplete="off" spellcheck="false" oninput="refSearch(this.value)">
-      <span class="rp-count" id="rp-count">${SRC_DATA.length} entries</span>
+      <span class="rp-count rp-count-live">${SRC_DATA.length} entries</span>
     </div>
     <div class="rp-table-wrap">
-      <table class="rp-table rp-table-wide" id="rp-table">${thead}<tbody>${rows.join('')}</tbody></table>
+      <table class="rp-table rp-table-wide rp-table-live">${thead}<tbody>${rows.join('')}</tbody></table>
     </div>`;
 }
 
@@ -2594,7 +2596,7 @@ if (_hash === '#ref-mic') {
   <div class="footer-inner">
     <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
     <div class="footer-links">
-      <a href="/feedback" class="footer-link">Feedback</a>
+      <a href="mailto:feedback@fixreader.org?subject=FIXReader.org%20Feedback" class="footer-link">Feedback</a>
     </div>
     <span class="footer-copy">© 2026 FIXReader.org</span>
   </div>

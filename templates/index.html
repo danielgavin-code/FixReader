@@ -252,26 +252,26 @@
       <div class="editor-header">
         <span class="editor-header-label" id="decoder-label">Paste Your FIX Message</span>
         <div class="examples-wrap">
-          <button type="button" class="examples-btn" id="examples-btn">EXAMPLES ▾</button>
-          <div class="examples-drop" id="examples-drop" style="display:none">
+          <button type="button" class="examples-btn" id="examples-btn" aria-expanded="false" aria-haspopup="true">EXAMPLES ▾</button>
+          <div class="examples-drop" id="examples-drop" style="display:none" role="menu">
             <div class="examples-drop-label">Order Messages</div>
-            <div class="examples-drop-item" data-msg="new_order">New Order Single <span class="ed-badge">35=D</span></div>
-            <div class="examples-drop-item" data-msg="exec_report">Execution Report <span class="ed-badge">35=8</span></div>
-            <div class="examples-drop-sep"></div>
-            <div class="examples-drop-item" data-msg="cancel_request">Order Cancel Request <span class="ed-badge">35=F</span></div>
-            <div class="examples-drop-item" data-msg="cancel_replace">Order Cancel/Replace <span class="ed-badge">35=G</span></div>
-            <div class="examples-drop-item" data-msg="order_status">Order Status Request <span class="ed-badge">35=H</span></div>
-            <div class="examples-drop-sep"></div>
+            <button type="button" class="examples-drop-item" data-msg="new_order" role="menuitem">New Order Single <span class="ed-badge">35=D</span></button>
+            <button type="button" class="examples-drop-item" data-msg="exec_report" role="menuitem">Execution Report <span class="ed-badge">35=8</span></button>
+            <div class="examples-drop-sep" role="separator"></div>
+            <button type="button" class="examples-drop-item" data-msg="cancel_request" role="menuitem">Order Cancel Request <span class="ed-badge">35=F</span></button>
+            <button type="button" class="examples-drop-item" data-msg="cancel_replace" role="menuitem">Order Cancel/Replace <span class="ed-badge">35=G</span></button>
+            <button type="button" class="examples-drop-item" data-msg="order_status" role="menuitem">Order Status Request <span class="ed-badge">35=H</span></button>
+            <div class="examples-drop-sep" role="separator"></div>
             <div class="examples-drop-label">Post-Trade</div>
-            <div class="examples-drop-item" data-msg="allocation">Allocation <span class="ed-badge">35=J</span></div>
-            <div class="examples-drop-sep"></div>
+            <button type="button" class="examples-drop-item" data-msg="allocation" role="menuitem">Allocation <span class="ed-badge">35=J</span></button>
+            <div class="examples-drop-sep" role="separator"></div>
             <div class="examples-drop-label">Session</div>
-            <div class="examples-drop-item" data-msg="logon">Logon <span class="ed-badge">35=A</span></div>
-            <div class="examples-drop-item" data-msg="logout">Logout <span class="ed-badge">35=5</span></div>
-            <div class="examples-drop-item" data-msg="heartbeat">Heartbeat <span class="ed-badge">35=0</span></div>
-            <div class="examples-drop-sep"></div>
-            <div class="examples-drop-item" data-msg="md_request">Market Data Request <span class="ed-badge">35=V</span></div>
-            <div class="examples-drop-item" data-msg="reject">Reject <span class="ed-badge">35=3</span></div>
+            <button type="button" class="examples-drop-item" data-msg="logon" role="menuitem">Logon <span class="ed-badge">35=A</span></button>
+            <button type="button" class="examples-drop-item" data-msg="logout" role="menuitem">Logout <span class="ed-badge">35=5</span></button>
+            <button type="button" class="examples-drop-item" data-msg="heartbeat" role="menuitem">Heartbeat <span class="ed-badge">35=0</span></button>
+            <div class="examples-drop-sep" role="separator"></div>
+            <button type="button" class="examples-drop-item" data-msg="md_request" role="menuitem">Market Data Request <span class="ed-badge">35=V</span></button>
+            <button type="button" class="examples-drop-item" data-msg="reject" role="menuitem">Reject <span class="ed-badge">35=3</span></button>
           </div>
         </div>
       </div>
@@ -476,7 +476,7 @@
   <div class="footer-inner">
     <span class="footer-logo"><span class="logo-fix">FIX</span><span class="logo-reader">Reader</span></span>
     <div class="footer-links">
-      <a href="/feedback" class="footer-link">Feedback</a>
+      <a href="mailto:feedback@fixreader.org?subject=FIXReader.org%20Feedback" class="footer-link">Feedback</a>
     </div>
     <span class="footer-copy">© 2026 FIXReader.org</span>
   </div>
@@ -533,32 +533,46 @@ if (clearBtn && editorInput) {
 // ── EXAMPLES dropdown ──
 const examplesBtn  = document.getElementById('examples-btn');
 const examplesDrop = document.getElementById('examples-drop');
+function _examplesClose() {
+  examplesDrop.style.display = 'none';
+  examplesDrop.classList.remove('drop-flip');
+  examplesBtn.setAttribute('aria-expanded', 'false');
+}
 if (examplesBtn && examplesDrop) {
   examplesBtn.addEventListener('click', e => {
     e.stopPropagation();
     const open = examplesDrop.style.display !== 'none';
     if (open) {
-      examplesDrop.style.display = 'none';
-      examplesDrop.classList.remove('drop-flip');
+      _examplesClose();
     } else {
       examplesDrop.classList.remove('drop-flip');
       examplesDrop.style.display = '';
+      examplesBtn.setAttribute('aria-expanded', 'true');
       const rect = examplesDrop.getBoundingClientRect();
       if (rect.bottom > window.innerHeight) {
         examplesDrop.classList.add('drop-flip');
       }
+      const first = examplesDrop.querySelector('.examples-drop-item');
+      if (first) first.focus();
     }
   });
   document.querySelectorAll('.examples-drop-item').forEach(item => {
     item.addEventListener('click', () => {
       loadSample(item.dataset.msg, false);
-      examplesDrop.style.display = 'none';
-      examplesDrop.classList.remove('drop-flip');
+      _examplesClose();
+      examplesBtn.focus();
     });
   });
-  document.addEventListener('click', () => {
-    examplesDrop.style.display = 'none';
-    examplesDrop.classList.remove('drop-flip');
+  document.addEventListener('click', e => {
+    if (!examplesBtn.contains(e.target) && !examplesDrop.contains(e.target)) {
+      _examplesClose();
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && examplesDrop.style.display !== 'none') {
+      _examplesClose();
+      examplesBtn.focus();
+    }
   });
 }
 
