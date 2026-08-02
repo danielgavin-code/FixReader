@@ -137,7 +137,7 @@
   {
     "code": "CHF",
     "name": "Swiss Franc",
-    "country": "LIECHTENSTEIN"
+    "country": "Switzerland"
   },
   {
     "code": "CHW",
@@ -227,7 +227,7 @@
   {
     "code": "EUR",
     "name": "Euro",
-    "country": "\\u00c5LAND ISLANDS"
+    "country": "Euro area"
   },
   {
     "code": "FJD",
@@ -242,7 +242,7 @@
   {
     "code": "GBP",
     "name": "Pound Sterling",
-    "country": "GUERNSEY"
+    "country": "United Kingdom"
   },
   {
     "code": "GEL",
@@ -312,7 +312,7 @@
   {
     "code": "INR",
     "name": "Indian Rupee",
-    "country": "BHUTAN"
+    "country": "India"
   },
   {
     "code": "IQD",
@@ -512,7 +512,7 @@
   {
     "code": "NOK",
     "name": "Norwegian Krone",
-    "country": "BOUVET ISLAND"
+    "country": "Norway"
   },
   {
     "code": "NPR",
@@ -522,7 +522,7 @@
   {
     "code": "NZD",
     "name": "New Zealand Dollar",
-    "country": "COOK ISLANDS (THE)"
+    "country": "New Zealand"
   },
   {
     "code": "OMR",
@@ -722,7 +722,7 @@
   {
     "code": "USD",
     "name": "US Dollar",
-    "country": "AMERICAN SAMOA"
+    "country": "United States"
   },
   {
     "code": "USN",
@@ -782,47 +782,47 @@
   {
     "code": "XAF",
     "name": "CFA Franc BEAC",
-    "country": "CAMEROON"
+    "country": "Central African Economic and Monetary Community (CEMAC)"
   },
   {
     "code": "XAG",
     "name": "Silver",
-    "country": "ZZ11_Silver"
+    "country": "Precious metal — Silver"
   },
   {
     "code": "XAU",
     "name": "Gold",
-    "country": "ZZ08_Gold"
+    "country": "Precious metal — Gold"
   },
   {
     "code": "XBA",
     "name": "Bond Markets Unit European Composite Unit (EURCO)",
-    "country": "ZZ01_Bond Markets Unit European_EURCO"
+    "country": "Supranational unit — EURCO"
   },
   {
     "code": "XBB",
     "name": "Bond Markets Unit European Monetary Unit (E.M.U.-6)",
-    "country": "ZZ02_Bond Markets Unit European_EMU-6"
+    "country": "Supranational unit — EMU-6"
   },
   {
     "code": "XBC",
     "name": "Bond Markets Unit European Unit of Account 9 (E.U.A.-9)",
-    "country": "ZZ03_Bond Markets Unit European_EUA-9"
+    "country": "Supranational unit — EUA-9"
   },
   {
     "code": "XBD",
     "name": "Bond Markets Unit European Unit of Account 17 (E.U.A.-17)",
-    "country": "ZZ04_Bond Markets Unit European_EUA-17"
+    "country": "Supranational unit — EUA-17"
   },
   {
     "code": "XCD",
     "name": "East Caribbean Dollar",
-    "country": "ANGUILLA"
+    "country": "Eastern Caribbean Currency Union (ECCU)"
   },
   {
     "code": "XCG",
     "name": "Caribbean Guilder",
-    "country": "CURA\\u00c7AO"
+    "country": "Curaçao and Sint Maarten"
   },
   {
     "code": "XDR",
@@ -832,27 +832,27 @@
   {
     "code": "XOF",
     "name": "CFA Franc BCEAO",
-    "country": "BENIN"
+    "country": "West African Economic and Monetary Union (WAEMU/UEMOA)"
   },
   {
     "code": "XPD",
     "name": "Palladium",
-    "country": "ZZ09_Palladium"
+    "country": "Precious metal — Palladium"
   },
   {
     "code": "XPF",
     "name": "CFP Franc",
-    "country": "FRENCH POLYNESIA"
+    "country": "French Pacific territories"
   },
   {
     "code": "XPT",
     "name": "Platinum",
-    "country": "ZZ10_Platinum"
+    "country": "Precious metal — Platinum"
   },
   {
     "code": "XTS",
     "name": "Codes specifically reserved for testing purposes",
-    "country": "ZZ06_Testing_Code"
+    "country": "Testing code"
   },
   {
     "code": "XUA",
@@ -862,7 +862,7 @@
   {
     "code": "XXX",
     "name": "The codes assigned for transactions where no currency is involved",
-    "country": "ZZ07_No_Currency"
+    "country": "No currency involved"
   },
   {
     "code": "YER",
@@ -872,7 +872,7 @@
   {
     "code": "ZAR",
     "name": "Rand",
-    "country": "LESOTHO"
+    "country": "South Africa"
   },
   {
     "code": "ZMW",

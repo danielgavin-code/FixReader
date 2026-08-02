@@ -233,8 +233,8 @@
 </nav>
 
 <div class="ex-version-bar" role="tablist" aria-label="Exchange">
-  <button class="ex-pill active" onclick="selectExchange('byx',this)"          role="tab" aria-selected="true">BATY</button>
-  <button class="ex-pill"        onclick="selectExchange('bzx',this)"          role="tab" aria-selected="false">XCBO</button>
+  <button class="ex-pill"        onclick="selectExchange('byx',this)"          role="tab" aria-selected="false">BATY</button>
+  <button class="ex-pill"        onclick="selectExchange('bzx',this)"          role="tab" aria-selected="false">BATS</button>
   <button class="ex-pill"        onclick="selectExchange('edga',this)"         role="tab" aria-selected="false">EDGA</button>
   <button class="ex-pill"        onclick="selectExchange('edgx',this)"         role="tab" aria-selected="false">EDGX</button>
   <button class="ex-pill"        onclick="selectExchange('iex',this)"          role="tab" aria-selected="false">IEXG</button>
@@ -276,7 +276,7 @@
         <span>CBOE BYX</span>
       </a>
       <a class="ex-item ml-msg-item" href="/exchange-specs#bzx" onclick="selectExchange('bzx',null)" data-key="bzx">
-        <span class="ml-msg-code">XCBO</span>
+        <span class="ml-msg-code">BATS</span>
         <span>CBOE BZX</span>
       </a>
       <a class="ex-item ml-msg-item" href="/exchange-specs#edga" onclick="selectExchange('edga',null)" data-key="edga">
@@ -295,7 +295,7 @@
         <span class="ml-msg-code">MEMX</span>
         <span>MEMX</span>
       </a>
-      <a class="ex-item ml-msg-item active" href="/exchange-specs#nasdaq" onclick="selectExchange('nasdaq',null)" data-key="nasdaq">
+      <a class="ex-item ml-msg-item" href="/exchange-specs#nasdaq" onclick="selectExchange('nasdaq',null)" data-key="nasdaq">
         <span class="ml-msg-code">XNAS</span>
         <span>NASDAQ</span>
       </a>
@@ -1648,7 +1648,7 @@ const EXCHANGES = {
 // ── Nav and pill sync ─────────────────────────────────────────
 let _activeKey = null;
 
-function selectExchange(key, pillEl) {
+function selectExchange(key, pillEl, updateHistory) {
   _activeKey = key;
 
   // Sync left nav items
@@ -1665,6 +1665,9 @@ function selectExchange(key, pillEl) {
   });
 
   renderExchange(key);
+  if (updateHistory !== false) {
+    history.pushState({ key: key }, '', '#' + key);
+  }
   document.getElementById('ex-right').scrollTop = 0;
 }
 
@@ -1781,12 +1784,12 @@ function renderExchange(key) {
   var _h = window.location.hash.slice(1);
   var _k = EXCHANGES[_h] ? _h : 'nyse';
   history.replaceState({ key: _k }, '', '#' + _k);
-  selectExchange(_k, null);
+  selectExchange(_k, null, false);
 })();
 
 window.addEventListener('popstate', function(e) {
   var _k = (e.state && e.state.key) || window.location.hash.slice(1);
-  if (EXCHANGES[_k]) selectExchange(_k, null);
+  if (EXCHANGES[_k]) selectExchange(_k, null, false);
 });
 </script>
 
