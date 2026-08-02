@@ -850,6 +850,11 @@
     "country": "Precious metal — Platinum"
   },
   {
+    "code": "XSU",
+    "name": "Sucre",
+    "country": "SISTEMA UNITARIO DE COMPENSACION REGIONAL DE PAGOS SUCRE"
+  },
+  {
     "code": "XTS",
     "name": "Codes specifically reserved for testing purposes",
     "country": "Testing code"

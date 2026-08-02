@@ -437,3 +437,122 @@ def test_detail_shared_currencies_no_member_flag(client):
             assert pattern not in html, (
                 f'/currency/{code}: CCY_TO_COUNTRY still maps to member-country flag {flag!r}'
             )
+
+
+# ── BTN / LSL — own-currency non-contamination ───────────────────────────────
+# BTN (Bhutan's Ngultrum) and LSL (Lesotho's Loti) were at risk of receiving
+# incorrect country values during the 23-record fix because INR and ZAR
+# previously had "BHUTAN" and "LESOTHO" as country values too.  These tests
+# confirm the fix did not contaminate unrelated records.
+
+def test_btn_detail_returns_200(client):
+    assert client.get('/currency/BTN').status_code == 200
+
+def test_btn_detail_shows_bhutan(client):
+    html = client.get('/currency/BTN').data.decode('utf-8')
+    assert 'BHUTAN' in html, 'BTN detail page must show BHUTAN as Country/Region'
+
+def test_btn_detail_not_india(client):
+    html = client.get('/currency/BTN').data.decode('utf-8')
+    assert 'India' not in html, (
+        'BTN detail page must not identify India as its country — '
+        'Ngultrum is Bhutan’s currency, not India’s'
+    )
+
+def test_lsl_detail_returns_200(client):
+    assert client.get('/currency/LSL').status_code == 200
+
+def test_lsl_detail_shows_lesotho(client):
+    html = client.get('/currency/LSL').data.decode('utf-8')
+    assert 'LESOTHO' in html, 'LSL detail page must show LESOTHO as Country/Region'
+
+def test_lsl_detail_not_south_africa(client):
+    html = client.get('/currency/LSL').data.decode('utf-8')
+    assert 'South Africa' not in html, (
+        'LSL detail page must not identify South Africa as its country — '
+        'Loti is Lesotho’s currency, not South Africa’s'
+    )
+
+def test_four_records_distinct(client):
+    """BTN→Bhutan, INR→India, LSL→Lesotho, ZAR→South Africa — all distinct and correct."""
+    data = _load_json()
+    assert data['BTN']['country'] == 'BHUTAN',      f"BTN: got {data['BTN']['country']!r}"
+    assert data['INR']['country'] == 'India',       f"INR: got {data['INR']['country']!r}"
+    assert data['LSL']['country'] == 'LESOTHO',     f"LSL: got {data['LSL']['country']!r}"
+    assert data['ZAR']['country'] == 'South Africa',f"ZAR: got {data['ZAR']['country']!r}"
+
+def test_library_ccy_data_btn_is_bhutan(library_html):
+    data = _ccy_data_from_html(library_html)
+    assert 'BTN' in data, 'BTN not found in CCY_DATA on message-library page'
+    assert data['BTN'] == 'BHUTAN', (
+        f'CCY_DATA[BTN]: expected "BHUTAN", got {data["BTN"]!r}'
+    )
+
+def test_library_ccy_data_btn_not_india(library_html):
+    data = _ccy_data_from_html(library_html)
+    if 'BTN' in data:
+        assert data['BTN'] != 'India', (
+            'CCY_DATA[BTN] incorrectly set to India — must be BHUTAN'
+        )
+
+def test_library_ccy_data_lsl_is_lesotho(library_html):
+    data = _ccy_data_from_html(library_html)
+    assert 'LSL' in data, 'LSL not found in CCY_DATA on message-library page'
+    assert data['LSL'] == 'LESOTHO', (
+        f'CCY_DATA[LSL]: expected "LESOTHO", got {data["LSL"]!r}'
+    )
+
+def test_library_ccy_data_lsl_not_south_africa(library_html):
+    data = _ccy_data_from_html(library_html)
+    if 'LSL' in data:
+        assert data['LSL'] != 'South Africa', (
+            'CCY_DATA[LSL] incorrectly set to South Africa — must be LESOTHO'
+        )
+
+def test_library_ccy_data_inr_is_india(library_html):
+    data = _ccy_data_from_html(library_html)
+    assert data.get('INR') == 'India', (
+        f'CCY_DATA[INR]: expected "India", got {data.get("INR")!r}'
+    )
+
+def test_library_ccy_data_zar_is_south_africa(library_html):
+    data = _ccy_data_from_html(library_html)
+    assert data.get('ZAR') == 'South Africa', (
+        f'CCY_DATA[ZAR]: expected "South Africa", got {data.get("ZAR")!r}'
+    )
+
+
+# ── Full JSON ↔ CCY_DATA parity (all codes) ──────────────────────────────────
+
+def test_all_json_codes_present_in_ccy_data(library_html):
+    """Every code in currency_codes.json must have a matching row in CCY_DATA."""
+    json_data = _load_json()
+    ccy_data = _ccy_data_from_html(library_html)
+    missing = [code for code in json_data if code not in ccy_data]
+    assert not missing, f'Codes in JSON but absent from CCY_DATA: {missing}'
+
+
+def test_all_ccy_data_codes_present_in_json(library_html):
+    """Every code in CCY_DATA must have a backing record in currency_codes.json."""
+    json_data = _load_json()
+    ccy_data = _ccy_data_from_html(library_html)
+    extra = [code for code in ccy_data if code not in json_data]
+    assert not extra, f'Codes in CCY_DATA but absent from JSON: {extra}'
+
+
+def test_full_json_ccy_data_country_parity(library_html):
+    """country field in JSON and CCY_DATA must match for every shared code."""
+    json_data = _load_json()
+    ccy_data = _ccy_data_from_html(library_html)
+    mismatches = []
+    for code in json_data:
+        if code not in ccy_data:
+            continue
+        j_val = json_data[code]['country']
+        c_val = ccy_data[code]
+        if j_val != c_val:
+            mismatches.append((code, j_val, c_val))
+    assert not mismatches, (
+        'JSON and CCY_DATA country values disagree:\n' +
+        '\n'.join(f'  {c}: JSON={j!r}  CCY_DATA={d!r}' for c, j, d in mismatches)
+    )
