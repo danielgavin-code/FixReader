@@ -1777,7 +1777,17 @@ function renderExchange(key) {
 }
 
 // ── Init ──────────────────────────────────────────────────────
-selectExchange('nyse', document.querySelector('.ex-pill'));
+(function() {
+  var _h = window.location.hash.slice(1);
+  var _k = EXCHANGES[_h] ? _h : 'nyse';
+  history.replaceState({ key: _k }, '', '#' + _k);
+  selectExchange(_k, null);
+})();
+
+window.addEventListener('popstate', function(e) {
+  var _k = (e.state && e.state.key) || window.location.hash.slice(1);
+  if (EXCHANGES[_k]) selectExchange(_k, null);
+});
 </script>
 
 <script>window.FIXREADER_ALL_TAGS = {{ tag_list_json | safe }};</script>
