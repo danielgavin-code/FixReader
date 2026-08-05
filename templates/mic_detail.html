@@ -41,6 +41,13 @@
     .mic-detail-back { padding-top: 24px; }
     .mic-back-link { font-size: 13px; color: var(--color-accent); text-decoration: none; }
     .mic-back-link:hover { text-decoration: underline; }
+    .mic-enrichment-section { margin-top: 8px; }
+    .mic-enrichment-link { color: var(--color-accent); text-decoration: none; word-break: break-all; }
+    .mic-enrichment-link:hover { text-decoration: underline; }
+    .mic-sources-list { list-style: none; padding: 0; margin: 12px 0 0; }
+    .mic-sources-list li { padding: 12px 0; border-bottom: 1px solid var(--border-light); font-size: 15px; }
+    .mic-sources-list li:last-child { border-bottom: none; }
+    .mic-source-meta { display: block; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
     @media (max-width: 680px) {
       .ml-shell { flex-direction: column; overflow: auto; }
       .ml-left  { width: 100%; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
@@ -147,6 +154,56 @@
         <a href="/message-library#ref-mic" class="mic-back-link">← Back to MIC Codes</a>
       </div>
     </div>
+    {% if enrichment and (enrichment.legal_entity or enrichment.parent_company or enrichment.headquarters or enrichment.institution_type or enrichment.website) %}
+    <div class="mic-detail-card mic-enrichment-section">
+      <span class="detail-type-badge">Organization</span>
+      {% if enrichment.legal_entity %}
+      <div class="mic-detail-row">
+        <span class="mic-detail-label">Legal Entity</span>
+        <span class="mic-detail-value">{{ enrichment.legal_entity }}</span>
+      </div>
+      {% endif %}
+      {% if enrichment.parent_company %}
+      <div class="mic-detail-row">
+        <span class="mic-detail-label">Parent Company</span>
+        <span class="mic-detail-value">{{ enrichment.parent_company }}</span>
+      </div>
+      {% endif %}
+      {% if enrichment.headquarters %}
+      <div class="mic-detail-row">
+        <span class="mic-detail-label">Headquarters</span>
+        <span class="mic-detail-value">{{ enrichment.headquarters }}</span>
+      </div>
+      {% endif %}
+      {% if enrichment.institution_type %}
+      <div class="mic-detail-row">
+        <span class="mic-detail-label">Institution Type</span>
+        <span class="mic-detail-value">{{ enrichment.institution_type }}</span>
+      </div>
+      {% endif %}
+      {% if enrichment.website %}
+      <div class="mic-detail-row">
+        <span class="mic-detail-label">Website</span>
+        <span class="mic-detail-value">
+          <a href="{{ enrichment.website }}" class="mic-enrichment-link" target="_blank" rel="noopener noreferrer">{{ enrichment.website }}</a>
+        </span>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+    {% if enrichment and enrichment.sources %}
+    <div class="mic-detail-card mic-enrichment-section">
+      <span class="detail-type-badge">Sources</span>
+      <ul class="mic-sources-list">
+        {% for src in enrichment.sources %}
+        <li>
+          <a href="{{ src.url }}" class="mic-enrichment-link" target="_blank" rel="noopener noreferrer">{{ src.title }}</a>
+          {% if src.retrieved %}<span class="mic-source-meta">Retrieved {{ src.retrieved }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
   </main>
 
 </div><!-- /ml-shell -->

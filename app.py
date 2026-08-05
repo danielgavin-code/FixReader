@@ -395,6 +395,15 @@ def mic_index():
     return redirect('/message-library')
 
 
+def _get_mic_enrichment(mic_code):
+    try:
+        path = os.path.join(_BASE, 'fixreader_data', 'mic_enrichment.json')
+        with open(path) as f:
+            return json.load(f).get(mic_code.upper())
+    except Exception:
+        return None
+
+
 @app.route('/mic/<mic_code>')
 def mic_detail(mic_code):
     try:
@@ -405,7 +414,8 @@ def mic_detail(mic_code):
     mic = mics.get(mic_code.upper())
     if not mic:
         abort(404)
-    return render_template('mic_detail.html', **_ctx(), mic=mic)
+    enrichment = _get_mic_enrichment(mic_code)
+    return render_template('mic_detail.html', **_ctx(), mic=mic, enrichment=enrichment)
 
 
 @app.route('/currency/<ccy_code>')
