@@ -1,0 +1,201 @@
+{
+  "XNYS": {
+    "legal_entity": "New York Stock Exchange LLC",
+    "parent_company": "Intercontinental Exchange, Inc.",
+    "headquarters": "New York, United States",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nyse.com",
+    "sources": [
+      {"title": "NYSE — The New York Stock Exchange", "url": "https://www.nyse.com/index", "retrieved": "2026-08-05"},
+      {"title": "NYSE Listed Company Network — ICE Family", "url": "https://www.nyse.com/network", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XNAS": {
+    "legal_entity": "The Nasdaq Stock Market LLC",
+    "parent_company": "Nasdaq, Inc.",
+    "headquarters": "New York, United States",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nasdaq.com/solutions/nasdaq-stock-market",
+    "sources": [
+      {"title": "The Nasdaq Stock Market LLC — Corporate Organization", "url": "https://listingcenter.nasdaq.com/assets/rulebook/nasdaq/rules/NASDAQ_Corporate_Organization_Nasdaq_LLC.pdf", "retrieved": "2026-08-05"},
+      {"title": "Nasdaq Investor Relations", "url": "https://ir.nasdaq.com/", "retrieved": "2026-08-05"}
+    ]
+  },
+  "IEXG": {
+    "legal_entity": "Investors Exchange LLC",
+    "parent_company": "IEX Group, Inc.",
+    "headquarters": "New York, United States",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.iexexchange.io/",
+    "sources": [
+      {"title": "IEX Equities — Investors Exchange LLC", "url": "https://www.iexexchange.io/", "retrieved": "2026-08-05"},
+      {"title": "IEX Regulation", "url": "https://www.iexexchange.io/resources/regulation", "retrieved": "2026-08-05"},
+      {"title": "About IEX Group", "url": "https://www.iexexchange.io/about", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XCBO": {
+    "legal_entity": "Cboe Global Markets, Inc.",
+    "headquarters": "Chicago, United States",
+    "website": "https://www.cboe.com/",
+    "sources": [
+      {"title": "Cboe Global Markets", "url": "https://www.cboe.com/", "retrieved": "2026-08-05"},
+      {"title": "Cboe Corporate Headquarters", "url": "https://ir.cboe.com/resources/investor-contacts/default.aspx", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XISX": {
+    "legal_entity": "Nasdaq ISE, LLC",
+    "parent_company": "Nasdaq, Inc.",
+    "headquarters": "New York, United States",
+    "institution_type": "Options Exchange",
+    "website": "https://www.nasdaq.com/solutions/nasdaq-ise",
+    "sources": [
+      {"title": "Nasdaq Investor Relations", "url": "https://ir.nasdaq.com/", "retrieved": "2026-08-05"},
+      {"title": "Nasdaq Trader", "url": "https://www.nasdaqtrader.com/", "retrieved": "2026-08-05"}
+    ]
+  },
+  "MIHI": {
+    "legal_entity": "Miami International Holdings, Inc.",
+    "headquarters": "Princeton, United States",
+    "website": "https://www.miaxglobal.com/",
+    "sources": [
+      {"title": "MIAX — Our Company", "url": "https://www.miaxglobal.com/company/about", "retrieved": "2026-08-05"},
+      {"title": "MIAX Contact and Office Locations", "url": "https://www.miaxglobal.com/contact", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XBOX": {
+    "legal_entity": "BOX Exchange LLC",
+    "headquarters": "Boston, United States",
+    "institution_type": "Options Exchange",
+    "website": "https://boxoptions.com/",
+    "sources": [
+      {"title": "BOX Options Market", "url": "https://boxoptions.com/", "retrieved": "2026-08-05"},
+      {"title": "About BOX Options", "url": "https://boxoptions.com/about/", "retrieved": "2026-08-05"},
+      {"title": "BOX Exchange Contact", "url": "https://boxoptions.com/contact/", "retrieved": "2026-08-05"}
+    ]
+  },
+  "OTCM": {
+    "legal_entity": "OTC Link LLC",
+    "parent_company": "OTC Markets Group Inc.",
+    "headquarters": "New York, United States",
+    "institution_type": "Alternative Trading System",
+    "website": "https://www.otcmarkets.com/",
+    "sources": [
+      {"title": "OTC Markets Group Company Profile", "url": "https://www.otcmarkets.com/stock/OTCM/profile", "retrieved": "2026-08-05"},
+      {"title": "OTC Markets Group Financial Report", "url": "https://www.otcmarkets.com/file/company/financial-report/425884/content", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XCME": {
+    "legal_entity": "Chicago Mercantile Exchange Inc.",
+    "parent_company": "CME Group Inc.",
+    "headquarters": "Chicago, United States",
+    "institution_type": "Futures Exchange",
+    "website": "https://www.cmegroup.com/",
+    "sources": [
+      {"title": "About CME Group", "url": "https://www.cmegroup.com/company/about-us.html", "retrieved": "2026-08-05"},
+      {"title": "CME Group Global Offices", "url": "https://www.cmegroup.com/company/history/global-offices.html", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XCBT": {
+    "legal_entity": "Board of Trade of the City of Chicago, Inc.",
+    "parent_company": "CME Group Inc.",
+    "headquarters": "Chicago, United States",
+    "institution_type": "Futures Exchange",
+    "website": "https://www.cmegroup.com/",
+    "sources": [
+      {"title": "About CME Group", "url": "https://www.cmegroup.com/company/about-us.html", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XNYM": {
+    "legal_entity": "New York Mercantile Exchange, Inc.",
+    "parent_company": "CME Group Inc.",
+    "headquarters": "New York, United States",
+    "institution_type": "Futures Exchange",
+    "website": "https://www.cmegroup.com/",
+    "sources": [
+      {"title": "About CME Group", "url": "https://www.cmegroup.com/company/about-us.html", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XLON": {
+    "legal_entity": "London Stock Exchange plc",
+    "parent_company": "London Stock Exchange Group plc",
+    "headquarters": "London, United Kingdom",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.londonstockexchange.com/",
+    "sources": [
+      {"title": "LSEG", "url": "https://www.lseg.com/en", "retrieved": "2026-08-05"},
+      {"title": "LSEG Annual Report 2024", "url": "https://www.lseg.com/content/dam/lseg/en_us/documents/investor-relations/annual-reports/lseg-annual-report-2024.pdf", "retrieved": "2026-08-05"}
+    ]
+  },
+  "SGMX": {
+    "legal_entity": "Goldman Sachs International",
+    "parent_company": "The Goldman Sachs Group, Inc.",
+    "headquarters": "London, United Kingdom",
+    "institution_type": "Multilateral Trading Facility",
+    "website": "https://www.goldmansachs.com/what-we-do/ficc-and-equities/gset-equities",
+    "sources": [
+      {"title": "Goldman Sachs Electronic Trading — Sigma X MTF", "url": "https://www.goldmansachs.com/what-we-do/ficc-and-equities/gset-equities", "retrieved": "2026-08-05"},
+      {"title": "Goldman Sachs EMEA Equity Trading Venue Rules and Regulations", "url": "https://www.goldmansachs.com/disclosures/mifid/emea-equity-trading-venue-rules-and-regulations", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XPAR": {
+    "legal_entity": "Euronext Paris S.A.",
+    "parent_company": "Euronext N.V.",
+    "headquarters": "Paris, France",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.euronext.com/en/about-euronext/markets/paris",
+    "sources": [
+      {"title": "Euronext Paris", "url": "https://www.euronext.com/en/about-euronext/markets/paris", "retrieved": "2026-08-05"},
+      {"title": "Euronext Harmonised Rule Book", "url": "https://www.euronext.com/sites/default/files/2020-11/Harmonised%20rulebook_EN.pdf", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XAMS": {
+    "legal_entity": "Euronext Amsterdam N.V.",
+    "parent_company": "Euronext N.V.",
+    "headquarters": "Amsterdam, Netherlands",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.euronext.com/en/markets/amsterdam",
+    "sources": [
+      {"title": "Euronext", "url": "https://www.euronext.com/en", "retrieved": "2026-08-05"},
+      {"title": "Euronext Harmonised Rule Book", "url": "https://www.euronext.com/sites/default/files/2020-11/Harmonised%20rulebook_EN.pdf", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XBRU": {
+    "legal_entity": "Euronext Brussels S.A./N.V.",
+    "parent_company": "Euronext N.V.",
+    "headquarters": "Brussels, Belgium",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.euronext.com/en/about-euronext/markets/brussels",
+    "sources": [
+      {"title": "Euronext Brussels", "url": "https://www.euronext.com/en/about-euronext/markets/brussels", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XLIS": {
+    "legal_entity": "Euronext Lisbon — Sociedade Gestora de Mercados Regulamentados, S.A.",
+    "parent_company": "Euronext N.V.",
+    "headquarters": "Lisbon, Portugal",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.euronext.com/en/markets/lisbon",
+    "sources": [
+      {"title": "Euronext Lisbon", "url": "https://www.euronext.com/en/markets/lisbon", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XMIL": {
+    "legal_entity": "Borsa Italiana S.p.A.",
+    "parent_company": "Euronext N.V.",
+    "headquarters": "Milan, Italy",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.borsaitaliana.it/",
+    "sources": [
+      {"title": "Euronext Universal Registration Document 2025", "url": "https://www.euronext.com/sites/default/files/financial-event-doc/2026-03/EUR2025_URD_EN_VMEL.pdf", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XETR": {
+    "legal_entity": "Deutsche Börse AG",
+    "headquarters": "Frankfurt, Germany",
+    "website": "https://www.cashmarket.deutsche-boerse.com/cash-en/trading/Xetra",
+    "sources": [
+      {"title": "Trading on Xetra — Deutsche Börse", "url": "https://www.cashmarket.deutsche-boerse.com/cash-en/trading/Xetra", "retrieved": "2026-08-05"},
+      {"title": "Deutsche Börse Group", "url": "https://www.deutsche-boerse.com/dbg-en", "retrieved": "2026-08-05"}
+    ]
+  }
+}

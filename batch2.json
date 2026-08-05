@@ -1,0 +1,198 @@
+{
+  "XFRA": {
+    "legal_entity": "Deutsche Börse AG",
+    "headquarters": "Frankfurt, Germany",
+    "website": "https://www.deutsche-boerse.com",
+    "sources": [
+      {"title": "Frankfurt Stock Exchange", "url": "https://www.deutsche-boerse.com/dbg-en/markets-services/trading/frankfurt-stock-exchange", "retrieved": "2026-08-05"},
+      {"title": "Headquarters of Deutsche Börse Group", "url": "https://www.deutsche-boerse.com/dbg-en/about-us/contact/addresses/30768-30768", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XEUR": {
+    "legal_entity": "Eurex Deutschland",
+    "parent_company": "Deutsche Börse AG",
+    "headquarters": "Frankfurt, Germany",
+    "institution_type": "Futures Exchange",
+    "website": "https://www.eurex.com",
+    "sources": [
+      {"title": "Eurex Rules and Regulations", "url": "https://www.eurex.com/ex-en/rules-regs/eurex-rules-regulations", "retrieved": "2026-08-05"},
+      {"title": "Management Board of Eurex Deutschland", "url": "https://www.eurex.com/ex-en/find/about-us/management-boards/Management-Board-of-Eurex-Deutschland-30398", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XDUS": {
+    "legal_entity": "BÖAG Börsen AG",
+    "headquarters": "Düsseldorf, Germany",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.boerse-duesseldorf.de",
+    "sources": [
+      {"title": "BÖAG Börsen AG — Legal Information", "url": "https://www.boersenag.de/impressum/impressum/", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XHAM": {
+    "legal_entity": "BÖAG Börsen AG",
+    "headquarters": "Hamburg, Germany",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.boerse-hamburg.de",
+    "sources": [
+      {"title": "BÖAG Börsen AG — Legal Information", "url": "https://www.boersenag.de/impressum/impressum/", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XHAN": {
+    "legal_entity": "BÖAG Börsen AG",
+    "headquarters": "Hannover, Germany",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.boerse-hannover.de",
+    "sources": [
+      {"title": "BÖAG Börsen AG — Legal Information", "url": "https://www.boersenag.de/impressum/impressum/", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XBER": {
+    "legal_entity": "Börse Berlin AG",
+    "headquarters": "Berlin, Germany",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.boerse-berlin.de",
+    "sources": [
+      {"title": "Börse Berlin", "url": "https://www.boerse-berlin.de/index.php", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XMUN": {
+    "legal_entity": "Bayerische Börse AG",
+    "headquarters": "Munich, Germany",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.boerse-muenchen.de",
+    "sources": [
+      {"title": "Börse München — Imprint", "url": "https://www.boerse-muenchen.de/impressum", "retrieved": "2026-08-05"},
+      {"title": "Börse München — Management", "url": "https://www.boerse-muenchen.de/ueber-uns/vorstand-geschaeftsfuehrung/", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XSTU": {
+    "legal_entity": "Baden-Württembergische Wertpapierbörse GmbH",
+    "headquarters": "Stuttgart, Germany",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.boerse-stuttgart.de",
+    "sources": [
+      {"title": "Baden-Württembergische Wertpapierbörse", "url": "https://www.boerse-stuttgart.de/de-de/gruppe-boerse-stuttgart/unternehmen/unsere-unternehmen/bwwb/", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XSWX": {
+    "legal_entity": "SIX Swiss Exchange Ltd.",
+    "parent_company": "SIX Group AG",
+    "headquarters": "Zurich, Switzerland",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.six-group.com/en/products-services/the-swiss-stock-exchange.html",
+    "sources": [
+      {"title": "SIX Swiss Exchange", "url": "https://www.six-group.com/en/products-services/the-swiss-stock-exchange.html", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XWBO": {
+    "legal_entity": "Wiener Börse AG",
+    "headquarters": "Vienna, Austria",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.wienerborse.at",
+    "sources": [
+      {"title": "Vienna Stock Exchange — Legal Notice", "url": "https://www.wienerborse.at/en/legal/social-media-disclaimer/", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XLUX": {
+    "legal_entity": "Société de la Bourse de Luxembourg S.A.",
+    "headquarters": "Luxembourg, Luxembourg",
+    "institution_type": "Stock Exchange",
+    "website": "https://luxse.com",
+    "sources": [
+      {"title": "Luxembourg Stock Exchange", "url": "https://luxse.com/", "retrieved": "2026-08-05"},
+      {"title": "Bourse de Luxembourg Market", "url": "https://luxse.com/listing/our-markets-and-platforms/bourse-de-luxembourg-market", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XDUB": {
+    "legal_entity": "Euronext Dublin",
+    "parent_company": "Euronext N.V.",
+    "headquarters": "Dublin, Ireland",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.euronext.com/en/about-euronext/markets/dublin",
+    "sources": [
+      {"title": "Euronext Dublin", "url": "https://www.euronext.com/en/about-euronext/markets/dublin", "retrieved": "2026-08-05"},
+      {"title": "Euronext Completes the Acquisition of the Irish Stock Exchange", "url": "https://www.euronext.com/en/about/media/euronext-press-releases/euronext-completes-acquisition-irish-stock-exchange", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XSTO": {
+    "legal_entity": "Nasdaq Stockholm AB",
+    "parent_company": "Nasdaq, Inc.",
+    "headquarters": "Stockholm, Sweden",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nasdaq.com/solutions/european-markets/stockholm",
+    "sources": [
+      {"title": "Stockholm Stock Exchange", "url": "https://www.nasdaq.com/solutions/european-markets/stockholm", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XCSE": {
+    "legal_entity": "Nasdaq Copenhagen A/S",
+    "parent_company": "Nasdaq, Inc.",
+    "headquarters": "Copenhagen, Denmark",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nasdaq.com/solutions/european-markets/copenhagen",
+    "sources": [
+      {"title": "Copenhagen Stock Exchange", "url": "https://www.nasdaq.com/solutions/european-markets/copenhagen", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XHEL": {
+    "legal_entity": "Nasdaq Helsinki Ltd",
+    "parent_company": "Nasdaq, Inc.",
+    "headquarters": "Helsinki, Finland",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nasdaq.com/solutions/european-markets/helsinki",
+    "sources": [
+      {"title": "Helsinki Stock Exchange", "url": "https://www.nasdaq.com/solutions/european-markets/helsinki", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XOSL": {
+    "legal_entity": "Oslo Børs ASA",
+    "parent_company": "Euronext N.V.",
+    "headquarters": "Oslo, Norway",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.euronext.com/en/markets/oslo",
+    "sources": [
+      {"title": "Euronext Oslo Børs", "url": "https://www.euronext.com/en/markets/oslo", "retrieved": "2026-08-05"},
+      {"title": "Euronext Completes the Acquisition of Oslo Børs VPS", "url": "https://www.euronext.com/en/about/media/euronext-press-releases/euronext-completes-acquisition-oslo-bors-vps", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XICE": {
+    "legal_entity": "Nasdaq Iceland hf.",
+    "parent_company": "Nasdaq, Inc.",
+    "headquarters": "Reykjavik, Iceland",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nasdaq.com/market-regulation/nordic/iceland",
+    "sources": [
+      {"title": "Nasdaq Nordic Main Market Application", "url": "https://listingcenter.nasdaq.com/assets/Nordic%20Main%20Market%20Application%20Preview.pdf", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XRIS": {
+    "legal_entity": "Nasdaq Riga AS",
+    "parent_company": "Nasdaq, Inc.",
+    "headquarters": "Riga, Latvia",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nasdaqbaltic.com",
+    "sources": [
+      {"title": "Nasdaq Nordic and Baltic Market Cost Accounting Methodology", "url": "https://www.nasdaq.com/docs/2023/08/31/Nordic-Baltic-Cost-Accounting-Methodology-2023.pdf", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XTAL": {
+    "legal_entity": "Nasdaq Tallinn AS",
+    "parent_company": "Nasdaq, Inc.",
+    "headquarters": "Tallinn, Estonia",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nasdaqbaltic.com",
+    "sources": [
+      {"title": "Nasdaq Nordic and Baltic Market Cost Accounting Methodology", "url": "https://www.nasdaq.com/docs/2023/08/31/Nordic-Baltic-Cost-Accounting-Methodology-2023.pdf", "retrieved": "2026-08-05"}
+    ]
+  },
+  "XLIT": {
+    "legal_entity": "AB Nasdaq Vilnius",
+    "parent_company": "Nasdaq, Inc.",
+    "headquarters": "Vilnius, Lithuania",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nasdaqbaltic.com",
+    "sources": [
+      {"title": "Nasdaq Nordic and Baltic Market Cost Accounting Methodology", "url": "https://www.nasdaq.com/docs/2023/08/31/Nordic-Baltic-Cost-Accounting-Methodology-2023.pdf", "retrieved": "2026-08-05"}
+    ]
+  }
+}
