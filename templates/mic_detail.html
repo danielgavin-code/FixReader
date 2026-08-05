@@ -141,7 +141,7 @@
       </div>
       <div class="mic-detail-row">
         <span class="mic-detail-label">Flag</span>
-        <span class="mic-detail-value" id="mic-flag"></span>
+        <span class="mic-detail-value" id="mic-flag">{% set _ri = {'A':'🇦','B':'🇧','C':'🇨','D':'🇩','E':'🇪','F':'🇫','G':'🇬','H':'🇭','I':'🇮','J':'🇯','K':'🇰','L':'🇱','M':'🇲','N':'🇳','O':'🇴','P':'🇵','Q':'🇶','R':'🇷','S':'🇸','T':'🇹','U':'🇺','V':'🇻','W':'🇼','X':'🇽','Y':'🇾','Z':'🇿'} %}{% set _c = mic.country | upper %}{% if _c | length == 2 and _c[0] in _ri and _c[1] in _ri %}{{ _ri[_c[0]] }}{{ _ri[_c[1]] }}{% endif %}</span>
       </div>
       <div class="mic-detail-back">
         <a href="/message-library#ref-mic" class="mic-back-link">← Back to MIC Codes</a>
