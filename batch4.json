@@ -1,0 +1,324 @@
+{
+  "XSTC": {
+    "headquarters": "Ho Chi Minh City, Vietnam",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.hsx.vn/en/",
+    "sources": [
+      {
+        "title": "HOSE - Introduction",
+        "url": "https://www.hsx.vn/en/gioi-thieu",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XLAO": {
+    "legal_entity": "Lao Securities Exchange",
+    "headquarters": "Vientiane, Laos",
+    "institution_type": "Stock Exchange",
+    "website": "https://lsx.com.la/en",
+    "sources": [
+      {
+        "title": "About Lao Securities Exchange",
+        "url": "https://lsx.com.la/en/about/ceo",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XULA": {
+    "legal_entity": "Mongolian Stock Exchange JSC",
+    "headquarters": "Ulaanbaatar, Mongolia",
+    "institution_type": "Stock Exchange",
+    "website": "https://mse.mn/en",
+    "sources": [
+      {
+        "title": "Mongolian Stock Exchange - About Us",
+        "url": "https://old.mse.mn/en/aboutus_en",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XKAZ": {
+    "legal_entity": "Kazakhstan Stock Exchange JSC",
+    "headquarters": "Almaty, Kazakhstan",
+    "institution_type": "Stock Exchange",
+    "website": "https://kase.kz/en",
+    "sources": [
+      {
+        "title": "Charter of Joint-Stock Company Kazakhstan Stock Exchange",
+        "url": "https://kase.kz/files/normative_base/ustav_eng.pdf",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XNGO": {
+    "legal_entity": "Nagoya Stock Exchange, Inc.",
+    "headquarters": "Nagoya, Japan",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nse.or.jp/e/",
+    "sources": [
+      {
+        "title": "Organization Structure",
+        "url": "https://www.nse.or.jp/e/syokai/e-gaiyou/e-sosiki.html",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XFKA": {
+    "headquarters": "Fukuoka, Japan",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.fse.or.jp/",
+    "sources": [
+      {
+        "title": "福岡証券取引所",
+        "url": "https://www.fse.or.jp/",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XSAP": {
+    "legal_entity": "Sapporo Securities Exchange",
+    "headquarters": "Sapporo, Japan",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.sse.or.jp/",
+    "sources": [
+      {
+        "title": "札幌証券取引所",
+        "url": "https://www.sse.or.jp/",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XBOM": {
+    "legal_entity": "BSE Limited",
+    "headquarters": "Mumbai, India",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.bseindia.com/",
+    "sources": [
+      {
+        "title": "Corporate Profile",
+        "url": "https://www.bseindia.com/static/about/corporate_profile.html",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XNSE": {
+    "legal_entity": "National Stock Exchange of India Limited",
+    "headquarters": "Mumbai, India",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nseindia.com/",
+    "sources": [
+      {
+        "title": "About Us",
+        "url": "https://www.nseindia.com/static/national-stock-exchange/about-nse-company",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XKAR": {
+    "legal_entity": "Pakistan Stock Exchange Limited",
+    "headquarters": "Karachi, Pakistan",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.psx.com.pk/",
+    "sources": [
+      {
+        "title": "Corporate Information",
+        "url": "https://www.psx.com.pk/psx/exchange/profile/corporate-information",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XCOL": {
+    "legal_entity": "Colombo Stock Exchange",
+    "headquarters": "Colombo, Sri Lanka",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.cse.lk/",
+    "sources": [
+      {
+        "title": "Colombo Stock Exchange Annual Report 2025",
+        "url": "https://cdn.cse.lk/pdf/annual-reports/Annual-Report-2025.pdf",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XDHA": {
+    "legal_entity": "Dhaka Stock Exchange PLC",
+    "headquarters": "Dhaka, Bangladesh",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.dsebd.org/",
+    "sources": [
+      {
+        "title": "Company Profile",
+        "url": "https://www.dsebd.org/company_profile.php",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XASX": {
+    "legal_entity": "ASX Limited",
+    "headquarters": "Sydney, Australia",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.asx.com.au/",
+    "sources": [
+      {
+        "title": "About Us",
+        "url": "https://www.asx.com.au/about",
+        "retrieved": "2026-08-05"
+      },
+      {
+        "title": "ASX 2025 Annual Report",
+        "url": "https://www.asx.com.au/content/dam/asx/annual-reports/asx-2025-annual-report.pdf",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XNZE": {
+    "legal_entity": "NZX Limited",
+    "headquarters": "Wellington, New Zealand",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.nzx.com/",
+    "sources": [
+      {
+        "title": "NZX Trading",
+        "url": "https://www.nzx.com/services/nzx-trading",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XTSE": {
+    "legal_entity": "TSX Inc.",
+    "parent_company": "TMX Group Limited",
+    "headquarters": "Toronto, Canada",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.tsx.com/",
+    "sources": [
+      {
+        "title": "TMX Group Company Profile",
+        "url": "https://www.tmx.com/about-the-company",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XCNQ": {
+    "legal_entity": "CNSX Markets Inc.",
+    "headquarters": "Toronto, Canada",
+    "institution_type": "Stock Exchange",
+    "website": "https://thecse.com/",
+    "sources": [
+      {
+        "title": "Site Terms",
+        "url": "https://thecse.com/site-terms/",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XMEX": {
+    "legal_entity": "Bolsa Mexicana de Valores, S.A.B. de C.V.",
+    "headquarters": "Mexico City, Mexico",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.bmv.com.mx/",
+    "sources": [
+      {
+        "title": "BMV Group",
+        "url": "https://www.bmv.com.mx/en/bmv-group",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "BVMF": {
+    "legal_entity": "B3 S.A. – Brasil, Bolsa, Balcão",
+    "headquarters": "São Paulo, Brazil",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.b3.com.br/en_us/",
+    "sources": [
+      {
+        "title": "Corporate Information",
+        "url": "https://ri.b3.com.br/en/b3/corporate-information/",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XBUE": {
+    "legal_entity": "Bolsa de Comercio de Buenos Aires",
+    "headquarters": "Buenos Aires, Argentina",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.bcba.sba.com.ar/",
+    "sources": [
+      {
+        "title": "Bolsa de Comercio de Buenos Aires",
+        "url": "https://www.bcba.sba.com.ar/",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XSGO": {
+    "legal_entity": "Bolsa de Comercio de Santiago, Bolsa de Valores S.A.",
+    "headquarters": "Santiago, Chile",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.bolsadesantiago.com/",
+    "sources": [
+      {
+        "title": "Bolsa de Santiago",
+        "url": "https://www.bolsadesantiago.com/",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XLIM": {
+    "legal_entity": "Bolsa de Valores de Lima S.A.A.",
+    "headquarters": "Lima, Peru",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.bvl.com.pe/",
+    "sources": [
+      {
+        "title": "Información Corporativa",
+        "url": "https://www.bvl.com.pe/nosotros/informacion-corporativa",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XBOG": {
+    "legal_entity": "Bolsa de Valores de Colombia S.A.",
+    "headquarters": "Bogotá, Colombia",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.bvc.com.co/",
+    "sources": [
+      {
+        "title": "Acerca de la Bolsa de Valores de Colombia",
+        "url": "https://www.bvc.com.co/acerca-de-la-bvc",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XMNT": {
+    "legal_entity": "Bolsa de Valores de Montevideo S.A.",
+    "headquarters": "Montevideo, Uruguay",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.bvm.com.uy/",
+    "sources": [
+      {
+        "title": "Información Institucional",
+        "url": "https://www.bvm.com.uy/institucional",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  },
+  "XLIS": {
+    "legal_entity": "Euronext Lisbon – Sociedade Gestora de Mercados Regulamentados, S.A.",
+    "parent_company": "Euronext N.V.",
+    "headquarters": "Lisbon, Portugal",
+    "institution_type": "Stock Exchange",
+    "website": "https://www.euronext.com/en/markets/lisbon",
+    "sources": [
+      {
+        "title": "Euronext Lisbon",
+        "url": "https://www.euronext.com/en/markets/lisbon",
+        "retrieved": "2026-08-05"
+      },
+      {
+        "title": "Euronext Regulated Markets",
+        "url": "https://www.euronext.com/en/regulation/euronext-regulated-markets",
+        "retrieved": "2026-08-05"
+      }
+    ]
+  }
+}
