@@ -414,8 +414,17 @@ def mic_detail(mic_code):
     mic = mics.get(mic_code.upper())
     if not mic:
         abort(404)
+    try:
+        with open(os.path.join(_BASE, 'fixreader_data', 'country_codes.json')) as f:
+            country_names = {c['code']: c['name'] for c in json.load(f)}
+    except Exception:
+        country_names = {}
+    _country_overrides = {'US': 'United States', 'GB': 'United Kingdom', 'ZZ': ''}
+    raw = country_names.get(mic.get('country', ''), mic.get('country', ''))
+    country_name = _country_overrides.get(mic.get('country', ''), raw)
     enrichment = _get_mic_enrichment(mic_code)
-    return render_template('mic_detail.html', **_ctx(), mic=mic, enrichment=enrichment)
+    return render_template('mic_detail.html', **_ctx(), mic=mic,
+                           country_name=country_name, enrichment=enrichment)
 
 
 @app.route('/currency/<ccy_code>')

@@ -19,40 +19,56 @@
     .ml-left  { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden; padding: 0; }
     .ml-nav-scroll { flex: 1; overflow-y: auto; padding: 12px 0 40px; }
     .ml-right { flex: 1; min-width: 0; overflow-y: auto; }
-    .mic-detail-card { padding: 32px; max-width: 500px; }
-    .detail-type-badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--color-accent);
-      background: var(--color-sidebar-bg);
-      border: 1px solid var(--color-accent);
-      border-radius: 4px;
-      padding: 2px 8px;
-      margin-bottom: 16px;
-    }
-    .mic-detail-row { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border-light); align-items: center; }
-    .mic-detail-row:last-of-type { border-bottom: none; }
-    .mic-detail-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); width: 140px; flex-shrink: 0; }
-    .mic-detail-value { font-size: 15px; color: var(--text); }
-    .mic-detail-code { font-family: var(--font-mono); font-weight: 700; color: var(--color-accent); font-size: 18px; }
-    .mic-detail-back { padding-top: 24px; }
-    .mic-back-link { font-size: 13px; color: var(--color-accent); text-decoration: none; }
+
+    /* Page wrapper */
+    .mic-page { padding: 32px 36px; max-width: 760px; }
+
+    /* Back navigation */
+    .mic-back-link { font-size: 13px; color: var(--color-accent); text-decoration: none; display: inline-block; margin-bottom: 20px; }
     .mic-back-link:hover { text-decoration: underline; }
-    .mic-enrichment-section { margin-top: 8px; }
-    .mic-enrichment-link { color: var(--color-accent); text-decoration: none; word-break: break-all; }
-    .mic-enrichment-link:hover { text-decoration: underline; }
-    .mic-sources-list { list-style: none; padding: 0; margin: 12px 0 0; }
-    .mic-sources-list li { padding: 12px 0; border-bottom: 1px solid var(--border-light); font-size: 15px; }
-    .mic-sources-list li:last-child { border-bottom: none; }
-    .mic-source-meta { display: block; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Hero card */
+    .mic-hero { border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); padding: 24px 28px 22px; margin-bottom: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .mic-hero-code { font-family: var(--mono); font-size: 30px; font-weight: 700; color: var(--color-accent); letter-spacing: -0.02em; line-height: 1; margin-bottom: 7px; }
+    .mic-hero-name { font-size: 16px; color: var(--text); font-weight: 500; line-height: 1.35; margin-bottom: 18px; word-break: break-word; }
+    .mic-hero-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .mic-hero-country { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-muted); }
+    .mic-hero-flag { font-size: 20px; line-height: 1; }
+    .mic-type-pill { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--text-muted); background: var(--color-sidebar-bg); border: 1px solid var(--border); border-radius: 4px; padding: 3px 10px; white-space: nowrap; }
+
+    /* Section layout */
+    .mic-section { margin-bottom: 28px; }
+    .mic-section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin: 0 0 12px; }
+
+    /* Organization grid */
+    .mic-org-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .mic-org-item { padding: 14px 18px; border-bottom: 1px solid var(--border-light); border-right: 1px solid var(--border-light); min-width: 0; }
+    .mic-org-item:nth-child(2n) { border-right: none; }
+    .mic-org-item:last-child { border-bottom: none; }
+    .mic-org-item:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+    .mic-org-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+    .mic-org-value { font-size: 14px; color: var(--text); word-break: break-word; overflow-wrap: break-word; line-height: 1.4; }
+    .mic-org-link { color: var(--color-accent); text-decoration: none; }
+    .mic-org-link:hover { text-decoration: underline; }
+
+    /* Sources */
+    .mic-sources-list { list-style: none; padding: 0; margin: 0; }
+    .mic-source-entry { padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+    .mic-source-entry:first-child { padding-top: 0; }
+    .mic-source-entry:last-child { border-bottom: none; padding-bottom: 0; }
+    .mic-source-link { font-size: 14px; color: var(--color-accent); text-decoration: none; }
+    .mic-source-link:hover { text-decoration: underline; }
+    .mic-source-retrieved { display: block; font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
     @media (max-width: 680px) {
       .ml-shell { flex-direction: column; overflow: auto; }
       .ml-left  { width: 100%; height: auto; overflow: visible; border-right: none; border-bottom: 1px solid var(--border); }
       .ml-nav-scroll { max-height: 220px; overflow-y: auto; }
       .ml-right { overflow: visible; }
+      .mic-page { padding: 20px 16px; }
+      .mic-org-grid { grid-template-columns: 1fr; }
+      .mic-org-item { border-right: none !important; }
+      .mic-org-item:nth-last-child(2):nth-child(odd) { border-bottom: 1px solid var(--border-light); }
     }
   </style>
 </head>
@@ -132,78 +148,76 @@
 
   <main class="ml-right">
     <h1 class="sr-only">{{ mic.mic }} — {{ mic.name }}</h1>
-    <div class="mic-detail-card">
-      <span class="detail-type-badge">MIC Code</span>
-      <div class="mic-detail-row">
-        <span class="mic-detail-label">MIC</span>
-        <span class="mic-detail-value mic-detail-code">{{ mic.mic }}</span>
+    <div class="mic-page">
+
+      <a href="/message-library#ref-mic" class="mic-back-link">← Back to MIC Codes</a>
+
+      <!-- Hero card -->
+      <div class="mic-hero">
+        <div class="mic-hero-code">{{ mic.mic }}</div>
+        <div class="mic-hero-name">{{ mic.name }}</div>
+        <div class="mic-hero-meta">
+          <div class="mic-hero-country">
+            <span class="mic-hero-flag">{% set _ri = {'A':'🇦','B':'🇧','C':'🇨','D':'🇩','E':'🇪','F':'🇫','G':'🇬','H':'🇭','I':'🇮','J':'🇯','K':'🇰','L':'🇱','M':'🇲','N':'🇳','O':'🇴','P':'🇵','Q':'🇶','R':'🇷','S':'🇸','T':'🇹','U':'🇺','V':'🇻','W':'🇼','X':'🇽','Y':'🇾','Z':'🇿'} %}{% set _c = mic.country | upper %}{% if _c | length == 2 and _c[0] in _ri and _c[1] in _ri %}{{ _ri[_c[0]] }}{{ _ri[_c[1]] }}{% endif %}</span>
+            <span>{{ country_name }}</span>
+          </div>
+          {% if enrichment and enrichment.institution_type %}
+          <span class="mic-type-pill">{{ enrichment.institution_type }}</span>
+          {% endif %}
+        </div>
       </div>
-      <div class="mic-detail-row">
-        <span class="mic-detail-label">Exchange / Venue</span>
-        <span class="mic-detail-value">{{ mic.name }}</span>
-      </div>
-      <div class="mic-detail-row">
-        <span class="mic-detail-label">Country</span>
-        <span class="mic-detail-value">{{ mic.country }}</span>
-      </div>
-      <div class="mic-detail-row">
-        <span class="mic-detail-label">Flag</span>
-        <span class="mic-detail-value" id="mic-flag">{% set _ri = {'A':'🇦','B':'🇧','C':'🇨','D':'🇩','E':'🇪','F':'🇫','G':'🇬','H':'🇭','I':'🇮','J':'🇯','K':'🇰','L':'🇱','M':'🇲','N':'🇳','O':'🇴','P':'🇵','Q':'🇶','R':'🇷','S':'🇸','T':'🇹','U':'🇺','V':'🇻','W':'🇼','X':'🇽','Y':'🇾','Z':'🇿'} %}{% set _c = mic.country | upper %}{% if _c | length == 2 and _c[0] in _ri and _c[1] in _ri %}{{ _ri[_c[0]] }}{{ _ri[_c[1]] }}{% endif %}</span>
-      </div>
-      <div class="mic-detail-back">
-        <a href="/message-library#ref-mic" class="mic-back-link">← Back to MIC Codes</a>
-      </div>
+
+      <!-- Organization section -->
+      {% if enrichment and (enrichment.legal_entity or enrichment.parent_company or enrichment.headquarters or enrichment.website) %}
+      <section class="mic-section" aria-label="Organization">
+        <h2 class="mic-section-title">Organization</h2>
+        <div class="mic-org-grid">
+          {% if enrichment.legal_entity %}
+          <div class="mic-org-item">
+            <div class="mic-org-label">Legal Entity</div>
+            <div class="mic-org-value">{{ enrichment.legal_entity }}</div>
+          </div>
+          {% endif %}
+          {% if enrichment.parent_company %}
+          <div class="mic-org-item">
+            <div class="mic-org-label">Parent Company</div>
+            <div class="mic-org-value">{{ enrichment.parent_company }}</div>
+          </div>
+          {% endif %}
+          {% if enrichment.headquarters %}
+          <div class="mic-org-item">
+            <div class="mic-org-label">Headquarters</div>
+            <div class="mic-org-value">{{ enrichment.headquarters }}</div>
+          </div>
+          {% endif %}
+          {% if enrichment.website %}
+          <div class="mic-org-item">
+            <div class="mic-org-label">Website</div>
+            <div class="mic-org-value">
+              <a href="{{ enrichment.website }}" class="mic-org-link" target="_blank" rel="noopener noreferrer">{{ enrichment.website | replace('https://', '') | replace('http://', '') }}</a>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </section>
+      {% endif %}
+
+      <!-- Sources section -->
+      {% if enrichment and enrichment.sources %}
+      <section class="mic-section" aria-label="Sources">
+        <h2 class="mic-section-title">Sources</h2>
+        <ul class="mic-sources-list">
+          {% for src in enrichment.sources %}
+          <li class="mic-source-entry">
+            <a href="{{ src.url }}" class="mic-source-link" target="_blank" rel="noopener noreferrer">{{ src.title }}</a>
+            {% if src.retrieved %}<span class="mic-source-retrieved">Retrieved {{ src.retrieved }}</span>{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
     </div>
-    {% if enrichment and (enrichment.legal_entity or enrichment.parent_company or enrichment.headquarters or enrichment.institution_type or enrichment.website) %}
-    <div class="mic-detail-card mic-enrichment-section">
-      <span class="detail-type-badge">Organization</span>
-      {% if enrichment.legal_entity %}
-      <div class="mic-detail-row">
-        <span class="mic-detail-label">Legal Entity</span>
-        <span class="mic-detail-value">{{ enrichment.legal_entity }}</span>
-      </div>
-      {% endif %}
-      {% if enrichment.parent_company %}
-      <div class="mic-detail-row">
-        <span class="mic-detail-label">Parent Company</span>
-        <span class="mic-detail-value">{{ enrichment.parent_company }}</span>
-      </div>
-      {% endif %}
-      {% if enrichment.headquarters %}
-      <div class="mic-detail-row">
-        <span class="mic-detail-label">Headquarters</span>
-        <span class="mic-detail-value">{{ enrichment.headquarters }}</span>
-      </div>
-      {% endif %}
-      {% if enrichment.institution_type %}
-      <div class="mic-detail-row">
-        <span class="mic-detail-label">Institution Type</span>
-        <span class="mic-detail-value">{{ enrichment.institution_type }}</span>
-      </div>
-      {% endif %}
-      {% if enrichment.website %}
-      <div class="mic-detail-row">
-        <span class="mic-detail-label">Website</span>
-        <span class="mic-detail-value">
-          <a href="{{ enrichment.website }}" class="mic-enrichment-link" target="_blank" rel="noopener noreferrer">{{ enrichment.website }}</a>
-        </span>
-      </div>
-      {% endif %}
-    </div>
-    {% endif %}
-    {% if enrichment and enrichment.sources %}
-    <div class="mic-detail-card mic-enrichment-section">
-      <span class="detail-type-badge">Sources</span>
-      <ul class="mic-sources-list">
-        {% for src in enrichment.sources %}
-        <li>
-          <a href="{{ src.url }}" class="mic-enrichment-link" target="_blank" rel="noopener noreferrer">{{ src.title }}</a>
-          {% if src.retrieved %}<span class="mic-source-meta">Retrieved {{ src.retrieved }}</span>{% endif %}
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
   </main>
 
 </div><!-- /ml-shell -->
@@ -313,15 +327,6 @@ function selectMsg(code) { window.location.href = '/message-library#msg-' + code
 function selectRefItem(code) { window.location.href = '/message-library#ref-' + code; }
 buildNav();
 document.querySelector('.ml-appendix-item[data-ref="mic"]').classList.add('active');
-</script>
-<script>
-const _micCountry = "{{ mic.country }}";
-if (_micCountry && _micCountry.length === 2) {
-  document.getElementById('mic-flag').textContent = String.fromCodePoint(
-    _micCountry.toUpperCase().charCodeAt(0) + 127397,
-    _micCountry.toUpperCase().charCodeAt(1) + 127397
-  );
-}
 </script>
 <script>window.FIXREADER_ALL_TAGS = {{ tag_list_json | safe }};</script>
 <script src="/static/js/search.js"></script>

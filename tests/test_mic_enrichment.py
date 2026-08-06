@@ -32,12 +32,13 @@ def test_enrichment_keys_match_real_mics():
 
 
 def test_mic_without_enrichment_renders_cleanly(client):
-    r = client.get('/mic/XNYS')
+    # 3579 has no enrichment entry — use it to verify clean fallback rendering
+    r = client.get('/mic/3579')
     assert r.status_code == 200
     html = r.data.decode()
-    assert 'XNYS' in html
+    assert '3579' in html
     # Enrichment sections must not be rendered when there is no enrichment entry
-    assert '<div class="mic-detail-card mic-enrichment-section">' not in html
+    assert '<div class="mic-org-grid">' not in html
     assert '<ul class="mic-sources-list">' not in html
 
 
