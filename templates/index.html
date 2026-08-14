@@ -592,22 +592,40 @@ document.querySelectorAll('[data-autosubmit="true"]').forEach(el => {
 });
 
 // ── Export CSV ──
+function _doExportCsv() {
+  const rows = [['Tag', 'Field Name', 'Value', 'Decoded Value', 'Section']];
+  for (const f of _lastDecodedFields) {
+    rows.push([f.tag, f.name, f.value, f.enum_value || '', f.section]);
+  }
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `fix_${_lastDecodedMsgType || 'message'}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 const exportCsvBtn = document.getElementById('btn-export-csv');
 if (exportCsvBtn) {
-  exportCsvBtn.addEventListener('click', () => {
-    if (!_lastDecodedFields.length) return;
-    const rows = [['Tag', 'Field Name', 'Value', 'Decoded Value', 'Section']];
-    for (const f of _lastDecodedFields) {
-      rows.push([f.tag, f.name, f.value, f.enum_value || '', f.section]);
+  exportCsvBtn.addEventListener('click', async () => {
+    if (_lastDecodedFields.length) {
+      _doExportCsv();
+      return;
     }
-    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = `fix_${_lastDecodedMsgType || 'message'}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const msg = (editorInput ? editorInput.value : '').trim();
+    if (!msg) {
+      showState('empty');
+      return;
+    }
+    exportCsvBtn.disabled = true;
+    try {
+      await doDecodeMessage();
+      if (_lastDecodedFields.length) _doExportCsv();
+    } finally {
+      exportCsvBtn.disabled = false;
+    }
   });
 }
 
