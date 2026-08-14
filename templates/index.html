@@ -697,13 +697,18 @@ function tlDetail(mt, fm) {
       const et   = EXEC_TYPE_NAMES[fm[150]] || '';
       const lqty = fm[32] || '';
       const lpx  = fm[31] ? `@ $${fm[31]}` : '';
-      return [sym, et, lqty, lpx].filter(Boolean).join(' ');
+      const base = [sym, et, lqty, lpx].filter(Boolean).join(' ');
+      if ((fm[39] === '8' || fm[150] === '8') && fm[58]) return base ? `${base} — ${fm[58]}` : fm[58];
+      return base;
     }
+    case '9': return fm[58] || '';
     case 'F': return ['Cancel', sym || fm[11]].filter(Boolean).join(' ');
     case 'G': return [sym, 'Replace →', qty, px].filter(Boolean).join(' ');
     case 'A': return `${fm[49] || ''} → ${fm[56] || ''}`;
     case '0': return `Seq #${fm[34] || ''}`;
     case '5': return fm[49] || '';
+    case '3': return fm[58] && fm[371] ? `${fm[58]} (tag ${fm[371]})` : fm[58] ? fm[58] : fm[371] ? `tag ${fm[371]}` : '';
+    case 'j': return fm[58] || '';
     default:  return sym;
   }
 }
@@ -718,6 +723,7 @@ function tlSideClass(mt, fm) {
     if (et === '1' || et === '2' || et === 'F') return 'tl-fill';
     if (et === '4' || et === '8') return 'tl-cancel';
   }
+  if (mt === '3' || mt === '9' || mt === 'j') return 'tl-cancel';
   return '';
 }
 
